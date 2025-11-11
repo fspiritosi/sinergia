@@ -27,3 +27,8 @@ export type Test = Prisma.TestModel
  * 
  */
 export type Cliente = Prisma.ClienteModel
+/**
+ * Model Servicio
+ * 
+ */
+export type Servicio = Prisma.ServicioModel
