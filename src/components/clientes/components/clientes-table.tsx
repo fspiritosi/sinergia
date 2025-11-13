@@ -2,7 +2,8 @@
 
 import { DataTable } from "@/components/tables/data-table"
 import { columns } from "./columns"
-import { Cliente } from "./actions"
+import { Cliente } from "@/generated/client"
+
 
 // Opciones para filtros
 
@@ -32,11 +33,11 @@ export function ClientesTable({ data }: ClientesTableProps) {
         if (!searchValue) return true
 
         const searchLower = searchValue.toLowerCase()
-        const nombre = cliente.name?.toLowerCase() || ""
+        const name = cliente.name?.toLowerCase() || ""
         const cuit = cliente.cuit?.toLowerCase() || ""
         const email = cliente.email?.toLowerCase() || ""
 
-        return nombre.includes(searchLower) ||
+        return name.includes(searchLower) ||
             cuit.includes(searchLower) ||
             email.includes(searchLower)
     }

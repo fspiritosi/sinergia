@@ -26,7 +26,7 @@ export function AddClienteButton() {
 
     return (
         <>
-            <Button onClick={() => setOpen(true)} className="bg-sinergia text-white">
+            <Button onClick={() => setOpen(true)} className="bg-sinergia text-white hover:bg-sinergia-hover">
                 <Plus className="mr-2 h-4 w-4" />
                 Agregar Cliente
             </Button>

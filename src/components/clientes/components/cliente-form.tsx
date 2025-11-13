@@ -255,7 +255,7 @@ export function ClienteForm({
                             >
                                 Cancelar
                             </Button>
-                            <Button type="submit" disabled={isLoading} className="bg-sinergia text-white hover:bg-sinergia/60">
+                            <Button type="submit" disabled={isLoading} className="bg-sinergia text-white hover:bg-sinergia-hover">
                                 {isLoading
                                     ? "Guardando..."
                                     : isEditing
