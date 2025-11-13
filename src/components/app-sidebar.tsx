@@ -196,12 +196,18 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-      
-<SignedOut>
-            </SignedOut>
+
             <SignedIn>
-              <UserButton />
+              <div className="w-full px-4 py-2 ring-1 ring-sidebar-primary-foreground flex items-center justify-around gap-2">
+
+              <UserButton /> 
+              <div> 
+              <p className="text-xs font-semibold">{user?.fullName}</p>
+              <span className="text-xs text-gray-400">{user?.emailAddresses[0].emailAddress}</span>
+              </div>
+              </div>
             </SignedIn>
+
 
             
       </SidebarFooter>

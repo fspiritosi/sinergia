@@ -29,8 +29,19 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Item } from "./actions"
 import { useEffect, useState } from "react"
+import { getServiciosByItem, ServicioAssignment } from "./items-actions"
 
 
 
@@ -71,7 +82,11 @@ export function ItemForm({
         },
     })
 
-
+    const [showDeactivateConfirm, setShowDeactivateConfirm] = useState(false)
+    const [associatedServicios, setAssociatedServicios] = useState<ServicioAssignment[]>([])
+    const [serviciosLoading, setServiciosLoading] = useState(false)
+    const [serviciosError, setServiciosError] = useState<string | null>(null)
+    const [hasConfirmedDeactivation, setHasConfirmedDeactivation] = useState(false)
 
     // Resetear el formulario cuando cambie el cliente o se abra/cierre el modal
     useEffect(() => {
@@ -90,8 +105,40 @@ export function ItemForm({
 
                 })
             }   
+        } else {
+            setShowDeactivateConfirm(false)
+            setAssociatedServicios([])
+            setServiciosError(null)
+            setServiciosLoading(false)
+            setHasConfirmedDeactivation(false)
         }
     }, [open, item, form])
+
+    const loadAssociatedServicios = async () => {
+        if (!item?.id) {
+            setAssociatedServicios([])
+            return
+        }
+
+        setServiciosLoading(true)
+        setServiciosError(null)
+
+        try {
+            const servicios = await getServiciosByItem(item.id)
+            setAssociatedServicios(servicios)
+        } catch (error) {
+            console.error("Error al obtener servicios asociados:", error)
+            setServiciosError("No se pudieron cargar los servicios asociados al item.")
+        } finally {
+            setServiciosLoading(false)
+        }
+    }
+
+    const handleConfirmDeactivate = () => {
+        setHasConfirmedDeactivation(true)
+        form.setValue("is_active", false, { shouldDirty: true })
+        setShowDeactivateConfirm(false)
+    }
 
 
 
@@ -100,13 +147,14 @@ export function ItemForm({
             await onSubmit(data)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar servicio:", error)
+            console.error("Error al guardar item:", error)
         }
     }
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
+        <>
+            <Dialog open={open} onOpenChange={onOpenChange}>
+                <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>
                         {isEditing ? "Editar Item" : "Crear Nuevo Item"}
@@ -189,11 +237,34 @@ export function ItemForm({
                                         <FormControl>
                                             <Switch
                                                 checked={field.value}
-                                                onCheckedChange={field.onChange}
+                                                onCheckedChange={(checked) => {
+                                                    if (checked) {
+                                                        setHasConfirmedDeactivation(false)
+                                                        field.onChange(true)
+                                                        return
+                                                    }
+
+                                                    if (!isEditing) {
+                                                        field.onChange(false)
+                                                        return
+                                                    }
+
+                                                    const currentValue = form.getValues("is_active")
+
+                                                    if (!item?.is_active || hasConfirmedDeactivation || !currentValue) {
+                                                        field.onChange(false)
+                                                        return
+                                                    }
+
+                                                    field.onChange(true)
+                                                    setShowDeactivateConfirm(true)
+                                                    setAssociatedServicios([])
+                                                    void loadAssociatedServicios()
+                                                }}
                                             />
                                         </FormControl>
-                                            </FormItem>
-                                        )}
+                                    </FormItem>
+                                )}
                             />
                         </div>
 
@@ -218,5 +289,56 @@ export function ItemForm({
                 </Form>
             </DialogContent>
         </Dialog>
+
+            <AlertDialog open={showDeactivateConfirm} onOpenChange={(value) => {
+                setShowDeactivateConfirm(value)
+                if (!value && form.getValues("is_active") === true && !hasConfirmedDeactivation) {
+                    // Mantener el switch en verdadero cuando se cierra sin confirmar
+                    form.setValue("is_active", true, { shouldDirty: true })
+                }
+            }}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Desactivar item</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Al desactivar este item se eliminará su asignación de los servicios listados a continuación.
+                            ¿Deseás continuar?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <div className="max-h-48 space-y-2 overflow-y-auto rounded-md border border-border p-3">
+                        {serviciosLoading ? (
+                            <p className="text-sm text-muted-foreground">Cargando servicios asociados...</p>
+                        ) : serviciosError ? (
+                            <p className="text-sm text-destructive">{serviciosError}</p>
+                        ) : associatedServicios.length ? (
+                            <ul className="space-y-2">
+                                {associatedServicios.map((servicio) => (
+                                    <li key={servicio.id} className="text-sm">
+                                        <p className="font-medium">{servicio.name}</p>
+                                        {servicio.description ? (
+                                            <p className="text-xs text-muted-foreground">{servicio.description}</p>
+                                        ) : null}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-sm text-muted-foreground">
+                                Este item no se encuentra asignado a servicios activos actualmente.
+                            </p>
+                        )}
+                    </div>
+
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setShowDeactivateConfirm(false)}>
+                            Cancelar
+                        </AlertDialogCancel>
+                        <AlertDialogAction onClick={handleConfirmDeactivate} disabled={serviciosLoading}>
+                            Desactivar item
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
     )
 }
