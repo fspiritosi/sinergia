@@ -29,85 +29,78 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { Cliente } from "./actions"
-import { useEffect } from "react"
+import { Item } from "./actions"
+import { useEffect, useState } from "react"
 
 
-const clienteSchema = z.object({
+
+
+const itemSchema = z.object({
     name: z.string().min(1, "El nombre es requerido"),
-    cuit: z.string().min(11, "El CUIT debe tener al menos 11 caracteres"),
-    email: z.string().email("Email inválido").optional().or(z.literal("")),
-    telefono: z.string().optional(),
-    domicilio: z.string().optional(),
-   // moneda: z.enum(["ARS", "USD"]),
+    description: z.string().min(1, "La descripción es requerida"),
     is_active: z.boolean(),
+
 })
 
-type ClienteFormData = z.infer<typeof clienteSchema>
+type  ItemFormData= z.infer<typeof itemSchema>
 
-interface ClienteFormProps {
+interface ItemFormProps {
     open: boolean
-    onOpenChange: (open: boolean) => void
-    cliente?: Cliente | null
+    onOpenChange: (open: boolean) => void   
+    item?: Item | null    
     onSubmit: (data: any) => Promise<void>
     isLoading?: boolean
 }
 
-export function ClienteForm({
+export function ItemForm({
     open,
     onOpenChange,
-    cliente,
+    item,
     onSubmit,
     isLoading = false,
-}: ClienteFormProps) {
-    const isEditing = !!cliente
+}: ItemFormProps) {
+    const isEditing = !!item
 
-    const form = useForm<any>({
-        resolver: zodResolver(clienteSchema),
+    const form = useForm<ItemFormData>({
+        resolver: zodResolver(itemSchema),
         defaultValues: {
             name: "",
-            cuit: "",
-            email: "",
-            telefono: "",
-            domicilio: "",
-           // moneda: "ARS",
+            description: "",
             is_active: true,
+
         },
     })
+
+
 
     // Resetear el formulario cuando cambie el cliente o se abra/cierre el modal
     useEffect(() => {
         if (open) {
-            if (cliente) {
+            if (item) {
                 form.reset({
-                    name: cliente.name,
-                    cuit: cliente.cuit,
-                    email: cliente.email || "",
-                    telefono: cliente.telefono || "",
-                    domicilio: cliente.domicilio || "",
-                    //moneda: cliente.moneda,
-                    is_active: cliente.is_active,
+                    name: item.name,
+                    description: item.description,
+                    is_active: item.is_active,
                 })
             } else {
                 form.reset({
                     name: "",
-                    cuit: "",
-                    email: "",
-                    telefono: "",
-                    domicilio: "",
-                    //moneda: "ARS",
+                    description: "",
                     is_active: true,
+
                 })
-            }
+            }   
         }
-    }, [open, cliente, form])
+    }, [open, item, form])
+
+
 
     const handleSubmit = async (data: any) => {
         try {
             await onSubmit(data)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar cliente:", error)
+            console.error("Error al guardar servicio:", error)
         }
     }
 
@@ -116,12 +109,12 @@ export function ClienteForm({
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>
-                        {isEditing ? "Editar Cliente" : "Crear Nuevo Cliente"}
+                        {isEditing ? "Editar Item" : "Crear Nuevo Item"}
                     </DialogTitle>
                     <DialogDescription>
                         {isEditing
-                            ? "Modifica los datos del cliente."
-                            : "Completa los datos para crear un nuevo cliente."}
+                            ? "Modifica los datos del item."
+                            : "Completa los datos para crear un nuevo item."}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -135,7 +128,7 @@ export function ClienteForm({
                                     <FormItem className="col-span-2">
                                         <FormLabel>Nombre *</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Nombre del cliente" {...field} />
+                                            <Input placeholder="Nombre del item" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -144,85 +137,43 @@ export function ClienteForm({
 
                             <FormField
                                 control={form.control}
-                                name="cuit"
+                                name="description"
                                 render={({ field }) => (
                                     <FormItem className="col-span-2">
-                                        <FormLabel>CUIT *</FormLabel>
+                                        <FormLabel>Descripción *</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="20-12345678-9" {...field} />
+                                            <Input placeholder="Descripción del item" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-
-                            <FormField
+                              {/* <FormField
                                 control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Email</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="email"
-                                                placeholder="cliente@ejemplo.com"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="telefono"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Teléfono</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="+54 11 1234-5678" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="domicilio"
+                                name="description"
                                 render={({ field }) => (
                                     <FormItem className="col-span-2">
-                                        <FormLabel>Dirección</FormLabel>
+                                        <FormLabel>Descripción *</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Dirección completa" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* <FormField
-                                control={form.control}
-                                name="moneda"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Moneda *</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
+                                            <Select {...field}>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Seleccionar moneda" />
+                                                    <SelectValue placeholder="Seleccione un servicio" />
                                                 </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="ARS">Pesos Argentinos (ARS)</SelectItem>
-                                                <SelectItem value="USD">Dólares (USD)</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                                <SelectContent>
+                                                    {servicios.map((servicio) => (
+                                                        <SelectItem key={servicio.id} value={servicio.id}>
+                                                            {servicio.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             /> */}
+
+
 
                             <FormField
                                 control={form.control}
@@ -232,7 +183,7 @@ export function ClienteForm({
                                         <div className="space-y-0.5">
                                             <FormLabel>Estado</FormLabel>
                                             <div className="text-sm text-muted-foreground">
-                                                Cliente activo
+                                                Item activo
                                             </div>
                                         </div>
                                         <FormControl>
@@ -241,8 +192,8 @@ export function ClienteForm({
                                                 onCheckedChange={field.onChange}
                                             />
                                         </FormControl>
-                                    </FormItem>
-                                )}
+                                            </FormItem>
+                                        )}
                             />
                         </div>
 
@@ -260,7 +211,7 @@ export function ClienteForm({
                                     ? "Guardando..."
                                     : isEditing
                                         ? "Actualizar"
-                                        : "Crear Cliente"}
+                                        : "Crear Item"}
                             </Button>
                         </DialogFooter>
                     </form>

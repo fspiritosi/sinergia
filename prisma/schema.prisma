@@ -30,3 +30,38 @@ model Cliente {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
+
+model Servicio {
+  id String @id @default(uuid())
+  name String 
+  description String
+  is_active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  itemsOnServicios ItemsOnServicios[]
+}
+
+model Items {
+  id String @id @default(uuid())
+  name String
+  description String
+  is_active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  servicios ItemsOnServicios[]
+
+}
+
+model ItemsOnServicios {
+
+  servicio Servicio @relation(fields: [servicioId], references: [id])
+  servicioId String
+
+  item Items @relation(fields: [itemId], references: [id])
+  itemId String
+  assignedAt DateTime @default(now())
+
+  @@id([servicioId, itemId])
+}

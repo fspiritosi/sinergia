@@ -2,22 +2,22 @@
 
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ClienteForm } from "./cliente-form"
-import { createCliente } from "./cliente-actions"
+import { ServiceForm } from "./service-form"
+import { createServicio } from "./service-actions"
 import { toast } from "sonner"
 import { useState } from "react"
 
-export function AddClienteButton() {
+export function AddServiceButton() {
     const [open, setOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (data: any) => {
         setIsLoading(true)
         try {
-            await createCliente(data)
-            toast.success("Cliente creado exitosamente")
+            await createServicio(data)
+            toast.success("Servicio creado exitosamente")
         } catch (error) {
-            toast.error("Error al crear el cliente")
+            toast.error("Error al crear el servicio")
             throw error
         } finally {
             setIsLoading(false)
@@ -28,9 +28,9 @@ export function AddClienteButton() {
         <>
             <Button onClick={() => setOpen(true)} className="bg-sinergia text-white hover:bg-sinergia-hover">
                 <Plus className="mr-2 h-4 w-4" />
-                Agregar Cliente
+                Agregar Servicio
             </Button>
-            <ClienteForm
+            <ServiceForm
                 open={open}
                 onOpenChange={setOpen}
                 onSubmit={handleSubmit}

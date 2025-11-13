@@ -2,22 +2,25 @@
 
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ClienteForm } from "./cliente-form"
-import { createCliente } from "./cliente-actions"
+import { AsignItemForm, AssignItemsFormValues } from "./asing-items-form"
+import { assignItemsToServicio } from "./items-actions"
 import { toast } from "sonner"
 import { useState } from "react"
 
-export function AddClienteButton() {
+export function AsignItemButton() {
     const [open, setOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
-    const handleSubmit = async (data: any) => {
+    const handleSubmit = async (data: AssignItemsFormValues) => {
         setIsLoading(true)
         try {
-            await createCliente(data)
-            toast.success("Cliente creado exitosamente")
+            await assignItemsToServicio({
+                servicioId: data.servicio,
+                itemIds: data.selectedItemIds,
+            })
+            toast.success("Items asignados exitosamente")
         } catch (error) {
-            toast.error("Error al crear el cliente")
+            toast.error("Error al asignar los items")
             throw error
         } finally {
             setIsLoading(false)
@@ -28,9 +31,9 @@ export function AddClienteButton() {
         <>
             <Button onClick={() => setOpen(true)} className="bg-sinergia text-white hover:bg-sinergia-hover">
                 <Plus className="mr-2 h-4 w-4" />
-                Agregar Cliente
+                Asignar Item
             </Button>
-            <ClienteForm
+            <AsignItemForm
                 open={open}
                 onOpenChange={setOpen}
                 onSubmit={handleSubmit}

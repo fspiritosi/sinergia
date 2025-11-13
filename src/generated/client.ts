@@ -54,3 +54,18 @@ export type Test = Prisma.TestModel
  * 
  */
 export type Cliente = Prisma.ClienteModel
+/**
+ * Model Servicio
+ * 
+ */
+export type Servicio = Prisma.ServicioModel
+/**
+ * Model Items
+ * 
+ */
+export type Items = Prisma.ItemsModel
+/**
+ * Model ItemsOnServicios
+ * 
+ */
+export type ItemsOnServicios = Prisma.ItemsOnServiciosModel

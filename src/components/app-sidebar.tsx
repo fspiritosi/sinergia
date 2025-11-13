@@ -1,7 +1,7 @@
 import * as React from "react"
-import { GalleryVerticalEnd, Minus, Plus } from "lucide-react"
+import { Minus, Plus } from "lucide-react"
 
-import { SearchForm } from "@/components/search-form"
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -52,57 +52,16 @@ const data = {
       ],
     },
     {
-      title: "Building Your Application",
-      url: "#",
+      title: "Servicios",
+      url: "/dashboard/servicios",
       items: [
         {
-          title: "Routing",
-          url: "#",
+          title: "Listado de Servicios",
+          url: "/dashboard/servicios",
         },
         {
-          title: "Data Fetching",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Rendering",
-          url: "#",
-        },
-        {
-          title: "Caching",
-          url: "#",
-        },
-        {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
-          url: "#",
+          title: "Listado de Items",
+          url: "/dashboard/items",
         },
       ],
     },
@@ -221,7 +180,7 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
-                              isActive={item.isActive}
+                              //isActive={item.isActive}
                             >
                               <a href={item.url}>{item.title}</a>
                             </SidebarMenuSubButton>

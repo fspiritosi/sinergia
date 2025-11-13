@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/tables/data-table"
 import { columns } from "./columns"
-import { Cliente } from "@/generated/client"
+import { Servicio } from "@/generated/client"
 
 
 // Opciones para filtros
@@ -23,23 +23,19 @@ const fechaOptions = [
 
 // Filtros por tipo de contacto y dominio de email - REMOVIDOS
 
-interface ClientesTableProps {
-    data: Cliente[]
+interface ServiceTableProps {
+    data: Servicio[]
 }
 
-export function ClientesTable({ data }: ClientesTableProps) {
+export function ServiceTable({ data }: ServiceTableProps) {
     // Función de filtro personalizada para buscar por nombre, CUIT o email
-    const customSearchFilter = (cliente: Cliente, searchValue: string): boolean => {
+    const customSearchFilter = (servicio: Servicio, searchValue: string): boolean => {
         if (!searchValue) return true
 
         const searchLower = searchValue.toLowerCase()
-        const name = cliente.name?.toLowerCase() || ""
-        const cuit = cliente.cuit?.toLowerCase() || ""
-        const email = cliente.email?.toLowerCase() || ""
+        const name = servicio.name?.toLowerCase() || ""
 
-        return name.includes(searchLower) ||
-            cuit.includes(searchLower) ||
-            email.includes(searchLower)
+        return name.includes(searchLower)
     }
 
     return (
@@ -47,7 +43,7 @@ export function ClientesTable({ data }: ClientesTableProps) {
             data={data}
             columns={columns}
             searchKey="name"
-            searchPlaceholder="Buscar por nombre, CUIT o email..."
+            searchPlaceholder="Buscar por nombre..."
             customSearchFilter={customSearchFilter}
             filters={[
                 {
