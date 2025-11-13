@@ -190,6 +190,7 @@ export type ServicioWhereInput = {
   is_active?: Prisma.BoolFilter<"Servicio"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Servicio"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Servicio"> | Date | string
+  itemsOnServicios?: Prisma.ItemsOnServiciosListRelationFilter
 }
 
 export type ServicioOrderByWithRelationInput = {
@@ -199,6 +200,7 @@ export type ServicioOrderByWithRelationInput = {
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  itemsOnServicios?: Prisma.ItemsOnServiciosOrderByRelationAggregateInput
 }
 
 export type ServicioWhereUniqueInput = Prisma.AtLeast<{
@@ -211,6 +213,7 @@ export type ServicioWhereUniqueInput = Prisma.AtLeast<{
   is_active?: Prisma.BoolFilter<"Servicio"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Servicio"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Servicio"> | Date | string
+  itemsOnServicios?: Prisma.ItemsOnServiciosListRelationFilter
 }, "id">
 
 export type ServicioOrderByWithAggregationInput = {
@@ -244,6 +247,7 @@ export type ServicioCreateInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  itemsOnServicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutServicioInput
 }
 
 export type ServicioUncheckedCreateInput = {
@@ -253,6 +257,7 @@ export type ServicioUncheckedCreateInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  itemsOnServicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutServicioInput
 }
 
 export type ServicioUpdateInput = {
@@ -262,6 +267,7 @@ export type ServicioUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itemsOnServicios?: Prisma.ItemsOnServiciosUpdateManyWithoutServicioNestedInput
 }
 
 export type ServicioUncheckedUpdateInput = {
@@ -271,6 +277,7 @@ export type ServicioUncheckedUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itemsOnServicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutServicioNestedInput
 }
 
 export type ServicioCreateManyInput = {
@@ -327,6 +334,106 @@ export type ServicioMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type ServicioScalarRelationFilter = {
+  is?: Prisma.ServicioWhereInput
+  isNot?: Prisma.ServicioWhereInput
+}
+
+export type ServicioCreateNestedOneWithoutItemsOnServiciosInput = {
+  create?: Prisma.XOR<Prisma.ServicioCreateWithoutItemsOnServiciosInput, Prisma.ServicioUncheckedCreateWithoutItemsOnServiciosInput>
+  connectOrCreate?: Prisma.ServicioCreateOrConnectWithoutItemsOnServiciosInput
+  connect?: Prisma.ServicioWhereUniqueInput
+}
+
+export type ServicioUpdateOneRequiredWithoutItemsOnServiciosNestedInput = {
+  create?: Prisma.XOR<Prisma.ServicioCreateWithoutItemsOnServiciosInput, Prisma.ServicioUncheckedCreateWithoutItemsOnServiciosInput>
+  connectOrCreate?: Prisma.ServicioCreateOrConnectWithoutItemsOnServiciosInput
+  upsert?: Prisma.ServicioUpsertWithoutItemsOnServiciosInput
+  connect?: Prisma.ServicioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServicioUpdateToOneWithWhereWithoutItemsOnServiciosInput, Prisma.ServicioUpdateWithoutItemsOnServiciosInput>, Prisma.ServicioUncheckedUpdateWithoutItemsOnServiciosInput>
+}
+
+export type ServicioCreateWithoutItemsOnServiciosInput = {
+  id?: string
+  name: string
+  description: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ServicioUncheckedCreateWithoutItemsOnServiciosInput = {
+  id?: string
+  name: string
+  description: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ServicioCreateOrConnectWithoutItemsOnServiciosInput = {
+  where: Prisma.ServicioWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServicioCreateWithoutItemsOnServiciosInput, Prisma.ServicioUncheckedCreateWithoutItemsOnServiciosInput>
+}
+
+export type ServicioUpsertWithoutItemsOnServiciosInput = {
+  update: Prisma.XOR<Prisma.ServicioUpdateWithoutItemsOnServiciosInput, Prisma.ServicioUncheckedUpdateWithoutItemsOnServiciosInput>
+  create: Prisma.XOR<Prisma.ServicioCreateWithoutItemsOnServiciosInput, Prisma.ServicioUncheckedCreateWithoutItemsOnServiciosInput>
+  where?: Prisma.ServicioWhereInput
+}
+
+export type ServicioUpdateToOneWithWhereWithoutItemsOnServiciosInput = {
+  where?: Prisma.ServicioWhereInput
+  data: Prisma.XOR<Prisma.ServicioUpdateWithoutItemsOnServiciosInput, Prisma.ServicioUncheckedUpdateWithoutItemsOnServiciosInput>
+}
+
+export type ServicioUpdateWithoutItemsOnServiciosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ServicioUncheckedUpdateWithoutItemsOnServiciosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type ServicioCountOutputType
+ */
+
+export type ServicioCountOutputType = {
+  itemsOnServicios: number
+}
+
+export type ServicioCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  itemsOnServicios?: boolean | ServicioCountOutputTypeCountItemsOnServiciosArgs
+}
+
+/**
+ * ServicioCountOutputType without action
+ */
+export type ServicioCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ServicioCountOutputType
+   */
+  select?: Prisma.ServicioCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ServicioCountOutputType without action
+ */
+export type ServicioCountOutputTypeCountItemsOnServiciosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ItemsOnServiciosWhereInput
+}
 
 
 export type ServicioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -336,6 +443,8 @@ export type ServicioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  itemsOnServicios?: boolean | Prisma.Servicio$itemsOnServiciosArgs<ExtArgs>
+  _count?: boolean | Prisma.ServicioCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["servicio"]>
 
 export type ServicioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -366,10 +475,18 @@ export type ServicioSelectScalar = {
 }
 
 export type ServicioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "createdAt" | "updatedAt", ExtArgs["result"]["servicio"]>
+export type ServicioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  itemsOnServicios?: boolean | Prisma.Servicio$itemsOnServiciosArgs<ExtArgs>
+  _count?: boolean | Prisma.ServicioCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type ServicioIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ServicioIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ServicioPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Servicio"
-  objects: {}
+  objects: {
+    itemsOnServicios: Prisma.$ItemsOnServiciosPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
@@ -771,6 +888,7 @@ readonly fields: ServicioFieldRefs;
  */
 export interface Prisma__ServicioClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  itemsOnServicios<T extends Prisma.Servicio$itemsOnServiciosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Servicio$itemsOnServiciosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemsOnServiciosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -823,6 +941,10 @@ export type ServicioFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
+  /**
    * Filter, which Servicio to fetch.
    */
   where: Prisma.ServicioWhereUniqueInput
@@ -841,6 +963,10 @@ export type ServicioFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
+  /**
    * Filter, which Servicio to fetch.
    */
   where: Prisma.ServicioWhereUniqueInput
@@ -858,6 +984,10 @@ export type ServicioFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Servicio
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
   /**
    * Filter, which Servicio to fetch.
    */
@@ -907,6 +1037,10 @@ export type ServicioFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
+  /**
    * Filter, which Servicio to fetch.
    */
   where?: Prisma.ServicioWhereInput
@@ -955,6 +1089,10 @@ export type ServicioFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
+  /**
    * Filter, which Servicios to fetch.
    */
   where?: Prisma.ServicioWhereInput
@@ -997,6 +1135,10 @@ export type ServicioCreateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Servicio
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
   /**
    * The data needed to create a Servicio.
    */
@@ -1045,6 +1187,10 @@ export type ServicioUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Servicio
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
   /**
    * The data needed to update a Servicio.
    */
@@ -1112,6 +1258,10 @@ export type ServicioUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
+  /**
    * The filter to search for the Servicio to update in case it exists.
    */
   where: Prisma.ServicioWhereUniqueInput
@@ -1138,6 +1288,10 @@ export type ServicioDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
+  /**
    * Filter which Servicio to delete.
    */
   where: Prisma.ServicioWhereUniqueInput
@@ -1158,6 +1312,30 @@ export type ServicioDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * Servicio.itemsOnServicios
+ */
+export type Servicio$itemsOnServiciosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ItemsOnServicios
+   */
+  select?: Prisma.ItemsOnServiciosSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ItemsOnServicios
+   */
+  omit?: Prisma.ItemsOnServiciosOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ItemsOnServiciosInclude<ExtArgs> | null
+  where?: Prisma.ItemsOnServiciosWhereInput
+  orderBy?: Prisma.ItemsOnServiciosOrderByWithRelationInput | Prisma.ItemsOnServiciosOrderByWithRelationInput[]
+  cursor?: Prisma.ItemsOnServiciosWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ItemsOnServiciosScalarFieldEnum | Prisma.ItemsOnServiciosScalarFieldEnum[]
+}
+
+/**
  * Servicio without action
  */
 export type ServicioDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1169,4 +1347,8 @@ export type ServicioDefaultArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Servicio
    */
   omit?: Prisma.ServicioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServicioInclude<ExtArgs> | null
 }

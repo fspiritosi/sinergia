@@ -11,4 +11,6 @@
 export type * from './models/Test'
 export type * from './models/Cliente'
 export type * from './models/Servicio'
+export type * from './models/Items'
+export type * from './models/ItemsOnServicios'
 export type * from './commonInputTypes'

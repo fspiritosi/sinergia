@@ -32,3 +32,13 @@ export type Cliente = Prisma.ClienteModel
  * 
  */
 export type Servicio = Prisma.ServicioModel
+/**
+ * Model Items
+ * 
+ */
+export type Items = Prisma.ItemsModel
+/**
+ * Model ItemsOnServicios
+ * 
+ */
+export type ItemsOnServicios = Prisma.ItemsOnServiciosModel
