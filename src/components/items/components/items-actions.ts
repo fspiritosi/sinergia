@@ -3,7 +3,7 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { Items } from "@/generated/client";
+import { Items, Servicio } from "@/generated/client";
 
 
 
@@ -34,6 +34,31 @@ export async function createItem(data: Items) {
 interface AssignItemsToServicioInput {
   servicioId: string;
   itemIds: string[];
+}
+
+export type ServicioAssignment = Pick<Servicio, "id" | "name" | "description" | "is_active">;
+
+export async function getServiciosByItem(itemId: string): Promise<ServicioAssignment[]> {
+  const servicios = await prisma.servicio.findMany({
+    where: {
+      itemsOnServicios: {
+        some: {
+          itemId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      is_active: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return servicios;
 }
 
 export async function assignItemsToServicio({
@@ -86,26 +111,58 @@ export async function assignItemsToServicio({
 }
 
 export async function updateItem(data: Partial<Items>) {
-
   try {
-    const cliente = await prisma.items.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        name: data.name,    
-        description: data.description,
-        is_active: data.is_active,
-        updatedAt: new Date().toISOString(),
+    if (!data.id) {
+      throw new Error("El identificador del item es requerido para actualizar");
+    }
+
+    let removedFromServicios = false;
+
+    await prisma.$transaction(async (tx) => {
+      const existingItem = await tx.items.findUnique({
+        where: {
+          id: data.id,
+        },
+        select: {
+          is_active: true,
+        },
+      });
+
+      if (!existingItem) {
+        console.error("Item not found for update", data.id);
+        throw new Error("Item no encontrado");
+      }
+
+      const shouldDeactivate = existingItem.is_active && data.is_active === false;
+
+      await tx.items.update({
+        where: {
+          id: data.id,
+        },
+        data: {
+          ...(data.name !== undefined ? { name: data.name } : {}),
+          ...(data.description !== undefined ? { description: data.description } : {}),
+          ...(data.is_active !== undefined ? { is_active: data.is_active } : {}),
+          updatedAt: new Date().toISOString(),
+        },
+      });
+
+      if (shouldDeactivate) {
+        await tx.itemsOnServicios.deleteMany({
+          where: {
+            itemId: data.id,
+          },
+        });
+        removedFromServicios = true;
       }
     });
 
-    if (!cliente) {
-      console.error("Error updating item");
-      throw new Error("Error al actualizar el item");
+    revalidatePath("/dashboard/items");
+
+    if (removedFromServicios) {
+      revalidatePath("/dashboard/servicios");
     }
 
-    revalidatePath("/dashboard/items");
     return { success: true };
   } catch (error) {
     console.error("Error in updateItem:", error);

@@ -42,3 +42,8 @@ export type Items = Prisma.ItemsModel
  * 
  */
 export type ItemsOnServicios = Prisma.ItemsOnServiciosModel
+/**
+ * Model PropuestaTecnica
+ * 
+ */
+export type PropuestaTecnica = Prisma.PropuestaTecnicaModel

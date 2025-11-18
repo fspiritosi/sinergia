@@ -53,7 +53,8 @@ export const ModelName = {
   Cliente: 'Cliente',
   Servicio: 'Servicio',
   Items: 'Items',
-  ItemsOnServicios: 'ItemsOnServicios'
+  ItemsOnServicios: 'ItemsOnServicios',
+  PropuestaTecnica: 'PropuestaTecnica'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -128,6 +129,24 @@ export const ItemsOnServiciosScalarFieldEnum = {
 export type ItemsOnServiciosScalarFieldEnum = (typeof ItemsOnServiciosScalarFieldEnum)[keyof typeof ItemsOnServiciosScalarFieldEnum]
 
 
+export const PropuestaTecnicaScalarFieldEnum = {
+  id: 'id',
+  codigo: 'codigo',
+  clienteId: 'clienteId',
+  servicioId: 'servicioId',
+  vigencia: 'vigencia',
+  status: 'status',
+  items: 'items',
+  valor: 'valor',
+  moneda: 'moneda',
+  is_active: 'is_active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PropuestaTecnicaScalarFieldEnum = (typeof PropuestaTecnicaScalarFieldEnum)[keyof typeof PropuestaTecnicaScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -142,4 +161,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

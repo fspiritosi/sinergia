@@ -29,6 +29,8 @@ model Cliente {
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  propuestas PropuestaTecnica[]
 }
 
 model Servicio {
@@ -40,6 +42,7 @@ model Servicio {
   updatedAt DateTime @default(now())
 
   itemsOnServicios ItemsOnServicios[]
+  propuestas PropuestaTecnica[]
 }
 
 model Items {
@@ -64,4 +67,41 @@ model ItemsOnServicios {
   assignedAt DateTime @default(now())
 
   @@id([servicioId, itemId])
+}
+
+model PropuestaTecnica {
+  id String @id @default(uuid())
+  codigo String @unique
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  clienteId String
+  servicios Servicio @relation(fields: [servicioId], references: [id])
+  servicioId String
+  vigencia DateTime?
+  status PropuestaStatus @default(pendiente)
+  items String[]
+  valor Decimal @default(0)
+  moneda Moneda @default(ARS)
+  
+  is_active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+
+}
+
+
+// ENUM 
+
+enum PropuestaStatus {
+  pendiente
+  aprobada
+  rechazada
+  en_progreso
+  finalizada
+}
+  
+enum Moneda {
+  ARS
+  USD
+  EUR
 }
