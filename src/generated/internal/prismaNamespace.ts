@@ -394,7 +394,8 @@ export const ModelName = {
   Cliente: 'Cliente',
   Servicio: 'Servicio',
   Items: 'Items',
-  ItemsOnServicios: 'ItemsOnServicios'
+  ItemsOnServicios: 'ItemsOnServicios',
+  PropuestaTecnica: 'PropuestaTecnica'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios"
+    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -784,6 +785,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PropuestaTecnica: {
+      payload: Prisma.$PropuestaTecnicaPayload<ExtArgs>
+      fields: Prisma.PropuestaTecnicaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PropuestaTecnicaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PropuestaTecnicaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>
+        }
+        findFirst: {
+          args: Prisma.PropuestaTecnicaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PropuestaTecnicaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>
+        }
+        findMany: {
+          args: Prisma.PropuestaTecnicaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>[]
+        }
+        create: {
+          args: Prisma.PropuestaTecnicaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>
+        }
+        createMany: {
+          args: Prisma.PropuestaTecnicaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PropuestaTecnicaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>[]
+        }
+        delete: {
+          args: Prisma.PropuestaTecnicaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>
+        }
+        update: {
+          args: Prisma.PropuestaTecnicaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>
+        }
+        deleteMany: {
+          args: Prisma.PropuestaTecnicaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PropuestaTecnicaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PropuestaTecnicaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>[]
+        }
+        upsert: {
+          args: Prisma.PropuestaTecnicaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PropuestaTecnicaPayload>
+        }
+        aggregate: {
+          args: Prisma.PropuestaTecnicaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePropuestaTecnica>
+        }
+        groupBy: {
+          args: Prisma.PropuestaTecnicaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropuestaTecnicaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PropuestaTecnicaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PropuestaTecnicaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -879,6 +954,24 @@ export const ItemsOnServiciosScalarFieldEnum = {
 export type ItemsOnServiciosScalarFieldEnum = (typeof ItemsOnServiciosScalarFieldEnum)[keyof typeof ItemsOnServiciosScalarFieldEnum]
 
 
+export const PropuestaTecnicaScalarFieldEnum = {
+  id: 'id',
+  codigo: 'codigo',
+  clienteId: 'clienteId',
+  servicioId: 'servicioId',
+  vigencia: 'vigencia',
+  status: 'status',
+  items: 'items',
+  valor: 'valor',
+  moneda: 'moneda',
+  is_active: 'is_active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PropuestaTecnicaScalarFieldEnum = (typeof PropuestaTecnicaScalarFieldEnum)[keyof typeof PropuestaTecnicaScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -893,6 +986,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -933,6 +1034,48 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PropuestaStatus'
+ */
+export type EnumPropuestaStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropuestaStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PropuestaStatus[]'
+ */
+export type ListEnumPropuestaStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropuestaStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Moneda'
+ */
+export type EnumMonedaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Moneda'>
+    
+
+
+/**
+ * Reference to a field of type 'Moneda[]'
+ */
+export type ListEnumMonedaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Moneda[]'>
     
 
 
@@ -1041,6 +1184,7 @@ export type GlobalOmitConfig = {
   servicio?: Prisma.ServicioOmit
   items?: Prisma.ItemsOmit
   itemsOnServicios?: Prisma.ItemsOnServiciosOmit
+  propuestaTecnica?: Prisma.PropuestaTecnicaOmit
 }
 
 /* Types for Logging */
