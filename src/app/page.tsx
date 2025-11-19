@@ -1,31 +1,49 @@
+import { Header } from "@/components/landing/header";
 
-
-import { currentUser } from '@clerk/nextjs/server'
-import {SignInButton, SignUpButton} from "@clerk/nextjs";
-
-
-export default async function Home() {
-  const user = await currentUser()
-  console.log(user)
+export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <h1 className="text-center text-4xl font-bold">Bienvenido a Sinergia</h1>
-        <div className="flex flex-col items-center gap-4 mt-8">
-          <SignInButton mode="modal">
-            <button className="bg-[#6d8f20] text-white rounded-md font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
-              Inicia sesión
-            </button>
-          </SignInButton>
-          {/* <SignUpButton mode="modal">
-            <button className="bg-[#6c47ff] text-white rounded-md font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
-              Crear cuenta
-            </button>
-          </SignUpButton> */}
+    <main className="min-h-screen bg-background text-foreground">
+      <Header />
+
+      {/* Hero Section Skeleton */}
+      <section className="py-20 lg:py-32 border-b border-border">
+        <div className="container mx-auto px-4 flex flex-col items-center text-center gap-8">
+          {/* Title Placeholder */}
+          <div className="h-12 w-3/4 md:w-1/2 bg-muted border border-border rounded-lg" />
+          <div className="h-12 w-2/3 md:w-1/3 bg-muted border border-border rounded-lg" />
+
+          {/* Description Placeholder */}
+          <div className="space-y-3 w-full max-w-2xl mt-4">
+            <div className="h-4 w-full bg-muted border border-border rounded" />
+            <div className="h-4 w-5/6 mx-auto bg-muted border border-border rounded" />
+            <div className="h-4 w-4/6 mx-auto bg-muted border border-border rounded" />
+          </div>
+
+          {/* Buttons Placeholder */}
+          <div className="flex gap-4 mt-8">
+            <div className="h-10 w-32 bg-muted border border-border rounded-md" />
+            <div className="h-10 w-32 bg-muted border border-border rounded-md" />
+          </div>
         </div>
-        
-      </main>
-    </div>
+      </section>
+
+      {/* Features Grid Skeleton */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="p-6 border border-border rounded-xl space-y-4">
+                <div className="h-12 w-12 bg-muted border border-border rounded-lg" />
+                <div className="h-6 w-1/2 bg-muted border border-border rounded" />
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-muted border border-border rounded" />
+                  <div className="h-4 w-5/6 bg-muted border border-border rounded" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

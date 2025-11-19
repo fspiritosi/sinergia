@@ -303,7 +303,7 @@ export function PropuestaForm({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] max-h-[95vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
                         {isEditing ? "Editar Propuesta" : "Crear Nueva Propuesta"}
@@ -365,7 +365,7 @@ export function PropuestaForm({
                                                 onValueChange={(value) => field.onChange(value)}
                                                 value={field.value || undefined}
                                                 disabled={clientesLoading || !!clientesError}
-                                                
+
                                             >
                                                 <SelectTrigger>
                                                     <SelectValue placeholder={
@@ -478,10 +478,10 @@ export function PropuestaForm({
                                     </FormItem>
                                 )}
                             />
-                            {isEditing && ( <FormField
+                            {isEditing && (<FormField
                                 control={form.control}
                                 name="status"
-                                
+
                                 render={({ field }) => (
                                     <FormItem className="col-span-2 sm:col-span-1">
                                         <FormLabel>Estado *</FormLabel>
@@ -506,7 +506,7 @@ export function PropuestaForm({
                                     </FormItem>
                                 )}
                             />)}
-                            
+
 
                             <FormField
                                 control={form.control}

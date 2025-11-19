@@ -47,7 +47,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --sinergia: #6d8f20; 
+    --sinergia: #2db5bc;
+    /* Lighter version of #2398A1 for dark mode */
   }
 }
 
@@ -55,77 +56,102 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
-  --sinergia: #1f98a1;
-  --sinergia-hover: #17747a;
+  /* Brand Colors - Sinergia Ambiental (Logo Colors) */
+  --sinergia: #2398A1;
+  /* Teal - Primary */
+  --sinergia-hover: #1a7680;
+  --sinergia-secondary: #84B631;
+  /* Lime Green */
+  --sinergia-accent: #6A7475;
+  /* Gray */
+  --sinergia-dark: #5B5B5E;
+  /* Dark Gray */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  /* Primary: Teal */
+  --primary: #2398A1;
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  /* Secondary: Lime Green */
+  --secondary: #84B631;
+  --secondary-foreground: oklch(0.145 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* Accent: Gray */
+  --accent: #6A7475;
+  --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --ring: #2398A1;
+  --chart-1: #2398A1;
+  --chart-2: #84B631;
+  --chart-3: #6A7475;
+  --chart-4: #5B5B5E;
+  --chart-5: #69a328;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: #2398A1;
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-accent: #2398A1;
+  --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-ring: #2398A1;
 }
 
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
+  /* Brand Colors - Dark Mode (Lighter versions) */
+  --sinergia: #2db5bc;
+  /* Lighter version of #2398A1 */
+  --sinergia-hover: #2398A1;
+  --sinergia-secondary: #9dd356;
+  /* Lighter version of #84B631 */
+  --sinergia-accent: #8a9b9c;
+  /* Lighter version of #6A7475 */
+  --sinergia-dark: #7a7a7d;
+  /* Lighter version of #5B5B5E */
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  /* Primary: Lighter Teal for dark mode */
+  --primary: #2db5bc;
+  --primary-foreground: oklch(0.145 0 0);
+  /* Secondary: Lighter Lime for dark mode */
+  --secondary: #9dd356;
+  --secondary-foreground: oklch(0.145 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
+  /* Accent: Lighter Gray for dark mode */
+  --accent: #8a9b9c;
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --ring: #2db5bc;
+  --chart-1: #2db5bc;
+  --chart-2: #9dd356;
+  --chart-3: #8a9b9c;
+  --chart-4: #7a7a7d;
+  --chart-5: #2398A1;
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-primary: #2db5bc;
+  --sidebar-primary-foreground: oklch(0.145 0 0);
+  --sidebar-accent: #2db5bc;
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: #2db5bc;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

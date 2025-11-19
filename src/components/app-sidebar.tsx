@@ -3,7 +3,6 @@
 import * as React from "react"
 import { Minus, Plus } from "lucide-react"
 
-
 import {
   Collapsible,
   CollapsibleContent,
@@ -66,23 +65,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard">
-                <div className=" text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Image src="/logo.jpg" alt="Logo" width={24} height={24} />
-                </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">Sinergia - App</span>
-                  <span className="">v1.0.0</span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-        {/* <SearchForm /> */}
+      <SidebarHeader className="p-4">
+        <Link href="/dashboard" className="flex items-center justify-center">
+          <Image
+            src="/LogoHorizontal.webp"
+            alt="Sinergia Logo"
+            width={200}
+            height={64}
+            className="h-14 w-auto object-contain"
+            priority
+          />
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -111,7 +104,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <CollapsibleContent>
                         <SidebarMenuSub>
                           {item.items.map((child) => {
-                            const isActive = pathname === child.url || pathname?.startsWith(`${child.url}/`)
+                            const isActive = pathname === child.url
 
                             return (
                               <SidebarMenuSubItem key={child.title}>

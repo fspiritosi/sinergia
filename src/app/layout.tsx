@@ -35,14 +35,14 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider localization={esES} >
-    <html lang="es">
-      <body
-         className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable}  font-sans`}
-      >
+      <html lang="es">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable}  font-sans`}
+        >
 
-        {children}
-      </body>
-    </html>
+          {children}
+        </body>
+      </html>
     </ClerkProvider>
 
 
