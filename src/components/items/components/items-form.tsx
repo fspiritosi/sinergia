@@ -1,8 +1,15 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -21,26 +28,12 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Item } from "./actions"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import { Item } from "./actions"
 import { getServiciosByItem, ServicioAssignment } from "./items-actions"
 
 
@@ -53,12 +46,12 @@ const itemSchema = z.object({
 
 })
 
-type  ItemFormData= z.infer<typeof itemSchema>
+type ItemFormData = z.infer<typeof itemSchema>
 
 interface ItemFormProps {
     open: boolean
-    onOpenChange: (open: boolean) => void   
-    item?: Item | null    
+    onOpenChange: (open: boolean) => void
+    item?: Item | null
     onSubmit: (data: any) => Promise<void>
     isLoading?: boolean
 }
@@ -96,7 +89,7 @@ export function ItemForm({
                     name: item.name,
                     description: item.description,
                     is_active: item.is_active,
-                })
+                } as any)
             } else {
                 form.reset({
                     name: "",
@@ -104,7 +97,7 @@ export function ItemForm({
                     is_active: true,
 
                 })
-            }   
+            }
         } else {
             setShowDeactivateConfirm(false)
             setAssociatedServicios([])
@@ -155,48 +148,48 @@ export function ItemForm({
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                    <DialogTitle>
-                        {isEditing ? "Editar Item" : "Crear Nuevo Item"}
-                    </DialogTitle>
-                    <DialogDescription>
-                        {isEditing
-                            ? "Modifica los datos del item."
-                            : "Completa los datos para crear un nuevo item."}
-                    </DialogDescription>
-                </DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {isEditing ? "Editar Item" : "Crear Nuevo Item"}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {isEditing
+                                ? "Modifica los datos del item."
+                                : "Completa los datos para crear un nuevo item."}
+                        </DialogDescription>
+                    </DialogHeader>
 
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-2">
-                                        <FormLabel>Nombre *</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Nombre del item" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem className="col-span-2">
+                                            <FormLabel>Nombre *</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Nombre del item" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                            <FormField
-                                control={form.control}
-                                name="description"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-2">
-                                        <FormLabel>Descripción *</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Descripción del item" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                              {/* <FormField
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                        <FormItem className="col-span-2">
+                                            <FormLabel>Descripción *</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Descripción del item" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* <FormField
                                 control={form.control}
                                 name="description"
                                 render={({ field }) => (
@@ -223,72 +216,72 @@ export function ItemForm({
 
 
 
-                            <FormField
-                                control={form.control}
-                                name="is_active"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                                        <div className="space-y-0.5">
-                                            <FormLabel>Estado</FormLabel>
-                                            <div className="text-sm text-muted-foreground">
-                                                Item activo
+                                <FormField
+                                    control={form.control}
+                                    name="is_active"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
+                                            <div className="space-y-0.5">
+                                                <FormLabel>Estado</FormLabel>
+                                                <div className="text-sm text-muted-foreground">
+                                                    Item activo
+                                                </div>
                                             </div>
-                                        </div>
-                                        <FormControl>
-                                            <Switch
-                                                checked={field.value}
-                                                onCheckedChange={(checked) => {
-                                                    if (checked) {
-                                                        setHasConfirmedDeactivation(false)
+                                            <FormControl>
+                                                <Switch
+                                                    checked={field.value}
+                                                    onCheckedChange={(checked) => {
+                                                        if (checked) {
+                                                            setHasConfirmedDeactivation(false)
+                                                            field.onChange(true)
+                                                            return
+                                                        }
+
+                                                        if (!isEditing) {
+                                                            field.onChange(false)
+                                                            return
+                                                        }
+
+                                                        const currentValue = form.getValues("is_active")
+
+                                                        if (!item?.is_active || hasConfirmedDeactivation || !currentValue) {
+                                                            field.onChange(false)
+                                                            return
+                                                        }
+
                                                         field.onChange(true)
-                                                        return
-                                                    }
+                                                        setShowDeactivateConfirm(true)
+                                                        setAssociatedServicios([])
+                                                        void loadAssociatedServicios()
+                                                    }}
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
-                                                    if (!isEditing) {
-                                                        field.onChange(false)
-                                                        return
-                                                    }
-
-                                                    const currentValue = form.getValues("is_active")
-
-                                                    if (!item?.is_active || hasConfirmedDeactivation || !currentValue) {
-                                                        field.onChange(false)
-                                                        return
-                                                    }
-
-                                                    field.onChange(true)
-                                                    setShowDeactivateConfirm(true)
-                                                    setAssociatedServicios([])
-                                                    void loadAssociatedServicios()
-                                                }}
-                                            />
-                                        </FormControl>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-
-                        <DialogFooter>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => onOpenChange(false)}
-                                disabled={isLoading}
-                            >
-                                Cancelar
-                            </Button>
-                            <Button type="submit" disabled={isLoading} className="bg-sinergia text-white hover:bg-sinergia-hover">
-                                {isLoading
-                                    ? "Guardando..."
-                                    : isEditing
-                                        ? "Actualizar"
-                                        : "Crear Item"}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </Form>
-            </DialogContent>
-        </Dialog>
+                            <DialogFooter>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => onOpenChange(false)}
+                                    disabled={isLoading}
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button type="submit" disabled={isLoading} className="bg-sinergia text-white hover:bg-sinergia-hover">
+                                    {isLoading
+                                        ? "Guardando..."
+                                        : isEditing
+                                            ? "Actualizar"
+                                            : "Crear Item"}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
 
             <AlertDialog open={showDeactivateConfirm} onOpenChange={(value) => {
                 setShowDeactivateConfirm(value)

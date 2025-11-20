@@ -1,9 +1,8 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { getActiveServicios } from "@/components/servicios/components/actions"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
     Dialog,
     DialogContent,
@@ -27,11 +26,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { getActiveItems, Item } from "./actions"
-import { useEffect, useState } from "react"
 import { Servicio } from "@/generated/client"
-import { getActiveServicios } from "@/components/servicios/components/actions"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import { getActiveItems, Item } from "./actions"
 
 
 
@@ -46,8 +46,8 @@ export type AssignItemsFormValues = z.infer<typeof itemSchema>
 
 interface ItemFormProps {
     open: boolean
-    onOpenChange: (open: boolean) => void   
-    item?: Item | null    
+    onOpenChange: (open: boolean) => void
+    item?: Item | null
     onSubmit: (data: AssignItemsFormValues) => Promise<void>
     isLoading?: boolean
 }
@@ -59,7 +59,7 @@ export function AsignItemForm({
     onSubmit,
     isLoading = false,
 }: ItemFormProps) {
-    
+
 
     const form = useForm<AssignItemsFormValues>({
         resolver: zodResolver(itemSchema),
@@ -88,12 +88,12 @@ export function AsignItemForm({
         const fetchItems = async () => {
             try {
                 const response = await getActiveItems()
-                setItems(response)
+                setItems(response as any)
             } catch (error) {
                 console.error("Error al obtener items:", error)
             }
         }
-       
+
         fetchItems()
     }, [])
 
@@ -201,7 +201,7 @@ export function AsignItemForm({
                                     </FormItem>
                                 )}
                             />
-                              {/* <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="description"
                                 render={({ field }) => (
