@@ -3,9 +3,10 @@ import { ItemsTable } from './items-table'
 import { AddItemButton } from './add-item-button'
 import { Items, Servicio } from "@/generated/client"
 import { AsignItemButton } from './asign-item-button'
+import { Item } from "./actions"
 
 interface ItemsTableWrapperProps {
-    data: Items[]
+    data: Item[]
 }
 
 
@@ -22,8 +23,8 @@ export function ItemsTableWrapper({ data }: ItemsTableWrapperProps) {
                         </CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
-                    <AsignItemButton />
-                    <AddItemButton />
+                        <AsignItemButton />
+                        <AddItemButton />
                     </div>
                 </div>
             </CardHeader>

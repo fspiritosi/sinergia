@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/tables/data-table"
 import { columns } from "./columns"
-import { Items } from "@/generated/client"
+import { Item } from "./actions"
 
 
 // Opciones para filtros
@@ -24,12 +24,12 @@ const fechaOptions = [
 // Filtros por tipo de contacto y dominio de email - REMOVIDOS
 
 interface ItemsTableProps {
-    data: Items[]
+    data: Item[]
 }
 
 export function ItemsTable({ data }: ItemsTableProps) {
     // Función de filtro personalizada para buscar por nombre, CUIT o email
-    const customSearchFilter = (item: Items, searchValue: string): boolean => {
+    const customSearchFilter = (item: Item, searchValue: string): boolean => {
         if (!searchValue) return true
 
         const searchLower = searchValue.toLowerCase()
@@ -38,9 +38,14 @@ export function ItemsTable({ data }: ItemsTableProps) {
         return name.includes(searchLower)
     }
 
+    const mappedData = data.map((item) => ({
+        ...item,
+        is_active: String(item.is_active)
+    }))
+
     return (
         <DataTable
-            data={data}
+            data={mappedData}
             columns={columns}
             searchKey="name"
             searchPlaceholder="Buscar por nombre..."

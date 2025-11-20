@@ -36,23 +36,26 @@ export function DataTableFacetedFilter<TData, TValue>({
     title,
     options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
-    // Verificar que la columna existe y tiene los métodos necesarios
     if (!column) {
         return null
     }
 
-    let facets: Map<string, number> | undefined
-    try {
-        facets = column.getFacetedUniqueValues?.()
-    } catch (error) {
-        console.warn(`Error getting faceted values for ${title}:`, error)
-        facets = new Map()
-    }
-
+    const facets = column.getFacetedUniqueValues()
     const filterValue = column.getFilterValue()
-    const selectedValues = new Set(
-        Array.isArray(filterValue) ? filterValue : []
-    )
+
+    // Estado local para manejo inmediato de la UI
+    const [selectedValues, setSelectedValues] = React.useState<Set<string>>(new Set())
+
+    // Sincronizar estado local con el valor del filtro de la columna
+    React.useEffect(() => {
+        const newSet = new Set<string>()
+        if (Array.isArray(filterValue)) {
+            filterValue.forEach(v => newSet.add(String(v)))
+        } else if (filterValue !== undefined && filterValue !== null) {
+            newSet.add(String(filterValue))
+        }
+        setSelectedValues(newSet)
+    }, [filterValue])
 
     return (
         <Popover>
@@ -107,12 +110,17 @@ export function DataTableFacetedFilter<TData, TValue>({
                                     <CommandItem
                                         key={option.value}
                                         onSelect={() => {
+                                            const newSet = new Set(selectedValues)
                                             if (isSelected) {
-                                                selectedValues.delete(option.value)
+                                                newSet.delete(option.value)
                                             } else {
-                                                selectedValues.add(option.value)
+                                                newSet.add(option.value)
                                             }
-                                            const filterValues = Array.from(selectedValues)
+                                            // Actualizar estado local inmediatamente
+                                            setSelectedValues(newSet)
+
+                                            // Actualizar filtro de columna
+                                            const filterValues = Array.from(newSet)
                                             column?.setFilterValue(
                                                 filterValues.length ? filterValues : undefined
                                             )
@@ -146,7 +154,10 @@ export function DataTableFacetedFilter<TData, TValue>({
                                 <CommandSeparator />
                                 <CommandGroup>
                                     <CommandItem
-                                        onSelect={() => column?.setFilterValue(undefined)}
+                                        onSelect={() => {
+                                            setSelectedValues(new Set())
+                                            column?.setFilterValue(undefined)
+                                        }}
                                         className="justify-center text-center"
                                     >
                                         Limpiar filtros

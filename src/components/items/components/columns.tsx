@@ -60,9 +60,9 @@ export const columns: ColumnDef<Item>[] = [
             )
         }
     },
-        {
+    {
         id: "is_active",
-        accessorFn: (row) => String(row.is_active),
+        accessorKey: "is_active",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Estado" />
         ),
@@ -80,6 +80,7 @@ export const columns: ColumnDef<Item>[] = [
     },
     {
         accessorKey: "createdAt",
+        id: "createdAt",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Fecha de Creación" />
         ),

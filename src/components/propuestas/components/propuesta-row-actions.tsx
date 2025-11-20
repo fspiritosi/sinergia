@@ -1,6 +1,6 @@
 "use client"
 
-import { MoreHorizontal, Edit } from "lucide-react"
+import { MoreHorizontal, Edit, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -19,6 +19,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { PropuestaForm } from "./propuesta-form"
+import { PDFViewerDialog } from "./pdf-viewer-dialog"
 import { updatePropuesta, deletePropuesta } from "./propuesta-actions"
 import { toast } from "sonner"
 import { useState } from "react"
@@ -31,6 +32,7 @@ interface PropuestaRowActionsProps {
 export function PropuestaRowActions({ propuesta }: PropuestaRowActionsProps) {
     const [editOpen, setEditOpen] = useState(false)
     const [deleteOpen, setDeleteOpen] = useState(false)
+    const [pdfViewerOpen, setPdfViewerOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleEdit = async (data: any) => {
@@ -74,6 +76,11 @@ export function PropuestaRowActions({ propuesta }: PropuestaRowActionsProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[160px]">
 
+                    <DropdownMenuItem onClick={() => setPdfViewerOpen(true)}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Ver PDF
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem onClick={() => setEditOpen(true)}>
                         <Edit className="mr-2 h-4 w-4" />
                         Editar
@@ -88,6 +95,13 @@ export function PropuestaRowActions({ propuesta }: PropuestaRowActionsProps) {
                 propuesta={propuesta}
                 onSubmit={handleEdit}
                 isLoading={isLoading}
+            />
+
+            <PDFViewerDialog
+                open={pdfViewerOpen}
+                onOpenChange={setPdfViewerOpen}
+                propuestaId={propuesta.id}
+                codigo={propuesta.codigo}
             />
 
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
