@@ -964,6 +964,7 @@ export const PropuestaTecnicaScalarFieldEnum = {
   items: 'items',
   valor: 'valor',
   moneda: 'moneda',
+  contacto: 'contacto',
   is_active: 'is_active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -1,8 +1,8 @@
 "use server";
 
+import { Moneda, PropuestaStatus, PropuestaTecnica } from "@/generated/client";
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { PropuestaTecnica, Moneda, PropuestaStatus } from "@/generated/client";
 
 interface CreatePropuestaInput {
   codigo: string;
@@ -10,6 +10,7 @@ interface CreatePropuestaInput {
   servicioId: string;
   vigencia: string | null;
   items: string[];
+  contacto?: string;
   is_active?: boolean;
   valor: number;
   moneda: Moneda;
@@ -25,6 +26,7 @@ export async function createPropuesta(data: CreatePropuestaInput) {
         servicioId: data.servicioId,
         vigencia: data.vigencia ? new Date(data.vigencia) : null,
         items: data.items,
+        contacto: data.contacto,
         is_active: data.is_active ?? true,
         valor: data.valor,
         moneda: data.moneda,
@@ -48,9 +50,10 @@ export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
         id: data.id,
       },
       data: {
-        codigo: data.codigo,    
+        codigo: data.codigo,
         vigencia: data.vigencia ?? null,
         items: data.items,
+        contacto: data.contacto,
         is_active: data.is_active,
         valor: data.valor,
         moneda: data.moneda,

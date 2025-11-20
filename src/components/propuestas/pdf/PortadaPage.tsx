@@ -1,8 +1,8 @@
-import { Page, View, Text } from '@react-pdf/renderer'
-import { pdfStyles } from './styles'
-import { PageHeader } from './PageHeader'
-import { PageFooter } from './PageFooter'
 import type { Items } from '@/generated/client'
+import { Page, Text, View } from '@react-pdf/renderer'
+import { PageFooter } from './PageFooter'
+import { PageHeader } from './PageHeader'
+import { pdfStyles } from './styles'
 
 interface PortadaPageProps {
     codigo: string
@@ -49,12 +49,6 @@ export function PortadaPage({
                         </View>
                         <View style={pdfStyles.sidebarDivider} />
 
-                        {/* Placeholder for the 4th item seen in image (Full Company Name?) */}
-                        <View style={pdfStyles.sidebarItem}>
-                            <Text style={pdfStyles.sidebarValue}>{clienteNombre}</Text>
-                        </View>
-                        <View style={pdfStyles.sidebarDivider} />
-
                         <View style={pdfStyles.sidebarItem}>
                             <Text style={pdfStyles.sidebarLabel}>Contacto:</Text>
                             <Text style={contacto ? pdfStyles.sidebarValue : pdfStyles.sidebarValueMissing}>
@@ -76,9 +70,13 @@ export function PortadaPage({
                                         • {item.name}
                                     </Text>
                                     {item.description && (
-                                        <Text style={[pdfStyles.listItem, { paddingLeft: 5 }]}>
-                                            - {item.description}
-                                        </Text>
+                                        <View>
+                                            {item.description.split('/').map((part, partIndex) => (
+                                                <Text key={partIndex} style={[pdfStyles.listItem, { paddingLeft: 5 }]}>
+                                                    - {part.trim()}
+                                                </Text>
+                                            ))}
+                                        </View>
                                     )}
                                 </View>
                             ))}

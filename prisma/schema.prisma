@@ -81,7 +81,7 @@ model PropuestaTecnica {
   items String[]
   valor Decimal @default(0)
   moneda Moneda @default(ARS)
-  
+  contacto   String?
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

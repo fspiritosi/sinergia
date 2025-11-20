@@ -1,7 +1,7 @@
 "use server";
 
-import prisma from "@/lib/db";
 import type { Moneda, PropuestaStatus } from "@/generated/client";
+import prisma from "@/lib/db";
 
 export interface SerializedPropuesta {
   id: string;
@@ -11,6 +11,7 @@ export interface SerializedPropuesta {
   vigencia: string | null;
   status: PropuestaStatus;
   items: string[];
+  contacto: string | null;
   valor: number;
   moneda: Moneda;
   is_active: boolean;
@@ -64,6 +65,7 @@ export async function getPropuestas(): Promise<SerializedPropuesta[]> {
     vigencia: propuesta.vigencia ? propuesta.vigencia.toISOString() : null,
     status: propuesta.status,
     items: propuesta.items,
+    contacto: propuesta.contacto ?? null,
     valor: Number(propuesta.valor ?? 0),
     moneda: propuesta.moneda,
     is_active: propuesta.is_active,

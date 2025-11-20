@@ -1,7 +1,7 @@
 "use server"
 
-import { renderToBuffer } from '@react-pdf/renderer'
 import prisma from "@/lib/db"
+import { renderToBuffer } from '@react-pdf/renderer'
 import { PropuestaPDF } from '../pdf/PropuestaPDF'
 
 export async function generatePropuestaPDF(propuestaId: string) {
@@ -33,7 +33,7 @@ export async function generatePropuestaPDF(propuestaId: string) {
                 codigo: propuesta.codigo,
                 vigencia: propuesta.vigencia?.toISOString() || new Date().toISOString(),
                 clienteNombre: propuesta.cliente.name,
-                contacto: null, // TODO: Agregar campo contacto a Cliente
+                contacto: propuesta.contacto,
                 servicioNombre: propuesta.servicios.name,
                 servicioDescripcion: propuesta.servicios.description,
                 items,

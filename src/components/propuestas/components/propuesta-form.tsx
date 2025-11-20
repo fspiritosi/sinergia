@@ -1,9 +1,10 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { getClientes } from "@/components/clientes/components/actions"
+import { getActiveServicios } from "@/components/servicios/components/actions"
+import { getItemsService } from "@/components/servicios/components/service-actions"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
     Dialog,
     DialogContent,
@@ -28,14 +29,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import type { PropuestaTecnica } from "./actions"
-import { useEffect, useMemo, useState } from "react"
-import { getClientes } from "@/components/clientes/components/actions"
-import { getActiveServicios } from "@/components/servicios/components/actions"
-import { getItemsService } from "@/components/servicios/components/service-actions"
-import { Checkbox } from "@/components/ui/checkbox"
 import type { Cliente, Items, Servicio } from "@/generated/client"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useMemo, useState } from "react"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import type { PropuestaTecnica } from "./actions"
 
 
 
@@ -64,6 +63,7 @@ const propuestaSchema = z.object({
             message: "Ingresá una fecha válida",
         }),
     items: z.array(z.string()).min(1, "Seleccioná al menos un item"),
+    contacto: z.string().optional(),
     valor: z
         .string()
         .min(1, "El valor es requerido")
@@ -118,6 +118,7 @@ export function PropuestaForm({
             servicioId: "",
             vigencia: "",
             items: [],
+            contacto: "",
             valor: "",
             moneda: MONEDA_OPTIONS[0],
             status: STATUS_OPTIONS[0],
@@ -148,6 +149,7 @@ export function PropuestaForm({
                     servicioId: propuesta.servicioId,
                     vigencia: formatDateForInput(propuesta.vigencia),
                     items: propuesta.items,
+                    contacto: propuesta.contacto ?? "",
                     valor: propuesta.valor?.toString() ?? "",
                     moneda: (propuesta.moneda as MonedaValue | null) ?? MONEDA_OPTIONS[0],
                     status: (propuesta.status as StatusValue | null) ?? STATUS_OPTIONS[0],
@@ -159,6 +161,7 @@ export function PropuestaForm({
                     servicioId: "",
                     vigencia: "",
                     items: [],
+                    contacto: "",
                     valor: "",
                     moneda: MONEDA_OPTIONS[0],
                     status: STATUS_OPTIONS[0],
@@ -422,6 +425,20 @@ export function PropuestaForm({
                                         {serviciosError ? (
                                             <p className="text-sm text-destructive">{serviciosError}</p>
                                         ) : null}
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="contacto"
+                                render={({ field }) => (
+                                    <FormItem className="col-span-2">
+                                        <FormLabel>Contacto</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Nombre del contacto" {...field} />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}

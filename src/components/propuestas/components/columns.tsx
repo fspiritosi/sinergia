@@ -1,11 +1,11 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header"
-import { PropuestaRowActions } from "./propuesta-row-actions"
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
+import { ColumnDef } from "@tanstack/react-table"
 import type { PropuestaTecnica } from "./actions"
+import { PropuestaRowActions } from "./propuesta-row-actions"
 
 export const columns: ColumnDef<PropuestaTecnica>[] = [
     {
@@ -72,11 +72,24 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
             return (
                 <div className="text-sm">
                     {servicioNombre}
-                        </div>
+                </div>
             )
         },
     },
-        // },
+    {
+        accessorKey: "contacto",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Contacto" />
+        ),
+        cell: ({ row }) => {
+            const contacto = row.original.contacto
+            return (
+                <div className="text-sm">
+                    {contacto || "-"}
+                </div>
+            )
+        },
+    },
     {
         id: "status",
         accessorFn: (row) => String(row.status),
