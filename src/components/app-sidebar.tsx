@@ -54,6 +54,11 @@ const data = {
           url: "/dashboard/items",
           isActive: false,
         },
+        {
+          title: "Usuarios",
+          url: "/dashboard/usuarios",
+          isActive: false,
+        },
       ],
     },
   ],
@@ -62,6 +67,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const { user } = useUser()
+  const isAdmin = user?.publicMetadata?.role === "admin"
 
   return (
     <Sidebar {...props}>
@@ -104,6 +110,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <CollapsibleContent>
                         <SidebarMenuSub>
                           {item.items.map((child) => {
+                            if (child.url === "/dashboard/usuarios" && !isAdmin) {
+                              return null
+                            }
                             const isActive = pathname === child.url
 
                             return (
