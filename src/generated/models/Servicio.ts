@@ -28,6 +28,7 @@ export type ServicioMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  type: $Enums.ServiceType | null
   is_active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -37,6 +38,7 @@ export type ServicioMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  type: $Enums.ServiceType | null
   is_active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,6 +48,7 @@ export type ServicioCountAggregateOutputType = {
   id: number
   name: number
   description: number
+  type: number
   is_active: number
   createdAt: number
   updatedAt: number
@@ -57,6 +60,7 @@ export type ServicioMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  type?: true
   is_active?: true
   createdAt?: true
   updatedAt?: true
@@ -66,6 +70,7 @@ export type ServicioMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  type?: true
   is_active?: true
   createdAt?: true
   updatedAt?: true
@@ -75,6 +80,7 @@ export type ServicioCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  type?: true
   is_active?: true
   createdAt?: true
   updatedAt?: true
@@ -157,6 +163,7 @@ export type ServicioGroupByOutputType = {
   id: string
   name: string
   description: string
+  type: $Enums.ServiceType
   is_active: boolean
   createdAt: Date
   updatedAt: Date
@@ -187,6 +194,7 @@ export type ServicioWhereInput = {
   id?: Prisma.StringFilter<"Servicio"> | string
   name?: Prisma.StringFilter<"Servicio"> | string
   description?: Prisma.StringFilter<"Servicio"> | string
+  type?: Prisma.EnumServiceTypeFilter<"Servicio"> | $Enums.ServiceType
   is_active?: Prisma.BoolFilter<"Servicio"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Servicio"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Servicio"> | Date | string
@@ -198,6 +206,7 @@ export type ServicioOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -212,6 +221,7 @@ export type ServicioWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ServicioWhereInput | Prisma.ServicioWhereInput[]
   name?: Prisma.StringFilter<"Servicio"> | string
   description?: Prisma.StringFilter<"Servicio"> | string
+  type?: Prisma.EnumServiceTypeFilter<"Servicio"> | $Enums.ServiceType
   is_active?: Prisma.BoolFilter<"Servicio"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Servicio"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Servicio"> | Date | string
@@ -223,6 +233,7 @@ export type ServicioOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -238,6 +249,7 @@ export type ServicioScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Servicio"> | string
   name?: Prisma.StringWithAggregatesFilter<"Servicio"> | string
   description?: Prisma.StringWithAggregatesFilter<"Servicio"> | string
+  type?: Prisma.EnumServiceTypeWithAggregatesFilter<"Servicio"> | $Enums.ServiceType
   is_active?: Prisma.BoolWithAggregatesFilter<"Servicio"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Servicio"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Servicio"> | Date | string
@@ -247,6 +259,7 @@ export type ServicioCreateInput = {
   id?: string
   name: string
   description: string
+  type?: $Enums.ServiceType
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -258,6 +271,7 @@ export type ServicioUncheckedCreateInput = {
   id?: string
   name: string
   description: string
+  type?: $Enums.ServiceType
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -269,6 +283,7 @@ export type ServicioUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -280,6 +295,7 @@ export type ServicioUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -291,6 +307,7 @@ export type ServicioCreateManyInput = {
   id?: string
   name: string
   description: string
+  type?: $Enums.ServiceType
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -300,6 +317,7 @@ export type ServicioUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -309,6 +327,7 @@ export type ServicioUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -318,6 +337,7 @@ export type ServicioCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -327,6 +347,7 @@ export type ServicioMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -336,6 +357,7 @@ export type ServicioMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -344,6 +366,10 @@ export type ServicioMinOrderByAggregateInput = {
 export type ServicioScalarRelationFilter = {
   is?: Prisma.ServicioWhereInput
   isNot?: Prisma.ServicioWhereInput
+}
+
+export type EnumServiceTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ServiceType
 }
 
 export type ServicioCreateNestedOneWithoutItemsOnServiciosInput = {
@@ -378,6 +404,7 @@ export type ServicioCreateWithoutItemsOnServiciosInput = {
   id?: string
   name: string
   description: string
+  type?: $Enums.ServiceType
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -388,6 +415,7 @@ export type ServicioUncheckedCreateWithoutItemsOnServiciosInput = {
   id?: string
   name: string
   description: string
+  type?: $Enums.ServiceType
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -414,6 +442,7 @@ export type ServicioUpdateWithoutItemsOnServiciosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -424,6 +453,7 @@ export type ServicioUncheckedUpdateWithoutItemsOnServiciosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -434,6 +464,7 @@ export type ServicioCreateWithoutPropuestasInput = {
   id?: string
   name: string
   description: string
+  type?: $Enums.ServiceType
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -444,6 +475,7 @@ export type ServicioUncheckedCreateWithoutPropuestasInput = {
   id?: string
   name: string
   description: string
+  type?: $Enums.ServiceType
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -470,6 +502,7 @@ export type ServicioUpdateWithoutPropuestasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -480,6 +513,7 @@ export type ServicioUncheckedUpdateWithoutPropuestasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -530,6 +564,7 @@ export type ServicioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   name?: boolean
   description?: boolean
+  type?: boolean
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -542,6 +577,7 @@ export type ServicioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   name?: boolean
   description?: boolean
+  type?: boolean
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -551,6 +587,7 @@ export type ServicioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   name?: boolean
   description?: boolean
+  type?: boolean
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -560,12 +597,13 @@ export type ServicioSelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
+  type?: boolean
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ServicioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "createdAt" | "updatedAt", ExtArgs["result"]["servicio"]>
+export type ServicioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "type" | "is_active" | "createdAt" | "updatedAt", ExtArgs["result"]["servicio"]>
 export type ServicioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   itemsOnServicios?: boolean | Prisma.Servicio$itemsOnServiciosArgs<ExtArgs>
   propuestas?: boolean | Prisma.Servicio$propuestasArgs<ExtArgs>
@@ -584,6 +622,7 @@ export type $ServicioPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: string
     name: string
     description: string
+    type: $Enums.ServiceType
     is_active: boolean
     createdAt: Date
     updatedAt: Date
@@ -1015,6 +1054,7 @@ export interface ServicioFieldRefs {
   readonly id: Prisma.FieldRef<"Servicio", 'String'>
   readonly name: Prisma.FieldRef<"Servicio", 'String'>
   readonly description: Prisma.FieldRef<"Servicio", 'String'>
+  readonly type: Prisma.FieldRef<"Servicio", 'ServiceType'>
   readonly is_active: Prisma.FieldRef<"Servicio", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Servicio", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Servicio", 'DateTime'>

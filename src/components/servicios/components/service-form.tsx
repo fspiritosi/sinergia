@@ -20,6 +20,13 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Servicio } from "./actions"
@@ -35,6 +42,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 const serviceSchema = z.object({
     name: z.string().min(1, "El nombre es requerido"),
     description: z.string().min(1, "La descripción es requerida"),
+    type: z.enum(["mensual", "unitario"], { message: "El tipo es requerido" }),
     is_active: z.boolean(),
 })
 
@@ -74,6 +82,7 @@ export function ServiceForm({
         defaultValues: {
             name: "",
             description: "",
+            type: "mensual" ,
             is_active: true,
         },
     })
@@ -85,12 +94,14 @@ export function ServiceForm({
                 form.reset({
                     name: servicio.name,
                     description: servicio.description,
+                    type: servicio.type,
                     is_active: servicio.is_active,
                 })
             } else {
                 form.reset({
                     name: "",
                     description: "",
+                    type: "mensual",
                     is_active: true,
                 })
             }   
@@ -260,6 +271,39 @@ export function ServiceForm({
                                         <FormControl>
                                             <Input placeholder="Descripción del servicio" {...field} />
                                         </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="type"
+                                render={({ field }) => (
+                                    <FormItem className="col-span-2">
+                                        <FormLabel>Tipo *</FormLabel>
+                                        <FormControl className="w-full">
+                                            <Select
+                                                onValueChange={(value) => field.onChange(value)}
+                                                value={field.value || undefined}
+                                                disabled={form.formState.isSubmitting}
+
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder={
+                                                        form.formState.isSubmitting
+                                                            ? "Cargando tipos..."
+                                                            : "Seleccioná un tipo de servicio"
+                                                    } />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="mensual">Mensual</SelectItem>
+                                                    <SelectItem value="unitario">Unitario</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        {form.formState.errors.type ? (
+                                            <p className="text-sm text-destructive">{form.formState.errors.type.message}</p>
+                                        ) : null}
                                         <FormMessage />
                                     </FormItem>
                                 )}

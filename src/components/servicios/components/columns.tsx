@@ -60,6 +60,21 @@ export const columns: ColumnDef<Servicio>[] = [
             )
         }
     },
+    {
+        accessorKey: "type",
+        header: ({column}) => (
+            <DataTableColumnHeader column={column} title="Tipo" />
+        ),
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium capitalize">
+                        {row.getValue("type")}
+                    </span>
+                </div>
+            )
+        }
+    },
         {
         id: "is_active",
         accessorFn: (row) => String(row.is_active),

@@ -100,6 +100,7 @@ export const ServicioScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  type: 'type',
   is_active: 'is_active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -27,3 +27,11 @@ export const Moneda = {
 } as const
 
 export type Moneda = (typeof Moneda)[keyof typeof Moneda]
+
+
+export const ServiceType = {
+  mensual: 'mensual',
+  unitario: 'unitario'
+} as const
+
+export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType]
