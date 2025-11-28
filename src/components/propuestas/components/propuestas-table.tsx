@@ -33,6 +33,11 @@ const fechaOptions = [
     { value: "year", label: "Este año" },
 ]
 
+const tipoOptions = [
+    { value: "mensual", label: "Mensual" },
+    { value: "unitario", label: "Unitario" },
+]
+
 // Filtros por tipo de contacto y dominio de email - REMOVIDOS
 
 interface PropuestasTableProps {
@@ -71,6 +76,11 @@ export function PropuestasTable({ data }: PropuestasTableProps) {
                     columnKey: "createdAt",
                     title: "Fecha de Creación",
                     options: fechaOptions,
+                },
+                {
+                    columnKey: "servicioTipo",
+                    title: "Tipo",
+                    options: tipoOptions,
                 },
 
             ]}
