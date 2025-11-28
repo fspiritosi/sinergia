@@ -24,6 +24,7 @@ export interface SerializedPropuesta {
   servicios: {
     id: string;
     name: string;
+    type: string;
   } | null;
 }
 
@@ -40,6 +41,7 @@ export async function getPropuestas(): Promise<SerializedPropuesta[]> {
         select: {
           id: true,
           name: true,
+          type: true,
         },
       },
     },

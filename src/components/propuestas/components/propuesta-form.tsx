@@ -35,6 +35,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import type { PropuestaTecnica } from "./actions"
+import { Badge } from "@/components/ui/badge"
 
 
 
@@ -416,7 +417,7 @@ export function PropuestaForm({
                                                 <SelectContent>
                                                     {servicios.map((servicio) => (
                                                         <SelectItem key={servicio.id} value={servicio.id}>
-                                                            {servicio.name}
+                                                            {servicio.name} - <Badge variant="outline" className="bg-white capitalize">{servicio.type}</Badge>
                                                         </SelectItem>
                                                     ))}
                                                 </SelectContent>

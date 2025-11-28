@@ -77,6 +77,21 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
         },
     },
     {
+        accessorFn: (row) => row.servicios?.type ?? "",
+        id: "servicioTipo",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Tipo" />
+        ),
+        cell: ({ row }) => {
+            const servicioTipo = row.original.servicios?.type ?? "Sin tipo"
+            return (
+                <div className="text-sm capitalize">
+                    {servicioTipo}
+                </div>
+            )
+        },
+    },
+    {
         accessorKey: "contacto",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Contacto" />

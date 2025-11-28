@@ -12,6 +12,11 @@ const estadoOptions = [
     { value: "false", label: "Inactivo" },
 ]
 
+const typeOptions = [
+    { value: "mensual", label: "Mensual" },
+    { value: "unitario", label: "Unitario" },
+]
+
 // Filtros por rango de fechas (últimos períodos)
 const fechaOptions = [
     { value: "today", label: "Hoy" },
@@ -55,6 +60,11 @@ export function ServiceTable({ data }: ServiceTableProps) {
                     columnKey: "createdAt",
                     title: "Fecha de Creación",
                     options: fechaOptions,
+                },
+                {
+                    columnKey: "type",
+                    title: "Tipo",
+                    options: typeOptions,
                 },
 
             ]}

@@ -14,6 +14,7 @@ export async function createServicio(data: ServicioType) {
       data: {
         name: data.name,
         description: data.description,
+        type: data.type,
         is_active: data.is_active,
     }
   });
@@ -41,6 +42,7 @@ export async function updateServicio(data: Partial<ServicioType>) {
       data: {
         name: data.name,    
         description: data.description,
+        type: data.type,
         is_active: data.is_active,
         updatedAt: new Date().toISOString(),
       }
