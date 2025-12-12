@@ -1,8 +1,8 @@
 export { columns } from "./columns";
-export { TipoInformeTable } from "./tipoInforme-table";
-export { TiposInformeTableWrapper } from "./clientLocations-table-wrapper";
-export { AddServiceButton } from "./add-tipoInforme-button";
-export { TipoInformeForm } from "./tipoInforme-form";
-export { TipoInformeRowActions } from "./clientLocations-row-actions";
-export { getTiposInforme, type TipoDeInforme } from "./actions";
-export { createTipoDeInforme, updateTipoDeInforme, deleteTipoDeInforme } from "./tipoInforme-actions";
+export { ClientLocationsTable } from "./clientLocations-table";
+export { ClientLocationTableWrapper } from "./clientLocations-table-wrapper";
+export { AddClientLocationsButton } from "./add-clientLocations-button";
+export { ClientLocationForm } from "./clientLocations-form";
+export { ClientLocationRowActions } from "./clientLocations-row-actions";
+export { getActiveClientLocations, type clientLocations } from "./actions";
+export { createClientLocation, updateClientLocation, deleteClientLocation } from "./clientLocations-actions";

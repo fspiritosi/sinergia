@@ -3,11 +3,11 @@ import { ClientLocationsTable } from './clientLocations-table'
 import { AddClientLocationsButton } from './add-clientLocations-button'
 import {clientLocations} from './actions'
 
-interface TiposInformeTableWrapperProps {
+interface ClientLocationTableWrapperProps {
     data: clientLocations[]
 }
 
-export function TiposInformeTableWrapper({ data }: TiposInformeTableWrapperProps) {
+export function ClientLocationTableWrapper({ data }: ClientLocationTableWrapperProps) {
     return (
         <Card>
             <CardHeader>
