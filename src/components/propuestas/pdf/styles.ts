@@ -5,7 +5,7 @@ export const pdfStyles = StyleSheet.create({
     page: {
         flexDirection: 'column',
         backgroundColor: PDF_COLORS.white,
-        padding: 20,
+        //padding: 20,
     },
 
     // Header
@@ -184,6 +184,9 @@ export const pdfStyles = StyleSheet.create({
     offerValueBox: {
         padding: 10,
         justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: PDF_COLORS.cream,
+
     },
     offerBoxLeft: {
         flex: 2,
@@ -204,7 +207,7 @@ export const pdfStyles = StyleSheet.create({
     offerValueTextRight: {
         fontSize: 12,
         fontWeight: 'bold',
-        color: PDF_COLORS.white, // Assuming white text on gradient for the value
+        //color: PDF_COLORS.white, // Assuming white text on gradient for the value
         textAlign: 'center',
     },
 

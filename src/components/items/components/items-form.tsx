@@ -35,6 +35,7 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Item } from "./actions"
 import { getServiciosByItem, ServicioAssignment } from "./items-actions"
+import { Textarea } from "@/components/ui/textarea"
 
 
 
@@ -183,7 +184,7 @@ export function ItemForm({
                                         <FormItem className="col-span-2">
                                             <FormLabel>Descripción *</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Descripción del item" {...field} />
+                                                <Textarea placeholder="Descripción del item" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

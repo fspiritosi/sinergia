@@ -37,6 +37,7 @@ import { Items } from "@/generated/client"
 import { X } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
 
 
 const serviceSchema = z.object({
@@ -269,7 +270,7 @@ export function ServiceForm({
                                     <FormItem className="col-span-2">
                                         <FormLabel>Descripción *</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Descripción del servicio" {...field} />
+                                            <Textarea placeholder="Descripción del servicio" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

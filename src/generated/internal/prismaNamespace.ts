@@ -395,7 +395,8 @@ export const ModelName = {
   Servicio: 'Servicio',
   Items: 'Items',
   ItemsOnServicios: 'ItemsOnServicios',
-  PropuestaTecnica: 'PropuestaTecnica'
+  PropuestaTecnica: 'PropuestaTecnica',
+  TipoDeInforme: 'TipoDeInforme'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica"
+    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -859,6 +860,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TipoDeInforme: {
+      payload: Prisma.$TipoDeInformePayload<ExtArgs>
+      fields: Prisma.TipoDeInformeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TipoDeInformeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TipoDeInformeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>
+        }
+        findFirst: {
+          args: Prisma.TipoDeInformeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TipoDeInformeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>
+        }
+        findMany: {
+          args: Prisma.TipoDeInformeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>[]
+        }
+        create: {
+          args: Prisma.TipoDeInformeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>
+        }
+        createMany: {
+          args: Prisma.TipoDeInformeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TipoDeInformeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>[]
+        }
+        delete: {
+          args: Prisma.TipoDeInformeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>
+        }
+        update: {
+          args: Prisma.TipoDeInformeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>
+        }
+        deleteMany: {
+          args: Prisma.TipoDeInformeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TipoDeInformeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TipoDeInformeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>[]
+        }
+        upsert: {
+          args: Prisma.TipoDeInformeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeInformePayload>
+        }
+        aggregate: {
+          args: Prisma.TipoDeInformeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTipoDeInforme>
+        }
+        groupBy: {
+          args: Prisma.TipoDeInformeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TipoDeInformeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TipoDeInformeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TipoDeInformeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -972,6 +1047,18 @@ export const PropuestaTecnicaScalarFieldEnum = {
 } as const
 
 export type PropuestaTecnicaScalarFieldEnum = (typeof PropuestaTecnicaScalarFieldEnum)[keyof typeof PropuestaTecnicaScalarFieldEnum]
+
+
+export const TipoDeInformeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  is_active: 'is_active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TipoDeInformeScalarFieldEnum = (typeof TipoDeInformeScalarFieldEnum)[keyof typeof TipoDeInformeScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1201,6 +1288,7 @@ export type GlobalOmitConfig = {
   items?: Prisma.ItemsOmit
   itemsOnServicios?: Prisma.ItemsOnServiciosOmit
   propuestaTecnica?: Prisma.PropuestaTecnicaOmit
+  tipoDeInforme?: Prisma.TipoDeInformeOmit
 }
 
 /* Types for Logging */

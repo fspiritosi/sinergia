@@ -57,7 +57,7 @@ export function OfertaEconomicaPage({
                         {/* Value Row with Gradient */}
                         <View style={pdfStyles.offerRow}>
                             {/* Left Box - Service Name */}
-                            <View style={[pdfStyles.offerValueBox, pdfStyles.offerBoxLeft, { backgroundColor: '#2398A1' }]}>
+                            <View style={[pdfStyles.offerValueBox, pdfStyles.offerBoxLeft]}>
                                 {/* Note: react-pdf might not support linear-gradient in style prop directly for View. 
                                     We might need to use a background color or an image. 
                                     Let's try to simulate or just use the primary color for now as requested "gradient from blue to green".
@@ -69,7 +69,7 @@ export function OfertaEconomicaPage({
                             </View>
 
                             {/* Right Box - Value */}
-                            <View style={[pdfStyles.offerValueBox, pdfStyles.offerBoxRight, { backgroundColor: '#84B631' }]}>
+                            <View style={[pdfStyles.offerValueBox, pdfStyles.offerBoxRight]}>
                                 <Text style={pdfStyles.offerValueTextRight}>
                                     {valor.toLocaleString('es-AR', {
                                         style: 'currency',

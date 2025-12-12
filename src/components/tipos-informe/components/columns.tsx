@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header"
-import { ItemRowActions } from "./items-row-actions"
-import { Item } from "./actions"
+import { TipoInformeRowActions } from "./tipoInforme-row-actions"
+import { TipoDeInforme } from "./actions"
 
-export const columns: ColumnDef<Item>[] = [
+export const columns: ColumnDef<TipoDeInforme>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -31,7 +31,6 @@ export const columns: ColumnDef<Item>[] = [
         enableHiding: false,
     },
     {
-        id:"name",
         accessorKey: "name",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Nombre" />
@@ -63,7 +62,7 @@ export const columns: ColumnDef<Item>[] = [
     },
     {
         id: "is_active",
-        accessorKey: "is_active",
+        accessorFn: (row) => String(row.is_active),
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Estado" />
         ),
@@ -81,7 +80,6 @@ export const columns: ColumnDef<Item>[] = [
     },
     {
         accessorKey: "createdAt",
-        id: "createdAt",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Fecha de Creación" />
         ),
@@ -123,7 +121,7 @@ export const columns: ColumnDef<Item>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            return <ItemRowActions item={row.original} />
+            return <TipoInformeRowActions tipoInforme={row.original} />
         },
     },
 ]

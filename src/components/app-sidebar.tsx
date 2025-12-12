@@ -55,10 +55,32 @@ const data = {
           isActive: false,
         },
         {
+          title: "Tipos de Informe",
+          url: "/dashboard/tipos-informe",
+          isActive: false,
+        },
+        {
           title: "Usuarios",
           url: "/dashboard/usuarios",
           isActive: false,
         },
+      ],
+    },
+    {
+      title: "Planificación",
+      url: "/dashboard/planes",
+      items: [
+        {
+          title: "Planes de Trabajo",
+          url: "/dashboard/planes",
+          isActive: false,
+        },
+        {
+          title: "Informes",
+          url: "/dashboard/informes",
+          isActive: false,
+        },
+ 
       ],
     },
   ],
