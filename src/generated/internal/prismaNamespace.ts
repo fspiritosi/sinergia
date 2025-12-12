@@ -396,7 +396,8 @@ export const ModelName = {
   Items: 'Items',
   ItemsOnServicios: 'ItemsOnServicios',
   PropuestaTecnica: 'PropuestaTecnica',
-  TipoDeInforme: 'TipoDeInforme'
+  TipoDeInforme: 'TipoDeInforme',
+  ClientLocations: 'ClientLocations'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme"
+    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "clientLocations"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -934,6 +935,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ClientLocations: {
+      payload: Prisma.$ClientLocationsPayload<ExtArgs>
+      fields: Prisma.ClientLocationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClientLocationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClientLocationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>
+        }
+        findFirst: {
+          args: Prisma.ClientLocationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClientLocationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>
+        }
+        findMany: {
+          args: Prisma.ClientLocationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>[]
+        }
+        create: {
+          args: Prisma.ClientLocationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>
+        }
+        createMany: {
+          args: Prisma.ClientLocationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClientLocationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>[]
+        }
+        delete: {
+          args: Prisma.ClientLocationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>
+        }
+        update: {
+          args: Prisma.ClientLocationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClientLocationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClientLocationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClientLocationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.ClientLocationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientLocationsPayload>
+        }
+        aggregate: {
+          args: Prisma.ClientLocationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClientLocations>
+        }
+        groupBy: {
+          args: Prisma.ClientLocationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientLocationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClientLocationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientLocationsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1059,6 +1134,18 @@ export const TipoDeInformeScalarFieldEnum = {
 } as const
 
 export type TipoDeInformeScalarFieldEnum = (typeof TipoDeInformeScalarFieldEnum)[keyof typeof TipoDeInformeScalarFieldEnum]
+
+
+export const ClientLocationsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  clienteId: 'clienteId',
+  is_active: 'is_active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClientLocationsScalarFieldEnum = (typeof ClientLocationsScalarFieldEnum)[keyof typeof ClientLocationsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1289,6 +1376,7 @@ export type GlobalOmitConfig = {
   itemsOnServicios?: Prisma.ItemsOnServiciosOmit
   propuestaTecnica?: Prisma.PropuestaTecnicaOmit
   tipoDeInforme?: Prisma.TipoDeInformeOmit
+  clientLocations?: Prisma.ClientLocationsOmit
 }
 
 /* Types for Logging */

@@ -40,6 +40,11 @@ const data = {
           isActive: true,
         },
         {
+          title: "Locaciones Clientes",
+          url: "/dashboard/clientes/locaciones",
+          isActive: false,
+        },
+        {
           title: "Propuestas",
           url: "/dashboard/clientes/propuestas",
           isActive: false,

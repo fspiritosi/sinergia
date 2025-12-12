@@ -52,3 +52,8 @@ export type PropuestaTecnica = Prisma.PropuestaTecnicaModel
  * 
  */
 export type TipoDeInforme = Prisma.TipoDeInformeModel
+/**
+ * Model ClientLocations
+ * 
+ */
+export type ClientLocations = Prisma.ClientLocationsModel

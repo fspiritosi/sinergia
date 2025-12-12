@@ -33,6 +33,7 @@ model Cliente {
   updatedAt DateTime @default(now())
 
   propuestas PropuestaTecnica[]
+  clientLocations ClientLocations[]
 }
 
 model Servicio {
@@ -96,6 +97,16 @@ model TipoDeInforme {
   id String @id @default(uuid())
   name String
   description String?
+  is_active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model ClientLocations {
+  id String @id @default(uuid())
+  name String
+  clienteId String
+  cliente Cliente @relation(fields: [clienteId], references: [id])
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
