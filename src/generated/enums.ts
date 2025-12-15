@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const InformeEstado = {
+  pendiente: 'pendiente',
+  entregado: 'entregado'
+} as const
+
+export type InformeEstado = (typeof InformeEstado)[keyof typeof InformeEstado]
+
+
 export const PropuestaStatus = {
   pendiente: 'pendiente',
   aprobada: 'aprobada',

@@ -26,6 +26,7 @@ export interface SerializedPropuesta {
     name: string;
     type: string;
   } | null;
+  condicionesParticulares: string[];
 }
 
 export async function getPropuestas(): Promise<SerializedPropuesta[]> {
@@ -75,6 +76,7 @@ export async function getPropuestas(): Promise<SerializedPropuesta[]> {
     updatedAt: propuesta.updatedAt.toISOString(),
     cliente: propuesta.cliente ?? null,
     servicios: propuesta.servicios ?? null,
+    condicionesParticulares: propuesta.condicionesParticulares,
   }));
 }
 

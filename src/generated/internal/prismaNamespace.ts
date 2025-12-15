@@ -397,7 +397,8 @@ export const ModelName = {
   ItemsOnServicios: 'ItemsOnServicios',
   PropuestaTecnica: 'PropuestaTecnica',
   TipoDeInforme: 'TipoDeInforme',
-  ClientLocations: 'ClientLocations'
+  ClientLocations: 'ClientLocations',
+  Informe: 'Informe'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -413,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "clientLocations"
+    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "clientLocations" | "informe"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1009,6 +1010,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Informe: {
+      payload: Prisma.$InformePayload<ExtArgs>
+      fields: Prisma.InformeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InformeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InformeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>
+        }
+        findFirst: {
+          args: Prisma.InformeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InformeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>
+        }
+        findMany: {
+          args: Prisma.InformeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>[]
+        }
+        create: {
+          args: Prisma.InformeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>
+        }
+        createMany: {
+          args: Prisma.InformeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InformeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>[]
+        }
+        delete: {
+          args: Prisma.InformeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>
+        }
+        update: {
+          args: Prisma.InformeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>
+        }
+        deleteMany: {
+          args: Prisma.InformeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InformeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InformeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>[]
+        }
+        upsert: {
+          args: Prisma.InformeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InformePayload>
+        }
+        aggregate: {
+          args: Prisma.InformeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInforme>
+        }
+        groupBy: {
+          args: Prisma.InformeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InformeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InformeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InformeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1090,7 +1165,8 @@ export const ItemsScalarFieldEnum = {
   description: 'description',
   is_active: 'is_active',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  tipoDeInformeId: 'tipoDeInformeId'
 } as const
 
 export type ItemsScalarFieldEnum = (typeof ItemsScalarFieldEnum)[keyof typeof ItemsScalarFieldEnum]
@@ -1117,6 +1193,7 @@ export const PropuestaTecnicaScalarFieldEnum = {
   moneda: 'moneda',
   contacto: 'contacto',
   is_active: 'is_active',
+  condicionesParticulares: 'condicionesParticulares',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1146,6 +1223,23 @@ export const ClientLocationsScalarFieldEnum = {
 } as const
 
 export type ClientLocationsScalarFieldEnum = (typeof ClientLocationsScalarFieldEnum)[keyof typeof ClientLocationsScalarFieldEnum]
+
+
+export const InformeScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  tipoDeInformeId: 'tipoDeInformeId',
+  propuestaId: 'propuestaId',
+  clientLocationId: 'clientLocationId',
+  fechaVencimiento: 'fechaVencimiento',
+  responsableConfeccion: 'responsableConfeccion',
+  estado: 'estado',
+  adjunto: 'adjunto',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InformeScalarFieldEnum = (typeof InformeScalarFieldEnum)[keyof typeof InformeScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1270,6 +1364,20 @@ export type ListEnumMonedaFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
 
 
 /**
+ * Reference to a field of type 'InformeEstado'
+ */
+export type EnumInformeEstadoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InformeEstado'>
+    
+
+
+/**
+ * Reference to a field of type 'InformeEstado[]'
+ */
+export type ListEnumInformeEstadoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InformeEstado[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1377,6 +1485,7 @@ export type GlobalOmitConfig = {
   propuestaTecnica?: Prisma.PropuestaTecnicaOmit
   tipoDeInforme?: Prisma.TipoDeInformeOmit
   clientLocations?: Prisma.ClientLocationsOmit
+  informe?: Prisma.InformeOmit
 }
 
 /* Types for Logging */

@@ -1,9 +1,6 @@
 import React from 'react'
+import Informes from "@/components/informes/Informes"
 
-function page() {
-  return (
-    <div>Informes</div>
-  )
+export default function Page() {
+  return <Informes />
 }
-
-export default page

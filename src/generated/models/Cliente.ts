@@ -216,6 +216,7 @@ export type ClienteWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   propuestas?: Prisma.PropuestaTecnicaListRelationFilter
   clientLocations?: Prisma.ClientLocationsListRelationFilter
+  informes?: Prisma.InformeListRelationFilter
 }
 
 export type ClienteOrderByWithRelationInput = {
@@ -230,6 +231,7 @@ export type ClienteOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   propuestas?: Prisma.PropuestaTecnicaOrderByRelationAggregateInput
   clientLocations?: Prisma.ClientLocationsOrderByRelationAggregateInput
+  informes?: Prisma.InformeOrderByRelationAggregateInput
 }
 
 export type ClienteWhereUniqueInput = Prisma.AtLeast<{
@@ -247,6 +249,7 @@ export type ClienteWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   propuestas?: Prisma.PropuestaTecnicaListRelationFilter
   clientLocations?: Prisma.ClientLocationsListRelationFilter
+  informes?: Prisma.InformeListRelationFilter
 }, "id" | "cuit">
 
 export type ClienteOrderByWithAggregationInput = {
@@ -291,6 +294,7 @@ export type ClienteCreateInput = {
   updatedAt?: Date | string
   propuestas?: Prisma.PropuestaTecnicaCreateNestedManyWithoutClienteInput
   clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
+  informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateInput = {
@@ -305,6 +309,7 @@ export type ClienteUncheckedCreateInput = {
   updatedAt?: Date | string
   propuestas?: Prisma.PropuestaTecnicaUncheckedCreateNestedManyWithoutClienteInput
   clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUpdateInput = {
@@ -319,6 +324,7 @@ export type ClienteUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   propuestas?: Prisma.PropuestaTecnicaUpdateManyWithoutClienteNestedInput
   clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateInput = {
@@ -333,6 +339,7 @@ export type ClienteUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   propuestas?: Prisma.PropuestaTecnicaUncheckedUpdateManyWithoutClienteNestedInput
   clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateManyInput = {
@@ -448,6 +455,20 @@ export type ClienteUpdateOneRequiredWithoutClientLocationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClienteUpdateToOneWithWhereWithoutClientLocationsInput, Prisma.ClienteUpdateWithoutClientLocationsInput>, Prisma.ClienteUncheckedUpdateWithoutClientLocationsInput>
 }
 
+export type ClienteCreateNestedOneWithoutInformesInput = {
+  create?: Prisma.XOR<Prisma.ClienteCreateWithoutInformesInput, Prisma.ClienteUncheckedCreateWithoutInformesInput>
+  connectOrCreate?: Prisma.ClienteCreateOrConnectWithoutInformesInput
+  connect?: Prisma.ClienteWhereUniqueInput
+}
+
+export type ClienteUpdateOneRequiredWithoutInformesNestedInput = {
+  create?: Prisma.XOR<Prisma.ClienteCreateWithoutInformesInput, Prisma.ClienteUncheckedCreateWithoutInformesInput>
+  connectOrCreate?: Prisma.ClienteCreateOrConnectWithoutInformesInput
+  upsert?: Prisma.ClienteUpsertWithoutInformesInput
+  connect?: Prisma.ClienteWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClienteUpdateToOneWithWhereWithoutInformesInput, Prisma.ClienteUpdateWithoutInformesInput>, Prisma.ClienteUncheckedUpdateWithoutInformesInput>
+}
+
 export type ClienteCreateWithoutPropuestasInput = {
   id?: string
   name: string
@@ -459,6 +480,7 @@ export type ClienteCreateWithoutPropuestasInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
+  informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutPropuestasInput = {
@@ -472,6 +494,7 @@ export type ClienteUncheckedCreateWithoutPropuestasInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutPropuestasInput = {
@@ -501,6 +524,7 @@ export type ClienteUpdateWithoutPropuestasInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutPropuestasInput = {
@@ -514,6 +538,7 @@ export type ClienteUncheckedUpdateWithoutPropuestasInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateWithoutClientLocationsInput = {
@@ -527,6 +552,7 @@ export type ClienteCreateWithoutClientLocationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   propuestas?: Prisma.PropuestaTecnicaCreateNestedManyWithoutClienteInput
+  informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutClientLocationsInput = {
@@ -540,6 +566,7 @@ export type ClienteUncheckedCreateWithoutClientLocationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   propuestas?: Prisma.PropuestaTecnicaUncheckedCreateNestedManyWithoutClienteInput
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutClientLocationsInput = {
@@ -569,6 +596,7 @@ export type ClienteUpdateWithoutClientLocationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   propuestas?: Prisma.PropuestaTecnicaUpdateManyWithoutClienteNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutClientLocationsInput = {
@@ -582,6 +610,79 @@ export type ClienteUncheckedUpdateWithoutClientLocationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   propuestas?: Prisma.PropuestaTecnicaUncheckedUpdateManyWithoutClienteNestedInput
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
+}
+
+export type ClienteCreateWithoutInformesInput = {
+  id?: string
+  name: string
+  cuit: string
+  domicilio: string
+  telefono: string
+  email: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  propuestas?: Prisma.PropuestaTecnicaCreateNestedManyWithoutClienteInput
+  clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
+}
+
+export type ClienteUncheckedCreateWithoutInformesInput = {
+  id?: string
+  name: string
+  cuit: string
+  domicilio: string
+  telefono: string
+  email: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  propuestas?: Prisma.PropuestaTecnicaUncheckedCreateNestedManyWithoutClienteInput
+  clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
+}
+
+export type ClienteCreateOrConnectWithoutInformesInput = {
+  where: Prisma.ClienteWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClienteCreateWithoutInformesInput, Prisma.ClienteUncheckedCreateWithoutInformesInput>
+}
+
+export type ClienteUpsertWithoutInformesInput = {
+  update: Prisma.XOR<Prisma.ClienteUpdateWithoutInformesInput, Prisma.ClienteUncheckedUpdateWithoutInformesInput>
+  create: Prisma.XOR<Prisma.ClienteCreateWithoutInformesInput, Prisma.ClienteUncheckedCreateWithoutInformesInput>
+  where?: Prisma.ClienteWhereInput
+}
+
+export type ClienteUpdateToOneWithWhereWithoutInformesInput = {
+  where?: Prisma.ClienteWhereInput
+  data: Prisma.XOR<Prisma.ClienteUpdateWithoutInformesInput, Prisma.ClienteUncheckedUpdateWithoutInformesInput>
+}
+
+export type ClienteUpdateWithoutInformesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cuit?: Prisma.StringFieldUpdateOperationsInput | string
+  domicilio?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  propuestas?: Prisma.PropuestaTecnicaUpdateManyWithoutClienteNestedInput
+  clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
+}
+
+export type ClienteUncheckedUpdateWithoutInformesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cuit?: Prisma.StringFieldUpdateOperationsInput | string
+  domicilio?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  propuestas?: Prisma.PropuestaTecnicaUncheckedUpdateManyWithoutClienteNestedInput
+  clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 
@@ -592,11 +693,13 @@ export type ClienteUncheckedUpdateWithoutClientLocationsInput = {
 export type ClienteCountOutputType = {
   propuestas: number
   clientLocations: number
+  informes: number
 }
 
 export type ClienteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   propuestas?: boolean | ClienteCountOutputTypeCountPropuestasArgs
   clientLocations?: boolean | ClienteCountOutputTypeCountClientLocationsArgs
+  informes?: boolean | ClienteCountOutputTypeCountInformesArgs
 }
 
 /**
@@ -623,6 +726,13 @@ export type ClienteCountOutputTypeCountClientLocationsArgs<ExtArgs extends runti
   where?: Prisma.ClientLocationsWhereInput
 }
 
+/**
+ * ClienteCountOutputType without action
+ */
+export type ClienteCountOutputTypeCountInformesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InformeWhereInput
+}
+
 
 export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -636,6 +746,7 @@ export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   propuestas?: boolean | Prisma.Cliente$propuestasArgs<ExtArgs>
   clientLocations?: boolean | Prisma.Cliente$clientLocationsArgs<ExtArgs>
+  informes?: boolean | Prisma.Cliente$informesArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cliente"]>
 
@@ -679,6 +790,7 @@ export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type ClienteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   propuestas?: boolean | Prisma.Cliente$propuestasArgs<ExtArgs>
   clientLocations?: boolean | Prisma.Cliente$clientLocationsArgs<ExtArgs>
+  informes?: boolean | Prisma.Cliente$informesArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClienteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -689,6 +801,7 @@ export type $ClientePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     propuestas: Prisma.$PropuestaTecnicaPayload<ExtArgs>[]
     clientLocations: Prisma.$ClientLocationsPayload<ExtArgs>[]
+    informes: Prisma.$InformePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1096,6 +1209,7 @@ export interface Prisma__ClienteClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   propuestas<T extends Prisma.Cliente$propuestasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$propuestasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropuestaTecnicaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clientLocations<T extends Prisma.Cliente$clientLocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$clientLocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientLocationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  informes<T extends Prisma.Cliente$informesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$informesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InformePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1567,6 +1681,30 @@ export type Cliente$clientLocationsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.ClientLocationsScalarFieldEnum | Prisma.ClientLocationsScalarFieldEnum[]
+}
+
+/**
+ * Cliente.informes
+ */
+export type Cliente$informesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Informe
+   */
+  select?: Prisma.InformeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Informe
+   */
+  omit?: Prisma.InformeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InformeInclude<ExtArgs> | null
+  where?: Prisma.InformeWhereInput
+  orderBy?: Prisma.InformeOrderByWithRelationInput | Prisma.InformeOrderByWithRelationInput[]
+  cursor?: Prisma.InformeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InformeScalarFieldEnum | Prisma.InformeScalarFieldEnum[]
 }
 
 /**

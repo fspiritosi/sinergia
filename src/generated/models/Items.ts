@@ -31,6 +31,7 @@ export type ItemsMinAggregateOutputType = {
   is_active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  tipoDeInformeId: string | null
 }
 
 export type ItemsMaxAggregateOutputType = {
@@ -40,6 +41,7 @@ export type ItemsMaxAggregateOutputType = {
   is_active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  tipoDeInformeId: string | null
 }
 
 export type ItemsCountAggregateOutputType = {
@@ -49,6 +51,7 @@ export type ItemsCountAggregateOutputType = {
   is_active: number
   createdAt: number
   updatedAt: number
+  tipoDeInformeId: number
   _all: number
 }
 
@@ -60,6 +63,7 @@ export type ItemsMinAggregateInputType = {
   is_active?: true
   createdAt?: true
   updatedAt?: true
+  tipoDeInformeId?: true
 }
 
 export type ItemsMaxAggregateInputType = {
@@ -69,6 +73,7 @@ export type ItemsMaxAggregateInputType = {
   is_active?: true
   createdAt?: true
   updatedAt?: true
+  tipoDeInformeId?: true
 }
 
 export type ItemsCountAggregateInputType = {
@@ -78,6 +83,7 @@ export type ItemsCountAggregateInputType = {
   is_active?: true
   createdAt?: true
   updatedAt?: true
+  tipoDeInformeId?: true
   _all?: true
 }
 
@@ -160,6 +166,7 @@ export type ItemsGroupByOutputType = {
   is_active: boolean
   createdAt: Date
   updatedAt: Date
+  tipoDeInformeId: string | null
   _count: ItemsCountAggregateOutputType | null
   _min: ItemsMinAggregateOutputType | null
   _max: ItemsMaxAggregateOutputType | null
@@ -190,7 +197,9 @@ export type ItemsWhereInput = {
   is_active?: Prisma.BoolFilter<"Items"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
+  tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
   servicios?: Prisma.ItemsOnServiciosListRelationFilter
+  tipoDeInforme?: Prisma.XOR<Prisma.TipoDeInformeNullableScalarRelationFilter, Prisma.TipoDeInformeWhereInput> | null
 }
 
 export type ItemsOrderByWithRelationInput = {
@@ -200,7 +209,9 @@ export type ItemsOrderByWithRelationInput = {
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tipoDeInformeId?: Prisma.SortOrderInput | Prisma.SortOrder
   servicios?: Prisma.ItemsOnServiciosOrderByRelationAggregateInput
+  tipoDeInforme?: Prisma.TipoDeInformeOrderByWithRelationInput
 }
 
 export type ItemsWhereUniqueInput = Prisma.AtLeast<{
@@ -213,7 +224,9 @@ export type ItemsWhereUniqueInput = Prisma.AtLeast<{
   is_active?: Prisma.BoolFilter<"Items"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
+  tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
   servicios?: Prisma.ItemsOnServiciosListRelationFilter
+  tipoDeInforme?: Prisma.XOR<Prisma.TipoDeInformeNullableScalarRelationFilter, Prisma.TipoDeInformeWhereInput> | null
 }, "id">
 
 export type ItemsOrderByWithAggregationInput = {
@@ -223,6 +236,7 @@ export type ItemsOrderByWithAggregationInput = {
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tipoDeInformeId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ItemsCountOrderByAggregateInput
   _max?: Prisma.ItemsMaxOrderByAggregateInput
   _min?: Prisma.ItemsMinOrderByAggregateInput
@@ -238,6 +252,7 @@ export type ItemsScalarWhereWithAggregatesInput = {
   is_active?: Prisma.BoolWithAggregatesFilter<"Items"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Items"> | Date | string
+  tipoDeInformeId?: Prisma.StringNullableWithAggregatesFilter<"Items"> | string | null
 }
 
 export type ItemsCreateInput = {
@@ -248,6 +263,7 @@ export type ItemsCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
+  tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
 }
 
 export type ItemsUncheckedCreateInput = {
@@ -257,6 +273,7 @@ export type ItemsUncheckedCreateInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  tipoDeInformeId?: string | null
   servicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutItemInput
 }
 
@@ -268,6 +285,7 @@ export type ItemsUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
+  tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
 }
 
 export type ItemsUncheckedUpdateInput = {
@@ -277,6 +295,7 @@ export type ItemsUncheckedUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   servicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutItemNestedInput
 }
 
@@ -287,6 +306,7 @@ export type ItemsCreateManyInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  tipoDeInformeId?: string | null
 }
 
 export type ItemsUpdateManyMutationInput = {
@@ -305,6 +325,7 @@ export type ItemsUncheckedUpdateManyInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ItemsCountOrderByAggregateInput = {
@@ -314,6 +335,7 @@ export type ItemsCountOrderByAggregateInput = {
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tipoDeInformeId?: Prisma.SortOrder
 }
 
 export type ItemsMaxOrderByAggregateInput = {
@@ -323,6 +345,7 @@ export type ItemsMaxOrderByAggregateInput = {
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tipoDeInformeId?: Prisma.SortOrder
 }
 
 export type ItemsMinOrderByAggregateInput = {
@@ -332,11 +355,26 @@ export type ItemsMinOrderByAggregateInput = {
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tipoDeInformeId?: Prisma.SortOrder
 }
 
 export type ItemsScalarRelationFilter = {
   is?: Prisma.ItemsWhereInput
   isNot?: Prisma.ItemsWhereInput
+}
+
+export type ItemsListRelationFilter = {
+  every?: Prisma.ItemsWhereInput
+  some?: Prisma.ItemsWhereInput
+  none?: Prisma.ItemsWhereInput
+}
+
+export type ItemsOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type ItemsCreateNestedOneWithoutServiciosInput = {
@@ -353,6 +391,48 @@ export type ItemsUpdateOneRequiredWithoutServiciosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ItemsUpdateToOneWithWhereWithoutServiciosInput, Prisma.ItemsUpdateWithoutServiciosInput>, Prisma.ItemsUncheckedUpdateWithoutServiciosInput>
 }
 
+export type ItemsCreateNestedManyWithoutTipoDeInformeInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutTipoDeInformeInput, Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput> | Prisma.ItemsCreateWithoutTipoDeInformeInput[] | Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput[]
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutTipoDeInformeInput | Prisma.ItemsCreateOrConnectWithoutTipoDeInformeInput[]
+  createMany?: Prisma.ItemsCreateManyTipoDeInformeInputEnvelope
+  connect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+}
+
+export type ItemsUncheckedCreateNestedManyWithoutTipoDeInformeInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutTipoDeInformeInput, Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput> | Prisma.ItemsCreateWithoutTipoDeInformeInput[] | Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput[]
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutTipoDeInformeInput | Prisma.ItemsCreateOrConnectWithoutTipoDeInformeInput[]
+  createMany?: Prisma.ItemsCreateManyTipoDeInformeInputEnvelope
+  connect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+}
+
+export type ItemsUpdateManyWithoutTipoDeInformeNestedInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutTipoDeInformeInput, Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput> | Prisma.ItemsCreateWithoutTipoDeInformeInput[] | Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput[]
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutTipoDeInformeInput | Prisma.ItemsCreateOrConnectWithoutTipoDeInformeInput[]
+  upsert?: Prisma.ItemsUpsertWithWhereUniqueWithoutTipoDeInformeInput | Prisma.ItemsUpsertWithWhereUniqueWithoutTipoDeInformeInput[]
+  createMany?: Prisma.ItemsCreateManyTipoDeInformeInputEnvelope
+  set?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  disconnect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  delete?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  connect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  update?: Prisma.ItemsUpdateWithWhereUniqueWithoutTipoDeInformeInput | Prisma.ItemsUpdateWithWhereUniqueWithoutTipoDeInformeInput[]
+  updateMany?: Prisma.ItemsUpdateManyWithWhereWithoutTipoDeInformeInput | Prisma.ItemsUpdateManyWithWhereWithoutTipoDeInformeInput[]
+  deleteMany?: Prisma.ItemsScalarWhereInput | Prisma.ItemsScalarWhereInput[]
+}
+
+export type ItemsUncheckedUpdateManyWithoutTipoDeInformeNestedInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutTipoDeInformeInput, Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput> | Prisma.ItemsCreateWithoutTipoDeInformeInput[] | Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput[]
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutTipoDeInformeInput | Prisma.ItemsCreateOrConnectWithoutTipoDeInformeInput[]
+  upsert?: Prisma.ItemsUpsertWithWhereUniqueWithoutTipoDeInformeInput | Prisma.ItemsUpsertWithWhereUniqueWithoutTipoDeInformeInput[]
+  createMany?: Prisma.ItemsCreateManyTipoDeInformeInputEnvelope
+  set?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  disconnect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  delete?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  connect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  update?: Prisma.ItemsUpdateWithWhereUniqueWithoutTipoDeInformeInput | Prisma.ItemsUpdateWithWhereUniqueWithoutTipoDeInformeInput[]
+  updateMany?: Prisma.ItemsUpdateManyWithWhereWithoutTipoDeInformeInput | Prisma.ItemsUpdateManyWithWhereWithoutTipoDeInformeInput[]
+  deleteMany?: Prisma.ItemsScalarWhereInput | Prisma.ItemsScalarWhereInput[]
+}
+
 export type ItemsCreateWithoutServiciosInput = {
   id?: string
   name: string
@@ -360,6 +440,7 @@ export type ItemsCreateWithoutServiciosInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
 }
 
 export type ItemsUncheckedCreateWithoutServiciosInput = {
@@ -369,6 +450,7 @@ export type ItemsUncheckedCreateWithoutServiciosInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  tipoDeInformeId?: string | null
 }
 
 export type ItemsCreateOrConnectWithoutServiciosInput = {
@@ -394,9 +476,108 @@ export type ItemsUpdateWithoutServiciosInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
 }
 
 export type ItemsUncheckedUpdateWithoutServiciosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ItemsCreateWithoutTipoDeInformeInput = {
+  id?: string
+  name: string
+  description: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
+}
+
+export type ItemsUncheckedCreateWithoutTipoDeInformeInput = {
+  id?: string
+  name: string
+  description: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  servicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutItemInput
+}
+
+export type ItemsCreateOrConnectWithoutTipoDeInformeInput = {
+  where: Prisma.ItemsWhereUniqueInput
+  create: Prisma.XOR<Prisma.ItemsCreateWithoutTipoDeInformeInput, Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput>
+}
+
+export type ItemsCreateManyTipoDeInformeInputEnvelope = {
+  data: Prisma.ItemsCreateManyTipoDeInformeInput | Prisma.ItemsCreateManyTipoDeInformeInput[]
+  skipDuplicates?: boolean
+}
+
+export type ItemsUpsertWithWhereUniqueWithoutTipoDeInformeInput = {
+  where: Prisma.ItemsWhereUniqueInput
+  update: Prisma.XOR<Prisma.ItemsUpdateWithoutTipoDeInformeInput, Prisma.ItemsUncheckedUpdateWithoutTipoDeInformeInput>
+  create: Prisma.XOR<Prisma.ItemsCreateWithoutTipoDeInformeInput, Prisma.ItemsUncheckedCreateWithoutTipoDeInformeInput>
+}
+
+export type ItemsUpdateWithWhereUniqueWithoutTipoDeInformeInput = {
+  where: Prisma.ItemsWhereUniqueInput
+  data: Prisma.XOR<Prisma.ItemsUpdateWithoutTipoDeInformeInput, Prisma.ItemsUncheckedUpdateWithoutTipoDeInformeInput>
+}
+
+export type ItemsUpdateManyWithWhereWithoutTipoDeInformeInput = {
+  where: Prisma.ItemsScalarWhereInput
+  data: Prisma.XOR<Prisma.ItemsUpdateManyMutationInput, Prisma.ItemsUncheckedUpdateManyWithoutTipoDeInformeInput>
+}
+
+export type ItemsScalarWhereInput = {
+  AND?: Prisma.ItemsScalarWhereInput | Prisma.ItemsScalarWhereInput[]
+  OR?: Prisma.ItemsScalarWhereInput[]
+  NOT?: Prisma.ItemsScalarWhereInput | Prisma.ItemsScalarWhereInput[]
+  id?: Prisma.StringFilter<"Items"> | string
+  name?: Prisma.StringFilter<"Items"> | string
+  description?: Prisma.StringFilter<"Items"> | string
+  is_active?: Prisma.BoolFilter<"Items"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
+  tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
+}
+
+export type ItemsCreateManyTipoDeInformeInput = {
+  id?: string
+  name: string
+  description: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ItemsUpdateWithoutTipoDeInformeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
+}
+
+export type ItemsUncheckedUpdateWithoutTipoDeInformeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutItemNestedInput
+}
+
+export type ItemsUncheckedUpdateManyWithoutTipoDeInformeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
@@ -443,7 +624,9 @@ export type ItemsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  tipoDeInformeId?: boolean
   servicios?: boolean | Prisma.Items$serviciosArgs<ExtArgs>
+  tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
   _count?: boolean | Prisma.ItemsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["items"]>
 
@@ -454,6 +637,8 @@ export type ItemsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  tipoDeInformeId?: boolean
+  tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
 }, ExtArgs["result"]["items"]>
 
 export type ItemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -463,6 +648,8 @@ export type ItemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  tipoDeInformeId?: boolean
+  tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
 }, ExtArgs["result"]["items"]>
 
 export type ItemsSelectScalar = {
@@ -472,20 +659,27 @@ export type ItemsSelectScalar = {
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  tipoDeInformeId?: boolean
 }
 
-export type ItemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "createdAt" | "updatedAt", ExtArgs["result"]["items"]>
+export type ItemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "createdAt" | "updatedAt" | "tipoDeInformeId", ExtArgs["result"]["items"]>
 export type ItemsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   servicios?: boolean | Prisma.Items$serviciosArgs<ExtArgs>
+  tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
   _count?: boolean | Prisma.ItemsCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ItemsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ItemsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ItemsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
+}
+export type ItemsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
+}
 
 export type $ItemsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Items"
   objects: {
     servicios: Prisma.$ItemsOnServiciosPayload<ExtArgs>[]
+    tipoDeInforme: Prisma.$TipoDeInformePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -494,6 +688,7 @@ export type $ItemsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     is_active: boolean
     createdAt: Date
     updatedAt: Date
+    tipoDeInformeId: string | null
   }, ExtArgs["result"]["items"]>
   composites: {}
 }
@@ -889,6 +1084,7 @@ readonly fields: ItemsFieldRefs;
 export interface Prisma__ItemsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   servicios<T extends Prisma.Items$serviciosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$serviciosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemsOnServiciosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tipoDeInforme<T extends Prisma.Items$tipoDeInformeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$tipoDeInformeArgs<ExtArgs>>): Prisma.Prisma__TipoDeInformeClient<runtime.Types.Result.GetResult<Prisma.$TipoDeInformePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -924,6 +1120,7 @@ export interface ItemsFieldRefs {
   readonly is_active: Prisma.FieldRef<"Items", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Items", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Items", 'DateTime'>
+  readonly tipoDeInformeId: Prisma.FieldRef<"Items", 'String'>
 }
     
 
@@ -1173,6 +1370,10 @@ export type ItemsCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.ItemsCreateManyInput | Prisma.ItemsCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ItemsIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1243,6 +1444,10 @@ export type ItemsUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Items to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ItemsIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1333,6 +1538,25 @@ export type Items$serviciosArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ItemsOnServiciosScalarFieldEnum | Prisma.ItemsOnServiciosScalarFieldEnum[]
+}
+
+/**
+ * Items.tipoDeInforme
+ */
+export type Items$tipoDeInformeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TipoDeInforme
+   */
+  select?: Prisma.TipoDeInformeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TipoDeInforme
+   */
+  omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
+  where?: Prisma.TipoDeInformeWhereInput
 }
 
 /**

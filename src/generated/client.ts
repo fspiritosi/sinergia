@@ -84,3 +84,8 @@ export type TipoDeInforme = Prisma.TipoDeInformeModel
  * 
  */
 export type ClientLocations = Prisma.ClientLocationsModel
+/**
+ * Model Informe
+ * 
+ */
+export type Informe = Prisma.InformeModel

@@ -15,6 +15,7 @@ interface CreatePropuestaInput {
   valor: number;
   moneda: Moneda;
   status: PropuestaStatus;
+  condicionesParticulares: string[];
 }
 
 export async function createPropuesta(data: CreatePropuestaInput) {
@@ -31,6 +32,7 @@ export async function createPropuesta(data: CreatePropuestaInput) {
         valor: data.valor,
         moneda: data.moneda,
         status: data.status,
+        condicionesParticulares: data.condicionesParticulares,
       },
     });
 
@@ -51,6 +53,8 @@ export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
       },
       data: {
         codigo: data.codigo,
+        clienteId: data.clienteId,
+        servicioId: data.servicioId,
         vigencia: data.vigencia ?? null,
         items: data.items,
         contacto: data.contacto,
@@ -58,6 +62,7 @@ export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
         valor: data.valor,
         moneda: data.moneda,
         status: data.status,
+        condicionesParticulares: data.condicionesParticulares,
         updatedAt: new Date().toISOString(),
       }
     });

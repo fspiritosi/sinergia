@@ -3,7 +3,7 @@ import { pdfStyles } from './styles'
 import { PageHeader } from './PageHeader'
 import { PageFooter } from './PageFooter'
 import { CONSIDERACIONES_GENERALES, NOTAS_PIE } from '@/lib/pdf-constants'
-import type { Items, Moneda } from '@/generated/client'
+import type { Items, Moneda, PropuestaTecnica } from '@/generated/client'
 
 interface OfertaEconomicaPageProps {
     servicioDescripcion: string
@@ -11,6 +11,7 @@ interface OfertaEconomicaPageProps {
     items: Items[]
     valor: number
     moneda: Moneda
+    condicionesParticulares?: PropuestaTecnica['condicionesParticulares']
 }
 
 export function OfertaEconomicaPage({
@@ -19,6 +20,7 @@ export function OfertaEconomicaPage({
     items,
     valor,
     moneda,
+    condicionesParticulares = [],
 }: OfertaEconomicaPageProps) {
     return (
         <Page size="A4" style={pdfStyles.page}>
@@ -26,7 +28,7 @@ export function OfertaEconomicaPage({
 
             <View style={pdfStyles.content}>
                 {/* Consideraciones Generales */}
-                <View style={pdfStyles.consideracionesSection}>
+                {/* <View style={pdfStyles.consideracionesSection}>
                     <Text style={pdfStyles.consideracionesTitle}>Consideraciones Generales</Text>
                     {CONSIDERACIONES_GENERALES.map((item, index) => (
                         <View key={index} style={{ flexDirection: 'row', marginBottom: 3 }}>
@@ -36,11 +38,23 @@ export function OfertaEconomicaPage({
                             </Text>
                         </View>
                     ))}
-                </View>
+                </View> */}
+                  {/* Consideraciones Particulares */}
+                {/* <View style={pdfStyles.consideracionesSection}>
+                    <Text style={pdfStyles.consideracionesTitle}>Consideraciones Particulares</Text>
+                    {condicionesParticulares.map((item, index) => (
+                        <View key={index} style={{ flexDirection: 'row', marginBottom: 3 }}>
+                            <View style={pdfStyles.bulletPoint} />
+                            <Text style={[pdfStyles.consideracion, { flex: 1, paddingLeft: 0 }]}>
+                                {item}
+                            </Text>
+                        </View>
+                    ))}
+                </View> */}
 
                 {/* Oferta Económica */}
                 <View>
-                    <View style={[pdfStyles.titleDivider, { alignSelf: 'flex-start', marginLeft: 20 }]} />
+                    {/* <View style={[pdfStyles.titleDivider, { alignSelf: 'flex-start', marginLeft: 20 }]} /> */}
                     <Text style={[pdfStyles.sectionTitle, { textAlign: 'left', marginLeft: 20 }]}>Oferta Económica</Text>
 
                     <View style={pdfStyles.offerContainer}>

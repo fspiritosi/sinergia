@@ -42,7 +42,7 @@ export function ClientLocationsTable({ data }: ClientLocationsTableProps) {
 
         return name.includes(searchLower)
     }
-
+    // Filtros por cliente
     const searcClient: {value: string, label: string}[] = []
     const clients = data.map((clientLocation) => {
         const clientId = clientLocation.cliente.name
@@ -51,7 +51,7 @@ export function ClientLocationsTable({ data }: ClientLocationsTableProps) {
         searcClient.push({value: clientLocation.cliente.name, label: clientLocation.cliente.name})
  
     })
-       console.log(searcClient)
+
  
 
     return (

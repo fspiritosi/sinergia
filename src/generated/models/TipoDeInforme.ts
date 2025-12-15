@@ -190,6 +190,8 @@ export type TipoDeInformeWhereInput = {
   is_active?: Prisma.BoolFilter<"TipoDeInforme"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TipoDeInforme"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TipoDeInforme"> | Date | string
+  items?: Prisma.ItemsListRelationFilter
+  informes?: Prisma.InformeListRelationFilter
 }
 
 export type TipoDeInformeOrderByWithRelationInput = {
@@ -199,6 +201,8 @@ export type TipoDeInformeOrderByWithRelationInput = {
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  items?: Prisma.ItemsOrderByRelationAggregateInput
+  informes?: Prisma.InformeOrderByRelationAggregateInput
 }
 
 export type TipoDeInformeWhereUniqueInput = Prisma.AtLeast<{
@@ -211,6 +215,8 @@ export type TipoDeInformeWhereUniqueInput = Prisma.AtLeast<{
   is_active?: Prisma.BoolFilter<"TipoDeInforme"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TipoDeInforme"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TipoDeInforme"> | Date | string
+  items?: Prisma.ItemsListRelationFilter
+  informes?: Prisma.InformeListRelationFilter
 }, "id">
 
 export type TipoDeInformeOrderByWithAggregationInput = {
@@ -244,6 +250,8 @@ export type TipoDeInformeCreateInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  items?: Prisma.ItemsCreateNestedManyWithoutTipoDeInformeInput
+  informes?: Prisma.InformeCreateNestedManyWithoutTipoDeInformeInput
 }
 
 export type TipoDeInformeUncheckedCreateInput = {
@@ -253,6 +261,8 @@ export type TipoDeInformeUncheckedCreateInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  items?: Prisma.ItemsUncheckedCreateNestedManyWithoutTipoDeInformeInput
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutTipoDeInformeInput
 }
 
 export type TipoDeInformeUpdateInput = {
@@ -262,6 +272,8 @@ export type TipoDeInformeUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.ItemsUpdateManyWithoutTipoDeInformeNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutTipoDeInformeNestedInput
 }
 
 export type TipoDeInformeUncheckedUpdateInput = {
@@ -271,6 +283,8 @@ export type TipoDeInformeUncheckedUpdateInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.ItemsUncheckedUpdateManyWithoutTipoDeInformeNestedInput
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutTipoDeInformeNestedInput
 }
 
 export type TipoDeInformeCreateManyInput = {
@@ -300,6 +314,11 @@ export type TipoDeInformeUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type TipoDeInformeNullableScalarRelationFilter = {
+  is?: Prisma.TipoDeInformeWhereInput | null
+  isNot?: Prisma.TipoDeInformeWhereInput | null
+}
+
 export type TipoDeInformeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -327,6 +346,191 @@ export type TipoDeInformeMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type TipoDeInformeScalarRelationFilter = {
+  is?: Prisma.TipoDeInformeWhereInput
+  isNot?: Prisma.TipoDeInformeWhereInput
+}
+
+export type TipoDeInformeCreateNestedOneWithoutItemsInput = {
+  create?: Prisma.XOR<Prisma.TipoDeInformeCreateWithoutItemsInput, Prisma.TipoDeInformeUncheckedCreateWithoutItemsInput>
+  connectOrCreate?: Prisma.TipoDeInformeCreateOrConnectWithoutItemsInput
+  connect?: Prisma.TipoDeInformeWhereUniqueInput
+}
+
+export type TipoDeInformeUpdateOneWithoutItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.TipoDeInformeCreateWithoutItemsInput, Prisma.TipoDeInformeUncheckedCreateWithoutItemsInput>
+  connectOrCreate?: Prisma.TipoDeInformeCreateOrConnectWithoutItemsInput
+  upsert?: Prisma.TipoDeInformeUpsertWithoutItemsInput
+  disconnect?: Prisma.TipoDeInformeWhereInput | boolean
+  delete?: Prisma.TipoDeInformeWhereInput | boolean
+  connect?: Prisma.TipoDeInformeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TipoDeInformeUpdateToOneWithWhereWithoutItemsInput, Prisma.TipoDeInformeUpdateWithoutItemsInput>, Prisma.TipoDeInformeUncheckedUpdateWithoutItemsInput>
+}
+
+export type TipoDeInformeCreateNestedOneWithoutInformesInput = {
+  create?: Prisma.XOR<Prisma.TipoDeInformeCreateWithoutInformesInput, Prisma.TipoDeInformeUncheckedCreateWithoutInformesInput>
+  connectOrCreate?: Prisma.TipoDeInformeCreateOrConnectWithoutInformesInput
+  connect?: Prisma.TipoDeInformeWhereUniqueInput
+}
+
+export type TipoDeInformeUpdateOneRequiredWithoutInformesNestedInput = {
+  create?: Prisma.XOR<Prisma.TipoDeInformeCreateWithoutInformesInput, Prisma.TipoDeInformeUncheckedCreateWithoutInformesInput>
+  connectOrCreate?: Prisma.TipoDeInformeCreateOrConnectWithoutInformesInput
+  upsert?: Prisma.TipoDeInformeUpsertWithoutInformesInput
+  connect?: Prisma.TipoDeInformeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TipoDeInformeUpdateToOneWithWhereWithoutInformesInput, Prisma.TipoDeInformeUpdateWithoutInformesInput>, Prisma.TipoDeInformeUncheckedUpdateWithoutInformesInput>
+}
+
+export type TipoDeInformeCreateWithoutItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  informes?: Prisma.InformeCreateNestedManyWithoutTipoDeInformeInput
+}
+
+export type TipoDeInformeUncheckedCreateWithoutItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutTipoDeInformeInput
+}
+
+export type TipoDeInformeCreateOrConnectWithoutItemsInput = {
+  where: Prisma.TipoDeInformeWhereUniqueInput
+  create: Prisma.XOR<Prisma.TipoDeInformeCreateWithoutItemsInput, Prisma.TipoDeInformeUncheckedCreateWithoutItemsInput>
+}
+
+export type TipoDeInformeUpsertWithoutItemsInput = {
+  update: Prisma.XOR<Prisma.TipoDeInformeUpdateWithoutItemsInput, Prisma.TipoDeInformeUncheckedUpdateWithoutItemsInput>
+  create: Prisma.XOR<Prisma.TipoDeInformeCreateWithoutItemsInput, Prisma.TipoDeInformeUncheckedCreateWithoutItemsInput>
+  where?: Prisma.TipoDeInformeWhereInput
+}
+
+export type TipoDeInformeUpdateToOneWithWhereWithoutItemsInput = {
+  where?: Prisma.TipoDeInformeWhereInput
+  data: Prisma.XOR<Prisma.TipoDeInformeUpdateWithoutItemsInput, Prisma.TipoDeInformeUncheckedUpdateWithoutItemsInput>
+}
+
+export type TipoDeInformeUpdateWithoutItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUpdateManyWithoutTipoDeInformeNestedInput
+}
+
+export type TipoDeInformeUncheckedUpdateWithoutItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutTipoDeInformeNestedInput
+}
+
+export type TipoDeInformeCreateWithoutInformesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.ItemsCreateNestedManyWithoutTipoDeInformeInput
+}
+
+export type TipoDeInformeUncheckedCreateWithoutInformesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.ItemsUncheckedCreateNestedManyWithoutTipoDeInformeInput
+}
+
+export type TipoDeInformeCreateOrConnectWithoutInformesInput = {
+  where: Prisma.TipoDeInformeWhereUniqueInput
+  create: Prisma.XOR<Prisma.TipoDeInformeCreateWithoutInformesInput, Prisma.TipoDeInformeUncheckedCreateWithoutInformesInput>
+}
+
+export type TipoDeInformeUpsertWithoutInformesInput = {
+  update: Prisma.XOR<Prisma.TipoDeInformeUpdateWithoutInformesInput, Prisma.TipoDeInformeUncheckedUpdateWithoutInformesInput>
+  create: Prisma.XOR<Prisma.TipoDeInformeCreateWithoutInformesInput, Prisma.TipoDeInformeUncheckedCreateWithoutInformesInput>
+  where?: Prisma.TipoDeInformeWhereInput
+}
+
+export type TipoDeInformeUpdateToOneWithWhereWithoutInformesInput = {
+  where?: Prisma.TipoDeInformeWhereInput
+  data: Prisma.XOR<Prisma.TipoDeInformeUpdateWithoutInformesInput, Prisma.TipoDeInformeUncheckedUpdateWithoutInformesInput>
+}
+
+export type TipoDeInformeUpdateWithoutInformesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.ItemsUpdateManyWithoutTipoDeInformeNestedInput
+}
+
+export type TipoDeInformeUncheckedUpdateWithoutInformesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.ItemsUncheckedUpdateManyWithoutTipoDeInformeNestedInput
+}
+
+
+/**
+ * Count Type TipoDeInformeCountOutputType
+ */
+
+export type TipoDeInformeCountOutputType = {
+  items: number
+  informes: number
+}
+
+export type TipoDeInformeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  items?: boolean | TipoDeInformeCountOutputTypeCountItemsArgs
+  informes?: boolean | TipoDeInformeCountOutputTypeCountInformesArgs
+}
+
+/**
+ * TipoDeInformeCountOutputType without action
+ */
+export type TipoDeInformeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TipoDeInformeCountOutputType
+   */
+  select?: Prisma.TipoDeInformeCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TipoDeInformeCountOutputType without action
+ */
+export type TipoDeInformeCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ItemsWhereInput
+}
+
+/**
+ * TipoDeInformeCountOutputType without action
+ */
+export type TipoDeInformeCountOutputTypeCountInformesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InformeWhereInput
+}
 
 
 export type TipoDeInformeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -336,6 +540,9 @@ export type TipoDeInformeSelect<ExtArgs extends runtime.Types.Extensions.Interna
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  items?: boolean | Prisma.TipoDeInforme$itemsArgs<ExtArgs>
+  informes?: boolean | Prisma.TipoDeInforme$informesArgs<ExtArgs>
+  _count?: boolean | Prisma.TipoDeInformeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tipoDeInforme"]>
 
 export type TipoDeInformeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -366,10 +573,20 @@ export type TipoDeInformeSelectScalar = {
 }
 
 export type TipoDeInformeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "createdAt" | "updatedAt", ExtArgs["result"]["tipoDeInforme"]>
+export type TipoDeInformeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  items?: boolean | Prisma.TipoDeInforme$itemsArgs<ExtArgs>
+  informes?: boolean | Prisma.TipoDeInforme$informesArgs<ExtArgs>
+  _count?: boolean | Prisma.TipoDeInformeCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type TipoDeInformeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type TipoDeInformeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $TipoDeInformePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TipoDeInforme"
-  objects: {}
+  objects: {
+    items: Prisma.$ItemsPayload<ExtArgs>[]
+    informes: Prisma.$InformePayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
@@ -771,6 +988,8 @@ readonly fields: TipoDeInformeFieldRefs;
  */
 export interface Prisma__TipoDeInformeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  items<T extends Prisma.TipoDeInforme$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TipoDeInforme$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  informes<T extends Prisma.TipoDeInforme$informesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TipoDeInforme$informesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InformePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -823,6 +1042,10 @@ export type TipoDeInformeFindUniqueArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
+  /**
    * Filter, which TipoDeInforme to fetch.
    */
   where: Prisma.TipoDeInformeWhereUniqueInput
@@ -841,6 +1064,10 @@ export type TipoDeInformeFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
+  /**
    * Filter, which TipoDeInforme to fetch.
    */
   where: Prisma.TipoDeInformeWhereUniqueInput
@@ -858,6 +1085,10 @@ export type TipoDeInformeFindFirstArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the TipoDeInforme
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
   /**
    * Filter, which TipoDeInforme to fetch.
    */
@@ -907,6 +1138,10 @@ export type TipoDeInformeFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
+  /**
    * Filter, which TipoDeInforme to fetch.
    */
   where?: Prisma.TipoDeInformeWhereInput
@@ -955,6 +1190,10 @@ export type TipoDeInformeFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
+  /**
    * Filter, which TipoDeInformes to fetch.
    */
   where?: Prisma.TipoDeInformeWhereInput
@@ -997,6 +1236,10 @@ export type TipoDeInformeCreateArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the TipoDeInforme
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
   /**
    * The data needed to create a TipoDeInforme.
    */
@@ -1045,6 +1288,10 @@ export type TipoDeInformeUpdateArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the TipoDeInforme
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
   /**
    * The data needed to update a TipoDeInforme.
    */
@@ -1112,6 +1359,10 @@ export type TipoDeInformeUpsertArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
+  /**
    * The filter to search for the TipoDeInforme to update in case it exists.
    */
   where: Prisma.TipoDeInformeWhereUniqueInput
@@ -1138,6 +1389,10 @@ export type TipoDeInformeDeleteArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
+  /**
    * Filter which TipoDeInforme to delete.
    */
   where: Prisma.TipoDeInformeWhereUniqueInput
@@ -1158,6 +1413,54 @@ export type TipoDeInformeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
+ * TipoDeInforme.items
+ */
+export type TipoDeInforme$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Items
+   */
+  select?: Prisma.ItemsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Items
+   */
+  omit?: Prisma.ItemsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ItemsInclude<ExtArgs> | null
+  where?: Prisma.ItemsWhereInput
+  orderBy?: Prisma.ItemsOrderByWithRelationInput | Prisma.ItemsOrderByWithRelationInput[]
+  cursor?: Prisma.ItemsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ItemsScalarFieldEnum | Prisma.ItemsScalarFieldEnum[]
+}
+
+/**
+ * TipoDeInforme.informes
+ */
+export type TipoDeInforme$informesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Informe
+   */
+  select?: Prisma.InformeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Informe
+   */
+  omit?: Prisma.InformeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InformeInclude<ExtArgs> | null
+  where?: Prisma.InformeWhereInput
+  orderBy?: Prisma.InformeOrderByWithRelationInput | Prisma.InformeOrderByWithRelationInput[]
+  cursor?: Prisma.InformeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InformeScalarFieldEnum | Prisma.InformeScalarFieldEnum[]
+}
+
+/**
  * TipoDeInforme without action
  */
 export type TipoDeInformeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1169,4 +1472,8 @@ export type TipoDeInformeDefaultArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the TipoDeInforme
    */
   omit?: Prisma.TipoDeInformeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
 }

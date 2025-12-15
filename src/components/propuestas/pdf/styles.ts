@@ -115,6 +115,7 @@ export const pdfStyles = StyleSheet.create({
         fontWeight: 'bold',
         color: PDF_COLORS.darkBlue,
         marginBottom: 15,
+        marginTop: 15,
         textAlign: 'center',
     },
     titleDivider: {
@@ -123,6 +124,7 @@ export const pdfStyles = StyleSheet.create({
         width: 200,
         alignSelf: 'center',
         marginBottom: 10,
+
     },
     itemsList: {
         marginTop: 10,
@@ -137,8 +139,8 @@ export const pdfStyles = StyleSheet.create({
 
     // Page 2 specific
     consideracionesSection: {
-        marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 0,
+        marginTop:10,
         paddingHorizontal: 20,
     },
     consideracionesTitle: {

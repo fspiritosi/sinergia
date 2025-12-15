@@ -56,7 +56,8 @@ export const ModelName = {
   ItemsOnServicios: 'ItemsOnServicios',
   PropuestaTecnica: 'PropuestaTecnica',
   TipoDeInforme: 'TipoDeInforme',
-  ClientLocations: 'ClientLocations'
+  ClientLocations: 'ClientLocations',
+  Informe: 'Informe'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -117,7 +118,8 @@ export const ItemsScalarFieldEnum = {
   description: 'description',
   is_active: 'is_active',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  tipoDeInformeId: 'tipoDeInformeId'
 } as const
 
 export type ItemsScalarFieldEnum = (typeof ItemsScalarFieldEnum)[keyof typeof ItemsScalarFieldEnum]
@@ -144,6 +146,7 @@ export const PropuestaTecnicaScalarFieldEnum = {
   moneda: 'moneda',
   contacto: 'contacto',
   is_active: 'is_active',
+  condicionesParticulares: 'condicionesParticulares',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -173,6 +176,23 @@ export const ClientLocationsScalarFieldEnum = {
 } as const
 
 export type ClientLocationsScalarFieldEnum = (typeof ClientLocationsScalarFieldEnum)[keyof typeof ClientLocationsScalarFieldEnum]
+
+
+export const InformeScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  tipoDeInformeId: 'tipoDeInformeId',
+  propuestaId: 'propuestaId',
+  clientLocationId: 'clientLocationId',
+  fechaVencimiento: 'fechaVencimiento',
+  responsableConfeccion: 'responsableConfeccion',
+  estado: 'estado',
+  adjunto: 'adjunto',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InformeScalarFieldEnum = (typeof InformeScalarFieldEnum)[keyof typeof InformeScalarFieldEnum]
 
 
 export const SortOrder = {

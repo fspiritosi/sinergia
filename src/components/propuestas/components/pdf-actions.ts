@@ -39,6 +39,7 @@ export async function generatePropuestaPDF(propuestaId: string) {
                 items,
                 valor: Number(propuesta.valor),
                 moneda: propuesta.moneda,
+                condicionesParticulares: propuesta.condicionesParticulares ?? [],
             })
         )
 

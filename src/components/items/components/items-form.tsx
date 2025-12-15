@@ -36,6 +36,14 @@ import * as z from "zod"
 import { Item } from "./actions"
 import { getServiciosByItem, ServicioAssignment } from "./items-actions"
 import { Textarea } from "@/components/ui/textarea"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { getActiveTiposInforme, type TipoDeInforme } from "@/components/tipos-informe/components/actions"
 
 
 
@@ -43,8 +51,8 @@ import { Textarea } from "@/components/ui/textarea"
 const itemSchema = z.object({
     name: z.string().min(1, "El nombre es requerido"),
     description: z.string().min(1, "La descripción es requerida"),
+    tipoDeInformeId: z.string().optional(),
     is_active: z.boolean(),
-
 })
 
 type ItemFormData = z.infer<typeof itemSchema>
@@ -66,11 +74,16 @@ export function ItemForm({
 }: ItemFormProps) {
     const isEditing = !!item
 
+    const [tiposInforme, setTiposInforme] = useState<TipoDeInforme[]>([])
+    const [tiposLoading, setTiposLoading] = useState(false)
+    const [tiposError, setTiposError] = useState<string | null>(null)
+
     const form = useForm<ItemFormData>({
         resolver: zodResolver(itemSchema),
         defaultValues: {
             name: "",
             description: "",
+            tipoDeInformeId: undefined,
             is_active: true,
 
         },
@@ -89,12 +102,14 @@ export function ItemForm({
                 form.reset({
                     name: item.name,
                     description: item.description,
+                    tipoDeInformeId: (item as any).tipoDeInformeId ?? undefined,
                     is_active: item.is_active,
                 } as any)
             } else {
                 form.reset({
                     name: "",
                     description: "",
+                    tipoDeInformeId: undefined,
                     is_active: true,
 
                 })
@@ -107,6 +122,39 @@ export function ItemForm({
             setHasConfirmedDeactivation(false)
         }
     }, [open, item, form])
+
+    // Cargar tipos de informe cuando se abre el modal
+    useEffect(() => {
+        if (!open) {
+            return
+        }
+
+        let isMounted = true
+
+        const loadTiposInforme = async () => {
+            setTiposLoading(true)
+            setTiposError(null)
+
+            try {
+                const tipos = await getActiveTiposInforme()
+                if (!isMounted) return
+                setTiposInforme(tipos)
+            } catch (error) {
+                console.error("Error al cargar tipos de informe:", error)
+                if (!isMounted) return
+                setTiposError("No se pudieron cargar los tipos de informe.")
+            } finally {
+                if (!isMounted) return
+                setTiposLoading(false)
+            }
+        }
+
+        void loadTiposInforme()
+
+        return () => {
+            isMounted = false
+        }
+    }, [open])
 
     const loadAssociatedServicios = async () => {
         if (!item?.id) {
@@ -190,32 +238,43 @@ export function ItemForm({
                                         </FormItem>
                                     )}
                                 />
-                                {/* <FormField
-                                control={form.control}
-                                name="description"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-2">
-                                        <FormLabel>Descripción *</FormLabel>
-                                        <FormControl>
-                                            <Select {...field}>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Seleccione un servicio" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {servicios.map((servicio) => (
-                                                        <SelectItem key={servicio.id} value={servicio.id}>
-                                                            {servicio.name}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            /> */}
-
-
+                                <FormField
+                                    control={form.control}
+                                    name="tipoDeInformeId"
+                                    render={({ field }) => (
+                                        <FormItem className="col-span-2">
+                                            <FormLabel>Tipo de Informe (opcional)</FormLabel>
+                                            <FormControl className="w-full">
+                                                <Select
+                                                    onValueChange={(value) => field.onChange(value)}
+                                                    value={field.value ?? undefined}
+                                                    disabled={tiposLoading || !!tiposError}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue
+                                                            placeholder={
+                                                                tiposLoading
+                                                                    ? "Cargando tipos de informe..."
+                                                                    : "Seleccioná un tipo de informe (opcional)"
+                                                            }
+                                                        />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {tiposInforme.map((tipo) => (
+                                                            <SelectItem key={tipo.id} value={tipo.id}>
+                                                                {tipo.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            {tiposError ? (
+                                                <p className="text-sm text-destructive">{tiposError}</p>
+                                            ) : null}
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
                                 <FormField
                                     control={form.control}

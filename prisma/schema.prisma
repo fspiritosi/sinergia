@@ -34,6 +34,7 @@ model Cliente {
 
   propuestas PropuestaTecnica[]
   clientLocations ClientLocations[]
+  informes Informe[]
 }
 
 model Servicio {
@@ -58,7 +59,8 @@ model Items {
   updatedAt DateTime @default(now())
 
   servicios ItemsOnServicios[]
-
+  tipoDeInforme   TipoDeInforme? @relation(fields: [tipoDeInformeId], references: [id])
+  tipoDeInformeId String?
 }
 
 model ItemsOnServicios {
@@ -87,9 +89,12 @@ model PropuestaTecnica {
   moneda Moneda @default(ARS)
   contacto   String?
   is_active Boolean @default(true)
+  condicionesParticulares String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
+
+  informes Informe[]
 
 }
 
@@ -100,6 +105,9 @@ model TipoDeInforme {
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  items Items[]
+  informes Informe[]
 }
 
 model ClientLocations {
@@ -110,9 +118,44 @@ model ClientLocations {
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  informes Informe[]
 }
 
+model Informe {
+  id                   String         @id @default(uuid())
+
+  clienteId            String
+  cliente              Cliente        @relation(fields: [clienteId], references: [id])
+
+  tipoDeInformeId      String
+  tipoDeInforme        TipoDeInforme  @relation(fields: [tipoDeInformeId], references: [id])
+
+  propuestaId          String
+  propuesta            PropuestaTecnica @relation(fields: [propuestaId], references: [id])
+
+  clientLocationId     String
+  clientLocation       ClientLocations @relation(fields: [clientLocationId], references: [id])
+
+  fechaVencimiento     DateTime
+  responsableConfeccion String
+  estado               InformeEstado   @default(pendiente)
+  adjunto              String?
+
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @default(now())
+}
+
+
+
+
+
 // ENUM 
+
+enum InformeEstado {
+  pendiente
+  entregado
+}
 
 enum PropuestaStatus {
   pendiente
