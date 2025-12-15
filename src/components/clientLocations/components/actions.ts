@@ -29,10 +29,11 @@ export async function getClientLocations() {
   return clientLocationsOrdenados;
 }
 
-export async function getActiveClientLocations() {
+export async function getActiveClientLocations(clienteId?: string) {
   const clientLocations = await prisma.clientLocations.findMany({
     where: {
       is_active: true,
+      ...(clienteId ? { clienteId } : {}),
     },
   });
 
@@ -47,5 +48,6 @@ export async function getActiveClientLocations() {
   return clientLocationsOrdenados;
 }
 
-// Exportamos el tipo de retorno de la función
+// Exportamos los tipos de retorno de las funciones
 export type clientLocations = Awaited<ReturnType<typeof getClientLocations>>[0];
+export type ClientLocationBasic = Awaited<ReturnType<typeof getActiveClientLocations>>[0];

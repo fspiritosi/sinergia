@@ -43,6 +43,17 @@ export function ClientLocationsTable({ data }: ClientLocationsTableProps) {
         return name.includes(searchLower)
     }
 
+    const searcClient: {value: string, label: string}[] = []
+    const clients = data.map((clientLocation) => {
+        const clientId = clientLocation.cliente.name
+        const clientExist = searcClient.find((client) => client.value === clientId)
+        if(clientExist) return
+        searcClient.push({value: clientLocation.cliente.name, label: clientLocation.cliente.name})
+ 
+    })
+       console.log(searcClient)
+ 
+
     return (
         <DataTable
             data={data}
@@ -60,6 +71,11 @@ export function ClientLocationsTable({ data }: ClientLocationsTableProps) {
                     columnKey: "createdAt",
                     title: "Fecha de Creación",
                     options: fechaOptions,
+                },
+                {
+                    columnKey: "clienteNombre",
+                    title: "Cliente",
+                    options: searcClient,
                 },
             ]}
         />
