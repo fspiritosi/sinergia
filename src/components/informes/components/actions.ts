@@ -3,6 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { uploadFileToR2 } from "@/lib/r2-upload";
+import { refreshPlanTrabajoEstado } from "@/components/planesTrabajo/components/actions";
 
 export async function getInformes() {
   const informes = await prisma.informe.findMany({
@@ -42,6 +43,59 @@ export async function getPendingInformes() {
   return informes;
 }
 
+export type InformeCalendarItem = {
+  id: string
+  clienteId: string
+  clienteNombre: string
+  propuestaId: string
+  propuestaCodigo: string
+  tipoDeInformeId: string
+  tipoDeInformeNombre: string
+  fechaVencimiento: string
+  estado: string
+  adjunto: string | null
+}
+
+export async function getInformesByRange(params: {
+  from: string
+  to: string
+}): Promise<InformeCalendarItem[]> {
+  const from = new Date(params.from)
+  const to = new Date(params.to)
+
+  if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) {
+    throw new Error("Rango de fechas inválido")
+  }
+
+  const informes = await prisma.informe.findMany({
+    where: {
+      fechaVencimiento: {
+        gte: from,
+        lte: to,
+      },
+    },
+    include: {
+      cliente: { select: { id: true, name: true } },
+      propuesta: { select: { id: true, codigo: true } },
+      tipoDeInforme: { select: { id: true, name: true } },
+    },
+    orderBy: { fechaVencimiento: "asc" },
+  })
+
+  return informes.map((i) => ({
+    id: i.id,
+    clienteId: i.cliente.id,
+    clienteNombre: i.cliente.name,
+    propuestaId: i.propuesta.id,
+    propuestaCodigo: i.propuesta.codigo,
+    tipoDeInformeId: i.tipoDeInforme.id,
+    tipoDeInformeNombre: i.tipoDeInforme.name,
+    fechaVencimiento: i.fechaVencimiento.toISOString(),
+    estado: String(i.estado),
+    adjunto: i.adjunto ?? null,
+  }))
+}
+
 export async function createInforme(data: any) {
   const informe = await prisma.informe.create({
     data,
@@ -63,14 +117,35 @@ export async function completarInforme(formData: FormData) {
   const key = `informes/${informeId}`;
   await uploadFileToR2(file, key);
 
-  await prisma.informe.update({
+  const updated = await prisma.informe.update({
     where: { id: informeId },
     data: {
       estado: "entregado",
       responsableConfeccion: responsable,
       adjunto: key,
     },
+    select: {
+      id: true,
+      planTrabajoProgramacionId: true,
+    },
   });
+
+  if (updated.planTrabajoProgramacionId) {
+    const programacion = await prisma.planTrabajoProgramacion.update({
+      where: { id: updated.planTrabajoProgramacionId },
+      data: {
+        ejecutadoAt: new Date(),
+      },
+      select: {
+        planTrabajoId: true,
+      },
+    });
+
+    await refreshPlanTrabajoEstado(programacion.planTrabajoId);
+
+    revalidatePath("/dashboard/planes");
+    revalidatePath(`/dashboard/planes/${programacion.planTrabajoId}`);
+  }
 
   revalidatePath("/dashboard/informes");
 }

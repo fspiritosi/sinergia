@@ -1,9 +1,7 @@
-import React from 'react'
+import PlanesTrabajo from "@/components/planesTrabajo/PlanesTrabajo"
 
-function Planes() {
-  return (
-    <div>Planes</div>
-  )
+export const dynamic = "force-dynamic";
+
+export default function Page() {
+  return <PlanesTrabajo />
 }
-
-export default Planes

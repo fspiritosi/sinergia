@@ -57,7 +57,9 @@ export const ModelName = {
   PropuestaTecnica: 'PropuestaTecnica',
   TipoDeInforme: 'TipoDeInforme',
   ClientLocations: 'ClientLocations',
-  Informe: 'Informe'
+  Informe: 'Informe',
+  PlanTrabajo: 'PlanTrabajo',
+  PlanTrabajoProgramacion: 'PlanTrabajoProgramacion'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -188,11 +190,41 @@ export const InformeScalarFieldEnum = {
   responsableConfeccion: 'responsableConfeccion',
   estado: 'estado',
   adjunto: 'adjunto',
+  planTrabajoProgramacionId: 'planTrabajoProgramacionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type InformeScalarFieldEnum = (typeof InformeScalarFieldEnum)[keyof typeof InformeScalarFieldEnum]
+
+
+export const PlanTrabajoScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  propuestaId: 'propuestaId',
+  fechaInicio: 'fechaInicio',
+  fechaFin: 'fechaFin',
+  estado: 'estado',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanTrabajoScalarFieldEnum = (typeof PlanTrabajoScalarFieldEnum)[keyof typeof PlanTrabajoScalarFieldEnum]
+
+
+export const PlanTrabajoProgramacionScalarFieldEnum = {
+  id: 'id',
+  planTrabajoId: 'planTrabajoId',
+  itemId: 'itemId',
+  fechaProgramada: 'fechaProgramada',
+  precision: 'precision',
+  clientLocationId: 'clientLocationId',
+  ejecutadoAt: 'ejecutadoAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanTrabajoProgramacionScalarFieldEnum = (typeof PlanTrabajoProgramacionScalarFieldEnum)[keyof typeof PlanTrabajoProgramacionScalarFieldEnum]
 
 
 export const SortOrder = {

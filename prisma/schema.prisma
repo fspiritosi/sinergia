@@ -35,6 +35,7 @@ model Cliente {
   propuestas PropuestaTecnica[]
   clientLocations ClientLocations[]
   informes Informe[]
+  planesTrabajo PlanTrabajo[]
 }
 
 model Servicio {
@@ -61,6 +62,8 @@ model Items {
   servicios ItemsOnServicios[]
   tipoDeInforme   TipoDeInforme? @relation(fields: [tipoDeInformeId], references: [id])
   tipoDeInformeId String?
+
+  planesTrabajoProgramaciones PlanTrabajoProgramacion[]
 }
 
 model ItemsOnServicios {
@@ -95,6 +98,7 @@ model PropuestaTecnica {
 
 
   informes Informe[]
+  planesTrabajo PlanTrabajo[]
 
 }
 
@@ -120,6 +124,8 @@ model ClientLocations {
   updatedAt DateTime @default(now())
 
   informes Informe[]
+
+  planesTrabajoProgramaciones PlanTrabajoProgramacion[]
 }
 
 model Informe {
@@ -142,8 +148,53 @@ model Informe {
   estado               InformeEstado   @default(pendiente)
   adjunto              String?
 
+  planTrabajoProgramacionId String? @unique
+  planTrabajoProgramacion   PlanTrabajoProgramacion? @relation(fields: [planTrabajoProgramacionId], references: [id])
+
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @default(now())
+}
+
+model PlanTrabajo {
+  id String @id @default(uuid())
+
+  clienteId String
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+
+  propuestaId String
+  propuesta PropuestaTecnica @relation(fields: [propuestaId], references: [id])
+
+  fechaInicio DateTime
+  fechaFin DateTime
+  estado PlanTrabajoEstado @default(pendiente_programacion)
+
+  programaciones PlanTrabajoProgramacion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model PlanTrabajoProgramacion {
+  id String @id @default(uuid())
+
+  planTrabajoId String
+  planTrabajo PlanTrabajo @relation(fields: [planTrabajoId], references: [id])
+
+  itemId String
+  item Items @relation(fields: [itemId], references: [id])
+
+  fechaProgramada DateTime
+  precision ProgramacionPrecision @default(dia)
+
+  clientLocationId String?
+  clientLocation ClientLocations? @relation(fields: [clientLocationId], references: [id])
+
+  ejecutadoAt DateTime?
+
+  informe Informe?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 
@@ -155,6 +206,20 @@ model Informe {
 enum InformeEstado {
   pendiente
   entregado
+}
+
+enum PlanTrabajoEstado {
+  pendiente_programacion
+  programado_incompleto
+  programado_completo
+  en_desarrollo
+  finalizado_con_pendientes
+  finalizado_completo
+}
+
+enum ProgramacionPrecision {
+  mes
+  dia
 }
 
 enum PropuestaStatus {

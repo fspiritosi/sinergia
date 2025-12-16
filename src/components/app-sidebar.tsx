@@ -76,6 +76,11 @@ const data = {
       url: "/dashboard/planes",
       items: [
         {
+          title: "Calendario",
+          url: "/dashboard/planificacion",
+          isActive: false,
+        },
+        {
           title: "Planes de Trabajo",
           url: "/dashboard/planes",
           isActive: false,

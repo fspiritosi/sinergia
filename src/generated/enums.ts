@@ -17,6 +17,26 @@ export const InformeEstado = {
 export type InformeEstado = (typeof InformeEstado)[keyof typeof InformeEstado]
 
 
+export const PlanTrabajoEstado = {
+  pendiente_programacion: 'pendiente_programacion',
+  programado_incompleto: 'programado_incompleto',
+  programado_completo: 'programado_completo',
+  en_desarrollo: 'en_desarrollo',
+  finalizado_con_pendientes: 'finalizado_con_pendientes',
+  finalizado_completo: 'finalizado_completo'
+} as const
+
+export type PlanTrabajoEstado = (typeof PlanTrabajoEstado)[keyof typeof PlanTrabajoEstado]
+
+
+export const ProgramacionPrecision = {
+  mes: 'mes',
+  dia: 'dia'
+} as const
+
+export type ProgramacionPrecision = (typeof ProgramacionPrecision)[keyof typeof ProgramacionPrecision]
+
+
 export const PropuestaStatus = {
   pendiente: 'pendiente',
   aprobada: 'aprobada',

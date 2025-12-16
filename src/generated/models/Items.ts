@@ -200,6 +200,7 @@ export type ItemsWhereInput = {
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
   servicios?: Prisma.ItemsOnServiciosListRelationFilter
   tipoDeInforme?: Prisma.XOR<Prisma.TipoDeInformeNullableScalarRelationFilter, Prisma.TipoDeInformeWhereInput> | null
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionListRelationFilter
 }
 
 export type ItemsOrderByWithRelationInput = {
@@ -212,6 +213,7 @@ export type ItemsOrderByWithRelationInput = {
   tipoDeInformeId?: Prisma.SortOrderInput | Prisma.SortOrder
   servicios?: Prisma.ItemsOnServiciosOrderByRelationAggregateInput
   tipoDeInforme?: Prisma.TipoDeInformeOrderByWithRelationInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionOrderByRelationAggregateInput
 }
 
 export type ItemsWhereUniqueInput = Prisma.AtLeast<{
@@ -227,6 +229,7 @@ export type ItemsWhereUniqueInput = Prisma.AtLeast<{
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
   servicios?: Prisma.ItemsOnServiciosListRelationFilter
   tipoDeInforme?: Prisma.XOR<Prisma.TipoDeInformeNullableScalarRelationFilter, Prisma.TipoDeInformeWhereInput> | null
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionListRelationFilter
 }, "id">
 
 export type ItemsOrderByWithAggregationInput = {
@@ -264,6 +267,7 @@ export type ItemsCreateInput = {
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
   tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutItemInput
 }
 
 export type ItemsUncheckedCreateInput = {
@@ -275,6 +279,7 @@ export type ItemsUncheckedCreateInput = {
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
   servicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutItemInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ItemsUpdateInput = {
@@ -286,6 +291,7 @@ export type ItemsUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutItemNestedInput
 }
 
 export type ItemsUncheckedUpdateInput = {
@@ -297,6 +303,7 @@ export type ItemsUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   servicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutItemNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ItemsCreateManyInput = {
@@ -433,6 +440,20 @@ export type ItemsUncheckedUpdateManyWithoutTipoDeInformeNestedInput = {
   deleteMany?: Prisma.ItemsScalarWhereInput | Prisma.ItemsScalarWhereInput[]
 }
 
+export type ItemsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutPlanesTrabajoProgramacionesInput, Prisma.ItemsUncheckedCreateWithoutPlanesTrabajoProgramacionesInput>
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutPlanesTrabajoProgramacionesInput
+  connect?: Prisma.ItemsWhereUniqueInput
+}
+
+export type ItemsUpdateOneRequiredWithoutPlanesTrabajoProgramacionesNestedInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutPlanesTrabajoProgramacionesInput, Prisma.ItemsUncheckedCreateWithoutPlanesTrabajoProgramacionesInput>
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutPlanesTrabajoProgramacionesInput
+  upsert?: Prisma.ItemsUpsertWithoutPlanesTrabajoProgramacionesInput
+  connect?: Prisma.ItemsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ItemsUpdateToOneWithWhereWithoutPlanesTrabajoProgramacionesInput, Prisma.ItemsUpdateWithoutPlanesTrabajoProgramacionesInput>, Prisma.ItemsUncheckedUpdateWithoutPlanesTrabajoProgramacionesInput>
+}
+
 export type ItemsCreateWithoutServiciosInput = {
   id?: string
   name: string
@@ -441,6 +462,7 @@ export type ItemsCreateWithoutServiciosInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutItemInput
 }
 
 export type ItemsUncheckedCreateWithoutServiciosInput = {
@@ -451,6 +473,7 @@ export type ItemsUncheckedCreateWithoutServiciosInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ItemsCreateOrConnectWithoutServiciosInput = {
@@ -477,6 +500,7 @@ export type ItemsUpdateWithoutServiciosInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutItemNestedInput
 }
 
 export type ItemsUncheckedUpdateWithoutServiciosInput = {
@@ -487,6 +511,7 @@ export type ItemsUncheckedUpdateWithoutServiciosInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ItemsCreateWithoutTipoDeInformeInput = {
@@ -497,6 +522,7 @@ export type ItemsCreateWithoutTipoDeInformeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutItemInput
 }
 
 export type ItemsUncheckedCreateWithoutTipoDeInformeInput = {
@@ -507,6 +533,7 @@ export type ItemsUncheckedCreateWithoutTipoDeInformeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutItemInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ItemsCreateOrConnectWithoutTipoDeInformeInput = {
@@ -548,6 +575,66 @@ export type ItemsScalarWhereInput = {
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
 }
 
+export type ItemsCreateWithoutPlanesTrabajoProgramacionesInput = {
+  id?: string
+  name: string
+  description: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
+  tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
+}
+
+export type ItemsUncheckedCreateWithoutPlanesTrabajoProgramacionesInput = {
+  id?: string
+  name: string
+  description: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tipoDeInformeId?: string | null
+  servicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutItemInput
+}
+
+export type ItemsCreateOrConnectWithoutPlanesTrabajoProgramacionesInput = {
+  where: Prisma.ItemsWhereUniqueInput
+  create: Prisma.XOR<Prisma.ItemsCreateWithoutPlanesTrabajoProgramacionesInput, Prisma.ItemsUncheckedCreateWithoutPlanesTrabajoProgramacionesInput>
+}
+
+export type ItemsUpsertWithoutPlanesTrabajoProgramacionesInput = {
+  update: Prisma.XOR<Prisma.ItemsUpdateWithoutPlanesTrabajoProgramacionesInput, Prisma.ItemsUncheckedUpdateWithoutPlanesTrabajoProgramacionesInput>
+  create: Prisma.XOR<Prisma.ItemsCreateWithoutPlanesTrabajoProgramacionesInput, Prisma.ItemsUncheckedCreateWithoutPlanesTrabajoProgramacionesInput>
+  where?: Prisma.ItemsWhereInput
+}
+
+export type ItemsUpdateToOneWithWhereWithoutPlanesTrabajoProgramacionesInput = {
+  where?: Prisma.ItemsWhereInput
+  data: Prisma.XOR<Prisma.ItemsUpdateWithoutPlanesTrabajoProgramacionesInput, Prisma.ItemsUncheckedUpdateWithoutPlanesTrabajoProgramacionesInput>
+}
+
+export type ItemsUpdateWithoutPlanesTrabajoProgramacionesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
+  tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
+}
+
+export type ItemsUncheckedUpdateWithoutPlanesTrabajoProgramacionesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  servicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutItemNestedInput
+}
+
 export type ItemsCreateManyTipoDeInformeInput = {
   id?: string
   name: string
@@ -565,6 +652,7 @@ export type ItemsUpdateWithoutTipoDeInformeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutItemNestedInput
 }
 
 export type ItemsUncheckedUpdateWithoutTipoDeInformeInput = {
@@ -575,6 +663,7 @@ export type ItemsUncheckedUpdateWithoutTipoDeInformeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutItemNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ItemsUncheckedUpdateManyWithoutTipoDeInformeInput = {
@@ -593,10 +682,12 @@ export type ItemsUncheckedUpdateManyWithoutTipoDeInformeInput = {
 
 export type ItemsCountOutputType = {
   servicios: number
+  planesTrabajoProgramaciones: number
 }
 
 export type ItemsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   servicios?: boolean | ItemsCountOutputTypeCountServiciosArgs
+  planesTrabajoProgramaciones?: boolean | ItemsCountOutputTypeCountPlanesTrabajoProgramacionesArgs
 }
 
 /**
@@ -616,6 +707,13 @@ export type ItemsCountOutputTypeCountServiciosArgs<ExtArgs extends runtime.Types
   where?: Prisma.ItemsOnServiciosWhereInput
 }
 
+/**
+ * ItemsCountOutputType without action
+ */
+export type ItemsCountOutputTypeCountPlanesTrabajoProgramacionesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanTrabajoProgramacionWhereInput
+}
+
 
 export type ItemsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -627,6 +725,7 @@ export type ItemsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   tipoDeInformeId?: boolean
   servicios?: boolean | Prisma.Items$serviciosArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
+  planesTrabajoProgramaciones?: boolean | Prisma.Items$planesTrabajoProgramacionesArgs<ExtArgs>
   _count?: boolean | Prisma.ItemsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["items"]>
 
@@ -666,6 +765,7 @@ export type ItemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type ItemsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   servicios?: boolean | Prisma.Items$serviciosArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
+  planesTrabajoProgramaciones?: boolean | Prisma.Items$planesTrabajoProgramacionesArgs<ExtArgs>
   _count?: boolean | Prisma.ItemsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ItemsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -680,6 +780,7 @@ export type $ItemsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     servicios: Prisma.$ItemsOnServiciosPayload<ExtArgs>[]
     tipoDeInforme: Prisma.$TipoDeInformePayload<ExtArgs> | null
+    planesTrabajoProgramaciones: Prisma.$PlanTrabajoProgramacionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1085,6 +1186,7 @@ export interface Prisma__ItemsClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   servicios<T extends Prisma.Items$serviciosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$serviciosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemsOnServiciosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tipoDeInforme<T extends Prisma.Items$tipoDeInformeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$tipoDeInformeArgs<ExtArgs>>): Prisma.Prisma__TipoDeInformeClient<runtime.Types.Result.GetResult<Prisma.$TipoDeInformePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  planesTrabajoProgramaciones<T extends Prisma.Items$planesTrabajoProgramacionesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$planesTrabajoProgramacionesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanTrabajoProgramacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1557,6 +1659,30 @@ export type Items$tipoDeInformeArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   include?: Prisma.TipoDeInformeInclude<ExtArgs> | null
   where?: Prisma.TipoDeInformeWhereInput
+}
+
+/**
+ * Items.planesTrabajoProgramaciones
+ */
+export type Items$planesTrabajoProgramacionesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanTrabajoProgramacion
+   */
+  select?: Prisma.PlanTrabajoProgramacionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanTrabajoProgramacion
+   */
+  omit?: Prisma.PlanTrabajoProgramacionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanTrabajoProgramacionInclude<ExtArgs> | null
+  where?: Prisma.PlanTrabajoProgramacionWhereInput
+  orderBy?: Prisma.PlanTrabajoProgramacionOrderByWithRelationInput | Prisma.PlanTrabajoProgramacionOrderByWithRelationInput[]
+  cursor?: Prisma.PlanTrabajoProgramacionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanTrabajoProgramacionScalarFieldEnum | Prisma.PlanTrabajoProgramacionScalarFieldEnum[]
 }
 
 /**

@@ -243,6 +243,40 @@ export type EnumInformeEstadoWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumInformeEstadoFilter<$PrismaModel>
 }
 
+export type EnumPlanTrabajoEstadoFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlanTrabajoEstado | Prisma.EnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  in?: $Enums.PlanTrabajoEstado[] | Prisma.ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlanTrabajoEstado[] | Prisma.ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlanTrabajoEstadoFilter<$PrismaModel> | $Enums.PlanTrabajoEstado
+}
+
+export type EnumPlanTrabajoEstadoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlanTrabajoEstado | Prisma.EnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  in?: $Enums.PlanTrabajoEstado[] | Prisma.ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlanTrabajoEstado[] | Prisma.ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlanTrabajoEstadoWithAggregatesFilter<$PrismaModel> | $Enums.PlanTrabajoEstado
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPlanTrabajoEstadoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPlanTrabajoEstadoFilter<$PrismaModel>
+}
+
+export type EnumProgramacionPrecisionFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProgramacionPrecision | Prisma.EnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.ProgramacionPrecision[] | Prisma.ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProgramacionPrecision[] | Prisma.ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProgramacionPrecisionFilter<$PrismaModel> | $Enums.ProgramacionPrecision
+}
+
+export type EnumProgramacionPrecisionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProgramacionPrecision | Prisma.EnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.ProgramacionPrecision[] | Prisma.ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProgramacionPrecision[] | Prisma.ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProgramacionPrecisionWithAggregatesFilter<$PrismaModel> | $Enums.ProgramacionPrecision
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProgramacionPrecisionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProgramacionPrecisionFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -483,6 +517,40 @@ export type NestedEnumInformeEstadoWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumInformeEstadoFilter<$PrismaModel>
   _max?: Prisma.NestedEnumInformeEstadoFilter<$PrismaModel>
+}
+
+export type NestedEnumPlanTrabajoEstadoFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlanTrabajoEstado | Prisma.EnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  in?: $Enums.PlanTrabajoEstado[] | Prisma.ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlanTrabajoEstado[] | Prisma.ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlanTrabajoEstadoFilter<$PrismaModel> | $Enums.PlanTrabajoEstado
+}
+
+export type NestedEnumPlanTrabajoEstadoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlanTrabajoEstado | Prisma.EnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  in?: $Enums.PlanTrabajoEstado[] | Prisma.ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlanTrabajoEstado[] | Prisma.ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlanTrabajoEstadoWithAggregatesFilter<$PrismaModel> | $Enums.PlanTrabajoEstado
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPlanTrabajoEstadoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPlanTrabajoEstadoFilter<$PrismaModel>
+}
+
+export type NestedEnumProgramacionPrecisionFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProgramacionPrecision | Prisma.EnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.ProgramacionPrecision[] | Prisma.ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProgramacionPrecision[] | Prisma.ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProgramacionPrecisionFilter<$PrismaModel> | $Enums.ProgramacionPrecision
+}
+
+export type NestedEnumProgramacionPrecisionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProgramacionPrecision | Prisma.EnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.ProgramacionPrecision[] | Prisma.ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProgramacionPrecision[] | Prisma.ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProgramacionPrecisionWithAggregatesFilter<$PrismaModel> | $Enums.ProgramacionPrecision
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProgramacionPrecisionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProgramacionPrecisionFilter<$PrismaModel>
 }
 
 

@@ -62,3 +62,13 @@ export type ClientLocations = Prisma.ClientLocationsModel
  * 
  */
 export type Informe = Prisma.InformeModel
+/**
+ * Model PlanTrabajo
+ * 
+ */
+export type PlanTrabajo = Prisma.PlanTrabajoModel
+/**
+ * Model PlanTrabajoProgramacion
+ * 
+ */
+export type PlanTrabajoProgramacion = Prisma.PlanTrabajoProgramacionModel

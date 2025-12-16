@@ -283,6 +283,7 @@ export type PropuestaTecnicaWhereInput = {
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
   servicios?: Prisma.XOR<Prisma.ServicioScalarRelationFilter, Prisma.ServicioWhereInput>
   informes?: Prisma.InformeListRelationFilter
+  planesTrabajo?: Prisma.PlanTrabajoListRelationFilter
 }
 
 export type PropuestaTecnicaOrderByWithRelationInput = {
@@ -303,6 +304,7 @@ export type PropuestaTecnicaOrderByWithRelationInput = {
   cliente?: Prisma.ClienteOrderByWithRelationInput
   servicios?: Prisma.ServicioOrderByWithRelationInput
   informes?: Prisma.InformeOrderByRelationAggregateInput
+  planesTrabajo?: Prisma.PlanTrabajoOrderByRelationAggregateInput
 }
 
 export type PropuestaTecnicaWhereUniqueInput = Prisma.AtLeast<{
@@ -326,6 +328,7 @@ export type PropuestaTecnicaWhereUniqueInput = Prisma.AtLeast<{
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
   servicios?: Prisma.XOR<Prisma.ServicioScalarRelationFilter, Prisma.ServicioWhereInput>
   informes?: Prisma.InformeListRelationFilter
+  planesTrabajo?: Prisma.PlanTrabajoListRelationFilter
 }, "id" | "codigo">
 
 export type PropuestaTecnicaOrderByWithAggregationInput = {
@@ -386,6 +389,7 @@ export type PropuestaTecnicaCreateInput = {
   cliente: Prisma.ClienteCreateNestedOneWithoutPropuestasInput
   servicios: Prisma.ServicioCreateNestedOneWithoutPropuestasInput
   informes?: Prisma.InformeCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUncheckedCreateInput = {
@@ -404,6 +408,7 @@ export type PropuestaTecnicaUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUpdateInput = {
@@ -422,6 +427,7 @@ export type PropuestaTecnicaUpdateInput = {
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutPropuestasNestedInput
   servicios?: Prisma.ServicioUpdateOneRequiredWithoutPropuestasNestedInput
   informes?: Prisma.InformeUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateInput = {
@@ -440,6 +446,7 @@ export type PropuestaTecnicaUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   informes?: Prisma.InformeUncheckedUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaCreateManyInput = {
@@ -705,6 +712,20 @@ export type PropuestaTecnicaUpdateOneRequiredWithoutInformesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropuestaTecnicaUpdateToOneWithWhereWithoutInformesInput, Prisma.PropuestaTecnicaUpdateWithoutInformesInput>, Prisma.PropuestaTecnicaUncheckedUpdateWithoutInformesInput>
 }
 
+export type PropuestaTecnicaCreateNestedOneWithoutPlanesTrabajoInput = {
+  create?: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput>
+  connectOrCreate?: Prisma.PropuestaTecnicaCreateOrConnectWithoutPlanesTrabajoInput
+  connect?: Prisma.PropuestaTecnicaWhereUniqueInput
+}
+
+export type PropuestaTecnicaUpdateOneRequiredWithoutPlanesTrabajoNestedInput = {
+  create?: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput>
+  connectOrCreate?: Prisma.PropuestaTecnicaCreateOrConnectWithoutPlanesTrabajoInput
+  upsert?: Prisma.PropuestaTecnicaUpsertWithoutPlanesTrabajoInput
+  connect?: Prisma.PropuestaTecnicaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropuestaTecnicaUpdateToOneWithWhereWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUpdateWithoutPlanesTrabajoInput>, Prisma.PropuestaTecnicaUncheckedUpdateWithoutPlanesTrabajoInput>
+}
+
 export type PropuestaTecnicaCreateWithoutClienteInput = {
   id?: string
   codigo: string
@@ -720,6 +741,7 @@ export type PropuestaTecnicaCreateWithoutClienteInput = {
   updatedAt?: Date | string
   servicios: Prisma.ServicioCreateNestedOneWithoutPropuestasInput
   informes?: Prisma.InformeCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUncheckedCreateWithoutClienteInput = {
@@ -737,6 +759,7 @@ export type PropuestaTecnicaUncheckedCreateWithoutClienteInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaCreateOrConnectWithoutClienteInput = {
@@ -800,6 +823,7 @@ export type PropuestaTecnicaCreateWithoutServiciosInput = {
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutPropuestasInput
   informes?: Prisma.InformeCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUncheckedCreateWithoutServiciosInput = {
@@ -817,6 +841,7 @@ export type PropuestaTecnicaUncheckedCreateWithoutServiciosInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaCreateOrConnectWithoutServiciosInput = {
@@ -860,6 +885,7 @@ export type PropuestaTecnicaCreateWithoutInformesInput = {
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutPropuestasInput
   servicios: Prisma.ServicioCreateNestedOneWithoutPropuestasInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUncheckedCreateWithoutInformesInput = {
@@ -877,6 +903,7 @@ export type PropuestaTecnicaUncheckedCreateWithoutInformesInput = {
   condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaCreateOrConnectWithoutInformesInput = {
@@ -910,6 +937,7 @@ export type PropuestaTecnicaUpdateWithoutInformesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutPropuestasNestedInput
   servicios?: Prisma.ServicioUpdateOneRequiredWithoutPropuestasNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateWithoutInformesInput = {
@@ -927,6 +955,95 @@ export type PropuestaTecnicaUncheckedUpdateWithoutInformesInput = {
   condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutPropuestaNestedInput
+}
+
+export type PropuestaTecnicaCreateWithoutPlanesTrabajoInput = {
+  id?: string
+  codigo: string
+  vigencia?: Date | string | null
+  status?: $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaCreateitemsInput | string[]
+  valor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: $Enums.Moneda
+  contacto?: string | null
+  is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cliente: Prisma.ClienteCreateNestedOneWithoutPropuestasInput
+  servicios: Prisma.ServicioCreateNestedOneWithoutPropuestasInput
+  informes?: Prisma.InformeCreateNestedManyWithoutPropuestaInput
+}
+
+export type PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput = {
+  id?: string
+  codigo: string
+  clienteId: string
+  servicioId: string
+  vigencia?: Date | string | null
+  status?: $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaCreateitemsInput | string[]
+  valor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: $Enums.Moneda
+  contacto?: string | null
+  is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutPropuestaInput
+}
+
+export type PropuestaTecnicaCreateOrConnectWithoutPlanesTrabajoInput = {
+  where: Prisma.PropuestaTecnicaWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput>
+}
+
+export type PropuestaTecnicaUpsertWithoutPlanesTrabajoInput = {
+  update: Prisma.XOR<Prisma.PropuestaTecnicaUpdateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedUpdateWithoutPlanesTrabajoInput>
+  create: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput>
+  where?: Prisma.PropuestaTecnicaWhereInput
+}
+
+export type PropuestaTecnicaUpdateToOneWithWhereWithoutPlanesTrabajoInput = {
+  where?: Prisma.PropuestaTecnicaWhereInput
+  data: Prisma.XOR<Prisma.PropuestaTecnicaUpdateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedUpdateWithoutPlanesTrabajoInput>
+}
+
+export type PropuestaTecnicaUpdateWithoutPlanesTrabajoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codigo?: Prisma.StringFieldUpdateOperationsInput | string
+  vigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPropuestaStatusFieldUpdateOperationsInput | $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaUpdateitemsInput | string[]
+  valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
+  contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutPropuestasNestedInput
+  servicios?: Prisma.ServicioUpdateOneRequiredWithoutPropuestasNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutPropuestaNestedInput
+}
+
+export type PropuestaTecnicaUncheckedUpdateWithoutPlanesTrabajoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codigo?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  servicioId?: Prisma.StringFieldUpdateOperationsInput | string
+  vigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPropuestaStatusFieldUpdateOperationsInput | $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaUpdateitemsInput | string[]
+  valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
+  contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaCreateManyClienteInput = {
@@ -960,6 +1077,7 @@ export type PropuestaTecnicaUpdateWithoutClienteInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ServicioUpdateOneRequiredWithoutPropuestasNestedInput
   informes?: Prisma.InformeUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateWithoutClienteInput = {
@@ -977,6 +1095,7 @@ export type PropuestaTecnicaUncheckedUpdateWithoutClienteInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   informes?: Prisma.InformeUncheckedUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateManyWithoutClienteInput = {
@@ -1026,6 +1145,7 @@ export type PropuestaTecnicaUpdateWithoutServiciosInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutPropuestasNestedInput
   informes?: Prisma.InformeUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateWithoutServiciosInput = {
@@ -1043,6 +1163,7 @@ export type PropuestaTecnicaUncheckedUpdateWithoutServiciosInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   informes?: Prisma.InformeUncheckedUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateManyWithoutServiciosInput = {
@@ -1068,10 +1189,12 @@ export type PropuestaTecnicaUncheckedUpdateManyWithoutServiciosInput = {
 
 export type PropuestaTecnicaCountOutputType = {
   informes: number
+  planesTrabajo: number
 }
 
 export type PropuestaTecnicaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   informes?: boolean | PropuestaTecnicaCountOutputTypeCountInformesArgs
+  planesTrabajo?: boolean | PropuestaTecnicaCountOutputTypeCountPlanesTrabajoArgs
 }
 
 /**
@@ -1089,6 +1212,13 @@ export type PropuestaTecnicaCountOutputTypeDefaultArgs<ExtArgs extends runtime.T
  */
 export type PropuestaTecnicaCountOutputTypeCountInformesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InformeWhereInput
+}
+
+/**
+ * PropuestaTecnicaCountOutputType without action
+ */
+export type PropuestaTecnicaCountOutputTypeCountPlanesTrabajoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanTrabajoWhereInput
 }
 
 
@@ -1110,6 +1240,7 @@ export type PropuestaTecnicaSelect<ExtArgs extends runtime.Types.Extensions.Inte
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
   servicios?: boolean | Prisma.ServicioDefaultArgs<ExtArgs>
   informes?: boolean | Prisma.PropuestaTecnica$informesArgs<ExtArgs>
+  planesTrabajo?: boolean | Prisma.PropuestaTecnica$planesTrabajoArgs<ExtArgs>
   _count?: boolean | Prisma.PropuestaTecnicaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["propuestaTecnica"]>
 
@@ -1173,6 +1304,7 @@ export type PropuestaTecnicaInclude<ExtArgs extends runtime.Types.Extensions.Int
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
   servicios?: boolean | Prisma.ServicioDefaultArgs<ExtArgs>
   informes?: boolean | Prisma.PropuestaTecnica$informesArgs<ExtArgs>
+  planesTrabajo?: boolean | Prisma.PropuestaTecnica$planesTrabajoArgs<ExtArgs>
   _count?: boolean | Prisma.PropuestaTecnicaCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropuestaTecnicaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1190,6 +1322,7 @@ export type $PropuestaTecnicaPayload<ExtArgs extends runtime.Types.Extensions.In
     cliente: Prisma.$ClientePayload<ExtArgs>
     servicios: Prisma.$ServicioPayload<ExtArgs>
     informes: Prisma.$InformePayload<ExtArgs>[]
+    planesTrabajo: Prisma.$PlanTrabajoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1603,6 +1736,7 @@ export interface Prisma__PropuestaTecnicaClient<T, Null = never, ExtArgs extends
   cliente<T extends Prisma.ClienteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClienteDefaultArgs<ExtArgs>>): Prisma.Prisma__ClienteClient<runtime.Types.Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   servicios<T extends Prisma.ServicioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServicioDefaultArgs<ExtArgs>>): Prisma.Prisma__ServicioClient<runtime.Types.Result.GetResult<Prisma.$ServicioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   informes<T extends Prisma.PropuestaTecnica$informesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropuestaTecnica$informesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InformePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  planesTrabajo<T extends Prisma.PropuestaTecnica$planesTrabajoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropuestaTecnica$planesTrabajoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanTrabajoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2063,6 +2197,30 @@ export type PropuestaTecnica$informesArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.InformeScalarFieldEnum | Prisma.InformeScalarFieldEnum[]
+}
+
+/**
+ * PropuestaTecnica.planesTrabajo
+ */
+export type PropuestaTecnica$planesTrabajoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanTrabajo
+   */
+  select?: Prisma.PlanTrabajoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanTrabajo
+   */
+  omit?: Prisma.PlanTrabajoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanTrabajoInclude<ExtArgs> | null
+  where?: Prisma.PlanTrabajoWhereInput
+  orderBy?: Prisma.PlanTrabajoOrderByWithRelationInput | Prisma.PlanTrabajoOrderByWithRelationInput[]
+  cursor?: Prisma.PlanTrabajoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanTrabajoScalarFieldEnum | Prisma.PlanTrabajoScalarFieldEnum[]
 }
 
 /**

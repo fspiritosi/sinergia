@@ -40,6 +40,7 @@ import { PDFViewerDialog } from "./pdf-viewer-dialog"
 import { updatePropuesta, deletePropuesta } from "./propuesta-actions"
 import { getActiveClientLocations, type ClientLocationBasic } from "@/components/clientLocations/components/actions"
 import { generateInformesFromPropuesta } from "@/components/informes/components/actions"
+import { createPlanTrabajoFromPropuesta } from "@/components/planesTrabajo/components/actions"
 import { toast } from "sonner"
 import { useEffect, useState } from "react"
 import type { PropuestaTecnica } from "./actions"
@@ -54,16 +55,25 @@ export function PropuestaRowActions({ propuesta }: PropuestaRowActionsProps) {
     const [pdfViewerOpen, setPdfViewerOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [generateInformesOpen, setGenerateInformesOpen] = useState(false)
+    const [createPlanOpen, setCreatePlanOpen] = useState(false)
     const [pendingUpdate, setPendingUpdate] = useState<any | null>(null)
 
     const handleEdit = async (data: any) => {
         const statusChangedToAprobada = propuesta.status !== "aprobada" && data.status === "aprobada"
         const isUnitario = propuesta.servicios?.type === "unitario"
+        const isMensual = propuesta.servicios?.type === "mensual"
 
         if (statusChangedToAprobada && isUnitario) {
             setPendingUpdate(data)
             setEditOpen(false)
             setGenerateInformesOpen(true)
+            return
+        }
+
+        if (statusChangedToAprobada && isMensual) {
+            setPendingUpdate(data)
+            setEditOpen(false)
+            setCreatePlanOpen(true)
             return
         }
 
@@ -144,6 +154,19 @@ export function PropuestaRowActions({ propuesta }: PropuestaRowActionsProps) {
                         setPendingUpdate(null)
                     }
                     setGenerateInformesOpen(nextOpen)
+                }}
+                propuesta={propuesta}
+                pendingUpdate={pendingUpdate}
+                clearPendingUpdate={() => setPendingUpdate(null)}
+            />
+
+            <CrearPlanTrabajoDialog
+                open={createPlanOpen}
+                onOpenChange={(nextOpen) => {
+                    if (!nextOpen) {
+                        setPendingUpdate(null)
+                    }
+                    setCreatePlanOpen(nextOpen)
                 }}
                 propuesta={propuesta}
                 pendingUpdate={pendingUpdate}
@@ -332,6 +355,120 @@ function GenerarInformesDialog({
                         className="bg-sinergia text-white hover:bg-sinergia-hover"
                     >
                         {isSubmitting ? "Generando..." : "Generar informes"}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+interface CrearPlanTrabajoDialogProps {
+    open: boolean
+    onOpenChange: (open: boolean) => void
+    propuesta: PropuestaTecnica
+    pendingUpdate: any | null
+    clearPendingUpdate: () => void
+}
+
+function CrearPlanTrabajoDialog({
+    open,
+    onOpenChange,
+    propuesta,
+    pendingUpdate,
+    clearPendingUpdate,
+}: CrearPlanTrabajoDialogProps) {
+    const [fechaInicio, setFechaInicio] = useState("")
+    const [fechaFin, setFechaFin] = useState("")
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const handleCreate = async () => {
+        if (!fechaInicio || !fechaFin) {
+            toast.error("Completá fecha de inicio y fecha de fin")
+            return
+        }
+
+        if (!pendingUpdate) {
+            toast.error("No hay cambios pendientes para confirmar")
+            return
+        }
+
+        setIsSubmitting(true)
+        try {
+            await updatePropuesta({ ...pendingUpdate, id: propuesta.id })
+
+            const result = await createPlanTrabajoFromPropuesta({
+                propuestaId: propuesta.id,
+                fechaInicio,
+                fechaFin,
+            })
+
+            if (!result.success) {
+                toast.error(result.reason ?? "No se pudo crear el plan de trabajo")
+                return
+            }
+
+            toast.success("Plan de trabajo creado exitosamente")
+            clearPendingUpdate()
+            onOpenChange(false)
+        } catch (error) {
+            console.error("Error al crear plan de trabajo:", error)
+            toast.error("Error al crear el plan de trabajo")
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-[480px]">
+                <DialogHeader>
+                    <DialogTitle>Crear plan de trabajo</DialogTitle>
+                    <DialogDescription>
+                        Indicá las fechas de inicio y fin del plan de trabajo para esta propuesta mensual.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4 py-2">
+                    <div className="space-y-2">
+                        <Label htmlFor="fechaInicioPlan">Fecha de inicio *</Label>
+                        <Input
+                            id="fechaInicioPlan"
+                            type="date"
+                            value={fechaInicio}
+                            onChange={(e) => setFechaInicio(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="fechaFinPlan">Fecha de fin *</Label>
+                        <Input
+                            id="fechaFinPlan"
+                            type="date"
+                            value={fechaFin}
+                            onChange={(e) => setFechaFin(e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <DialogFooter>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                            clearPendingUpdate()
+                            onOpenChange(false)
+                        }}
+                        disabled={isSubmitting}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={handleCreate}
+                        disabled={isSubmitting}
+                        className="bg-sinergia text-white hover:bg-sinergia-hover"
+                    >
+                        {isSubmitting ? "Creando..." : "Crear plan"}
                     </Button>
                 </DialogFooter>
             </DialogContent>

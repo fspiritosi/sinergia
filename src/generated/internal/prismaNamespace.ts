@@ -398,7 +398,9 @@ export const ModelName = {
   PropuestaTecnica: 'PropuestaTecnica',
   TipoDeInforme: 'TipoDeInforme',
   ClientLocations: 'ClientLocations',
-  Informe: 'Informe'
+  Informe: 'Informe',
+  PlanTrabajo: 'PlanTrabajo',
+  PlanTrabajoProgramacion: 'PlanTrabajoProgramacion'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "clientLocations" | "informe"
+    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1084,6 +1086,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PlanTrabajo: {
+      payload: Prisma.$PlanTrabajoPayload<ExtArgs>
+      fields: Prisma.PlanTrabajoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlanTrabajoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlanTrabajoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>
+        }
+        findFirst: {
+          args: Prisma.PlanTrabajoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlanTrabajoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>
+        }
+        findMany: {
+          args: Prisma.PlanTrabajoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>[]
+        }
+        create: {
+          args: Prisma.PlanTrabajoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>
+        }
+        createMany: {
+          args: Prisma.PlanTrabajoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlanTrabajoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>[]
+        }
+        delete: {
+          args: Prisma.PlanTrabajoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>
+        }
+        update: {
+          args: Prisma.PlanTrabajoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlanTrabajoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlanTrabajoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlanTrabajoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlanTrabajoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoPayload>
+        }
+        aggregate: {
+          args: Prisma.PlanTrabajoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlanTrabajo>
+        }
+        groupBy: {
+          args: Prisma.PlanTrabajoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanTrabajoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlanTrabajoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanTrabajoCountAggregateOutputType> | number
+        }
+      }
+    }
+    PlanTrabajoProgramacion: {
+      payload: Prisma.$PlanTrabajoProgramacionPayload<ExtArgs>
+      fields: Prisma.PlanTrabajoProgramacionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlanTrabajoProgramacionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlanTrabajoProgramacionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>
+        }
+        findFirst: {
+          args: Prisma.PlanTrabajoProgramacionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlanTrabajoProgramacionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>
+        }
+        findMany: {
+          args: Prisma.PlanTrabajoProgramacionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>[]
+        }
+        create: {
+          args: Prisma.PlanTrabajoProgramacionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>
+        }
+        createMany: {
+          args: Prisma.PlanTrabajoProgramacionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlanTrabajoProgramacionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>[]
+        }
+        delete: {
+          args: Prisma.PlanTrabajoProgramacionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>
+        }
+        update: {
+          args: Prisma.PlanTrabajoProgramacionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlanTrabajoProgramacionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlanTrabajoProgramacionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlanTrabajoProgramacionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlanTrabajoProgramacionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanTrabajoProgramacionPayload>
+        }
+        aggregate: {
+          args: Prisma.PlanTrabajoProgramacionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlanTrabajoProgramacion>
+        }
+        groupBy: {
+          args: Prisma.PlanTrabajoProgramacionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanTrabajoProgramacionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlanTrabajoProgramacionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanTrabajoProgramacionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1235,11 +1385,41 @@ export const InformeScalarFieldEnum = {
   responsableConfeccion: 'responsableConfeccion',
   estado: 'estado',
   adjunto: 'adjunto',
+  planTrabajoProgramacionId: 'planTrabajoProgramacionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type InformeScalarFieldEnum = (typeof InformeScalarFieldEnum)[keyof typeof InformeScalarFieldEnum]
+
+
+export const PlanTrabajoScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  propuestaId: 'propuestaId',
+  fechaInicio: 'fechaInicio',
+  fechaFin: 'fechaFin',
+  estado: 'estado',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanTrabajoScalarFieldEnum = (typeof PlanTrabajoScalarFieldEnum)[keyof typeof PlanTrabajoScalarFieldEnum]
+
+
+export const PlanTrabajoProgramacionScalarFieldEnum = {
+  id: 'id',
+  planTrabajoId: 'planTrabajoId',
+  itemId: 'itemId',
+  fechaProgramada: 'fechaProgramada',
+  precision: 'precision',
+  clientLocationId: 'clientLocationId',
+  ejecutadoAt: 'ejecutadoAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanTrabajoProgramacionScalarFieldEnum = (typeof PlanTrabajoProgramacionScalarFieldEnum)[keyof typeof PlanTrabajoProgramacionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1378,6 +1558,34 @@ export type ListEnumInformeEstadoFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'PlanTrabajoEstado'
+ */
+export type EnumPlanTrabajoEstadoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanTrabajoEstado'>
+    
+
+
+/**
+ * Reference to a field of type 'PlanTrabajoEstado[]'
+ */
+export type ListEnumPlanTrabajoEstadoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanTrabajoEstado[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ProgramacionPrecision'
+ */
+export type EnumProgramacionPrecisionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramacionPrecision'>
+    
+
+
+/**
+ * Reference to a field of type 'ProgramacionPrecision[]'
+ */
+export type ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramacionPrecision[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1486,6 +1694,8 @@ export type GlobalOmitConfig = {
   tipoDeInforme?: Prisma.TipoDeInformeOmit
   clientLocations?: Prisma.ClientLocationsOmit
   informe?: Prisma.InformeOmit
+  planTrabajo?: Prisma.PlanTrabajoOmit
+  planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionOmit
 }
 
 /* Types for Logging */
