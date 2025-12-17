@@ -3,7 +3,7 @@
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ServiceForm } from "./service-form"
-import { createServicio } from "./service-actions"
+import { createServicio } from "../../servicios/components/service-actions"
 import { toast } from "sonner"
 import { useState } from "react"
 

@@ -19,7 +19,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { ServiceForm, ServiceFormSubmitData } from "./service-form"
-import { updateServicio, deleteServicio, updateServicioItems } from "./service-actions"
+import { updateServicio, deleteServicio, updateServicioItems } from "../../servicios/components/service-actions"
 import { ServiceDetailDialog } from "./service-detail-dialog"
 import { Servicio } from "./actions"
 import { toast } from "sonner"

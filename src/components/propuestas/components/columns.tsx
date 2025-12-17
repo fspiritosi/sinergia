@@ -99,7 +99,11 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
         cell: ({ row }) => {
             const status = row.original.status
             return (
-                <Badge variant={status === "aprobada" ? "sinergia" : "secondary"}>
+                <Badge variant={
+                    status === "aprobada" ? "sinergia" 
+                    : status === "rechazada" ? "destructive" 
+                    : status === "pendiente" ? "warning" 
+                    : "secondary"}>
                     {status}
                 </Badge>
             )
@@ -154,43 +158,6 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
             return value.includes(row.getValue(id))
         },
     },
-
-
-    // {
-    //     accessorKey: "moneda",
-    //     header: ({ column }) => (
-    //         <DataTableColumnHeader column={column} title="Moneda" />
-    //     ),
-    //     cell: ({ row }) => {
-    //         const moneda = row.getValue("moneda") as "ARS" | "USD"
-    //         return (
-    //             <Badge variant={moneda === "USD" ? "default" : "secondary"}>
-    //                 {moneda}
-    //             </Badge>
-    //         )
-    //     },
-    //     filterFn: (row, id, value) => {
-    //         return value.includes(row.getValue(id))
-    //     },
-    // },
-    // {
-    //     id: "is_active",
-    //     accessorFn: (row) => String(row.is_active),
-    //     header: ({ column }) => (
-    //         <DataTableColumnHeader column={column} title="Estado" />
-    //     ),
-    //     cell: ({ row }) => {
-    //         const isActive = row.original.is_active
-    //         return (
-    //             <Badge variant={isActive ? "sinergia" : "secondary"}>
-    //                 {isActive ? "Activo" : "Inactivo"}
-    //             </Badge>
-    //         )
-    //     },
-    //     filterFn: (row, id, value) => {
-    //         return value.includes(row.getValue(id))
-    //     },
-    // },
     {
         accessorKey: "createdAt",
         header: ({ column }) => (

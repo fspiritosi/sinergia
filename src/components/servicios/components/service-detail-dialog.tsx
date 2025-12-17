@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Servicio } from "./actions"
-import { getItemsService } from "./service-actions"
+import { getItemsService } from "../../servicios/components/service-actions"
 
 interface ServiceDetailDialogProps {
     open: boolean
