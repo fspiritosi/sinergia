@@ -11,6 +11,7 @@ interface PropuestaPDFProps {
     contacto?: string | null
     servicioNombre: string
     servicioDescripcion: string
+    servicioType: string
     items: Items[]
     valor: number
     moneda: Moneda
@@ -24,6 +25,7 @@ export function PropuestaPDF({
     contacto,
     servicioNombre,
     servicioDescripcion,
+    servicioType,
     items,
     valor,
     moneda,
@@ -48,6 +50,7 @@ export function PropuestaPDF({
             <OfertaEconomicaPage
                 servicioDescripcion={servicioDescripcion}
                 servicioNombre={servicioNombre}
+                servicioType={servicioType}
                 items={items}
                 valor={valor}
                 moneda={moneda}

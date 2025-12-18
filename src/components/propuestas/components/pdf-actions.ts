@@ -36,6 +36,7 @@ export async function generatePropuestaPDF(propuestaId: string) {
                 contacto: propuesta.contacto,
                 servicioNombre: propuesta.servicios.name,
                 servicioDescripcion: propuesta.servicios.description,
+                servicioType: propuesta.servicios.type,
                 items,
                 valor: Number(propuesta.valor),
                 moneda: propuesta.moneda,

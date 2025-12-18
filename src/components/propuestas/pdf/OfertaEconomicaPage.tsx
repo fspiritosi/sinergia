@@ -12,11 +12,13 @@ interface OfertaEconomicaPageProps {
     valor: number
     moneda: Moneda
     condicionesParticulares?: PropuestaTecnica['condicionesParticulares']
+    servicioType: string
 }
 
 export function OfertaEconomicaPage({
     servicioDescripcion,
     servicioNombre,
+    servicioType,
     items,
     valor,
     moneda,
@@ -64,7 +66,7 @@ export function OfertaEconomicaPage({
                                 <Text style={pdfStyles.offerHeaderText}>Detalle del servicio</Text>
                             </View>
                             <View style={[pdfStyles.offerHeaderBox, pdfStyles.offerBoxRight]}>
-                                <Text style={pdfStyles.offerHeaderText}>Costo mensual ($ {moneda})</Text>
+                                <Text style={pdfStyles.offerHeaderText}>{servicioType === 'mensual' ? `Costo mensual ($ ${moneda})` : `Costo unitario ($ ${moneda})`}</Text>
                             </View>
                         </View>
 
