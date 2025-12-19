@@ -3,6 +3,7 @@
 import { Moneda, PropuestaStatus, PropuestaTecnica } from "@/generated/client";
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { parseDateOnlyToLocalNoon } from "@/lib/dates";
 
 interface CreatePropuestaInput {
   codigo: string;
@@ -25,7 +26,7 @@ export async function createPropuesta(data: CreatePropuestaInput) {
         codigo: data.codigo,
         clienteId: data.clienteId,
         servicioId: data.servicioId,
-        vigencia: data.vigencia ? new Date(data.vigencia) : null,
+        vigencia: data.vigencia ? parseDateOnlyToLocalNoon(data.vigencia) : null,
         items: data.items,
         contacto: data.contacto,
         is_active: data.is_active ?? true,
@@ -47,6 +48,13 @@ export async function createPropuesta(data: CreatePropuestaInput) {
 export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
 
   try {
+    const vigencia =
+      data.vigencia instanceof Date
+        ? data.vigencia
+        : data.vigencia
+          ? parseDateOnlyToLocalNoon(data.vigencia)
+          : null;
+
     const propuesta = await prisma.propuestaTecnica.update({
       where: {
         id: data.id,
@@ -55,7 +63,7 @@ export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
         codigo: data.codigo,
         clienteId: data.clienteId,
         servicioId: data.servicioId,
-        vigencia: data.vigencia ?? null,
+        vigencia,
         items: data.items,
         contacto: data.contacto,
         is_active: data.is_active,

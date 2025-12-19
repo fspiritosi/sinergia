@@ -24,6 +24,7 @@ import { InformeViewerDialog } from "./informe-viewer-dialog"
 import { toast } from "sonner"
 import { useState, type ChangeEvent } from "react"
 import { useFormStatus } from "react-dom"
+import { formatDateOnly, formatDateTime, parseCalendarStringToDate } from "@/lib/dates"
 
 interface InformeRowActionsProps {
   informe: Informe
@@ -160,16 +161,19 @@ export function InformeRowActions({ informe }: InformeRowActionsProps) {
             </div>
             <div>
               <span className="font-medium">Fecha de compromiso: </span>
-              <span>{new Date(informe.fechaVencimiento).toLocaleDateString("es-AR")}</span>
+              <span>{formatDateOnly(informe.fechaVencimiento, "es-AR")}</span>
             </div>
             <div>
               <span className="font-medium">Fecha de realización: </span>
-              <span>{new Date(informe.updatedAt).toLocaleDateString("es-AR")}</span>
+              <span>{formatDateTime(informe.updatedAt, "es-AR")}</span>
             </div>
             <div>
               <span className="font-medium">Calidad: </span>
               {(() => {
-                  const fechaVencimiento = new Date(informe.fechaVencimiento)
+                  const fechaVencimiento =
+  informe.fechaVencimiento instanceof Date
+    ? informe.fechaVencimiento
+    : parseCalendarStringToDate(informe.fechaVencimiento)
   const fechaRealizacion = new Date(informe.updatedAt)
   const diffTime = fechaRealizacion.getTime() - fechaVencimiento.getTime()
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))

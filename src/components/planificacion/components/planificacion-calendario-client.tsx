@@ -13,17 +13,13 @@ import {
   type PlanTrabajoProgramacionCalendarItem,
 } from "@/components/planesTrabajo/components/actions"
 import { getInformesByRange, type InformeCalendarItem } from "@/components/informes/components/actions"
+import { formatDateOnly, parseCalendarStringToDate } from "@/lib/dates"
 
 function toDayKey(date: Date): string {
   const yyyy = String(date.getFullYear())
   const mm = String(date.getMonth() + 1).padStart(2, "0")
   const dd = String(date.getDate()).padStart(2, "0")
   return `${yyyy}-${mm}-${dd}`
-}
-
-function parseISOToDate(value: string): Date {
-  const d = new Date(value)
-  return d
 }
 
 function startOfMonth(date: Date): Date {
@@ -41,9 +37,7 @@ function monthKey(date: Date): string {
 }
 
 function formatDate(value: Date | string): string {
-  const date = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(date.getTime())) return "-"
-  return date.toLocaleDateString("es-AR")
+  return formatDateOnly(value, "es-AR")
 }
 
 export function PlanificacionCalendarioClient() {
@@ -83,7 +77,7 @@ export function PlanificacionCalendarioClient() {
     const map = new Map<string, PlanTrabajoProgramacionCalendarItem[]>()
     for (const it of items) {
       if (it.precision !== "dia") continue
-      const d = parseISOToDate(it.fechaProgramada)
+      const d = parseCalendarStringToDate(it.fechaProgramada)
       const key = toDayKey(d)
       const existing = map.get(key) ?? []
       existing.push(it)
@@ -96,7 +90,7 @@ export function PlanificacionCalendarioClient() {
     const map = new Map<string, PlanTrabajoProgramacionCalendarItem[]>()
     for (const it of items) {
       if (it.precision !== "mes") continue
-      const d = parseISOToDate(it.fechaProgramada)
+      const d = parseCalendarStringToDate(it.fechaProgramada)
       const key = monthKey(d)
       const existing = map.get(key) ?? []
       existing.push(it)
@@ -108,7 +102,7 @@ export function PlanificacionCalendarioClient() {
   const informesByDay = useMemo(() => {
     const map = new Map<string, InformeCalendarItem[]>()
     for (const inf of informes) {
-      const d = parseISOToDate(inf.fechaVencimiento)
+      const d = parseCalendarStringToDate(inf.fechaVencimiento)
       const key = toDayKey(d)
       const existing = map.get(key) ?? []
       existing.push(inf)

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header"
 import { InformeRowActions } from "./informe-row-actions"
 import { Informe } from "./actions"
+import { formatDateOnly } from "@/lib/dates"
 
 export const columns: ColumnDef<Informe>[] = [
   {
@@ -79,10 +80,9 @@ export const columns: ColumnDef<Informe>[] = [
       <DataTableColumnHeader column={column} title="Fecha de Vencimiento" />
     ),
     cell: ({ row }) => {
-      const date = new Date(row.getValue("fechaVencimiento"))
       return (
         <div className="text-sm text-muted-foreground">
-          {date.toLocaleDateString("es-AR")}
+          {formatDateOnly(row.getValue("fechaVencimiento") as any, "es-AR")}
         </div>
       )
     },

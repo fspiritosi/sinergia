@@ -33,8 +33,10 @@ import type { Cliente, Items, Servicio } from "@/generated/client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { toast } from "sonner"
+import { z } from "zod"
 import type { PropuestaTecnica } from "./actions"
+import { parseDateOnlyToLocalNoon, toDateOnlyString } from "@/lib/dates"
 import { Badge } from "@/components/ui/badge"
 
 
@@ -469,13 +471,11 @@ export function PropuestaForm({
     )
 
     const handleSubmit = async (data: PropuestaFormData) => {
-        const normalizedDate = new Date(data.vigencia)
+        const normalizedDate = data.vigencia ? parseDateOnlyToLocalNoon(data.vigencia) : null
         const payload = {
             ...data,
             valor: Number(data.valor),
-            vigencia: Number.isNaN(normalizedDate.getTime())
-                ? null
-                : normalizedDate.toISOString(),
+            vigencia: normalizedDate ? toDateOnlyString(normalizedDate) : null,
             is_active: propuesta?.is_active ?? true,
         }
 

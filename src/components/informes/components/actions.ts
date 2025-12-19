@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { uploadFileToR2 } from "@/lib/r2-upload";
 import { refreshPlanTrabajoEstado } from "@/components/planesTrabajo/components/actions";
+import { parseCalendarStringToDate, toDateOnlyString } from "@/lib/dates";
 
 export async function getInformes() {
   const informes = await prisma.informe.findMany({
@@ -90,7 +91,7 @@ export async function getInformesByRange(params: {
     propuestaCodigo: i.propuesta.codigo,
     tipoDeInformeId: i.tipoDeInforme.id,
     tipoDeInformeNombre: i.tipoDeInforme.name,
-    fechaVencimiento: i.fechaVencimiento.toISOString(),
+    fechaVencimiento: toDateOnlyString(i.fechaVencimiento),
     estado: String(i.estado),
     adjunto: i.adjunto ?? null,
   }))
@@ -197,10 +198,7 @@ export async function generateInformesFromPropuesta({
     };
   }
 
-  const fecha = new Date(fechaVencimiento);
-  if (Number.isNaN(fecha.getTime())) {
-    throw new Error("Fecha de realización inválida");
-  }
+  const fecha = parseCalendarStringToDate(fechaVencimiento);
 
   const items = await prisma.items.findMany({
     where: {

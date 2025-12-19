@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header"
 import type { PlanTrabajoListItem } from "./actions"
+import { formatDateOnly } from "@/lib/dates"
 
 function formatEstado(value: string): string {
   switch (value) {
@@ -54,8 +55,7 @@ export const columns: ColumnDef<PlanTrabajoListItem>[] = [
     id: "fechaInicio",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Inicio" />,
     cell: ({ row }) => {
-      const date = new Date(row.getValue("fechaInicio"))
-      return <div className="text-sm text-muted-foreground">{date.toLocaleDateString("es-AR")}</div>
+      return <div className="text-sm text-muted-foreground">{formatDateOnly(String(row.getValue("fechaInicio")), "es-AR")}</div>
     },
   },
   {
@@ -63,8 +63,7 @@ export const columns: ColumnDef<PlanTrabajoListItem>[] = [
     id: "fechaFin",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Fin" />,
     cell: ({ row }) => {
-      const date = new Date(row.getValue("fechaFin"))
-      return <div className="text-sm text-muted-foreground">{date.toLocaleDateString("es-AR")}</div>
+      return <div className="text-sm text-muted-foreground">{formatDateOnly(String(row.getValue("fechaFin")), "es-AR")}</div>
     },
   },
   {

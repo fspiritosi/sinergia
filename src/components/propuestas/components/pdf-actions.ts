@@ -3,6 +3,7 @@
 import prisma from "@/lib/db"
 import { renderToBuffer } from '@react-pdf/renderer'
 import { PropuestaPDF } from '../pdf/PropuestaPDF'
+import { toDateOnlyString } from "@/lib/dates"
 
 export async function generatePropuestaPDF(propuestaId: string) {
     try {
@@ -31,7 +32,7 @@ export async function generatePropuestaPDF(propuestaId: string) {
         const pdfBuffer = await renderToBuffer(
             PropuestaPDF({
                 codigo: propuesta.codigo,
-                vigencia: propuesta.vigencia?.toISOString() || new Date().toISOString(),
+                vigencia: propuesta.vigencia ? toDateOnlyString(propuesta.vigencia) : toDateOnlyString(new Date()),
                 clienteNombre: propuesta.cliente.name,
                 contacto: propuesta.contacto,
                 servicioNombre: propuesta.servicios.name,

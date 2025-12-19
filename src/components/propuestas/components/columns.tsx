@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import type { PropuestaTecnica } from "./actions"
 import { PropuestaRowActions } from "./propuesta-row-actions"
+import { formatDateOnly } from "@/lib/dates"
 
 export const columns: ColumnDef<PropuestaTecnica>[] = [
     {
@@ -129,13 +130,13 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
     },
     {
         id: "vigencia",
-        accessorFn: (row) => row.vigencia ? new Date(row.vigencia).toLocaleDateString() : "",
+        accessorFn: (row) => (row.vigencia ? formatDateOnly(row.vigencia) : ""),
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Vigencia" />
         ),
         cell: ({ row }) => {
             const vigencia = row.original.vigencia
-            return vigencia ? new Date(vigencia).toLocaleDateString() : "-"
+            return vigencia ? formatDateOnly(vigencia) : "-"
         },
     },
 

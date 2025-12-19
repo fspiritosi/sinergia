@@ -33,6 +33,8 @@ import {
   updatePlanTrabajoFechas,
 } from "./actions"
 import { getActiveClientLocations, type ClientLocationBasic } from "@/components/clientLocations/components/actions"
+import { formatDateOnly, parseCalendarStringToDate, toDateOnlyString, toMonthOnlyString } from "@/lib/dates"
+import { useDashboardTitle } from "@/components/dashboard/DashboardTitleContext"
 
 interface PlanTrabajoDetailViewProps {
   plan: PlanTrabajoWithProgramaciones
@@ -58,15 +60,19 @@ function formatEstado(estado: string): string {
 }
 
 function formatDate(value: Date | string): string {
-  const date = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(date.getTime())) return "-"
-  return date.toLocaleDateString("es-AR")
+  return formatDateOnly(value, "es-AR")
 }
 
 export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const router = useRouter()
+  const { setTitle } = useDashboardTitle()
   const [programarOpen, setProgramarOpen] = useState(false)
   const [editarFechasOpen, setEditarFechasOpen] = useState(false)
+  const [editarProgramacionId, setEditarProgramacionId] = useState<string | null>(null)
+  const [editarProgramacionPrecision, setEditarProgramacionPrecision] = useState<"dia" | "mes">("dia")
+  const [editarProgramacionFechaDia, setEditarProgramacionFechaDia] = useState("")
+  const [editarProgramacionFechaMes, setEditarProgramacionFechaMes] = useState("")
+  const [editarProgramacionSaving, setEditarProgramacionSaving] = useState(false)
 
   const canProgramar = useMemo(() => {
     return (
@@ -79,6 +85,27 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const pendingCount = useMemo(() => {
     return plan.programaciones.filter((p) => !p.ejecutadoAt && p.informe?.estado !== "entregado").length
   }, [plan.programaciones])
+
+  const programacionEnEdicion = useMemo(() => {
+    return plan.programaciones.find((p) => p.id === editarProgramacionId) ?? null
+  }, [editarProgramacionId, plan.programaciones])
+
+  useEffect(() => {
+    setTitle(`${plan.cliente.name} - Propuesta ${plan.propuesta.codigo}`)
+    return () => setTitle(null)
+  }, [plan.cliente.name, plan.propuesta.codigo, setTitle])
+
+  const pendingPlanificarCount = useMemo(() => {
+    const itemIdsPropuesta = new Set(plan.propuestaItemsDetalle.map((item) => item.id))
+    const itemIdsProgramados = new Set(plan.programaciones.map((p) => p.item.id))
+
+    let count = 0
+    for (const itemId of itemIdsPropuesta) {
+      if (!itemIdsProgramados.has(itemId)) count += 1
+    }
+
+    return count
+  }, [plan.programaciones, plan.propuestaItemsDetalle])
 
   const canEditarFechas = useMemo(() => {
     return plan.estado !== "finalizado_con_pendientes" && plan.estado !== "finalizado_completo"
@@ -117,7 +144,7 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-4">
             <div>
               <p className="text-sm text-muted-foreground">Inicio</p>
               <p className="text-sm font-medium">{formatDate(plan.fechaInicio)}</p>
@@ -127,7 +154,11 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
               <p className="text-sm font-medium">{formatDate(plan.fechaFin)}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Pendientes</p>
+              <p className="text-sm text-muted-foreground">Pendientes de Planificar</p>
+              <p className="text-sm font-medium">{pendingPlanificarCount}</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Pendientes de Ejecución</p>
               <p className="text-sm font-medium">{pendingCount}</p>
             </div>
           </div>
@@ -162,6 +193,24 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
                         {ejecutado ? "Ejecutado" : "Pendiente"}
                       </Badge>
 
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setEditarProgramacionId(p.id)
+
+                          const nextPrecision: "dia" | "mes" = requiereInforme ? "dia" : (p.precision as "dia" | "mes")
+                          setEditarProgramacionPrecision(nextPrecision)
+
+                          const fechaDia = toDateOnlyString(p.fechaProgramada)
+                          const fechaMes = toMonthOnlyString(p.fechaProgramada)
+                          setEditarProgramacionFechaDia(fechaDia)
+                          setEditarProgramacionFechaMes(fechaMes)
+                        }}
+                      >
+                        Editar fecha
+                      </Button>
+
                       {!requiereInforme ? (
                         <Button
                           type="button"
@@ -194,6 +243,101 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
         </CardContent>
       </Card>
 
+      <Dialog
+        open={Boolean(editarProgramacionId)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditarProgramacionId(null)
+            setEditarProgramacionSaving(false)
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-[520px]">
+          <DialogHeader>
+            <DialogTitle>Editar fecha programada</DialogTitle>
+            <DialogDescription>
+              Ajustá la fecha o mes de programación del item seleccionado.
+            </DialogDescription>
+          </DialogHeader>
+
+          {programacionEnEdicion ? (
+            <div className="space-y-4 py-2">
+              <div className="space-y-1">
+                <div className="text-sm font-medium">{programacionEnEdicion.item.name}</div>
+                <div className="text-xs text-muted-foreground">
+                  Actual: {formatDate(programacionEnEdicion.fechaProgramada)}
+                  {programacionEnEdicion.precision === "mes" ? " (mes)" : ""}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>{editarProgramacionPrecision === "mes" && !programacionEnEdicion.item.tipoDeInformeId ? "Mes *" : "Fecha *"}</Label>
+                <Input
+                  type={editarProgramacionPrecision === "mes" && !programacionEnEdicion.item.tipoDeInformeId ? "month" : "date"}
+                  value={editarProgramacionPrecision === "mes" && !programacionEnEdicion.item.tipoDeInformeId ? editarProgramacionFechaMes : editarProgramacionFechaDia}
+                  onChange={(e) => {
+                    if (editarProgramacionPrecision === "mes" && !programacionEnEdicion.item.tipoDeInformeId) {
+                      setEditarProgramacionFechaMes(e.target.value)
+                    } else {
+                      setEditarProgramacionFechaDia(e.target.value)
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={editarProgramacionSaving}
+              onClick={() => setEditarProgramacionId(null)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              disabled={editarProgramacionSaving || !programacionEnEdicion}
+              onClick={async () => {
+                if (!programacionEnEdicion) return
+
+                const requiereInforme = Boolean(programacionEnEdicion.item.tipoDeInformeId)
+                const nextPrecision = requiereInforme ? "dia" : editarProgramacionPrecision
+                const fechaProgramada =
+                  nextPrecision === "mes" ? editarProgramacionFechaMes : editarProgramacionFechaDia
+
+                if (!fechaProgramada) {
+                  toast.error("Completá la nueva fecha")
+                  return
+                }
+
+                setEditarProgramacionSaving(true)
+                try {
+                  await reprogramarPlanTrabajoProgramacion({
+                    programacionId: programacionEnEdicion.id,
+                    precision: nextPrecision,
+                    fechaProgramada: nextPrecision === "mes" ? `${fechaProgramada}-01` : fechaProgramada,
+                    rangoInicio: toDateOnlyString(plan.fechaInicio),
+                    rangoFin: toDateOnlyString(plan.fechaFin),
+                  })
+                  toast.success("Fecha actualizada")
+                  setEditarProgramacionId(null)
+                  router.refresh()
+                } catch (error: any) {
+                  console.error(error)
+                  toast.error(error?.message ?? "No se pudo actualizar la fecha")
+                } finally {
+                  setEditarProgramacionSaving(false)
+                }
+              }}
+            >
+              Guardar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <ProgramarDialog open={programarOpen} onOpenChange={setProgramarOpen} plan={plan} />
       <EditarFechasDialog
         open={editarFechasOpen}
@@ -206,12 +350,13 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
 }
 
 function toDateInputValue(value: Date | string): string {
-  const date = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(date.getTime())) return ""
-  const yyyy = String(date.getFullYear())
-  const mm = String(date.getMonth() + 1).padStart(2, "0")
-  const dd = String(date.getDate()).padStart(2, "0")
-  return `${yyyy}-${mm}-${dd}`
+  if (value instanceof Date) return toDateOnlyString(value)
+  if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(value)) return value
+  try {
+    return toDateOnlyString(parseCalendarStringToDate(value))
+  } catch {
+    return ""
+  }
 }
 
 function EditarFechasDialog({
@@ -542,6 +687,14 @@ function ProgramarDialog({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
 
+  const programacionesCountByItemId = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const p of plan.programaciones) {
+      counts[p.item.id] = (counts[p.item.id] ?? 0) + 1
+    }
+    return counts
+  }, [plan.programaciones])
+
   const selectedItem = useMemo(() => {
     return plan.propuestaItemsDetalle.find((i) => i.id === itemId) ?? null
   }, [itemId, plan.propuestaItemsDetalle])
@@ -663,7 +816,7 @@ function ProgramarDialog({
               <SelectContent>
                 {itemsUnicos.map((item) => (
                   <SelectItem key={item.id} value={item.id}>
-                    {item.name}
+                    {item.name} ({programacionesCountByItemId[item.id] ?? 0})
                   </SelectItem>
                 ))}
               </SelectContent>

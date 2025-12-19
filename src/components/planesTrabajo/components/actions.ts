@@ -4,6 +4,12 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import type { PlanTrabajo, PlanTrabajoProgramacion } from "@/generated/client";
 import type { PlanTrabajoEstado, ProgramacionPrecision } from "@/generated/enums";
+import {
+  parseDateOnlyToLocalNoon,
+  parseMonthOnlyToLocalNoon,
+  toDateOnlyString,
+  toMonthOnlyString,
+} from "@/lib/dates";
 
 export type PlanTrabajoWithProgramaciones = PlanTrabajo & {
   cliente: { id: string; name: string };
@@ -24,16 +30,12 @@ function normalizeProgramacionDate(
   raw: string,
   precision: ProgramacionPrecision,
 ): Date {
-  const date = new Date(raw);
-  if (!isValidDate(date)) {
-    throw new Error("Fecha inválida");
-  }
-
   if (precision === "mes") {
-    return new Date(date.getFullYear(), date.getMonth(), 1);
+    const monthValue = raw.length >= 7 ? raw.slice(0, 7) : raw;
+    return parseMonthOnlyToLocalNoon(monthValue);
   }
 
-  return date;
+  return parseDateOnlyToLocalNoon(raw);
 }
 
 function assertDateInRange(value: Date, inicio: Date, fin: Date) {
@@ -120,8 +122,8 @@ export async function createPlanTrabajoFromPropuesta(params: {
   fechaInicio: string;
   fechaFin: string;
 }) {
-  const fechaInicio = new Date(params.fechaInicio);
-  const fechaFin = new Date(params.fechaFin);
+  const fechaInicio = parseDateOnlyToLocalNoon(params.fechaInicio);
+  const fechaFin = parseDateOnlyToLocalNoon(params.fechaFin);
 
   if (!isValidDate(fechaInicio) || !isValidDate(fechaFin)) {
     throw new Error("Fecha de inicio/fin inválida");
@@ -239,6 +241,9 @@ export async function getPlanTrabajoProgramacionesByRange(params: {
     const ejecutado = Boolean(p.ejecutadoAt) || (p.informe?.estado === "entregado" && Boolean(p.informe?.adjunto));
     const requiereInforme = Boolean(p.item.tipoDeInformeId);
 
+    const fechaProgramada =
+      p.precision === "mes" ? toMonthOnlyString(p.fechaProgramada) : toDateOnlyString(p.fechaProgramada);
+
     return {
       id: p.id,
       planTrabajoId: p.planTrabajoId,
@@ -250,7 +255,7 @@ export async function getPlanTrabajoProgramacionesByRange(params: {
       itemNombre: p.item.name,
       requiereInforme,
       clientLocationNombre: p.clientLocation?.name ?? null,
-      fechaProgramada: p.fechaProgramada.toISOString(),
+      fechaProgramada,
       precision: p.precision as ProgramacionPrecision,
       ejecutado,
     };
@@ -428,8 +433,8 @@ export async function reprogramarPlanTrabajoProgramacion(params: {
   rangoInicio: string;
   rangoFin: string;
 }) {
-  const rangoInicio = new Date(params.rangoInicio);
-  const rangoFin = new Date(params.rangoFin);
+  const rangoInicio = parseDateOnlyToLocalNoon(params.rangoInicio);
+  const rangoFin = parseDateOnlyToLocalNoon(params.rangoFin);
 
   if (!isValidDate(rangoInicio) || !isValidDate(rangoFin)) {
     throw new Error("Fecha de inicio/fin inválida");
@@ -485,8 +490,8 @@ export async function previewUpdatePlanTrabajoFechas(params: {
   fechaInicio: string;
   fechaFin: string;
 }) {
-  const fechaInicio = new Date(params.fechaInicio);
-  const fechaFin = new Date(params.fechaFin);
+  const fechaInicio = parseDateOnlyToLocalNoon(params.fechaInicio);
+  const fechaFin = parseDateOnlyToLocalNoon(params.fechaFin);
 
   if (!isValidDate(fechaInicio) || !isValidDate(fechaFin)) {
     throw new Error("Fecha de inicio/fin inválida");
@@ -517,7 +522,7 @@ export async function previewUpdatePlanTrabajoFechas(params: {
       programacionId: p.id,
       itemId: p.itemId,
       itemName: p.item.name,
-      fechaProgramada: p.fechaProgramada.toISOString(),
+      fechaProgramada: p.precision === "mes" ? toMonthOnlyString(p.fechaProgramada) : toDateOnlyString(p.fechaProgramada),
       precision: p.precision,
       requiereInforme: Boolean(p.item.tipoDeInformeId),
       informeId: p.informe?.id ?? null,
@@ -540,8 +545,8 @@ export async function updatePlanTrabajoFechas(params: {
     return { success: false, reason: "Hay programaciones fuera del rango", fueraDeRango: preview.fueraDeRango };
   }
 
-  const fechaInicio = new Date(params.fechaInicio);
-  const fechaFin = new Date(params.fechaFin);
+  const fechaInicio = parseDateOnlyToLocalNoon(params.fechaInicio);
+  const fechaFin = parseDateOnlyToLocalNoon(params.fechaFin);
 
   await prisma.planTrabajo.update({
     where: { id: params.planTrabajoId },
