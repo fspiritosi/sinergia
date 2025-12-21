@@ -56,6 +56,12 @@ export function toMonthOnlyString(value: Date): string {
   return `${yyyy}-${mm}`
 }
 
+export function addMonths(value: Date, amount: number): Date {
+  const next = new Date(value)
+  next.setUTCMonth(next.getUTCMonth() + amount)
+  return next
+}
+
 export function formatDateOnly(value: Date | string, locale = "es-AR"): string {
   const date = value instanceof Date ? parseDateOnlyToLocalNoon(toDateOnlyString(value)) : parseCalendarStringToDate(value)
   if (!isValidDate(date)) return "-"

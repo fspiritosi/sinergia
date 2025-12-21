@@ -119,6 +119,7 @@ export const ItemsScalarFieldEnum = {
   name: 'name',
   description: 'description',
   is_active: 'is_active',
+  esPlanificable: 'esPlanificable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   tipoDeInformeId: 'tipoDeInformeId'

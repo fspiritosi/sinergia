@@ -52,16 +52,18 @@ const itemSchema = z.object({
     name: z.string().min(1, "El nombre es requerido"),
     description: z.string().min(1, "La descripción es requerida"),
     tipoDeInformeId: z.string().optional(),
+    esPlanificable: z.boolean().default(true),
     is_active: z.boolean(),
 })
 
 type ItemFormData = z.infer<typeof itemSchema>
+type ItemFormInput = z.input<typeof itemSchema>
 
 interface ItemFormProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     item?: Item | null
-    onSubmit: (data: any) => Promise<void>
+    onSubmit: (data: ItemFormData) => Promise<void>
     isLoading?: boolean
 }
 
@@ -78,14 +80,14 @@ export function ItemForm({
     const [tiposLoading, setTiposLoading] = useState(false)
     const [tiposError, setTiposError] = useState<string | null>(null)
 
-    const form = useForm<ItemFormData>({
+    const form = useForm<ItemFormInput, any, ItemFormData>({
         resolver: zodResolver(itemSchema),
         defaultValues: {
             name: "",
             description: "",
             tipoDeInformeId: undefined,
+            esPlanificable: true,
             is_active: true,
-
         },
     })
 
@@ -103,6 +105,7 @@ export function ItemForm({
                     name: item.name,
                     description: item.description,
                     tipoDeInformeId: (item as any).tipoDeInformeId ?? undefined,
+                    esPlanificable: (item as any).esPlanificable ?? true,
                     is_active: item.is_active,
                 } as any)
             } else {
@@ -110,6 +113,7 @@ export function ItemForm({
                     name: "",
                     description: "",
                     tipoDeInformeId: undefined,
+                    esPlanificable: true,
                     is_active: true,
 
                 })
@@ -238,6 +242,7 @@ export function ItemForm({
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="tipoDeInformeId"
@@ -246,7 +251,12 @@ export function ItemForm({
                                             <FormLabel>Tipo de Informe (opcional)</FormLabel>
                                             <FormControl className="w-full">
                                                 <Select
-                                                    onValueChange={(value) => field.onChange(value)}
+                                                    onValueChange={(value) => {
+                                                        field.onChange(value)
+                                                        if (value) {
+                                                            form.setValue("esPlanificable", true, { shouldDirty: true })
+                                                        }
+                                                    }}
                                                     value={field.value ?? undefined}
                                                     disabled={tiposLoading || !!tiposError}
                                                 >
@@ -268,23 +278,50 @@ export function ItemForm({
                                                     </SelectContent>
                                                 </Select>
                                             </FormControl>
-                                            {tiposError ? (
-                                                <p className="text-sm text-destructive">{tiposError}</p>
-                                            ) : null}
-                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
 
                                 <FormField
                                     control={form.control}
+                                    name="esPlanificable"
+                                    render={({ field }) => {
+                                        const tieneInforme = Boolean(form.watch("tipoDeInformeId"))
+                                        return (
+                                            <FormItem className="col-span-2 flex flex-row items-center justify-between rounded-lg border p-3">
+                                                <div className="space-y-0.5">
+                                                    <FormLabel>Es planificable</FormLabel>
+                                                    <div className="text-sm text-muted-foreground">
+                                                        Si tiene tipo de informe, siempre es planificable.
+                                                    </div>
+                                                </div>
+                                                <FormControl>
+                                                    <Switch
+                                                        checked={tieneInforme ? true : field.value}
+                                                        onCheckedChange={(checked) => {
+                                                            if (tieneInforme) {
+                                                                field.onChange(true)
+                                                                return
+                                                            }
+                                                            field.onChange(checked)
+                                                        }}
+                                                        disabled={tieneInforme}
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )
+                                    }}
+                                />
+
+                                <FormField
+                                    control={form.control}
                                     name="is_active"
                                     render={({ field }) => (
-                                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
+                                        <FormItem className="col-span-2 flex flex-row items-center justify-between rounded-lg border p-3">
                                             <div className="space-y-0.5">
-                                                <FormLabel>Estado</FormLabel>
+                                                <FormLabel>Activo</FormLabel>
                                                 <div className="text-sm text-muted-foreground">
-                                                    Item activo
+                                                    Desactiva para removerlo de los servicios asociados.
                                                 </div>
                                             </div>
                                             <FormControl>

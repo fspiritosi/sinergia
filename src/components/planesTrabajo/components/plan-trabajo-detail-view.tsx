@@ -27,13 +27,21 @@ import {
 import type { PlanTrabajoWithProgramaciones } from "./actions"
 import {
   createPlanTrabajoProgramacion,
+  createPlanTrabajoProgramacionesMensuales,
   marcarProgramacionEjecutada,
   previewUpdatePlanTrabajoFechas,
   reprogramarPlanTrabajoProgramacion,
   updatePlanTrabajoFechas,
 } from "./actions"
 import { getActiveClientLocations, type ClientLocationBasic } from "@/components/clientLocations/components/actions"
-import { formatDateOnly, parseCalendarStringToDate, toDateOnlyString, toMonthOnlyString } from "@/lib/dates"
+import {
+  formatDateOnly,
+  isValidDate,
+  parseCalendarStringToDate,
+  parseMonthOnlyToLocalNoon,
+  toDateOnlyString,
+  toMonthOnlyString,
+} from "@/lib/dates"
 import { useDashboardTitle } from "@/components/dashboard/DashboardTitleContext"
 
 interface PlanTrabajoDetailViewProps {
@@ -96,7 +104,11 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   }, [plan.cliente.name, plan.propuesta.codigo, setTitle])
 
   const pendingPlanificarCount = useMemo(() => {
-    const itemIdsPropuesta = new Set(plan.propuestaItemsDetalle.map((item) => item.id))
+    const itemIdsPropuesta = new Set(
+      plan.propuestaItemsDetalle
+        .filter((item) => item.tipoDeInformeId || item.esPlanificable)
+        .map((item) => item.id),
+    )
     const itemIdsProgramados = new Set(plan.programaciones.map((p) => p.item.id))
 
     let count = 0
@@ -106,6 +118,10 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
 
     return count
   }, [plan.programaciones, plan.propuestaItemsDetalle])
+
+  const nonPlanificablesCount = useMemo(() => {
+    return plan.propuestaItemsDetalle.filter((item) => !item.tipoDeInformeId && !item.esPlanificable).length
+  }, [plan.propuestaItemsDetalle])
 
   const canEditarFechas = useMemo(() => {
     return plan.estado !== "finalizado_con_pendientes" && plan.estado !== "finalizado_completo"
@@ -160,6 +176,10 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
             <div>
               <p className="text-sm text-muted-foreground">Pendientes de Ejecución</p>
               <p className="text-sm font-medium">{pendingCount}</p>
+            </div>
+            <div className="sm:col-span-4 md:col-span-1">
+              <p className="text-sm text-muted-foreground">Items no planificables</p>
+              <p className="text-sm font-medium">{nonPlanificablesCount}</p>
             </div>
           </div>
         </CardContent>
@@ -681,6 +701,8 @@ function ProgramarDialog({
   const [precision, setPrecision] = useState<"dia" | "mes">("dia")
   const [fechaDia, setFechaDia] = useState("")
   const [fechaMes, setFechaMes] = useState("")
+  const [mesInicioSerie, setMesInicioSerie] = useState("")
+  const [planificarTodosLosMeses, setPlanificarTodosLosMeses] = useState(false)
   const [locationId, setLocationId] = useState("")
   const [locations, setLocations] = useState<ClientLocationBasic[]>([])
   const [locationsLoading, setLocationsLoading] = useState(false)
@@ -707,6 +729,8 @@ function ProgramarDialog({
       setPrecision("dia")
       setFechaDia("")
       setFechaMes("")
+      setMesInicioSerie("")
+      setPlanificarTodosLosMeses(false)
       setLocationId("")
       return
     }
@@ -748,6 +772,39 @@ function ProgramarDialog({
     return plan.propuestaItemsDetalle
   }, [plan.propuestaItemsDetalle])
 
+  const mesInicioPorDefecto = useMemo(() => {
+    const start = plan.fechaInicio instanceof Date ? plan.fechaInicio : new Date(plan.fechaInicio)
+    if (!isValidDate(start)) return ""
+    return toMonthOnlyString(start)
+  }, [plan.fechaInicio])
+
+  useEffect(() => {
+    if (!mesInicioSerie && mesInicioPorDefecto) {
+      setMesInicioSerie(mesInicioPorDefecto)
+    }
+  }, [mesInicioPorDefecto, mesInicioSerie])
+
+  const mesesCreadosCount = useMemo(() => {
+    if (!planificarTodosLosMeses) return 0
+    if (!mesInicioSerie) return 0
+    try {
+      const start = parseMonthOnlyToLocalNoon(mesInicioSerie)
+      const planStart = new Date(plan.fechaInicio.getFullYear(), plan.fechaInicio.getMonth(), 1)
+      const planEnd = new Date(plan.fechaFin.getFullYear(), plan.fechaFin.getMonth(), 1)
+      const effectiveStart = start.getTime() < planStart.getTime() ? planStart : start
+      if (effectiveStart.getTime() > planEnd.getTime()) return 0
+      let count = 0
+      let cursor = new Date(effectiveStart)
+      while (cursor.getTime() <= planEnd.getTime()) {
+        count += 1
+        cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1)
+      }
+      return count
+    } catch {
+      return 0
+    }
+  }, [mesInicioSerie, plan.fechaFin, plan.fechaInicio, planificarTodosLosMeses])
+
   const handleSubmit = async () => {
     if (!itemId) {
       toast.error("Seleccioná un item")
@@ -763,7 +820,7 @@ function ProgramarDialog({
         toast.error("Completá la fecha")
         return
       }
-    } else {
+    } else if (!planificarTodosLosMeses) {
       if (precision === "dia" && !fechaDia) {
         toast.error("Completá la fecha")
         return
@@ -778,14 +835,27 @@ function ProgramarDialog({
 
     setIsSubmitting(true)
     try {
-      await createPlanTrabajoProgramacion({
-        planTrabajoId: plan.id,
-        itemId,
-        fechaProgramada,
-        precision,
-        clientLocationId: requiereInforme ? locationId : undefined,
-      })
-      toast.success("Programación creada")
+      if (!requiereInforme && planificarTodosLosMeses) {
+        if (!mesInicioSerie) {
+          toast.error("Completá el mes de inicio")
+          return
+        }
+        await createPlanTrabajoProgramacionesMensuales({
+          planTrabajoId: plan.id,
+          itemId,
+          mesInicio: mesInicioSerie,
+        })
+        toast.success("Programaciones creadas")
+      } else {
+        await createPlanTrabajoProgramacion({
+          planTrabajoId: plan.id,
+          itemId,
+          fechaProgramada,
+          precision,
+          clientLocationId: requiereInforme ? locationId : undefined,
+        })
+        toast.success("Programación creada")
+      }
       onOpenChange(false)
       router.refresh()
     } catch (error: any) {
@@ -816,7 +886,14 @@ function ProgramarDialog({
               <SelectContent>
                 {itemsUnicos.map((item) => (
                   <SelectItem key={item.id} value={item.id}>
-                    {item.name} ({programacionesCountByItemId[item.id] ?? 0})
+                    <div className="flex items-center gap-2">
+                      <span>
+                        {item.name} ({programacionesCountByItemId[item.id] ?? 0})
+                      </span>
+                      {!item.tipoDeInformeId && !item.esPlanificable ? (
+                        <Badge variant="warning">No planificable</Badge>
+                      ) : null}
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -843,17 +920,53 @@ function ProgramarDialog({
             </div>
           ) : null}
 
-          <div className="space-y-2">
-            <Label>{precision === "mes" && !requiereInforme ? "Mes *" : "Fecha *"}</Label>
-            <Input
-              type={precision === "mes" && !requiereInforme ? "month" : "date"}
-              value={precision === "mes" && !requiereInforme ? fechaMes : fechaDia}
-              onChange={(e) => {
-                if (precision === "mes" && !requiereInforme) setFechaMes(e.target.value)
-                else setFechaDia(e.target.value)
-              }}
-            />
-          </div>
+          {!requiereInforme ? (
+            <div className="flex items-center gap-2">
+              <input
+                id="planificar-serie"
+                type="checkbox"
+                className="h-4 w-4 accent-sinergia"
+                checked={planificarTodosLosMeses}
+                onChange={(e) => {
+                  const checked = e.target.checked
+                  setPlanificarTodosLosMeses(checked)
+                  if (checked) {
+                    setPrecision("mes")
+                  }
+                }}
+              />
+              <Label htmlFor="planificar-serie" className="text-sm">
+                Planificar en todos los meses del plan
+              </Label>
+            </div>
+          ) : null}
+
+          {planificarTodosLosMeses && !requiereInforme ? (
+            <div className="space-y-2">
+              <Label>Mes de inicio *</Label>
+              <Input
+                type="month"
+                value={mesInicioSerie}
+                min={mesInicioPorDefecto || undefined}
+                onChange={(e) => setMesInicioSerie(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                Se crearán {mesesCreadosCount} programación(es) mensual(es) dentro del rango del plan.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <Label>{precision === "mes" && !requiereInforme ? "Mes *" : "Fecha *"}</Label>
+              <Input
+                type={precision === "mes" && !requiereInforme ? "month" : "date"}
+                value={precision === "mes" && !requiereInforme ? fechaMes : fechaDia}
+                onChange={(e) => {
+                  if (precision === "mes" && !requiereInforme) setFechaMes(e.target.value)
+                  else setFechaDia(e.target.value)
+                }}
+              />
+            </div>
+          )}
 
           {requiereInforme ? (
             <div className="space-y-2">

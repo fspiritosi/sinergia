@@ -29,6 +29,7 @@ export type ItemsMinAggregateOutputType = {
   name: string | null
   description: string | null
   is_active: boolean | null
+  esPlanificable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   tipoDeInformeId: string | null
@@ -39,6 +40,7 @@ export type ItemsMaxAggregateOutputType = {
   name: string | null
   description: string | null
   is_active: boolean | null
+  esPlanificable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   tipoDeInformeId: string | null
@@ -49,6 +51,7 @@ export type ItemsCountAggregateOutputType = {
   name: number
   description: number
   is_active: number
+  esPlanificable: number
   createdAt: number
   updatedAt: number
   tipoDeInformeId: number
@@ -61,6 +64,7 @@ export type ItemsMinAggregateInputType = {
   name?: true
   description?: true
   is_active?: true
+  esPlanificable?: true
   createdAt?: true
   updatedAt?: true
   tipoDeInformeId?: true
@@ -71,6 +75,7 @@ export type ItemsMaxAggregateInputType = {
   name?: true
   description?: true
   is_active?: true
+  esPlanificable?: true
   createdAt?: true
   updatedAt?: true
   tipoDeInformeId?: true
@@ -81,6 +86,7 @@ export type ItemsCountAggregateInputType = {
   name?: true
   description?: true
   is_active?: true
+  esPlanificable?: true
   createdAt?: true
   updatedAt?: true
   tipoDeInformeId?: true
@@ -164,6 +170,7 @@ export type ItemsGroupByOutputType = {
   name: string
   description: string
   is_active: boolean
+  esPlanificable: boolean
   createdAt: Date
   updatedAt: Date
   tipoDeInformeId: string | null
@@ -195,6 +202,7 @@ export type ItemsWhereInput = {
   name?: Prisma.StringFilter<"Items"> | string
   description?: Prisma.StringFilter<"Items"> | string
   is_active?: Prisma.BoolFilter<"Items"> | boolean
+  esPlanificable?: Prisma.BoolFilter<"Items"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
@@ -208,6 +216,7 @@ export type ItemsOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
+  esPlanificable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -224,6 +233,7 @@ export type ItemsWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Items"> | string
   description?: Prisma.StringFilter<"Items"> | string
   is_active?: Prisma.BoolFilter<"Items"> | boolean
+  esPlanificable?: Prisma.BoolFilter<"Items"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
@@ -237,6 +247,7 @@ export type ItemsOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
+  esPlanificable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -253,6 +264,7 @@ export type ItemsScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Items"> | string
   description?: Prisma.StringWithAggregatesFilter<"Items"> | string
   is_active?: Prisma.BoolWithAggregatesFilter<"Items"> | boolean
+  esPlanificable?: Prisma.BoolWithAggregatesFilter<"Items"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Items"> | Date | string
   tipoDeInformeId?: Prisma.StringNullableWithAggregatesFilter<"Items"> | string | null
@@ -263,6 +275,7 @@ export type ItemsCreateInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
@@ -275,6 +288,7 @@ export type ItemsUncheckedCreateInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
@@ -287,6 +301,7 @@ export type ItemsUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
@@ -299,6 +314,7 @@ export type ItemsUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -311,6 +327,7 @@ export type ItemsCreateManyInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
@@ -321,6 +338,7 @@ export type ItemsUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -330,6 +348,7 @@ export type ItemsUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -340,6 +359,7 @@ export type ItemsCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
+  esPlanificable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrder
@@ -350,6 +370,7 @@ export type ItemsMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
+  esPlanificable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrder
@@ -360,6 +381,7 @@ export type ItemsMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
+  esPlanificable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrder
@@ -459,6 +481,7 @@ export type ItemsCreateWithoutServiciosInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
@@ -470,6 +493,7 @@ export type ItemsUncheckedCreateWithoutServiciosInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
@@ -497,6 +521,7 @@ export type ItemsUpdateWithoutServiciosInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
@@ -508,6 +533,7 @@ export type ItemsUncheckedUpdateWithoutServiciosInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -519,6 +545,7 @@ export type ItemsCreateWithoutTipoDeInformeInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
@@ -530,6 +557,7 @@ export type ItemsUncheckedCreateWithoutTipoDeInformeInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutItemInput
@@ -570,6 +598,7 @@ export type ItemsScalarWhereInput = {
   name?: Prisma.StringFilter<"Items"> | string
   description?: Prisma.StringFilter<"Items"> | string
   is_active?: Prisma.BoolFilter<"Items"> | boolean
+  esPlanificable?: Prisma.BoolFilter<"Items"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
@@ -580,6 +609,7 @@ export type ItemsCreateWithoutPlanesTrabajoProgramacionesInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
@@ -591,6 +621,7 @@ export type ItemsUncheckedCreateWithoutPlanesTrabajoProgramacionesInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
@@ -618,6 +649,7 @@ export type ItemsUpdateWithoutPlanesTrabajoProgramacionesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
@@ -629,6 +661,7 @@ export type ItemsUncheckedUpdateWithoutPlanesTrabajoProgramacionesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -640,6 +673,7 @@ export type ItemsCreateManyTipoDeInformeInput = {
   name: string
   description: string
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -649,6 +683,7 @@ export type ItemsUpdateWithoutTipoDeInformeInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
@@ -660,6 +695,7 @@ export type ItemsUncheckedUpdateWithoutTipoDeInformeInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutItemNestedInput
@@ -671,6 +707,7 @@ export type ItemsUncheckedUpdateManyWithoutTipoDeInformeInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -720,6 +757,7 @@ export type ItemsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name?: boolean
   description?: boolean
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tipoDeInformeId?: boolean
@@ -734,6 +772,7 @@ export type ItemsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   description?: boolean
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tipoDeInformeId?: boolean
@@ -745,6 +784,7 @@ export type ItemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   description?: boolean
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tipoDeInformeId?: boolean
@@ -756,12 +796,13 @@ export type ItemsSelectScalar = {
   name?: boolean
   description?: boolean
   is_active?: boolean
+  esPlanificable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tipoDeInformeId?: boolean
 }
 
-export type ItemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "createdAt" | "updatedAt" | "tipoDeInformeId", ExtArgs["result"]["items"]>
+export type ItemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "esPlanificable" | "createdAt" | "updatedAt" | "tipoDeInformeId", ExtArgs["result"]["items"]>
 export type ItemsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   servicios?: boolean | Prisma.Items$serviciosArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
@@ -787,6 +828,7 @@ export type $ItemsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     name: string
     description: string
     is_active: boolean
+    esPlanificable: boolean
     createdAt: Date
     updatedAt: Date
     tipoDeInformeId: string | null
@@ -1220,6 +1262,7 @@ export interface ItemsFieldRefs {
   readonly name: Prisma.FieldRef<"Items", 'String'>
   readonly description: Prisma.FieldRef<"Items", 'String'>
   readonly is_active: Prisma.FieldRef<"Items", 'Boolean'>
+  readonly esPlanificable: Prisma.FieldRef<"Items", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Items", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Items", 'DateTime'>
   readonly tipoDeInformeId: Prisma.FieldRef<"Items", 'String'>
