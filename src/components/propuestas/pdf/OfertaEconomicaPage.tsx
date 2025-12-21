@@ -29,34 +29,10 @@ export function OfertaEconomicaPage({
             <PageHeader serviceDescription={servicioDescripcion} />
 
             <View style={pdfStyles.content}>
-                {/* Consideraciones Generales */}
-                {/* <View style={pdfStyles.consideracionesSection}>
-                    <Text style={pdfStyles.consideracionesTitle}>Consideraciones Generales</Text>
-                    {CONSIDERACIONES_GENERALES.map((item, index) => (
-                        <View key={index} style={{ flexDirection: 'row', marginBottom: 3 }}>
-                            <View style={pdfStyles.bulletPoint} />
-                            <Text style={[pdfStyles.consideracion, { flex: 1, paddingLeft: 0 }]}>
-                                {item}
-                            </Text>
-                        </View>
-                    ))}
-                </View> */}
-                  {/* Consideraciones Particulares */}
-                {/* <View style={pdfStyles.consideracionesSection}>
-                    <Text style={pdfStyles.consideracionesTitle}>Consideraciones Particulares</Text>
-                    {condicionesParticulares.map((item, index) => (
-                        <View key={index} style={{ flexDirection: 'row', marginBottom: 3 }}>
-                            <View style={pdfStyles.bulletPoint} />
-                            <Text style={[pdfStyles.consideracion, { flex: 1, paddingLeft: 0 }]}>
-                                {item}
-                            </Text>
-                        </View>
-                    ))}
-                </View> */}
+              
 
                 {/* Oferta Económica */}
                 <View>
-                    {/* <View style={[pdfStyles.titleDivider, { alignSelf: 'flex-start', marginLeft: 20 }]} /> */}
                     <Text style={[pdfStyles.sectionTitle, { textAlign: 'left', marginLeft: 20 }]}>Oferta Económica</Text>
 
                     <View style={pdfStyles.offerContainer}>
@@ -97,13 +73,13 @@ export function OfertaEconomicaPage({
                     </View>
 
                     {/* Notas al pie */}
-                    <View style={pdfStyles.notasSection}>
+                    {/* <View style={pdfStyles.notasSection}>
                         {NOTAS_PIE.map((nota, index) => (
                             <Text key={index} style={pdfStyles.nota}>
                                 {nota}
                             </Text>
                         ))}
-                    </View>
+                    </View> */}
                 </View>
             </View>
 

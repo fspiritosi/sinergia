@@ -4,7 +4,8 @@ import { PDF_COLORS } from '@/lib/pdf-constants'
 export const pdfStyles = StyleSheet.create({
     page: {
         flexDirection: 'column',
-        backgroundColor: PDF_COLORS.white,
+        //backgroundColor: PDF_COLORS.white,
+         backgroundColor: PDF_COLORS.lightGray,
         //padding: 20,
     },
 
@@ -48,13 +49,13 @@ export const pdfStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     serviceTitle: {
-        fontSize: 14,
+        fontSize: 22,
         fontWeight: 'bold',
         color: PDF_COLORS.textDarkBlue,
         marginBottom: 8,
     },
     serviceText: {
-        fontSize: 12,
+        fontSize: 18,
         lineHeight: 1.6,
         color: PDF_COLORS.textDarkBlue,
     },

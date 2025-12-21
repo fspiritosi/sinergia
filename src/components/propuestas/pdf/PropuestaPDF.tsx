@@ -47,6 +47,15 @@ export function PropuestaPDF({
                 items={items}
             />
 
+            <CondicionesPage 
+                servicioDescripcion={servicioDescripcion}
+                servicioNombre={servicioNombre}
+                items={items}
+                valor={valor}
+                moneda={moneda}
+                condicionesParticulares={condicionesParticulares}
+            />
+
             <OfertaEconomicaPage
                 servicioDescripcion={servicioDescripcion}
                 servicioNombre={servicioNombre}
@@ -56,14 +65,7 @@ export function PropuestaPDF({
                 moneda={moneda}
                 condicionesParticulares={condicionesParticulares}
             />
-            <CondicionesPage 
-            servicioDescripcion={servicioDescripcion}
-                servicioNombre={servicioNombre}
-                items={items}
-                valor={valor}
-                moneda={moneda}
-                condicionesParticulares={condicionesParticulares}
-            />
+          
         </Document>
     )
 }
