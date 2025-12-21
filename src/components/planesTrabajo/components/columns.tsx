@@ -73,7 +73,7 @@ export const columns: ColumnDef<PlanTrabajoListItem>[] = [
     cell: ({ row }) => {
       const estado = String(row.getValue("estado") ?? "")
       const isPendiente = estado === "pendiente_programacion"
-      return <Badge variant={isPendiente ? "sinergia" : "secondary"}>{formatEstado(estado)}</Badge>
+      return <Badge variant={isPendiente ? "warning" : "default"}>{formatEstado(estado)}</Badge>
     },
   },
   {

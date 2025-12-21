@@ -139,7 +139,7 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant={plan.estado === "pendiente_programacion" ? "sinergia" : "secondary"}>
+              <Badge variant={plan.estado === "pendiente_programacion" ? "warning" : "default"}>
                 {formatEstado(plan.estado)}
               </Badge>
               {canEditarFechas ? (
