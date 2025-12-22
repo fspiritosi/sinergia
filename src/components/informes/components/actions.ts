@@ -1,47 +1,170 @@
 "use server";
 
 import prisma from "@/lib/db";
+import type { Prisma } from "@/generated/client";
 import { revalidatePath } from "next/cache";
 import { uploadFileToR2 } from "@/lib/r2-upload";
 import { refreshPlanTrabajoEstado } from "@/components/planesTrabajo/components/actions";
 import { parseCalendarStringToDate, toDateOnlyString } from "@/lib/dates";
 
-export async function getInformes() {
+type InformeWithRelations = Prisma.InformeGetPayload<{
+  include: {
+    cliente: { select: { id: true, name: true } };
+    tipoDeInforme: { select: { id: true, name: true } };
+    clientLocation: { select: { id: true, name: true } };
+    propuesta: {
+      select: {
+        id: true;
+        codigo: true;
+        clienteId: true;
+        servicioId: true;
+        vigencia: true;
+        status: true;
+        items: true;
+        contacto: true;
+        valor: true;
+        moneda: true;
+        is_active: true;
+        condicionesParticulares: true;
+        createdAt: true;
+        updatedAt: true;
+      };
+    };
+  };
+}>;
+
+export interface SerializedInforme {
+  id: string;
+  cliente: { id: string; name: string } | null;
+  tipoDeInforme: { id: string; name: string } | null;
+  clientLocation: { id: string; name: string } | null;
+  propuesta: {
+    id: string;
+    codigo: string;
+    clienteId: string;
+    servicioId: string;
+    vigencia: string | null;
+    status: string;
+    items: string[];
+    contacto: string | null;
+    valor: number;
+    moneda: string;
+    is_active: boolean;
+    condicionesParticulares: string[];
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+  fechaVencimiento: string;
+  estado: string;
+  adjunto: string | null;
+  responsableConfeccion: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function serializeInforme(i: InformeWithRelations): SerializedInforme {
+  return {
+    id: i.id,
+    cliente: i.cliente ? { id: i.cliente.id, name: i.cliente.name } : null,
+    tipoDeInforme: i.tipoDeInforme ? { id: i.tipoDeInforme.id, name: i.tipoDeInforme.name } : null,
+    clientLocation: i.clientLocation ? { id: i.clientLocation.id, name: i.clientLocation.name } : null,
+    propuesta: i.propuesta
+      ? {
+          id: i.propuesta.id,
+          codigo: i.propuesta.codigo,
+          clienteId: i.propuesta.clienteId,
+          servicioId: i.propuesta.servicioId,
+          vigencia: i.propuesta.vigencia ? toDateOnlyString(i.propuesta.vigencia) : null,
+          status: i.propuesta.status,
+          items: i.propuesta.items,
+          contacto: i.propuesta.contacto ?? null,
+          valor: Number(i.propuesta.valor ?? 0),
+          moneda: i.propuesta.moneda,
+          is_active: i.propuesta.is_active,
+          condicionesParticulares: i.propuesta.condicionesParticulares,
+          createdAt: i.propuesta.createdAt.toISOString(),
+          updatedAt: i.propuesta.updatedAt.toISOString(),
+        }
+      : null,
+    fechaVencimiento: toDateOnlyString(i.fechaVencimiento),
+    estado: i.estado,
+    adjunto: i.adjunto ?? null,
+    responsableConfeccion: i.responsableConfeccion ?? null,
+    createdAt: i.createdAt.toISOString(),
+    updatedAt: i.updatedAt.toISOString(),
+  };
+}
+
+export async function getInformes(): Promise<SerializedInforme[]> {
   const informes = await prisma.informe.findMany({
     include: {
-      cliente: true,
-      tipoDeInforme: true,
-      clientLocation: true,
-      propuesta: true,
+      cliente: { select: { id: true, name: true } },
+      tipoDeInforme: { select: { id: true, name: true } },
+      clientLocation: { select: { id: true, name: true } },
+      propuesta: {
+        select: {
+          id: true,
+          codigo: true,
+          clienteId: true,
+          servicioId: true,
+          vigencia: true,
+          status: true,
+          items: true,
+          contacto: true,
+          valor: true,
+          moneda: true,
+          is_active: true,
+          condicionesParticulares: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
     },
+    orderBy: [
+      { estado: "asc" },
+      { fechaVencimiento: "asc" },
+    ],
   });
 
   if (!informes) return [];
 
-  const ordenados = informes.sort((a, b) => {
-    if (a.estado === "pendiente" && b.estado !== "pendiente") return -1;
-    if (a.estado !== "pendiente" && b.estado === "pendiente") return 1;
-    return a.fechaVencimiento.getTime() - b.fechaVencimiento.getTime();
-  });
-
-  return ordenados;
+  return informes.map(serializeInforme);
 }
 
-export async function getPendingInformes() {
+export async function getPendingInformes(): Promise<SerializedInforme[]> {
   const informes = await prisma.informe.findMany({
     where: {
       estado: "pendiente",
     },
     include: {
-      cliente: true,
-      tipoDeInforme: true,
-      clientLocation: true,
+      cliente: { select: { id: true, name: true } },
+      tipoDeInforme: { select: { id: true, name: true } },
+      clientLocation: { select: { id: true, name: true } },
+      propuesta: {
+        select: {
+          id: true,
+          codigo: true,
+          clienteId: true,
+          servicioId: true,
+          vigencia: true,
+          status: true,
+          items: true,
+          contacto: true,
+          valor: true,
+          moneda: true,
+          is_active: true,
+          condicionesParticulares: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
     },
+    orderBy: [{ fechaVencimiento: "asc" }],
   });
 
   if (!informes) return [];
 
-  return informes;
+  return informes.map(serializeInforme);
 }
 
 export type InformeCalendarItem = {
