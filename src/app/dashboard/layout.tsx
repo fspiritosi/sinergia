@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { PageHeader } from "@/components/dashboard/PageHeader"
+import { DashboardTitleProvider } from "@/components/dashboard/DashboardTitleContext"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import {
@@ -16,13 +17,15 @@ export default async function Page({ children }: { children: React.ReactNode }) 
 
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <PageHeader />
-        <div className="h-full w-full p-8">
-          {children}
-        </div>
-      </SidebarInset>
+      <DashboardTitleProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <PageHeader />
+          <div className="h-full w-full p-8">
+            {children}
+          </div>
+        </SidebarInset>
+      </DashboardTitleProvider>
     </SidebarProvider>
   )
 }

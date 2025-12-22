@@ -74,3 +74,28 @@ export type ItemsOnServicios = Prisma.ItemsOnServiciosModel
  * 
  */
 export type PropuestaTecnica = Prisma.PropuestaTecnicaModel
+/**
+ * Model TipoDeInforme
+ * 
+ */
+export type TipoDeInforme = Prisma.TipoDeInformeModel
+/**
+ * Model ClientLocations
+ * 
+ */
+export type ClientLocations = Prisma.ClientLocationsModel
+/**
+ * Model Informe
+ * 
+ */
+export type Informe = Prisma.InformeModel
+/**
+ * Model PlanTrabajo
+ * 
+ */
+export type PlanTrabajo = Prisma.PlanTrabajoModel
+/**
+ * Model PlanTrabajoProgramacion
+ * 
+ */
+export type PlanTrabajoProgramacion = Prisma.PlanTrabajoProgramacionModel

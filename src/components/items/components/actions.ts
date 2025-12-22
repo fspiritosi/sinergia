@@ -3,7 +3,11 @@
 import prisma from "@/lib/db";
 
 export async function getItems() {
-  const items = await prisma.items.findMany();
+  const items = await prisma.items.findMany({
+    include: {
+      tipoDeInforme: true,
+    },
+  });
 
   if (!items) return [];
 
@@ -27,6 +31,9 @@ export async function getActiveItems() {
   const items = await prisma.items.findMany({
     where: {
       is_active: true,
+    },
+    include: {
+      tipoDeInforme: true,
     },
   });
 

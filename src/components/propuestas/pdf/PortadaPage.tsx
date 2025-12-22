@@ -3,6 +3,7 @@ import { Page, Text, View } from '@react-pdf/renderer'
 import { PageFooter } from './PageFooter'
 import { PageHeader } from './PageHeader'
 import { pdfStyles } from './styles'
+import { formatDateOnly } from '@/lib/dates'
 
 interface PortadaPageProps {
     codigo: string
@@ -21,7 +22,7 @@ export function PortadaPage({
     servicioDescripcion,
     items,
 }: PortadaPageProps) {
-    const fechaFormateada = new Date(vigencia).toLocaleDateString('es-AR')
+    const fechaFormateada = formatDateOnly(vigencia, 'es-AR')
 
     return (
         <Page size="A4" style={pdfStyles.page}>

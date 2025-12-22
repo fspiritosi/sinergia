@@ -4,8 +4,9 @@ import { PDF_COLORS } from '@/lib/pdf-constants'
 export const pdfStyles = StyleSheet.create({
     page: {
         flexDirection: 'column',
-        backgroundColor: PDF_COLORS.white,
-        padding: 20,
+        //backgroundColor: PDF_COLORS.white,
+         backgroundColor: PDF_COLORS.lightGray,
+        //padding: 20,
     },
 
     // Header
@@ -48,13 +49,13 @@ export const pdfStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     serviceTitle: {
-        fontSize: 14,
+        fontSize: 22,
         fontWeight: 'bold',
         color: PDF_COLORS.textDarkBlue,
         marginBottom: 8,
     },
     serviceText: {
-        fontSize: 12,
+        fontSize: 18,
         lineHeight: 1.6,
         color: PDF_COLORS.textDarkBlue,
     },
@@ -115,6 +116,7 @@ export const pdfStyles = StyleSheet.create({
         fontWeight: 'bold',
         color: PDF_COLORS.darkBlue,
         marginBottom: 15,
+        marginTop: 15,
         textAlign: 'center',
     },
     titleDivider: {
@@ -123,6 +125,7 @@ export const pdfStyles = StyleSheet.create({
         width: 200,
         alignSelf: 'center',
         marginBottom: 10,
+
     },
     itemsList: {
         marginTop: 10,
@@ -137,8 +140,8 @@ export const pdfStyles = StyleSheet.create({
 
     // Page 2 specific
     consideracionesSection: {
-        marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 0,
+        marginTop:10,
         paddingHorizontal: 20,
     },
     consideracionesTitle: {
@@ -184,6 +187,9 @@ export const pdfStyles = StyleSheet.create({
     offerValueBox: {
         padding: 10,
         justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: PDF_COLORS.cream,
+
     },
     offerBoxLeft: {
         flex: 2,
@@ -204,7 +210,7 @@ export const pdfStyles = StyleSheet.create({
     offerValueTextRight: {
         fontSize: 12,
         fontWeight: 'bold',
-        color: PDF_COLORS.white, // Assuming white text on gradient for the value
+        //color: PDF_COLORS.white, // Assuming white text on gradient for the value
         textAlign: 'center',
     },
 

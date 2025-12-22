@@ -14,6 +14,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Modelos
+
 model Test {
   id String @id @default(uuid())
   name String @default("Test")
@@ -31,12 +33,16 @@ model Cliente {
   updatedAt DateTime @default(now())
 
   propuestas PropuestaTecnica[]
+  clientLocations ClientLocations[]
+  informes Informe[]
+  planesTrabajo PlanTrabajo[]
 }
 
 model Servicio {
   id String @id @default(uuid())
   name String 
   description String
+  type ServiceType @default(mensual)
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -50,11 +56,15 @@ model Items {
   name String
   description String
   is_active Boolean @default(true)
+  esPlanificable Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
   servicios ItemsOnServicios[]
+  tipoDeInforme   TipoDeInforme? @relation(fields: [tipoDeInformeId], references: [id])
+  tipoDeInformeId String?
 
+  planesTrabajoProgramaciones PlanTrabajoProgramacion[]
 }
 
 model ItemsOnServicios {
@@ -83,14 +93,136 @@ model PropuestaTecnica {
   moneda Moneda @default(ARS)
   contacto   String?
   is_active Boolean @default(true)
+  condicionesParticulares String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
 
+  informes Informe[]
+  planesTrabajo PlanTrabajo[]
+
+}
+
+model TipoDeInforme {
+  id String @id @default(uuid())
+  name String
+  description String?
+  is_active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  items Items[]
+  informes Informe[]
+}
+
+model ClientLocations {
+  id String @id @default(uuid())
+  name String
+  clienteId String
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  is_active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  informes Informe[]
+
+  planesTrabajoProgramaciones PlanTrabajoProgramacion[]
+}
+
+model Informe {
+  id                   String         @id @default(uuid())
+
+  clienteId            String
+  cliente              Cliente        @relation(fields: [clienteId], references: [id])
+
+  tipoDeInformeId      String
+  tipoDeInforme        TipoDeInforme  @relation(fields: [tipoDeInformeId], references: [id])
+
+  propuestaId          String
+  propuesta            PropuestaTecnica @relation(fields: [propuestaId], references: [id])
+
+  clientLocationId     String
+  clientLocation       ClientLocations @relation(fields: [clientLocationId], references: [id])
+
+  fechaVencimiento     DateTime
+  responsableConfeccion String
+  estado               InformeEstado   @default(pendiente)
+  adjunto              String?
+
+  planTrabajoProgramacionId String? @unique
+  planTrabajoProgramacion   PlanTrabajoProgramacion? @relation(fields: [planTrabajoProgramacionId], references: [id])
+
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @default(now())
+}
+
+model PlanTrabajo {
+  id String @id @default(uuid())
+
+  clienteId String
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+
+  propuestaId String
+  propuesta PropuestaTecnica @relation(fields: [propuestaId], references: [id])
+
+  fechaInicio DateTime
+  fechaFin DateTime
+  estado PlanTrabajoEstado @default(pendiente_programacion)
+
+  programaciones PlanTrabajoProgramacion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model PlanTrabajoProgramacion {
+  id String @id @default(uuid())
+
+  planTrabajoId String
+  planTrabajo PlanTrabajo @relation(fields: [planTrabajoId], references: [id])
+
+  itemId String
+  item Items @relation(fields: [itemId], references: [id])
+
+  fechaProgramada DateTime
+  precision ProgramacionPrecision @default(dia)
+
+  clientLocationId String?
+  clientLocation ClientLocations? @relation(fields: [clientLocationId], references: [id])
+
+  ejecutadoAt DateTime?
+  adjunto     String?
+
+  informe Informe?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 
+
+
+
 // ENUM 
+
+enum InformeEstado {
+  pendiente
+  entregado
+}
+
+enum PlanTrabajoEstado {
+  pendiente_programacion
+  programado_incompleto
+  programado_completo
+  en_desarrollo
+  finalizado_con_pendientes
+  finalizado_completo
+}
+
+enum ProgramacionPrecision {
+  mes
+  dia
+}
 
 enum PropuestaStatus {
   pendiente
@@ -104,4 +236,9 @@ enum Moneda {
   ARS
   USD
   EUR
+}
+
+enum ServiceType {
+  mensual
+  unitario
 }

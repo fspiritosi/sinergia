@@ -31,6 +31,7 @@ export const columns: ColumnDef<Item>[] = [
         enableHiding: false,
     },
     {
+        id:"name",
         accessorKey: "name",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Nombre" />
@@ -59,6 +60,23 @@ export const columns: ColumnDef<Item>[] = [
                 </div>
             )
         }
+    },
+    {
+        accessorFn: (row) => (row as any).tipoDeInforme?.name ?? "",
+        id: "tipoDeInformeNombre",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Tipo de Informe" />
+        ),
+        cell: ({ row }) => {
+            const tipoNombre = (row.original as any).tipoDeInforme?.name
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate text-sm text-muted-foreground">
+                        {tipoNombre ?? "-"}
+                    </span>
+                </div>
+            )
+        },
     },
     {
         id: "is_active",

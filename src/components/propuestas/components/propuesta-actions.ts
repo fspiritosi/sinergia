@@ -3,6 +3,7 @@
 import { Moneda, PropuestaStatus, PropuestaTecnica } from "@/generated/client";
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { parseDateOnlyToLocalNoon } from "@/lib/dates";
 
 interface CreatePropuestaInput {
   codigo: string;
@@ -15,6 +16,7 @@ interface CreatePropuestaInput {
   valor: number;
   moneda: Moneda;
   status: PropuestaStatus;
+  condicionesParticulares: string[];
 }
 
 export async function createPropuesta(data: CreatePropuestaInput) {
@@ -24,13 +26,14 @@ export async function createPropuesta(data: CreatePropuestaInput) {
         codigo: data.codigo,
         clienteId: data.clienteId,
         servicioId: data.servicioId,
-        vigencia: data.vigencia ? new Date(data.vigencia) : null,
+        vigencia: data.vigencia ? parseDateOnlyToLocalNoon(data.vigencia) : null,
         items: data.items,
         contacto: data.contacto,
         is_active: data.is_active ?? true,
         valor: data.valor,
         moneda: data.moneda,
         status: data.status,
+        condicionesParticulares: data.condicionesParticulares,
       },
     });
 
@@ -45,19 +48,29 @@ export async function createPropuesta(data: CreatePropuestaInput) {
 export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
 
   try {
+    const vigencia =
+      data.vigencia instanceof Date
+        ? data.vigencia
+        : data.vigencia
+          ? parseDateOnlyToLocalNoon(data.vigencia)
+          : null;
+
     const propuesta = await prisma.propuestaTecnica.update({
       where: {
         id: data.id,
       },
       data: {
         codigo: data.codigo,
-        vigencia: data.vigencia ?? null,
+        clienteId: data.clienteId,
+        servicioId: data.servicioId,
+        vigencia,
         items: data.items,
         contacto: data.contacto,
         is_active: data.is_active,
         valor: data.valor,
         moneda: data.moneda,
         status: data.status,
+        condicionesParticulares: data.condicionesParticulares,
         updatedAt: new Date().toISOString(),
       }
     });

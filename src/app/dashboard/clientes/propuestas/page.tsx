@@ -1,7 +1,6 @@
 import Propuestas from "@/components/propuestas/Propuestas";
-
-export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default function PropuestasPage() {
-  return <Propuestas />
+  return <Propuestas />;
 }

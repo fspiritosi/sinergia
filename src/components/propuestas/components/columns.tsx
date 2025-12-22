@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import type { PropuestaTecnica } from "./actions"
 import { PropuestaRowActions } from "./propuesta-row-actions"
+import { formatDateOnly } from "@/lib/dates"
 
 export const columns: ColumnDef<PropuestaTecnica>[] = [
     {
@@ -77,6 +78,21 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
         },
     },
     {
+        accessorFn: (row) => row.servicios?.type ?? "",
+        id: "servicioTipo",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Tipo" />
+        ),
+        cell: ({ row }) => {
+            const servicioTipo = row.original.servicios?.type ?? "Sin tipo"
+            return (
+                <div className="text-sm capitalize">
+                    {servicioTipo}
+                </div>
+            )
+        },
+    },
+    {
         accessorKey: "contacto",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Contacto" />
@@ -114,13 +130,13 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
     },
     {
         id: "vigencia",
-        accessorFn: (row) => row.vigencia ? new Date(row.vigencia).toLocaleDateString() : "",
+        accessorFn: (row) => (row.vigencia ? formatDateOnly(row.vigencia) : ""),
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Vigencia" />
         ),
         cell: ({ row }) => {
             const vigencia = row.original.vigencia
-            return vigencia ? new Date(vigencia).toLocaleDateString() : "-"
+            return vigencia ? formatDateOnly(vigencia) : "-"
         },
     },
 

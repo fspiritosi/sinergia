@@ -76,6 +76,7 @@ export type PropuestaTecnicaCountAggregateOutputType = {
   moneda: number
   contacto: number
   is_active: number
+  condicionesParticulares: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -132,6 +133,7 @@ export type PropuestaTecnicaCountAggregateInputType = {
   moneda?: true
   contacto?: true
   is_active?: true
+  condicionesParticulares?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -235,6 +237,7 @@ export type PropuestaTecnicaGroupByOutputType = {
   moneda: $Enums.Moneda
   contacto: string | null
   is_active: boolean
+  condicionesParticulares: string[]
   createdAt: Date
   updatedAt: Date
   _count: PropuestaTecnicaCountAggregateOutputType | null
@@ -274,10 +277,13 @@ export type PropuestaTecnicaWhereInput = {
   moneda?: Prisma.EnumMonedaFilter<"PropuestaTecnica"> | $Enums.Moneda
   contacto?: Prisma.StringNullableFilter<"PropuestaTecnica"> | string | null
   is_active?: Prisma.BoolFilter<"PropuestaTecnica"> | boolean
+  condicionesParticulares?: Prisma.StringNullableListFilter<"PropuestaTecnica">
   createdAt?: Prisma.DateTimeFilter<"PropuestaTecnica"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PropuestaTecnica"> | Date | string
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
   servicios?: Prisma.XOR<Prisma.ServicioScalarRelationFilter, Prisma.ServicioWhereInput>
+  informes?: Prisma.InformeListRelationFilter
+  planesTrabajo?: Prisma.PlanTrabajoListRelationFilter
 }
 
 export type PropuestaTecnicaOrderByWithRelationInput = {
@@ -292,10 +298,13 @@ export type PropuestaTecnicaOrderByWithRelationInput = {
   moneda?: Prisma.SortOrder
   contacto?: Prisma.SortOrderInput | Prisma.SortOrder
   is_active?: Prisma.SortOrder
+  condicionesParticulares?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   cliente?: Prisma.ClienteOrderByWithRelationInput
   servicios?: Prisma.ServicioOrderByWithRelationInput
+  informes?: Prisma.InformeOrderByRelationAggregateInput
+  planesTrabajo?: Prisma.PlanTrabajoOrderByRelationAggregateInput
 }
 
 export type PropuestaTecnicaWhereUniqueInput = Prisma.AtLeast<{
@@ -313,10 +322,13 @@ export type PropuestaTecnicaWhereUniqueInput = Prisma.AtLeast<{
   moneda?: Prisma.EnumMonedaFilter<"PropuestaTecnica"> | $Enums.Moneda
   contacto?: Prisma.StringNullableFilter<"PropuestaTecnica"> | string | null
   is_active?: Prisma.BoolFilter<"PropuestaTecnica"> | boolean
+  condicionesParticulares?: Prisma.StringNullableListFilter<"PropuestaTecnica">
   createdAt?: Prisma.DateTimeFilter<"PropuestaTecnica"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PropuestaTecnica"> | Date | string
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
   servicios?: Prisma.XOR<Prisma.ServicioScalarRelationFilter, Prisma.ServicioWhereInput>
+  informes?: Prisma.InformeListRelationFilter
+  planesTrabajo?: Prisma.PlanTrabajoListRelationFilter
 }, "id" | "codigo">
 
 export type PropuestaTecnicaOrderByWithAggregationInput = {
@@ -331,6 +343,7 @@ export type PropuestaTecnicaOrderByWithAggregationInput = {
   moneda?: Prisma.SortOrder
   contacto?: Prisma.SortOrderInput | Prisma.SortOrder
   is_active?: Prisma.SortOrder
+  condicionesParticulares?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PropuestaTecnicaCountOrderByAggregateInput
@@ -355,6 +368,7 @@ export type PropuestaTecnicaScalarWhereWithAggregatesInput = {
   moneda?: Prisma.EnumMonedaWithAggregatesFilter<"PropuestaTecnica"> | $Enums.Moneda
   contacto?: Prisma.StringNullableWithAggregatesFilter<"PropuestaTecnica"> | string | null
   is_active?: Prisma.BoolWithAggregatesFilter<"PropuestaTecnica"> | boolean
+  condicionesParticulares?: Prisma.StringNullableListFilter<"PropuestaTecnica">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PropuestaTecnica"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PropuestaTecnica"> | Date | string
 }
@@ -369,10 +383,13 @@ export type PropuestaTecnicaCreateInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutPropuestasInput
   servicios: Prisma.ServicioCreateNestedOneWithoutPropuestasInput
+  informes?: Prisma.InformeCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUncheckedCreateInput = {
@@ -387,8 +404,11 @@ export type PropuestaTecnicaUncheckedCreateInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUpdateInput = {
@@ -401,10 +421,13 @@ export type PropuestaTecnicaUpdateInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutPropuestasNestedInput
   servicios?: Prisma.ServicioUpdateOneRequiredWithoutPropuestasNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateInput = {
@@ -419,8 +442,11 @@ export type PropuestaTecnicaUncheckedUpdateInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaCreateManyInput = {
@@ -435,6 +461,7 @@ export type PropuestaTecnicaCreateManyInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -449,6 +476,7 @@ export type PropuestaTecnicaUpdateManyMutationInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -465,6 +493,7 @@ export type PropuestaTecnicaUncheckedUpdateManyInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -499,6 +528,7 @@ export type PropuestaTecnicaCountOrderByAggregateInput = {
   moneda?: Prisma.SortOrder
   contacto?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
+  condicionesParticulares?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -539,6 +569,11 @@ export type PropuestaTecnicaMinOrderByAggregateInput = {
 
 export type PropuestaTecnicaSumOrderByAggregateInput = {
   valor?: Prisma.SortOrder
+}
+
+export type PropuestaTecnicaScalarRelationFilter = {
+  is?: Prisma.PropuestaTecnicaWhereInput
+  isNot?: Prisma.PropuestaTecnicaWhereInput
 }
 
 export type PropuestaTecnicaCreateNestedManyWithoutClienteInput = {
@@ -629,6 +664,10 @@ export type PropuestaTecnicaCreateitemsInput = {
   set: string[]
 }
 
+export type PropuestaTecnicaCreatecondicionesParticularesInput = {
+  set: string[]
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
@@ -654,8 +693,37 @@ export type EnumMonedaFieldUpdateOperationsInput = {
   set?: $Enums.Moneda
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type PropuestaTecnicaUpdatecondicionesParticularesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type PropuestaTecnicaCreateNestedOneWithoutInformesInput = {
+  create?: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutInformesInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutInformesInput>
+  connectOrCreate?: Prisma.PropuestaTecnicaCreateOrConnectWithoutInformesInput
+  connect?: Prisma.PropuestaTecnicaWhereUniqueInput
+}
+
+export type PropuestaTecnicaUpdateOneRequiredWithoutInformesNestedInput = {
+  create?: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutInformesInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutInformesInput>
+  connectOrCreate?: Prisma.PropuestaTecnicaCreateOrConnectWithoutInformesInput
+  upsert?: Prisma.PropuestaTecnicaUpsertWithoutInformesInput
+  connect?: Prisma.PropuestaTecnicaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropuestaTecnicaUpdateToOneWithWhereWithoutInformesInput, Prisma.PropuestaTecnicaUpdateWithoutInformesInput>, Prisma.PropuestaTecnicaUncheckedUpdateWithoutInformesInput>
+}
+
+export type PropuestaTecnicaCreateNestedOneWithoutPlanesTrabajoInput = {
+  create?: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput>
+  connectOrCreate?: Prisma.PropuestaTecnicaCreateOrConnectWithoutPlanesTrabajoInput
+  connect?: Prisma.PropuestaTecnicaWhereUniqueInput
+}
+
+export type PropuestaTecnicaUpdateOneRequiredWithoutPlanesTrabajoNestedInput = {
+  create?: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput>
+  connectOrCreate?: Prisma.PropuestaTecnicaCreateOrConnectWithoutPlanesTrabajoInput
+  upsert?: Prisma.PropuestaTecnicaUpsertWithoutPlanesTrabajoInput
+  connect?: Prisma.PropuestaTecnicaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropuestaTecnicaUpdateToOneWithWhereWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUpdateWithoutPlanesTrabajoInput>, Prisma.PropuestaTecnicaUncheckedUpdateWithoutPlanesTrabajoInput>
 }
 
 export type PropuestaTecnicaCreateWithoutClienteInput = {
@@ -668,9 +736,12 @@ export type PropuestaTecnicaCreateWithoutClienteInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios: Prisma.ServicioCreateNestedOneWithoutPropuestasInput
+  informes?: Prisma.InformeCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUncheckedCreateWithoutClienteInput = {
@@ -684,8 +755,11 @@ export type PropuestaTecnicaUncheckedCreateWithoutClienteInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaCreateOrConnectWithoutClienteInput = {
@@ -729,6 +803,7 @@ export type PropuestaTecnicaScalarWhereInput = {
   moneda?: Prisma.EnumMonedaFilter<"PropuestaTecnica"> | $Enums.Moneda
   contacto?: Prisma.StringNullableFilter<"PropuestaTecnica"> | string | null
   is_active?: Prisma.BoolFilter<"PropuestaTecnica"> | boolean
+  condicionesParticulares?: Prisma.StringNullableListFilter<"PropuestaTecnica">
   createdAt?: Prisma.DateTimeFilter<"PropuestaTecnica"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PropuestaTecnica"> | Date | string
 }
@@ -743,9 +818,12 @@ export type PropuestaTecnicaCreateWithoutServiciosInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutPropuestasInput
+  informes?: Prisma.InformeCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaUncheckedCreateWithoutServiciosInput = {
@@ -759,8 +837,11 @@ export type PropuestaTecnicaUncheckedCreateWithoutServiciosInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutPropuestaInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutPropuestaInput
 }
 
 export type PropuestaTecnicaCreateOrConnectWithoutServiciosInput = {
@@ -789,6 +870,182 @@ export type PropuestaTecnicaUpdateManyWithWhereWithoutServiciosInput = {
   data: Prisma.XOR<Prisma.PropuestaTecnicaUpdateManyMutationInput, Prisma.PropuestaTecnicaUncheckedUpdateManyWithoutServiciosInput>
 }
 
+export type PropuestaTecnicaCreateWithoutInformesInput = {
+  id?: string
+  codigo: string
+  vigencia?: Date | string | null
+  status?: $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaCreateitemsInput | string[]
+  valor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: $Enums.Moneda
+  contacto?: string | null
+  is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cliente: Prisma.ClienteCreateNestedOneWithoutPropuestasInput
+  servicios: Prisma.ServicioCreateNestedOneWithoutPropuestasInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutPropuestaInput
+}
+
+export type PropuestaTecnicaUncheckedCreateWithoutInformesInput = {
+  id?: string
+  codigo: string
+  clienteId: string
+  servicioId: string
+  vigencia?: Date | string | null
+  status?: $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaCreateitemsInput | string[]
+  valor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: $Enums.Moneda
+  contacto?: string | null
+  is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutPropuestaInput
+}
+
+export type PropuestaTecnicaCreateOrConnectWithoutInformesInput = {
+  where: Prisma.PropuestaTecnicaWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutInformesInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutInformesInput>
+}
+
+export type PropuestaTecnicaUpsertWithoutInformesInput = {
+  update: Prisma.XOR<Prisma.PropuestaTecnicaUpdateWithoutInformesInput, Prisma.PropuestaTecnicaUncheckedUpdateWithoutInformesInput>
+  create: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutInformesInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutInformesInput>
+  where?: Prisma.PropuestaTecnicaWhereInput
+}
+
+export type PropuestaTecnicaUpdateToOneWithWhereWithoutInformesInput = {
+  where?: Prisma.PropuestaTecnicaWhereInput
+  data: Prisma.XOR<Prisma.PropuestaTecnicaUpdateWithoutInformesInput, Prisma.PropuestaTecnicaUncheckedUpdateWithoutInformesInput>
+}
+
+export type PropuestaTecnicaUpdateWithoutInformesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codigo?: Prisma.StringFieldUpdateOperationsInput | string
+  vigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPropuestaStatusFieldUpdateOperationsInput | $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaUpdateitemsInput | string[]
+  valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
+  contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutPropuestasNestedInput
+  servicios?: Prisma.ServicioUpdateOneRequiredWithoutPropuestasNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutPropuestaNestedInput
+}
+
+export type PropuestaTecnicaUncheckedUpdateWithoutInformesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codigo?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  servicioId?: Prisma.StringFieldUpdateOperationsInput | string
+  vigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPropuestaStatusFieldUpdateOperationsInput | $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaUpdateitemsInput | string[]
+  valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
+  contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutPropuestaNestedInput
+}
+
+export type PropuestaTecnicaCreateWithoutPlanesTrabajoInput = {
+  id?: string
+  codigo: string
+  vigencia?: Date | string | null
+  status?: $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaCreateitemsInput | string[]
+  valor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: $Enums.Moneda
+  contacto?: string | null
+  is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cliente: Prisma.ClienteCreateNestedOneWithoutPropuestasInput
+  servicios: Prisma.ServicioCreateNestedOneWithoutPropuestasInput
+  informes?: Prisma.InformeCreateNestedManyWithoutPropuestaInput
+}
+
+export type PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput = {
+  id?: string
+  codigo: string
+  clienteId: string
+  servicioId: string
+  vigencia?: Date | string | null
+  status?: $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaCreateitemsInput | string[]
+  valor?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: $Enums.Moneda
+  contacto?: string | null
+  is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutPropuestaInput
+}
+
+export type PropuestaTecnicaCreateOrConnectWithoutPlanesTrabajoInput = {
+  where: Prisma.PropuestaTecnicaWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput>
+}
+
+export type PropuestaTecnicaUpsertWithoutPlanesTrabajoInput = {
+  update: Prisma.XOR<Prisma.PropuestaTecnicaUpdateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedUpdateWithoutPlanesTrabajoInput>
+  create: Prisma.XOR<Prisma.PropuestaTecnicaCreateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedCreateWithoutPlanesTrabajoInput>
+  where?: Prisma.PropuestaTecnicaWhereInput
+}
+
+export type PropuestaTecnicaUpdateToOneWithWhereWithoutPlanesTrabajoInput = {
+  where?: Prisma.PropuestaTecnicaWhereInput
+  data: Prisma.XOR<Prisma.PropuestaTecnicaUpdateWithoutPlanesTrabajoInput, Prisma.PropuestaTecnicaUncheckedUpdateWithoutPlanesTrabajoInput>
+}
+
+export type PropuestaTecnicaUpdateWithoutPlanesTrabajoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codigo?: Prisma.StringFieldUpdateOperationsInput | string
+  vigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPropuestaStatusFieldUpdateOperationsInput | $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaUpdateitemsInput | string[]
+  valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
+  contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutPropuestasNestedInput
+  servicios?: Prisma.ServicioUpdateOneRequiredWithoutPropuestasNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutPropuestaNestedInput
+}
+
+export type PropuestaTecnicaUncheckedUpdateWithoutPlanesTrabajoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codigo?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  servicioId?: Prisma.StringFieldUpdateOperationsInput | string
+  vigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPropuestaStatusFieldUpdateOperationsInput | $Enums.PropuestaStatus
+  items?: Prisma.PropuestaTecnicaUpdateitemsInput | string[]
+  valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
+  contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutPropuestaNestedInput
+}
+
 export type PropuestaTecnicaCreateManyClienteInput = {
   id?: string
   codigo: string
@@ -800,6 +1057,7 @@ export type PropuestaTecnicaCreateManyClienteInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -814,9 +1072,12 @@ export type PropuestaTecnicaUpdateWithoutClienteInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ServicioUpdateOneRequiredWithoutPropuestasNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateWithoutClienteInput = {
@@ -830,8 +1091,11 @@ export type PropuestaTecnicaUncheckedUpdateWithoutClienteInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateManyWithoutClienteInput = {
@@ -845,6 +1109,7 @@ export type PropuestaTecnicaUncheckedUpdateManyWithoutClienteInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -860,6 +1125,7 @@ export type PropuestaTecnicaCreateManyServiciosInput = {
   moneda?: $Enums.Moneda
   contacto?: string | null
   is_active?: boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaCreatecondicionesParticularesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -874,9 +1140,12 @@ export type PropuestaTecnicaUpdateWithoutServiciosInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutPropuestasNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateWithoutServiciosInput = {
@@ -890,8 +1159,11 @@ export type PropuestaTecnicaUncheckedUpdateWithoutServiciosInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutPropuestaNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutPropuestaNestedInput
 }
 
 export type PropuestaTecnicaUncheckedUpdateManyWithoutServiciosInput = {
@@ -905,10 +1177,49 @@ export type PropuestaTecnicaUncheckedUpdateManyWithoutServiciosInput = {
   moneda?: Prisma.EnumMonedaFieldUpdateOperationsInput | $Enums.Moneda
   contacto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  condicionesParticulares?: Prisma.PropuestaTecnicaUpdatecondicionesParticularesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type PropuestaTecnicaCountOutputType
+ */
+
+export type PropuestaTecnicaCountOutputType = {
+  informes: number
+  planesTrabajo: number
+}
+
+export type PropuestaTecnicaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  informes?: boolean | PropuestaTecnicaCountOutputTypeCountInformesArgs
+  planesTrabajo?: boolean | PropuestaTecnicaCountOutputTypeCountPlanesTrabajoArgs
+}
+
+/**
+ * PropuestaTecnicaCountOutputType without action
+ */
+export type PropuestaTecnicaCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PropuestaTecnicaCountOutputType
+   */
+  select?: Prisma.PropuestaTecnicaCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PropuestaTecnicaCountOutputType without action
+ */
+export type PropuestaTecnicaCountOutputTypeCountInformesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InformeWhereInput
+}
+
+/**
+ * PropuestaTecnicaCountOutputType without action
+ */
+export type PropuestaTecnicaCountOutputTypeCountPlanesTrabajoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanTrabajoWhereInput
+}
 
 
 export type PropuestaTecnicaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -923,10 +1234,14 @@ export type PropuestaTecnicaSelect<ExtArgs extends runtime.Types.Extensions.Inte
   moneda?: boolean
   contacto?: boolean
   is_active?: boolean
+  condicionesParticulares?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
   servicios?: boolean | Prisma.ServicioDefaultArgs<ExtArgs>
+  informes?: boolean | Prisma.PropuestaTecnica$informesArgs<ExtArgs>
+  planesTrabajo?: boolean | Prisma.PropuestaTecnica$planesTrabajoArgs<ExtArgs>
+  _count?: boolean | Prisma.PropuestaTecnicaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["propuestaTecnica"]>
 
 export type PropuestaTecnicaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -941,6 +1256,7 @@ export type PropuestaTecnicaSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   moneda?: boolean
   contacto?: boolean
   is_active?: boolean
+  condicionesParticulares?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
@@ -959,6 +1275,7 @@ export type PropuestaTecnicaSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   moneda?: boolean
   contacto?: boolean
   is_active?: boolean
+  condicionesParticulares?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
@@ -977,14 +1294,18 @@ export type PropuestaTecnicaSelectScalar = {
   moneda?: boolean
   contacto?: boolean
   is_active?: boolean
+  condicionesParticulares?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PropuestaTecnicaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "codigo" | "clienteId" | "servicioId" | "vigencia" | "status" | "items" | "valor" | "moneda" | "contacto" | "is_active" | "createdAt" | "updatedAt", ExtArgs["result"]["propuestaTecnica"]>
+export type PropuestaTecnicaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "codigo" | "clienteId" | "servicioId" | "vigencia" | "status" | "items" | "valor" | "moneda" | "contacto" | "is_active" | "condicionesParticulares" | "createdAt" | "updatedAt", ExtArgs["result"]["propuestaTecnica"]>
 export type PropuestaTecnicaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
   servicios?: boolean | Prisma.ServicioDefaultArgs<ExtArgs>
+  informes?: boolean | Prisma.PropuestaTecnica$informesArgs<ExtArgs>
+  planesTrabajo?: boolean | Prisma.PropuestaTecnica$planesTrabajoArgs<ExtArgs>
+  _count?: boolean | Prisma.PropuestaTecnicaCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropuestaTecnicaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
@@ -1000,6 +1321,8 @@ export type $PropuestaTecnicaPayload<ExtArgs extends runtime.Types.Extensions.In
   objects: {
     cliente: Prisma.$ClientePayload<ExtArgs>
     servicios: Prisma.$ServicioPayload<ExtArgs>
+    informes: Prisma.$InformePayload<ExtArgs>[]
+    planesTrabajo: Prisma.$PlanTrabajoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1013,6 +1336,7 @@ export type $PropuestaTecnicaPayload<ExtArgs extends runtime.Types.Extensions.In
     moneda: $Enums.Moneda
     contacto: string | null
     is_active: boolean
+    condicionesParticulares: string[]
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["propuestaTecnica"]>
@@ -1411,6 +1735,8 @@ export interface Prisma__PropuestaTecnicaClient<T, Null = never, ExtArgs extends
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cliente<T extends Prisma.ClienteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClienteDefaultArgs<ExtArgs>>): Prisma.Prisma__ClienteClient<runtime.Types.Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   servicios<T extends Prisma.ServicioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServicioDefaultArgs<ExtArgs>>): Prisma.Prisma__ServicioClient<runtime.Types.Result.GetResult<Prisma.$ServicioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  informes<T extends Prisma.PropuestaTecnica$informesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropuestaTecnica$informesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InformePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  planesTrabajo<T extends Prisma.PropuestaTecnica$planesTrabajoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropuestaTecnica$planesTrabajoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanTrabajoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1451,6 +1777,7 @@ export interface PropuestaTecnicaFieldRefs {
   readonly moneda: Prisma.FieldRef<"PropuestaTecnica", 'Moneda'>
   readonly contacto: Prisma.FieldRef<"PropuestaTecnica", 'String'>
   readonly is_active: Prisma.FieldRef<"PropuestaTecnica", 'Boolean'>
+  readonly condicionesParticulares: Prisma.FieldRef<"PropuestaTecnica", 'String[]'>
   readonly createdAt: Prisma.FieldRef<"PropuestaTecnica", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PropuestaTecnica", 'DateTime'>
 }
@@ -1846,6 +2173,54 @@ export type PropuestaTecnicaDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many PropuestaTecnicas to delete.
    */
   limit?: number
+}
+
+/**
+ * PropuestaTecnica.informes
+ */
+export type PropuestaTecnica$informesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Informe
+   */
+  select?: Prisma.InformeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Informe
+   */
+  omit?: Prisma.InformeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InformeInclude<ExtArgs> | null
+  where?: Prisma.InformeWhereInput
+  orderBy?: Prisma.InformeOrderByWithRelationInput | Prisma.InformeOrderByWithRelationInput[]
+  cursor?: Prisma.InformeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InformeScalarFieldEnum | Prisma.InformeScalarFieldEnum[]
+}
+
+/**
+ * PropuestaTecnica.planesTrabajo
+ */
+export type PropuestaTecnica$planesTrabajoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanTrabajo
+   */
+  select?: Prisma.PlanTrabajoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanTrabajo
+   */
+  omit?: Prisma.PlanTrabajoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanTrabajoInclude<ExtArgs> | null
+  where?: Prisma.PlanTrabajoWhereInput
+  orderBy?: Prisma.PlanTrabajoOrderByWithRelationInput | Prisma.PlanTrabajoOrderByWithRelationInput[]
+  cursor?: Prisma.PlanTrabajoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanTrabajoScalarFieldEnum | Prisma.PlanTrabajoScalarFieldEnum[]
 }
 
 /**

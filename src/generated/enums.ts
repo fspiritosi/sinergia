@@ -9,6 +9,34 @@
 * 🟢 You can import this file directly.
 */
 
+export const InformeEstado = {
+  pendiente: 'pendiente',
+  entregado: 'entregado'
+} as const
+
+export type InformeEstado = (typeof InformeEstado)[keyof typeof InformeEstado]
+
+
+export const PlanTrabajoEstado = {
+  pendiente_programacion: 'pendiente_programacion',
+  programado_incompleto: 'programado_incompleto',
+  programado_completo: 'programado_completo',
+  en_desarrollo: 'en_desarrollo',
+  finalizado_con_pendientes: 'finalizado_con_pendientes',
+  finalizado_completo: 'finalizado_completo'
+} as const
+
+export type PlanTrabajoEstado = (typeof PlanTrabajoEstado)[keyof typeof PlanTrabajoEstado]
+
+
+export const ProgramacionPrecision = {
+  mes: 'mes',
+  dia: 'dia'
+} as const
+
+export type ProgramacionPrecision = (typeof ProgramacionPrecision)[keyof typeof ProgramacionPrecision]
+
+
 export const PropuestaStatus = {
   pendiente: 'pendiente',
   aprobada: 'aprobada',
@@ -27,3 +55,11 @@ export const Moneda = {
 } as const
 
 export type Moneda = (typeof Moneda)[keyof typeof Moneda]
+
+
+export const ServiceType = {
+  mensual: 'mensual',
+  unitario: 'unitario'
+} as const
+
+export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType]

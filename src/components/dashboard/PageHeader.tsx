@@ -3,9 +3,11 @@
 import { usePathname } from "next/navigation"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { useDashboardTitle } from "@/components/dashboard/DashboardTitleContext"
 
 export function PageHeader() {
     const pathname = usePathname()
+    const { title } = useDashboardTitle()
 
     // Obtener el último segmento del path y capitalizarlo
     const getPageTitle = (path: string) => {
@@ -37,7 +39,7 @@ export function PageHeader() {
             .join(' ')
     }
 
-    const pageTitle = getPageTitle(pathname)
+    const pageTitle = title ?? getPageTitle(pathname)
 
 
     return (

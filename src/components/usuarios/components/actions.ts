@@ -47,6 +47,7 @@ export async function createUserAction(data: CreateUserPayload): Promise<void> {
   try {
     await client.invitations.createInvitation({
       emailAddress: email,
+      redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
       publicMetadata: {
         role: newUserRole === "admin" ? "admin" : "user",
       },

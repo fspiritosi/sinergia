@@ -1,7 +1,8 @@
 import { Document } from '@react-pdf/renderer'
 import { PortadaPage } from './PortadaPage'
 import { OfertaEconomicaPage } from './OfertaEconomicaPage'
-import type { Items, Moneda } from '@/generated/client'
+import { CondicionesPage } from './CondicionesPage'
+import type { Items, Moneda, PropuestaTecnica } from '@/generated/client'
 
 interface PropuestaPDFProps {
     codigo: string
@@ -10,9 +11,11 @@ interface PropuestaPDFProps {
     contacto?: string | null
     servicioNombre: string
     servicioDescripcion: string
+    servicioType: string
     items: Items[]
     valor: number
     moneda: Moneda
+    condicionesParticulares: PropuestaTecnica['condicionesParticulares']
 }
 
 export function PropuestaPDF({
@@ -22,9 +25,11 @@ export function PropuestaPDF({
     contacto,
     servicioNombre,
     servicioDescripcion,
+    servicioType,
     items,
     valor,
     moneda,
+    condicionesParticulares,
 }: PropuestaPDFProps) {
     return (
         <Document
@@ -42,13 +47,25 @@ export function PropuestaPDF({
                 items={items}
             />
 
-            <OfertaEconomicaPage
+            <CondicionesPage 
                 servicioDescripcion={servicioDescripcion}
                 servicioNombre={servicioNombre}
                 items={items}
                 valor={valor}
                 moneda={moneda}
+                condicionesParticulares={condicionesParticulares}
             />
+
+            <OfertaEconomicaPage
+                servicioDescripcion={servicioDescripcion}
+                servicioNombre={servicioNombre}
+                servicioType={servicioType}
+                items={items}
+                valor={valor}
+                moneda={moneda}
+                condicionesParticulares={condicionesParticulares}
+            />
+          
         </Document>
     )
 }

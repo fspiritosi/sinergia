@@ -3,7 +3,7 @@ import { pdfStyles } from './styles'
 import { PageHeader } from './PageHeader'
 import { PageFooter } from './PageFooter'
 import { CONSIDERACIONES_GENERALES, NOTAS_PIE } from '@/lib/pdf-constants'
-import type { Items, Moneda } from '@/generated/client'
+import type { Items, Moneda, PropuestaTecnica } from '@/generated/client'
 
 interface OfertaEconomicaPageProps {
     servicioDescripcion: string
@@ -11,36 +11,28 @@ interface OfertaEconomicaPageProps {
     items: Items[]
     valor: number
     moneda: Moneda
+    condicionesParticulares?: PropuestaTecnica['condicionesParticulares']
+    servicioType: string
 }
 
 export function OfertaEconomicaPage({
     servicioDescripcion,
     servicioNombre,
+    servicioType,
     items,
     valor,
     moneda,
+    condicionesParticulares = [],
 }: OfertaEconomicaPageProps) {
     return (
         <Page size="A4" style={pdfStyles.page}>
             <PageHeader serviceDescription={servicioDescripcion} />
 
             <View style={pdfStyles.content}>
-                {/* Consideraciones Generales */}
-                <View style={pdfStyles.consideracionesSection}>
-                    <Text style={pdfStyles.consideracionesTitle}>Consideraciones Generales</Text>
-                    {CONSIDERACIONES_GENERALES.map((item, index) => (
-                        <View key={index} style={{ flexDirection: 'row', marginBottom: 3 }}>
-                            <View style={pdfStyles.bulletPoint} />
-                            <Text style={[pdfStyles.consideracion, { flex: 1, paddingLeft: 0 }]}>
-                                {item}
-                            </Text>
-                        </View>
-                    ))}
-                </View>
+              
 
                 {/* Oferta Económica */}
                 <View>
-                    <View style={[pdfStyles.titleDivider, { alignSelf: 'flex-start', marginLeft: 20 }]} />
                     <Text style={[pdfStyles.sectionTitle, { textAlign: 'left', marginLeft: 20 }]}>Oferta Económica</Text>
 
                     <View style={pdfStyles.offerContainer}>
@@ -50,14 +42,14 @@ export function OfertaEconomicaPage({
                                 <Text style={pdfStyles.offerHeaderText}>Detalle del servicio</Text>
                             </View>
                             <View style={[pdfStyles.offerHeaderBox, pdfStyles.offerBoxRight]}>
-                                <Text style={pdfStyles.offerHeaderText}>Costo mensual ($ {moneda})</Text>
+                                <Text style={pdfStyles.offerHeaderText}>{servicioType === 'mensual' ? `Costo mensual ($ ${moneda})` : `Costo unitario ($ ${moneda})`}</Text>
                             </View>
                         </View>
 
                         {/* Value Row with Gradient */}
                         <View style={pdfStyles.offerRow}>
                             {/* Left Box - Service Name */}
-                            <View style={[pdfStyles.offerValueBox, pdfStyles.offerBoxLeft, { backgroundColor: '#2398A1' }]}>
+                            <View style={[pdfStyles.offerValueBox, pdfStyles.offerBoxLeft]}>
                                 {/* Note: react-pdf might not support linear-gradient in style prop directly for View. 
                                     We might need to use a background color or an image. 
                                     Let's try to simulate or just use the primary color for now as requested "gradient from blue to green".
@@ -69,7 +61,7 @@ export function OfertaEconomicaPage({
                             </View>
 
                             {/* Right Box - Value */}
-                            <View style={[pdfStyles.offerValueBox, pdfStyles.offerBoxRight, { backgroundColor: '#84B631' }]}>
+                            <View style={[pdfStyles.offerValueBox, pdfStyles.offerBoxRight]}>
                                 <Text style={pdfStyles.offerValueTextRight}>
                                     {valor.toLocaleString('es-AR', {
                                         style: 'currency',
@@ -81,13 +73,13 @@ export function OfertaEconomicaPage({
                     </View>
 
                     {/* Notas al pie */}
-                    <View style={pdfStyles.notasSection}>
+                    {/* <View style={pdfStyles.notasSection}>
                         {NOTAS_PIE.map((nota, index) => (
                             <Text key={index} style={pdfStyles.nota}>
                                 {nota}
                             </Text>
                         ))}
-                    </View>
+                    </View> */}
                 </View>
             </View>
 

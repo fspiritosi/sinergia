@@ -40,6 +40,11 @@ const data = {
           isActive: true,
         },
         {
+          title: "Locaciones Clientes",
+          url: "/dashboard/clientes/locaciones",
+          isActive: false,
+        },
+        {
           title: "Propuestas",
           url: "/dashboard/clientes/propuestas",
           isActive: false,
@@ -55,10 +60,37 @@ const data = {
           isActive: false,
         },
         {
+          title: "Tipos de Informe",
+          url: "/dashboard/tipos-informe",
+          isActive: false,
+        },
+        {
           title: "Usuarios",
           url: "/dashboard/usuarios",
           isActive: false,
         },
+      ],
+    },
+    {
+      title: "Planificación",
+      url: "/dashboard/planes",
+      items: [
+        {
+          title: "Calendario",
+          url: "/dashboard/planificacion",
+          isActive: false,
+        },
+        {
+          title: "Planes de Trabajo",
+          url: "/dashboard/planes",
+          isActive: false,
+        },
+        {
+          title: "Informes",
+          url: "/dashboard/informes",
+          isActive: false,
+        },
+ 
       ],
     },
   ],

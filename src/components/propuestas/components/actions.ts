@@ -2,6 +2,7 @@
 
 import type { Moneda, PropuestaStatus } from "@/generated/client";
 import prisma from "@/lib/db";
+import { toDateOnlyString } from "@/lib/dates";
 
 export interface SerializedPropuesta {
   id: string;
@@ -24,7 +25,9 @@ export interface SerializedPropuesta {
   servicios: {
     id: string;
     name: string;
+    type: string;
   } | null;
+  condicionesParticulares: string[];
 }
 
 export async function getPropuestas(): Promise<SerializedPropuesta[]> {
@@ -40,6 +43,7 @@ export async function getPropuestas(): Promise<SerializedPropuesta[]> {
         select: {
           id: true,
           name: true,
+          type: true,
         },
       },
     },
@@ -62,7 +66,7 @@ export async function getPropuestas(): Promise<SerializedPropuesta[]> {
     codigo: propuesta.codigo,
     clienteId: propuesta.clienteId,
     servicioId: propuesta.servicioId,
-    vigencia: propuesta.vigencia ? propuesta.vigencia.toISOString() : null,
+    vigencia: propuesta.vigencia ? toDateOnlyString(propuesta.vigencia) : null,
     status: propuesta.status,
     items: propuesta.items,
     contacto: propuesta.contacto ?? null,
@@ -73,6 +77,7 @@ export async function getPropuestas(): Promise<SerializedPropuesta[]> {
     updatedAt: propuesta.updatedAt.toISOString(),
     cliente: propuesta.cliente ?? null,
     servicios: propuesta.servicios ?? null,
+    condicionesParticulares: propuesta.condicionesParticulares,
   }));
 }
 

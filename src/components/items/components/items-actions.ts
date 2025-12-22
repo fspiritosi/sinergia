@@ -10,13 +10,22 @@ import { Items, Servicio } from "@/generated/client";
 
 export async function createItem(data: Items) {
   try {
+    const tipoDeInformeId =
+      (data as any).tipoDeInformeId && (data as any).tipoDeInformeId !== ""
+        ? (data as any).tipoDeInformeId
+        : null;
+    const esPlanificable =
+      tipoDeInformeId !== null ? true : (data as any).esPlanificable ?? true;
+
     const cliente: Items = await prisma.items.create({
       data: {
         name: data.name,
         description: data.description,
         is_active: data.is_active,
-    }
-  });
+        tipoDeInformeId,
+        esPlanificable,
+      },
+    });
 
     if (!cliente) {
       console.error("Error creating item:");
@@ -135,6 +144,17 @@ export async function updateItem(data: Partial<Items>) {
 
       const shouldDeactivate = existingItem.is_active && data.is_active === false;
 
+      const tipoDeInformeId =
+        (data as any).tipoDeInformeId && (data as any).tipoDeInformeId !== ""
+          ? (data as any).tipoDeInformeId
+          : null;
+      const esPlanificable =
+        tipoDeInformeId !== null
+          ? true
+          : (data as any).esPlanificable === undefined
+            ? undefined
+            : Boolean((data as any).esPlanificable);
+
       await tx.items.update({
         where: {
           id: data.id,
@@ -143,6 +163,8 @@ export async function updateItem(data: Partial<Items>) {
           ...(data.name !== undefined ? { name: data.name } : {}),
           ...(data.description !== undefined ? { description: data.description } : {}),
           ...(data.is_active !== undefined ? { is_active: data.is_active } : {}),
+          ...(tipoDeInformeId !== undefined ? { tipoDeInformeId } : {}),
+          ...(esPlanificable !== undefined ? { esPlanificable } : {}),
           updatedAt: new Date().toISOString(),
         },
       });

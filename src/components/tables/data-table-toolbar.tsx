@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { Table } from "@tanstack/react-table"
 import { X } from "lucide-react"
 
@@ -31,6 +32,8 @@ export function DataTableToolbar<TData>({
     customSearchFilter,
     filters = [],
 }: DataTableToolbarProps<TData>) {
+    const [searchValue, setSearchValue] = React.useState("")
+
     const isFiltered = table.getState().columnFilters.length > 0 ||
         (customSearchFilter && table.getState().globalFilter)
 
@@ -41,13 +44,13 @@ export function DataTableToolbar<TData>({
                     placeholder={searchPlaceholder}
                     value={
                         customSearchFilter
-                            ? (table.getState().globalFilter ?? "")
+                            ? searchValue
                             : (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
                     }
                     onChange={(event) => {
                         const value = event.target.value
                         if (customSearchFilter) {
-                            // Usar filtro global personalizado
+                            setSearchValue(value)
                             table.setGlobalFilter(value)
                         } else {
                             // Usar filtro de columna por defecto
@@ -74,6 +77,7 @@ export function DataTableToolbar<TData>({
                             table.resetColumnFilters()
                             if (customSearchFilter) {
                                 table.setGlobalFilter("")
+                                setSearchValue("")
                             }
                         }}
                         className="h-8 px-2 lg:px-3"
