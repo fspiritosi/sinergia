@@ -29,6 +29,7 @@ import {
   createPlanTrabajoProgramacion,
   createPlanTrabajoProgramacionesMensuales,
   marcarProgramacionEjecutada,
+  ejecutarProgramacionConAdjunto,
   previewUpdatePlanTrabajoFechas,
   reprogramarPlanTrabajoProgramacion,
   updatePlanTrabajoFechas,
@@ -81,6 +82,10 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const [editarProgramacionFechaDia, setEditarProgramacionFechaDia] = useState("")
   const [editarProgramacionFechaMes, setEditarProgramacionFechaMes] = useState("")
   const [editarProgramacionSaving, setEditarProgramacionSaving] = useState(false)
+  const [ejecutarProgramacionId, setEjecutarProgramacionId] = useState<string | null>(null)
+  const [ejecutarFile, setEjecutarFile] = useState<File | null>(null)
+  const [ejecutarLoading, setEjecutarLoading] = useState(false)
+  const [verAdjuntoProgramacionId, setVerAdjuntoProgramacionId] = useState<string | null>(null)
 
   const canProgramar = useMemo(() => {
     return (
@@ -97,6 +102,14 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const programacionEnEdicion = useMemo(() => {
     return plan.programaciones.find((p) => p.id === editarProgramacionId) ?? null
   }, [editarProgramacionId, plan.programaciones])
+
+  const programacionAEjecutar = useMemo(() => {
+    return plan.programaciones.find((p) => p.id === ejecutarProgramacionId) ?? null
+  }, [ejecutarProgramacionId, plan.programaciones])
+
+  const programacionConAdjunto = useMemo(() => {
+    return plan.programaciones.find((p) => p.id === verAdjuntoProgramacionId) ?? null
+  }, [verAdjuntoProgramacionId, plan.programaciones])
 
   useEffect(() => {
     setTitle(`${plan.cliente.name} - Propuesta ${plan.propuesta.codigo}`)
@@ -185,6 +198,89 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
         </CardContent>
       </Card>
 
+      <Dialog
+        open={Boolean(ejecutarProgramacionId)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEjecutarProgramacionId(null)
+            setEjecutarFile(null)
+            setEjecutarLoading(false)
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-[520px]">
+          <DialogHeader>
+            <DialogTitle>Subir evidencia de ejecución</DialogTitle>
+            <DialogDescription>Adjuntá un archivo para marcar la programación como ejecutada.</DialogDescription>
+          </DialogHeader>
+
+          {programacionAEjecutar ? (
+            <div className="space-y-4 py-2">
+              <div className="space-y-1">
+                <div className="text-sm font-medium">{programacionAEjecutar.item.name}</div>
+                <div className="text-xs text-muted-foreground">
+                  Programado: {formatDate(programacionAEjecutar.fechaProgramada)}
+                  {programacionAEjecutar.precision === "mes" ? " (mes)" : ""}
+                  {programacionAEjecutar.clientLocation ? ` - ${programacionAEjecutar.clientLocation.name}` : ""}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Adjunto *</Label>
+                <Input
+                  type="file"
+                  accept="application/pdf,image/*"
+                  onChange={(e) => setEjecutarFile(e.target.files?.[0] ?? null)}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={ejecutarLoading}
+              onClick={() => {
+                setEjecutarProgramacionId(null)
+                setEjecutarFile(null)
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              disabled={ejecutarLoading || !programacionAEjecutar}
+              onClick={async () => {
+                if (!programacionAEjecutar) return
+                if (!ejecutarFile) {
+                  toast.error("Adjuntá un archivo")
+                  return
+                }
+                setEjecutarLoading(true)
+                try {
+                  const formData = new FormData()
+                  formData.append("programacionId", programacionAEjecutar.id)
+                  formData.append("file", ejecutarFile)
+                  await ejecutarProgramacionConAdjunto(formData)
+                  toast.success("Programación marcada como ejecutada")
+                  setEjecutarProgramacionId(null)
+                  setEjecutarFile(null)
+                  router.refresh()
+                } catch (error: any) {
+                  console.error(error)
+                  toast.error(error?.message ?? "No se pudo ejecutar la programación")
+                } finally {
+                  setEjecutarLoading(false)
+                }
+              }}
+            >
+              {ejecutarLoading ? "Guardando..." : "Confirmar ejecución"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Card>
         <CardHeader>
           <CardTitle>Programaciones</CardTitle>
@@ -209,11 +305,11 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Badge variant={ejecutado ? "secondary" : "sinergia"}>
+                      <Badge variant={ejecutado ? "sinergia" : "warning"}>
                         {ejecutado ? "Ejecutado" : "Pendiente"}
                       </Badge>
 
-                      <Button
+                      {!p.ejecutadoAt ?<Button
                         type="button"
                         variant="outline"
                         onClick={() => {
@@ -229,27 +325,25 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
                         }}
                       >
                         Editar fecha
-                      </Button>
+                      </Button> : null}
 
                       {!requiereInforme ? (
                         <Button
                           type="button"
-                          variant={ejecutado ? "outline" : "default"}
+                          variant="outline"
                           onClick={async () => {
-                            try {
-                              await marcarProgramacionEjecutada({
-                                programacionId: p.id,
-                                ejecutada: !ejecutado,
-                              })
-                              toast.success(ejecutado ? "Pendiente reabierto" : "Marcado como ejecutado")
-                              router.refresh()
-                            } catch (error) {
-                              console.error(error)
-                              toast.error("No se pudo actualizar la ejecución")
+                            if (ejecutado) {
+                              if (!p.adjunto) {
+                                toast.error("Esta ejecución no tiene adjunto cargado")
+                                return
+                              }
+                              setVerAdjuntoProgramacionId(p.id)
+                            } else {
+                              setEjecutarProgramacionId(p.id)
                             }
                           }}
                         >
-                          {ejecutado ? "Desmarcar" : "Ejecutar"}
+                          {ejecutado ? "Ver evidencia" : "Ejecutar"}
                         </Button>
                       ) : null}
                     </div>
@@ -262,6 +356,52 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
           )}
         </CardContent>
       </Card>
+
+      <Dialog
+        open={Boolean(verAdjuntoProgramacionId)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setVerAdjuntoProgramacionId(null)
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-[900px] h-[90vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>Evidencia de ejecución</DialogTitle>
+            <DialogDescription>Visualizá el adjunto subido al ejecutar la programación.</DialogDescription>
+          </DialogHeader>
+
+          {programacionConAdjunto ? (
+            <div className="flex-1 min-h-0 rounded-md border overflow-hidden bg-muted">
+              <iframe
+                src={`/api/planes-trabajo/programaciones/file/${programacionConAdjunto.id}`}
+                className="h-full w-full"
+                title="Adjunto de programación"
+              />
+            </div>
+          ) : null}
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setVerAdjuntoProgramacionId(null)}
+            >
+              Cerrar
+            </Button>
+            {programacionConAdjunto ? (
+              <Button
+                type="button"
+                onClick={() =>
+                  window.open(`/api/planes-trabajo/programaciones/file/${programacionConAdjunto.id}`, "_blank")
+                }
+              >
+                Descargar
+              </Button>
+            ) : null}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={Boolean(editarProgramacionId)}

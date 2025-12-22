@@ -1416,6 +1416,7 @@ export const PlanTrabajoProgramacionScalarFieldEnum = {
   precision: 'precision',
   clientLocationId: 'clientLocationId',
   ejecutadoAt: 'ejecutadoAt',
+  adjunto: 'adjunto',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

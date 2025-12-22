@@ -38,8 +38,9 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider localization={esES} >
-      <html lang="es">
+      <html lang="es" suppressHydrationWarning>
         <body
+          suppressHydrationWarning
           className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable}  font-sans`}
         >
 

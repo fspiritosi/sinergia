@@ -11,6 +11,7 @@ import {
   toDateOnlyString,
   toMonthOnlyString,
 } from "@/lib/dates";
+import { uploadFileToR2 } from "@/lib/r2-upload";
 
 export type PlanTrabajoWithProgramaciones = PlanTrabajo & {
   cliente: { id: string; name: string };
@@ -512,6 +513,45 @@ export async function marcarProgramacionEjecutada(params: {
     where: { id: programacion.id },
     data: {
       ejecutadoAt: params.ejecutada ? new Date() : null,
+      adjunto: params.ejecutada ? programacion.adjunto ?? null : null,
+    },
+  });
+
+  await refreshPlanTrabajoEstado(programacion.planTrabajoId);
+  revalidatePath("/dashboard");
+
+  return { success: true };
+}
+
+export async function ejecutarProgramacionConAdjunto(formData: FormData) {
+  const programacionId = formData.get("programacionId") as string | null;
+  const file = formData.get("file") as File | null;
+
+  if (!programacionId || !file) {
+    throw new Error("Faltan datos para ejecutar la programación");
+  }
+
+  const programacion = await prisma.planTrabajoProgramacion.findUnique({
+    where: { id: programacionId },
+    include: {
+      planTrabajo: true,
+      item: { select: { tipoDeInformeId: true } },
+    },
+  });
+
+  if (!programacion) throw new Error("Programación no encontrada");
+  if (programacion.item.tipoDeInformeId) {
+    throw new Error("Los items con informe asociado se ejecutan desde Informes");
+  }
+
+  const key = `programaciones/${programacionId}`;
+  await uploadFileToR2(file, key);
+
+  await prisma.planTrabajoProgramacion.update({
+    where: { id: programacionId },
+    data: {
+      ejecutadoAt: new Date(),
+      adjunto: key,
     },
   });
 

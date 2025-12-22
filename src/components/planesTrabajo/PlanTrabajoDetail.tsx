@@ -12,7 +12,9 @@ async function PlanTrabajoDetail({ planTrabajoId }: PlanTrabajoDetailProps) {
     return <div>Plan de trabajo no encontrado</div>
   }
 
-  return <PlanTrabajoDetailView plan={plan} />
+  const planSafe = JSON.parse(JSON.stringify(plan))
+
+  return <PlanTrabajoDetailView plan={planSafe} />
 }
 
 export default PlanTrabajoDetail

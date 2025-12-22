@@ -191,6 +191,7 @@ model PlanTrabajoProgramacion {
   clientLocation ClientLocations? @relation(fields: [clientLocationId], references: [id])
 
   ejecutadoAt DateTime?
+  adjunto     String?
 
   informe Informe?
 
