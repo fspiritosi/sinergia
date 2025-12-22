@@ -32,7 +32,7 @@ export const columns: ColumnDef<Informe>[] = [
     enableHiding: false,
   },
   {
-    accessorFn: (row) => row.cliente.name,
+    accessorFn: (row) => row.cliente?.name,
     id: "clienteNombre",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Cliente" />
@@ -40,13 +40,13 @@ export const columns: ColumnDef<Informe>[] = [
     cell: ({ row }) => (
       <div className="flex space-x-2">
         <span className="max-w-[500px] truncate font-medium">
-          {row.original.cliente.name}
+          {row.original.cliente?.name || 'Sin cliente'}
         </span>
       </div>
     ),
   },
   {
-    accessorFn: (row) => row.tipoDeInforme.name,
+    accessorFn: (row) => row.tipoDeInforme?.name,
     id: "tipoDeInformeNombre",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tipo de Informe" />
@@ -54,13 +54,13 @@ export const columns: ColumnDef<Informe>[] = [
     cell: ({ row }) => (
       <div className="flex space-x-2">
         <span className="max-w-[500px] truncate text-sm text-muted-foreground">
-          {row.original.tipoDeInforme.name}
+          {row.original.tipoDeInforme?.name || 'Sin tipo'}
         </span>
       </div>
     ),
   },
   {
-    accessorFn: (row) => row.clientLocation.name,
+    accessorFn: (row) => row.clientLocation?.name,
     id: "locacionNombre",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Locación" />
@@ -68,7 +68,7 @@ export const columns: ColumnDef<Informe>[] = [
     cell: ({ row }) => (
       <div className="flex space-x-2">
         <span className="max-w-[500px] truncate text-sm text-muted-foreground">
-          {row.original.clientLocation.name}
+          {row.original.clientLocation?.name || 'Sin locación'}
         </span>
       </div>
     ),

@@ -24,7 +24,7 @@ export function InformeViewerDialog({ open, onOpenChange, informe }: InformeView
       <DialogContent className="sm:max-w-[900px] h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>
-            Informe - {informe.cliente.name} / {informe.tipoDeInforme.name}
+            Informe - {informe.cliente?.name} / {informe.tipoDeInforme?.name}
           </DialogTitle>
           <DialogDescription>
             Visualizá el archivo generado para este informe.

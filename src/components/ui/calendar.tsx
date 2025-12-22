@@ -29,6 +29,7 @@ function Calendar({
   buttonVariant?: React.ComponentProps<typeof Button>["variant"]
 }) {
   const defaultClassNames = getDefaultClassNames()
+  type DayPickerComponents = React.ComponentProps<typeof DayPicker>["components"]
 
   return (
     <DayPicker
@@ -42,7 +43,7 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) =>
+        formatMonthDropdown: (date: Date) =>
           date.toLocaleString("es-ES", { month: "short" }),
         ...formatters,
       }}
@@ -134,20 +135,18 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        Root: ({ className, rootRef, ...props }) => {
-          return (
-            <div
-              data-slot="calendar"
-              ref={rootRef}
-              className={cn(className)}
-              {...props}
-            />
-          )
-        },
-        Chevron: ({ className, orientation, ...props }) => {
+        Root: (({ className, rootRef, ...rootProps }) => (
+          <div
+            data-slot="calendar"
+            ref={rootRef}
+            className={cn(className)}
+            {...rootProps}
+          />
+        )) as NonNullable<DayPickerComponents>["Root"],
+        Chevron: (({ className, orientation, ...chevronProps }) => {
           if (orientation === "left") {
             return (
-              <ChevronLeftIcon className={cn("size-4", className)} {...props} />
+              <ChevronLeftIcon className={cn("size-4", className)} {...chevronProps} />
             )
           }
 
@@ -155,25 +154,26 @@ function Calendar({
             return (
               <ChevronRightIcon
                 className={cn("size-4", className)}
-                {...props}
+                {...chevronProps}
               />
             )
           }
 
           return (
-            <ChevronDownIcon className={cn("size-4", className)} {...props} />
+            <ChevronDownIcon className={cn("size-4", className)} {...chevronProps} />
           )
-        },
+        }) as NonNullable<DayPickerComponents>["Chevron"],
         DayButton: CalendarDayButton,
-        WeekNumber: ({ children, ...props }) => {
+        WeekNumber: ((weekProps) => {
+          const { children, ...rest } = weekProps as React.TdHTMLAttributes<HTMLTableCellElement> & { children?: React.ReactNode }
           return (
-            <td {...props}>
+            <td {...rest}>
               <div className="flex size-(--cell-size) items-center justify-center text-center">
                 {children}
               </div>
             </td>
           )
-        },
+        }) as NonNullable<DayPickerComponents>["WeekNumber"],
         ...components,
       }}
       {...props}

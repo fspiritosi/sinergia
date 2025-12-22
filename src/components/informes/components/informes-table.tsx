@@ -26,8 +26,8 @@ export function InformesTable({ data }: InformesTableProps) {
     if (!searchValue) return true
 
     const searchLower = searchValue.toLowerCase()
-    const cliente = informe.cliente.name?.toLowerCase() || ""
-    const tipo = informe.tipoDeInforme.name?.toLowerCase() || ""
+    const cliente = informe.cliente?.name?.toLowerCase() || ""
+    const tipo = informe.tipoDeInforme?.name?.toLowerCase() || ""
 
     return cliente.includes(searchLower) || tipo.includes(searchLower)
   }
