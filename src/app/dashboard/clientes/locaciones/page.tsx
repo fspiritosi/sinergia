@@ -1,8 +1,6 @@
-import React from 'react'
-import ClientLocations from '@/components/clientLocations/ClientsLocations'
+import ClientLocations from "@/components/clientLocations/ClientsLocations";
+export const revalidate = 0;
 
-function page() {
-  return <ClientLocations />
+export default function ClientLocationsPage() {
+  return <ClientLocations />;
 }
-
-export default page

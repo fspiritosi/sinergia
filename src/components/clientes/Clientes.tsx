@@ -1,11 +1,10 @@
-import React from 'react'
-import { getClientes } from './components/actions'
-import { ClientesTableWrapper } from './components/clientes-table-wrapper'
+import { getClientes } from "./components/actions";
+import { ClientesTableWrapper } from "./components/clientes-table-wrapper";
 
 async function Clientes() {
-    const clientes = await getClientes()
+  const clientes = await getClientes();
 
-    return <ClientesTableWrapper data={clientes} />
+  return <ClientesTableWrapper data={clientes} />;
 }
 
-export default Clientes
+export default Clientes;

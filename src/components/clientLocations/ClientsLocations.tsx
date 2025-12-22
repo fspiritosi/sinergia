@@ -1,11 +1,10 @@
-
-import { getClientLocations } from './components/actions'
-import { ClientLocationTableWrapper   } from './components/clientLocations-table-wrapper'
+import { getClientLocations } from "./components/actions";
+import { ClientLocationTableWrapper } from "./components/clientLocations-table-wrapper";
 
 async function ClientLocations() {
-    const clientLocations = await getClientLocations()
+  const clientLocations = await getClientLocations();
 
-    return <ClientLocationTableWrapper data={clientLocations} />
+  return <ClientLocationTableWrapper data={clientLocations} />;
 }
 
-export default ClientLocations 
+export default ClientLocations;

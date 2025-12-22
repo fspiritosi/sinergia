@@ -1,6 +1,6 @@
 "use client"
 
-import { MoreHorizontal, CheckCircle2, Eye } from "lucide-react"
+import { MoreHorizontal, CheckCircle2, Eye, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -53,16 +53,17 @@ export function InformeRowActions({ informe }: InformeRowActionsProps) {
         <DropdownMenuContent align="end" className="w-[220px]">
           {isPendiente ? (
             <DropdownMenuItem onClick={() => setRealizadoOpen(true)}>
-              <CheckCircle2 className="mr-2 h-4 w-4" />
+              <CheckCircle2 className="mr-2 h-4 w-4 hover:text-white" />
               Marcar como realizado
             </DropdownMenuItem>
           ) : (
             <>
               <DropdownMenuItem onClick={() => setViewerOpen(true)}>
-                <Eye className="mr-2 h-4 w-4" />
+                <FileText className="mr-2 h-4 w-4 hover:text-white" />
                 Ver informe
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setVerOpen(true)}>
+                <Eye className="mr-2 h-4 w-4 hover:text-white" />
                 Ver detalle
               </DropdownMenuItem>
             </>

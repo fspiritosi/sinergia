@@ -1,7 +1,6 @@
 import Clientes from "@/components/clientes/Clientes";
-
-export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default function ClientesPage() {
-  return <Clientes />
+  return <Clientes />;
 }
