@@ -146,35 +146,35 @@ export function InformeRowActions({ informe }: InformeRowActionsProps) {
           <div className="space-y-3 py-2 text-sm">
             <div>
               <span className="font-medium">Cliente: </span>
-              <span>{informe.cliente.name}</span>
+              <span>{informe.cliente?.name}</span>
             </div>
             <div>
               <span className="font-medium">Propuesta: </span>
-              <span>{informe.propuesta.codigo}</span>
+              <span>{informe.propuesta?.codigo}</span>
             </div>
             <div>
               <span className="font-medium">Tipo de informe: </span>
-              <span>{informe.tipoDeInforme.name}</span>
+              <span>{informe.tipoDeInforme?.name || 'Sin tipo'}</span>
             </div>
             <div>
               <span className="font-medium">Locación: </span>
-              <span>{informe.clientLocation.name}</span>
+              <span>{informe.clientLocation?.name || 'Sin locación'}</span>
             </div>
             <div>
               <span className="font-medium">Fecha de compromiso: </span>
-              <span>{formatDateOnly(informe.fechaVencimiento, "es-AR")}</span>
+              <span>{informe.fechaVencimiento ? formatDateOnly(informe.fechaVencimiento, "es-AR") : 'Sin fecha'}</span>
             </div>
             <div>
               <span className="font-medium">Fecha de realización: </span>
-              <span>{formatDateTime(informe.updatedAt, "es-AR")}</span>
+              <span>{informe.updatedAt ? formatDateTime(informe.updatedAt, "es-AR") : 'Sin fecha'}</span>
             </div>
             <div>
               <span className="font-medium">Calidad: </span>
               {(() => {
                   const fechaVencimiento =
-  informe.fechaVencimiento instanceof Date
-    ? informe.fechaVencimiento
-    : parseCalendarStringToDate(informe.fechaVencimiento)
+  informe.fechaVencimiento && typeof informe.fechaVencimiento === 'string'
+    ? parseCalendarStringToDate(informe.fechaVencimiento)
+    : new Date(informe.fechaVencimiento)
   const fechaRealizacion = new Date(informe.updatedAt)
   const diffTime = fechaRealizacion.getTime() - fechaVencimiento.getTime()
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
