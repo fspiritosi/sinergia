@@ -7,7 +7,12 @@ import { DataTableColumnHeader } from "@/components/tables/data-table-column-hea
 import { ClienteRowActions } from "./cliente-row-actions"
 import { Cliente } from "./actions"
 
-export const columns: ColumnDef<Cliente>[] = [
+export type ClienteWithRelations = Cliente & {
+    provincia: { id: string; nombre: string } | null
+    ciudad: { id: string; nombre: string; provinciaId: string } | null
+}
+
+export const columns: ColumnDef<ClienteWithRelations>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -118,6 +123,28 @@ export const columns: ColumnDef<Cliente>[] = [
                     {telefono || "Sin teléfono"}
                 </div>
             )
+        },
+    },
+    {
+        accessorFn: (row) => row.provincia?.nombre ?? "",
+        id: "provinciaNombre",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Provincia" />
+        ),
+        cell: ({ row }) => {
+            const provincia = row.original.provincia?.nombre ?? "—"
+            return <div className="text-sm">{provincia}</div>
+        },
+    },
+    {
+        accessorFn: (row) => row.ciudad?.nombre ?? "",
+        id: "ciudadNombre",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Ciudad" />
+        ),
+        cell: ({ row }) => {
+            const ciudad = row.original.ciudad?.nombre ?? "—"
+            return <div className="text-sm">{ciudad}</div>
         },
     },
     // {

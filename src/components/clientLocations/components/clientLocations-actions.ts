@@ -14,6 +14,8 @@ export async function createClientLocation(data: ClientLocations) {
       data: {
         name: data.name,
         clienteId: data.clienteId,
+        provinciaId: data.provinciaId,
+        ciudadId: data.ciudadId,
         is_active: data.is_active,
     }
   });
@@ -41,6 +43,8 @@ export async function updateClientLocation(data: Partial<ClientLocations>) {
       data: {
         name: data.name,    
         clienteId: data.clienteId,
+        provinciaId: data.provinciaId,
+        ciudadId: data.ciudadId,
         is_active: data.is_active,
         updatedAt: new Date().toISOString(),
       }

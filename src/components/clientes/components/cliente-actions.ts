@@ -5,9 +5,6 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { Cliente as ClienteType } from "@/generated/client"
 
-
-
-
 export async function createCliente(data: ClienteType) {
   console.log('create client data',data);
   try {
@@ -18,6 +15,8 @@ export async function createCliente(data: ClienteType) {
         email: data.email,
         telefono: data.telefono,
         domicilio: data.domicilio,
+        provinciaId: data.provinciaId,
+        ciudadId: data.ciudadId,
         is_active: data.is_active,
     }
   });
@@ -48,6 +47,8 @@ export async function updateCliente(data: Partial<ClienteType>) {
         email: data.email,
         telefono: data.telefono,
         domicilio: data.domicilio,
+        provinciaId: data.provinciaId,
+        ciudadId: data.ciudadId,
         is_active: data.is_active,
         updatedAt: new Date().toISOString(),
       }

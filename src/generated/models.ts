@@ -10,6 +10,8 @@
  */
 export type * from './models/Test'
 export type * from './models/Cliente'
+export type * from './models/Provincia'
+export type * from './models/Ciudad'
 export type * from './models/Servicio'
 export type * from './models/Items'
 export type * from './models/ItemsOnServicios'

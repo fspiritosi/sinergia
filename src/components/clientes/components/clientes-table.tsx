@@ -1,8 +1,8 @@
 "use client"
 
 import { DataTable } from "@/components/tables/data-table";
-import { columns } from "./columns";
-import { Cliente } from "@/generated/client";
+import { columns, type ClienteWithRelations } from "./columns";
+import type { ColumnDef } from "@tanstack/react-table";
 import { createStringSearchFilter } from "@/components/tables/search-utils";
 
 
@@ -25,20 +25,22 @@ const fechaOptions = [
 // Filtros por tipo de contacto y dominio de email - REMOVIDOS
 
 interface ClientesTableProps {
-  data: Cliente[];
+  data: ClienteWithRelations[];
 }
 
 export function ClientesTable({ data }: ClientesTableProps) {
-  const customSearchFilter = createStringSearchFilter<Cliente>([
+  const customSearchFilter = createStringSearchFilter<ClienteWithRelations>([
     "name",
     "cuit",
     "email",
+    (c) => c.provincia?.nombre,
+    (c) => c.ciudad?.nombre,
   ]);
 
   return (
     <DataTable
       data={data}
-      columns={columns}
+      columns={columns as ColumnDef<ClienteWithRelations, unknown>[]}
       searchKey="name"
       searchPlaceholder="Buscar por nombre, CUIT o email..."
       customSearchFilter={customSearchFilter}
@@ -52,6 +54,32 @@ export function ClientesTable({ data }: ClientesTableProps) {
           columnKey: "createdAt",
           title: "Fecha de Creación",
           options: fechaOptions,
+        },
+        {
+          columnKey: "provinciaNombre",
+          title: "Provincia",
+          options: Array.from(
+            new Set(
+              data
+                .map((c) => c.provincia?.nombre)
+                .filter((v): v is string => !!v)
+            )
+          )
+            .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
+            .map((p) => ({ value: p, label: p })),
+        },
+        {
+          columnKey: "ciudadNombre",
+          title: "Ciudad",
+          options: Array.from(
+            new Set(
+              data
+                .map((c) => c.ciudad?.nombre)
+                .filter((v): v is string => !!v)
+            )
+          )
+            .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
+            .map((p) => ({ value: p, label: p })),
         },
       ]}
     />

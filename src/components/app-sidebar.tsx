@@ -39,36 +39,17 @@ const data = {
           url: "/dashboard/clientes",
           isActive: true,
         },
-        {
-          title: "Locaciones Clientes",
-          url: "/dashboard/clientes/locaciones",
-          isActive: false,
-        },
+        // {
+        //   title: "Locaciones Clientes",
+        //   url: "/dashboard/clientes/locaciones",
+        //   isActive: false,
+        // },
         {
           title: "Propuestas",
           url: "/dashboard/clientes/propuestas",
           isActive: false,
         },
-        {
-          title: "Servicios",
-          url: "/dashboard/servicios",
-          isActive: false,
-        },
-        {
-          title: "Items",
-          url: "/dashboard/items",
-          isActive: false,
-        },
-        {
-          title: "Tipos de Informe",
-          url: "/dashboard/tipos-informe",
-          isActive: false,
-        },
-        {
-          title: "Usuarios",
-          url: "/dashboard/usuarios",
-          isActive: false,
-        },
+       
       ],
     },
     {
@@ -88,6 +69,33 @@ const data = {
         {
           title: "Informes",
           url: "/dashboard/informes",
+          isActive: false,
+        },
+ 
+      ],
+    },
+    {
+      title: "Configuración",
+      url: "/dashboard/configuracion",
+      items: [
+        {
+          title: "Servicios",
+          url: "/dashboard/servicios",
+          isActive: false,
+        },
+        {
+          title: "Items",
+          url: "/dashboard/items",
+          isActive: false,
+        },
+        {
+          title: "Tipos de Informe",
+          url: "/dashboard/tipos-informe",
+          isActive: false,
+        },
+        {
+          title: "Usuarios",
+          url: "/dashboard/usuarios",
           isActive: false,
         },
  

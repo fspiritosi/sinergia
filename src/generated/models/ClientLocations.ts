@@ -28,6 +28,8 @@ export type ClientLocationsMinAggregateOutputType = {
   id: string | null
   name: string | null
   clienteId: string | null
+  provinciaId: string | null
+  ciudadId: string | null
   is_active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -37,6 +39,8 @@ export type ClientLocationsMaxAggregateOutputType = {
   id: string | null
   name: string | null
   clienteId: string | null
+  provinciaId: string | null
+  ciudadId: string | null
   is_active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,6 +50,8 @@ export type ClientLocationsCountAggregateOutputType = {
   id: number
   name: number
   clienteId: number
+  provinciaId: number
+  ciudadId: number
   is_active: number
   createdAt: number
   updatedAt: number
@@ -57,6 +63,8 @@ export type ClientLocationsMinAggregateInputType = {
   id?: true
   name?: true
   clienteId?: true
+  provinciaId?: true
+  ciudadId?: true
   is_active?: true
   createdAt?: true
   updatedAt?: true
@@ -66,6 +74,8 @@ export type ClientLocationsMaxAggregateInputType = {
   id?: true
   name?: true
   clienteId?: true
+  provinciaId?: true
+  ciudadId?: true
   is_active?: true
   createdAt?: true
   updatedAt?: true
@@ -75,6 +85,8 @@ export type ClientLocationsCountAggregateInputType = {
   id?: true
   name?: true
   clienteId?: true
+  provinciaId?: true
+  ciudadId?: true
   is_active?: true
   createdAt?: true
   updatedAt?: true
@@ -157,6 +169,8 @@ export type ClientLocationsGroupByOutputType = {
   id: string
   name: string
   clienteId: string
+  provinciaId: string | null
+  ciudadId: string | null
   is_active: boolean
   createdAt: Date
   updatedAt: Date
@@ -187,10 +201,14 @@ export type ClientLocationsWhereInput = {
   id?: Prisma.StringFilter<"ClientLocations"> | string
   name?: Prisma.StringFilter<"ClientLocations"> | string
   clienteId?: Prisma.StringFilter<"ClientLocations"> | string
+  provinciaId?: Prisma.StringNullableFilter<"ClientLocations"> | string | null
+  ciudadId?: Prisma.StringNullableFilter<"ClientLocations"> | string | null
   is_active?: Prisma.BoolFilter<"ClientLocations"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ClientLocations"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClientLocations"> | Date | string
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
+  provincia?: Prisma.XOR<Prisma.ProvinciaNullableScalarRelationFilter, Prisma.ProvinciaWhereInput> | null
+  ciudad?: Prisma.XOR<Prisma.CiudadNullableScalarRelationFilter, Prisma.CiudadWhereInput> | null
   informes?: Prisma.InformeListRelationFilter
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionListRelationFilter
 }
@@ -199,10 +217,14 @@ export type ClientLocationsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  provinciaId?: Prisma.SortOrderInput | Prisma.SortOrder
+  ciudadId?: Prisma.SortOrderInput | Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   cliente?: Prisma.ClienteOrderByWithRelationInput
+  provincia?: Prisma.ProvinciaOrderByWithRelationInput
+  ciudad?: Prisma.CiudadOrderByWithRelationInput
   informes?: Prisma.InformeOrderByRelationAggregateInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionOrderByRelationAggregateInput
 }
@@ -214,10 +236,14 @@ export type ClientLocationsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ClientLocationsWhereInput | Prisma.ClientLocationsWhereInput[]
   name?: Prisma.StringFilter<"ClientLocations"> | string
   clienteId?: Prisma.StringFilter<"ClientLocations"> | string
+  provinciaId?: Prisma.StringNullableFilter<"ClientLocations"> | string | null
+  ciudadId?: Prisma.StringNullableFilter<"ClientLocations"> | string | null
   is_active?: Prisma.BoolFilter<"ClientLocations"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ClientLocations"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClientLocations"> | Date | string
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
+  provincia?: Prisma.XOR<Prisma.ProvinciaNullableScalarRelationFilter, Prisma.ProvinciaWhereInput> | null
+  ciudad?: Prisma.XOR<Prisma.CiudadNullableScalarRelationFilter, Prisma.CiudadWhereInput> | null
   informes?: Prisma.InformeListRelationFilter
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionListRelationFilter
 }, "id">
@@ -226,6 +252,8 @@ export type ClientLocationsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  provinciaId?: Prisma.SortOrderInput | Prisma.SortOrder
+  ciudadId?: Prisma.SortOrderInput | Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -241,6 +269,8 @@ export type ClientLocationsScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ClientLocations"> | string
   name?: Prisma.StringWithAggregatesFilter<"ClientLocations"> | string
   clienteId?: Prisma.StringWithAggregatesFilter<"ClientLocations"> | string
+  provinciaId?: Prisma.StringNullableWithAggregatesFilter<"ClientLocations"> | string | null
+  ciudadId?: Prisma.StringNullableWithAggregatesFilter<"ClientLocations"> | string | null
   is_active?: Prisma.BoolWithAggregatesFilter<"ClientLocations"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ClientLocations"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ClientLocations"> | Date | string
@@ -253,6 +283,8 @@ export type ClientLocationsCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutClientLocationsInput
+  provincia?: Prisma.ProvinciaCreateNestedOneWithoutClientLocationsInput
+  ciudad?: Prisma.CiudadCreateNestedOneWithoutClientLocationsInput
   informes?: Prisma.InformeCreateNestedManyWithoutClientLocationInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutClientLocationInput
 }
@@ -261,6 +293,8 @@ export type ClientLocationsUncheckedCreateInput = {
   id?: string
   name: string
   clienteId: string
+  provinciaId?: string | null
+  ciudadId?: string | null
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -275,6 +309,8 @@ export type ClientLocationsUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutClientLocationsNestedInput
+  provincia?: Prisma.ProvinciaUpdateOneWithoutClientLocationsNestedInput
+  ciudad?: Prisma.CiudadUpdateOneWithoutClientLocationsNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClientLocationNestedInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutClientLocationNestedInput
 }
@@ -283,6 +319,8 @@ export type ClientLocationsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -294,6 +332,8 @@ export type ClientLocationsCreateManyInput = {
   id?: string
   name: string
   clienteId: string
+  provinciaId?: string | null
+  ciudadId?: string | null
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -311,6 +351,8 @@ export type ClientLocationsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -330,6 +372,8 @@ export type ClientLocationsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  provinciaId?: Prisma.SortOrder
+  ciudadId?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -339,6 +383,8 @@ export type ClientLocationsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  provinciaId?: Prisma.SortOrder
+  ciudadId?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -348,6 +394,8 @@ export type ClientLocationsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  provinciaId?: Prisma.SortOrder
+  ciudadId?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -405,6 +453,90 @@ export type ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput = {
   deleteMany?: Prisma.ClientLocationsScalarWhereInput | Prisma.ClientLocationsScalarWhereInput[]
 }
 
+export type ClientLocationsCreateNestedManyWithoutProvinciaInput = {
+  create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutProvinciaInput, Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput> | Prisma.ClientLocationsCreateWithoutProvinciaInput[] | Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput[]
+  connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutProvinciaInput | Prisma.ClientLocationsCreateOrConnectWithoutProvinciaInput[]
+  createMany?: Prisma.ClientLocationsCreateManyProvinciaInputEnvelope
+  connect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+}
+
+export type ClientLocationsUncheckedCreateNestedManyWithoutProvinciaInput = {
+  create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutProvinciaInput, Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput> | Prisma.ClientLocationsCreateWithoutProvinciaInput[] | Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput[]
+  connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutProvinciaInput | Prisma.ClientLocationsCreateOrConnectWithoutProvinciaInput[]
+  createMany?: Prisma.ClientLocationsCreateManyProvinciaInputEnvelope
+  connect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+}
+
+export type ClientLocationsUpdateManyWithoutProvinciaNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutProvinciaInput, Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput> | Prisma.ClientLocationsCreateWithoutProvinciaInput[] | Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput[]
+  connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutProvinciaInput | Prisma.ClientLocationsCreateOrConnectWithoutProvinciaInput[]
+  upsert?: Prisma.ClientLocationsUpsertWithWhereUniqueWithoutProvinciaInput | Prisma.ClientLocationsUpsertWithWhereUniqueWithoutProvinciaInput[]
+  createMany?: Prisma.ClientLocationsCreateManyProvinciaInputEnvelope
+  set?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  disconnect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  delete?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  connect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  update?: Prisma.ClientLocationsUpdateWithWhereUniqueWithoutProvinciaInput | Prisma.ClientLocationsUpdateWithWhereUniqueWithoutProvinciaInput[]
+  updateMany?: Prisma.ClientLocationsUpdateManyWithWhereWithoutProvinciaInput | Prisma.ClientLocationsUpdateManyWithWhereWithoutProvinciaInput[]
+  deleteMany?: Prisma.ClientLocationsScalarWhereInput | Prisma.ClientLocationsScalarWhereInput[]
+}
+
+export type ClientLocationsUncheckedUpdateManyWithoutProvinciaNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutProvinciaInput, Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput> | Prisma.ClientLocationsCreateWithoutProvinciaInput[] | Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput[]
+  connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutProvinciaInput | Prisma.ClientLocationsCreateOrConnectWithoutProvinciaInput[]
+  upsert?: Prisma.ClientLocationsUpsertWithWhereUniqueWithoutProvinciaInput | Prisma.ClientLocationsUpsertWithWhereUniqueWithoutProvinciaInput[]
+  createMany?: Prisma.ClientLocationsCreateManyProvinciaInputEnvelope
+  set?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  disconnect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  delete?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  connect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  update?: Prisma.ClientLocationsUpdateWithWhereUniqueWithoutProvinciaInput | Prisma.ClientLocationsUpdateWithWhereUniqueWithoutProvinciaInput[]
+  updateMany?: Prisma.ClientLocationsUpdateManyWithWhereWithoutProvinciaInput | Prisma.ClientLocationsUpdateManyWithWhereWithoutProvinciaInput[]
+  deleteMany?: Prisma.ClientLocationsScalarWhereInput | Prisma.ClientLocationsScalarWhereInput[]
+}
+
+export type ClientLocationsCreateNestedManyWithoutCiudadInput = {
+  create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutCiudadInput, Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput> | Prisma.ClientLocationsCreateWithoutCiudadInput[] | Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput[]
+  connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutCiudadInput | Prisma.ClientLocationsCreateOrConnectWithoutCiudadInput[]
+  createMany?: Prisma.ClientLocationsCreateManyCiudadInputEnvelope
+  connect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+}
+
+export type ClientLocationsUncheckedCreateNestedManyWithoutCiudadInput = {
+  create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutCiudadInput, Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput> | Prisma.ClientLocationsCreateWithoutCiudadInput[] | Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput[]
+  connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutCiudadInput | Prisma.ClientLocationsCreateOrConnectWithoutCiudadInput[]
+  createMany?: Prisma.ClientLocationsCreateManyCiudadInputEnvelope
+  connect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+}
+
+export type ClientLocationsUpdateManyWithoutCiudadNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutCiudadInput, Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput> | Prisma.ClientLocationsCreateWithoutCiudadInput[] | Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput[]
+  connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutCiudadInput | Prisma.ClientLocationsCreateOrConnectWithoutCiudadInput[]
+  upsert?: Prisma.ClientLocationsUpsertWithWhereUniqueWithoutCiudadInput | Prisma.ClientLocationsUpsertWithWhereUniqueWithoutCiudadInput[]
+  createMany?: Prisma.ClientLocationsCreateManyCiudadInputEnvelope
+  set?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  disconnect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  delete?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  connect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  update?: Prisma.ClientLocationsUpdateWithWhereUniqueWithoutCiudadInput | Prisma.ClientLocationsUpdateWithWhereUniqueWithoutCiudadInput[]
+  updateMany?: Prisma.ClientLocationsUpdateManyWithWhereWithoutCiudadInput | Prisma.ClientLocationsUpdateManyWithWhereWithoutCiudadInput[]
+  deleteMany?: Prisma.ClientLocationsScalarWhereInput | Prisma.ClientLocationsScalarWhereInput[]
+}
+
+export type ClientLocationsUncheckedUpdateManyWithoutCiudadNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutCiudadInput, Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput> | Prisma.ClientLocationsCreateWithoutCiudadInput[] | Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput[]
+  connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutCiudadInput | Prisma.ClientLocationsCreateOrConnectWithoutCiudadInput[]
+  upsert?: Prisma.ClientLocationsUpsertWithWhereUniqueWithoutCiudadInput | Prisma.ClientLocationsUpsertWithWhereUniqueWithoutCiudadInput[]
+  createMany?: Prisma.ClientLocationsCreateManyCiudadInputEnvelope
+  set?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  disconnect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  delete?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  connect?: Prisma.ClientLocationsWhereUniqueInput | Prisma.ClientLocationsWhereUniqueInput[]
+  update?: Prisma.ClientLocationsUpdateWithWhereUniqueWithoutCiudadInput | Prisma.ClientLocationsUpdateWithWhereUniqueWithoutCiudadInput[]
+  updateMany?: Prisma.ClientLocationsUpdateManyWithWhereWithoutCiudadInput | Prisma.ClientLocationsUpdateManyWithWhereWithoutCiudadInput[]
+  deleteMany?: Prisma.ClientLocationsScalarWhereInput | Prisma.ClientLocationsScalarWhereInput[]
+}
+
 export type ClientLocationsCreateNestedOneWithoutInformesInput = {
   create?: Prisma.XOR<Prisma.ClientLocationsCreateWithoutInformesInput, Prisma.ClientLocationsUncheckedCreateWithoutInformesInput>
   connectOrCreate?: Prisma.ClientLocationsCreateOrConnectWithoutInformesInput
@@ -441,6 +573,8 @@ export type ClientLocationsCreateWithoutClienteInput = {
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  provincia?: Prisma.ProvinciaCreateNestedOneWithoutClientLocationsInput
+  ciudad?: Prisma.CiudadCreateNestedOneWithoutClientLocationsInput
   informes?: Prisma.InformeCreateNestedManyWithoutClientLocationInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutClientLocationInput
 }
@@ -448,6 +582,8 @@ export type ClientLocationsCreateWithoutClienteInput = {
 export type ClientLocationsUncheckedCreateWithoutClienteInput = {
   id?: string
   name: string
+  provinciaId?: string | null
+  ciudadId?: string | null
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -488,9 +624,111 @@ export type ClientLocationsScalarWhereInput = {
   id?: Prisma.StringFilter<"ClientLocations"> | string
   name?: Prisma.StringFilter<"ClientLocations"> | string
   clienteId?: Prisma.StringFilter<"ClientLocations"> | string
+  provinciaId?: Prisma.StringNullableFilter<"ClientLocations"> | string | null
+  ciudadId?: Prisma.StringNullableFilter<"ClientLocations"> | string | null
   is_active?: Prisma.BoolFilter<"ClientLocations"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ClientLocations"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClientLocations"> | Date | string
+}
+
+export type ClientLocationsCreateWithoutProvinciaInput = {
+  id?: string
+  name: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cliente: Prisma.ClienteCreateNestedOneWithoutClientLocationsInput
+  ciudad?: Prisma.CiudadCreateNestedOneWithoutClientLocationsInput
+  informes?: Prisma.InformeCreateNestedManyWithoutClientLocationInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutClientLocationInput
+}
+
+export type ClientLocationsUncheckedCreateWithoutProvinciaInput = {
+  id?: string
+  name: string
+  clienteId: string
+  ciudadId?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClientLocationInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedCreateNestedManyWithoutClientLocationInput
+}
+
+export type ClientLocationsCreateOrConnectWithoutProvinciaInput = {
+  where: Prisma.ClientLocationsWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientLocationsCreateWithoutProvinciaInput, Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput>
+}
+
+export type ClientLocationsCreateManyProvinciaInputEnvelope = {
+  data: Prisma.ClientLocationsCreateManyProvinciaInput | Prisma.ClientLocationsCreateManyProvinciaInput[]
+  skipDuplicates?: boolean
+}
+
+export type ClientLocationsUpsertWithWhereUniqueWithoutProvinciaInput = {
+  where: Prisma.ClientLocationsWhereUniqueInput
+  update: Prisma.XOR<Prisma.ClientLocationsUpdateWithoutProvinciaInput, Prisma.ClientLocationsUncheckedUpdateWithoutProvinciaInput>
+  create: Prisma.XOR<Prisma.ClientLocationsCreateWithoutProvinciaInput, Prisma.ClientLocationsUncheckedCreateWithoutProvinciaInput>
+}
+
+export type ClientLocationsUpdateWithWhereUniqueWithoutProvinciaInput = {
+  where: Prisma.ClientLocationsWhereUniqueInput
+  data: Prisma.XOR<Prisma.ClientLocationsUpdateWithoutProvinciaInput, Prisma.ClientLocationsUncheckedUpdateWithoutProvinciaInput>
+}
+
+export type ClientLocationsUpdateManyWithWhereWithoutProvinciaInput = {
+  where: Prisma.ClientLocationsScalarWhereInput
+  data: Prisma.XOR<Prisma.ClientLocationsUpdateManyMutationInput, Prisma.ClientLocationsUncheckedUpdateManyWithoutProvinciaInput>
+}
+
+export type ClientLocationsCreateWithoutCiudadInput = {
+  id?: string
+  name: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cliente: Prisma.ClienteCreateNestedOneWithoutClientLocationsInput
+  provincia?: Prisma.ProvinciaCreateNestedOneWithoutClientLocationsInput
+  informes?: Prisma.InformeCreateNestedManyWithoutClientLocationInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutClientLocationInput
+}
+
+export type ClientLocationsUncheckedCreateWithoutCiudadInput = {
+  id?: string
+  name: string
+  clienteId: string
+  provinciaId?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClientLocationInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedCreateNestedManyWithoutClientLocationInput
+}
+
+export type ClientLocationsCreateOrConnectWithoutCiudadInput = {
+  where: Prisma.ClientLocationsWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientLocationsCreateWithoutCiudadInput, Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput>
+}
+
+export type ClientLocationsCreateManyCiudadInputEnvelope = {
+  data: Prisma.ClientLocationsCreateManyCiudadInput | Prisma.ClientLocationsCreateManyCiudadInput[]
+  skipDuplicates?: boolean
+}
+
+export type ClientLocationsUpsertWithWhereUniqueWithoutCiudadInput = {
+  where: Prisma.ClientLocationsWhereUniqueInput
+  update: Prisma.XOR<Prisma.ClientLocationsUpdateWithoutCiudadInput, Prisma.ClientLocationsUncheckedUpdateWithoutCiudadInput>
+  create: Prisma.XOR<Prisma.ClientLocationsCreateWithoutCiudadInput, Prisma.ClientLocationsUncheckedCreateWithoutCiudadInput>
+}
+
+export type ClientLocationsUpdateWithWhereUniqueWithoutCiudadInput = {
+  where: Prisma.ClientLocationsWhereUniqueInput
+  data: Prisma.XOR<Prisma.ClientLocationsUpdateWithoutCiudadInput, Prisma.ClientLocationsUncheckedUpdateWithoutCiudadInput>
+}
+
+export type ClientLocationsUpdateManyWithWhereWithoutCiudadInput = {
+  where: Prisma.ClientLocationsScalarWhereInput
+  data: Prisma.XOR<Prisma.ClientLocationsUpdateManyMutationInput, Prisma.ClientLocationsUncheckedUpdateManyWithoutCiudadInput>
 }
 
 export type ClientLocationsCreateWithoutInformesInput = {
@@ -500,6 +738,8 @@ export type ClientLocationsCreateWithoutInformesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutClientLocationsInput
+  provincia?: Prisma.ProvinciaCreateNestedOneWithoutClientLocationsInput
+  ciudad?: Prisma.CiudadCreateNestedOneWithoutClientLocationsInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutClientLocationInput
 }
 
@@ -507,6 +747,8 @@ export type ClientLocationsUncheckedCreateWithoutInformesInput = {
   id?: string
   name: string
   clienteId: string
+  provinciaId?: string | null
+  ciudadId?: string | null
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -536,6 +778,8 @@ export type ClientLocationsUpdateWithoutInformesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutClientLocationsNestedInput
+  provincia?: Prisma.ProvinciaUpdateOneWithoutClientLocationsNestedInput
+  ciudad?: Prisma.CiudadUpdateOneWithoutClientLocationsNestedInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutClientLocationNestedInput
 }
 
@@ -543,6 +787,8 @@ export type ClientLocationsUncheckedUpdateWithoutInformesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -556,6 +802,8 @@ export type ClientLocationsCreateWithoutPlanesTrabajoProgramacionesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutClientLocationsInput
+  provincia?: Prisma.ProvinciaCreateNestedOneWithoutClientLocationsInput
+  ciudad?: Prisma.CiudadCreateNestedOneWithoutClientLocationsInput
   informes?: Prisma.InformeCreateNestedManyWithoutClientLocationInput
 }
 
@@ -563,6 +811,8 @@ export type ClientLocationsUncheckedCreateWithoutPlanesTrabajoProgramacionesInpu
   id?: string
   name: string
   clienteId: string
+  provinciaId?: string | null
+  ciudadId?: string | null
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -592,6 +842,8 @@ export type ClientLocationsUpdateWithoutPlanesTrabajoProgramacionesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutClientLocationsNestedInput
+  provincia?: Prisma.ProvinciaUpdateOneWithoutClientLocationsNestedInput
+  ciudad?: Prisma.CiudadUpdateOneWithoutClientLocationsNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClientLocationNestedInput
 }
 
@@ -599,6 +851,8 @@ export type ClientLocationsUncheckedUpdateWithoutPlanesTrabajoProgramacionesInpu
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -608,6 +862,8 @@ export type ClientLocationsUncheckedUpdateWithoutPlanesTrabajoProgramacionesInpu
 export type ClientLocationsCreateManyClienteInput = {
   id?: string
   name: string
+  provinciaId?: string | null
+  ciudadId?: string | null
   is_active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -619,6 +875,8 @@ export type ClientLocationsUpdateWithoutClienteInput = {
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provincia?: Prisma.ProvinciaUpdateOneWithoutClientLocationsNestedInput
+  ciudad?: Prisma.CiudadUpdateOneWithoutClientLocationsNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClientLocationNestedInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutClientLocationNestedInput
 }
@@ -626,6 +884,8 @@ export type ClientLocationsUpdateWithoutClienteInput = {
 export type ClientLocationsUncheckedUpdateWithoutClienteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -636,6 +896,96 @@ export type ClientLocationsUncheckedUpdateWithoutClienteInput = {
 export type ClientLocationsUncheckedUpdateManyWithoutClienteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ClientLocationsCreateManyProvinciaInput = {
+  id?: string
+  name: string
+  clienteId: string
+  ciudadId?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ClientLocationsUpdateWithoutProvinciaInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutClientLocationsNestedInput
+  ciudad?: Prisma.CiudadUpdateOneWithoutClientLocationsNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutClientLocationNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutClientLocationNestedInput
+}
+
+export type ClientLocationsUncheckedUpdateWithoutProvinciaInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutClientLocationNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedUpdateManyWithoutClientLocationNestedInput
+}
+
+export type ClientLocationsUncheckedUpdateManyWithoutProvinciaInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ClientLocationsCreateManyCiudadInput = {
+  id?: string
+  name: string
+  clienteId: string
+  provinciaId?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ClientLocationsUpdateWithoutCiudadInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutClientLocationsNestedInput
+  provincia?: Prisma.ProvinciaUpdateOneWithoutClientLocationsNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutClientLocationNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutClientLocationNestedInput
+}
+
+export type ClientLocationsUncheckedUpdateWithoutCiudadInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutClientLocationNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedUpdateManyWithoutClientLocationNestedInput
+}
+
+export type ClientLocationsUncheckedUpdateManyWithoutCiudadInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -685,10 +1035,14 @@ export type ClientLocationsSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   name?: boolean
   clienteId?: boolean
+  provinciaId?: boolean
+  ciudadId?: boolean
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  provincia?: boolean | Prisma.ClientLocations$provinciaArgs<ExtArgs>
+  ciudad?: boolean | Prisma.ClientLocations$ciudadArgs<ExtArgs>
   informes?: boolean | Prisma.ClientLocations$informesArgs<ExtArgs>
   planesTrabajoProgramaciones?: boolean | Prisma.ClientLocations$planesTrabajoProgramacionesArgs<ExtArgs>
   _count?: boolean | Prisma.ClientLocationsCountOutputTypeDefaultArgs<ExtArgs>
@@ -698,49 +1052,67 @@ export type ClientLocationsSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   name?: boolean
   clienteId?: boolean
+  provinciaId?: boolean
+  ciudadId?: boolean
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  provincia?: boolean | Prisma.ClientLocations$provinciaArgs<ExtArgs>
+  ciudad?: boolean | Prisma.ClientLocations$ciudadArgs<ExtArgs>
 }, ExtArgs["result"]["clientLocations"]>
 
 export type ClientLocationsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   clienteId?: boolean
+  provinciaId?: boolean
+  ciudadId?: boolean
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  provincia?: boolean | Prisma.ClientLocations$provinciaArgs<ExtArgs>
+  ciudad?: boolean | Prisma.ClientLocations$ciudadArgs<ExtArgs>
 }, ExtArgs["result"]["clientLocations"]>
 
 export type ClientLocationsSelectScalar = {
   id?: boolean
   name?: boolean
   clienteId?: boolean
+  provinciaId?: boolean
+  ciudadId?: boolean
   is_active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClientLocationsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "clienteId" | "is_active" | "createdAt" | "updatedAt", ExtArgs["result"]["clientLocations"]>
+export type ClientLocationsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "clienteId" | "provinciaId" | "ciudadId" | "is_active" | "createdAt" | "updatedAt", ExtArgs["result"]["clientLocations"]>
 export type ClientLocationsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  provincia?: boolean | Prisma.ClientLocations$provinciaArgs<ExtArgs>
+  ciudad?: boolean | Prisma.ClientLocations$ciudadArgs<ExtArgs>
   informes?: boolean | Prisma.ClientLocations$informesArgs<ExtArgs>
   planesTrabajoProgramaciones?: boolean | Prisma.ClientLocations$planesTrabajoProgramacionesArgs<ExtArgs>
   _count?: boolean | Prisma.ClientLocationsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClientLocationsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  provincia?: boolean | Prisma.ClientLocations$provinciaArgs<ExtArgs>
+  ciudad?: boolean | Prisma.ClientLocations$ciudadArgs<ExtArgs>
 }
 export type ClientLocationsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  provincia?: boolean | Prisma.ClientLocations$provinciaArgs<ExtArgs>
+  ciudad?: boolean | Prisma.ClientLocations$ciudadArgs<ExtArgs>
 }
 
 export type $ClientLocationsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ClientLocations"
   objects: {
     cliente: Prisma.$ClientePayload<ExtArgs>
+    provincia: Prisma.$ProvinciaPayload<ExtArgs> | null
+    ciudad: Prisma.$CiudadPayload<ExtArgs> | null
     informes: Prisma.$InformePayload<ExtArgs>[]
     planesTrabajoProgramaciones: Prisma.$PlanTrabajoProgramacionPayload<ExtArgs>[]
   }
@@ -748,6 +1120,8 @@ export type $ClientLocationsPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     name: string
     clienteId: string
+    provinciaId: string | null
+    ciudadId: string | null
     is_active: boolean
     createdAt: Date
     updatedAt: Date
@@ -1146,6 +1520,8 @@ readonly fields: ClientLocationsFieldRefs;
 export interface Prisma__ClientLocationsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cliente<T extends Prisma.ClienteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClienteDefaultArgs<ExtArgs>>): Prisma.Prisma__ClienteClient<runtime.Types.Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  provincia<T extends Prisma.ClientLocations$provinciaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientLocations$provinciaArgs<ExtArgs>>): Prisma.Prisma__ProvinciaClient<runtime.Types.Result.GetResult<Prisma.$ProvinciaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  ciudad<T extends Prisma.ClientLocations$ciudadArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientLocations$ciudadArgs<ExtArgs>>): Prisma.Prisma__CiudadClient<runtime.Types.Result.GetResult<Prisma.$CiudadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   informes<T extends Prisma.ClientLocations$informesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientLocations$informesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InformePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   planesTrabajoProgramaciones<T extends Prisma.ClientLocations$planesTrabajoProgramacionesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientLocations$planesTrabajoProgramacionesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanTrabajoProgramacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1180,6 +1556,8 @@ export interface ClientLocationsFieldRefs {
   readonly id: Prisma.FieldRef<"ClientLocations", 'String'>
   readonly name: Prisma.FieldRef<"ClientLocations", 'String'>
   readonly clienteId: Prisma.FieldRef<"ClientLocations", 'String'>
+  readonly provinciaId: Prisma.FieldRef<"ClientLocations", 'String'>
+  readonly ciudadId: Prisma.FieldRef<"ClientLocations", 'String'>
   readonly is_active: Prisma.FieldRef<"ClientLocations", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"ClientLocations", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ClientLocations", 'DateTime'>
@@ -1576,6 +1954,44 @@ export type ClientLocationsDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many ClientLocations to delete.
    */
   limit?: number
+}
+
+/**
+ * ClientLocations.provincia
+ */
+export type ClientLocations$provinciaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Provincia
+   */
+  select?: Prisma.ProvinciaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Provincia
+   */
+  omit?: Prisma.ProvinciaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProvinciaInclude<ExtArgs> | null
+  where?: Prisma.ProvinciaWhereInput
+}
+
+/**
+ * ClientLocations.ciudad
+ */
+export type ClientLocations$ciudadArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Ciudad
+   */
+  select?: Prisma.CiudadSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Ciudad
+   */
+  omit?: Prisma.CiudadOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CiudadInclude<ExtArgs> | null
+  where?: Prisma.CiudadWhereInput
 }
 
 /**

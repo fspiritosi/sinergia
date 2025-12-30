@@ -51,6 +51,8 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 export const ModelName = {
   Test: 'Test',
   Cliente: 'Cliente',
+  Provincia: 'Provincia',
+  Ciudad: 'Ciudad',
   Servicio: 'Servicio',
   Items: 'Items',
   ItemsOnServicios: 'ItemsOnServicios',
@@ -93,12 +95,31 @@ export const ClienteScalarFieldEnum = {
   domicilio: 'domicilio',
   telefono: 'telefono',
   email: 'email',
+  provinciaId: 'provinciaId',
+  ciudadId: 'ciudadId',
   is_active: 'is_active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
+
+
+export const ProvinciaScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre'
+} as const
+
+export type ProvinciaScalarFieldEnum = (typeof ProvinciaScalarFieldEnum)[keyof typeof ProvinciaScalarFieldEnum]
+
+
+export const CiudadScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  provinciaId: 'provinciaId'
+} as const
+
+export type CiudadScalarFieldEnum = (typeof CiudadScalarFieldEnum)[keyof typeof CiudadScalarFieldEnum]
 
 
 export const ServicioScalarFieldEnum = {
@@ -173,6 +194,8 @@ export const ClientLocationsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   clienteId: 'clienteId',
+  provinciaId: 'provinciaId',
+  ciudadId: 'ciudadId',
   is_active: 'is_active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -28,6 +28,10 @@ model Cliente {
   domicilio String
   telefono String
   email String
+  provincia   Provincia? @relation(fields: [provinciaId], references: [id])
+  provinciaId String?
+  ciudad     Ciudad? @relation(fields: [ciudadId], references: [id])
+  ciudadId   String?
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -36,6 +40,23 @@ model Cliente {
   clientLocations ClientLocations[]
   informes Informe[]
   planesTrabajo PlanTrabajo[]
+}
+
+model Provincia {
+  id String @id @default(uuid())
+  nombre String
+  ciudades Ciudad[]
+  clientes Cliente[]
+  clientLocations ClientLocations[]
+}
+
+model Ciudad {
+  id String @id @default(uuid())
+  nombre String
+  provincia Provincia @relation(fields: [provinciaId], references: [id])
+  provinciaId String
+  clientes Cliente[]
+  clientLocations ClientLocations[]
 }
 
 model Servicio {
@@ -120,6 +141,10 @@ model ClientLocations {
   name String
   clienteId String
   cliente Cliente @relation(fields: [clienteId], references: [id])
+  provincia   Provincia? @relation(fields: [provinciaId], references: [id])
+  provinciaId String?
+  ciudad     Ciudad? @relation(fields: [ciudadId], references: [id])
+  ciudadId   String?
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

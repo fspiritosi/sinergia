@@ -392,6 +392,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Test: 'Test',
   Cliente: 'Cliente',
+  Provincia: 'Provincia',
+  Ciudad: 'Ciudad',
   Servicio: 'Servicio',
   Items: 'Items',
   ItemsOnServicios: 'ItemsOnServicios',
@@ -416,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion"
+    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -565,6 +567,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ClienteCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ClienteCountAggregateOutputType> | number
+        }
+      }
+    }
+    Provincia: {
+      payload: Prisma.$ProvinciaPayload<ExtArgs>
+      fields: Prisma.ProvinciaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProvinciaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProvinciaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>
+        }
+        findFirst: {
+          args: Prisma.ProvinciaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProvinciaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>
+        }
+        findMany: {
+          args: Prisma.ProvinciaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>[]
+        }
+        create: {
+          args: Prisma.ProvinciaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>
+        }
+        createMany: {
+          args: Prisma.ProvinciaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProvinciaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>[]
+        }
+        delete: {
+          args: Prisma.ProvinciaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>
+        }
+        update: {
+          args: Prisma.ProvinciaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProvinciaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProvinciaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProvinciaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProvinciaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvinciaPayload>
+        }
+        aggregate: {
+          args: Prisma.ProvinciaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProvincia>
+        }
+        groupBy: {
+          args: Prisma.ProvinciaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProvinciaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProvinciaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProvinciaCountAggregateOutputType> | number
+        }
+      }
+    }
+    Ciudad: {
+      payload: Prisma.$CiudadPayload<ExtArgs>
+      fields: Prisma.CiudadFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CiudadFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CiudadFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>
+        }
+        findFirst: {
+          args: Prisma.CiudadFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CiudadFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>
+        }
+        findMany: {
+          args: Prisma.CiudadFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>[]
+        }
+        create: {
+          args: Prisma.CiudadCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>
+        }
+        createMany: {
+          args: Prisma.CiudadCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CiudadCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>[]
+        }
+        delete: {
+          args: Prisma.CiudadDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>
+        }
+        update: {
+          args: Prisma.CiudadUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>
+        }
+        deleteMany: {
+          args: Prisma.CiudadDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CiudadUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CiudadUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>[]
+        }
+        upsert: {
+          args: Prisma.CiudadUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CiudadPayload>
+        }
+        aggregate: {
+          args: Prisma.CiudadAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCiudad>
+        }
+        groupBy: {
+          args: Prisma.CiudadGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CiudadGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CiudadCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CiudadCountAggregateOutputType> | number
         }
       }
     }
@@ -1288,12 +1438,31 @@ export const ClienteScalarFieldEnum = {
   domicilio: 'domicilio',
   telefono: 'telefono',
   email: 'email',
+  provinciaId: 'provinciaId',
+  ciudadId: 'ciudadId',
   is_active: 'is_active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
+
+
+export const ProvinciaScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre'
+} as const
+
+export type ProvinciaScalarFieldEnum = (typeof ProvinciaScalarFieldEnum)[keyof typeof ProvinciaScalarFieldEnum]
+
+
+export const CiudadScalarFieldEnum = {
+  id: 'id',
+  nombre: 'nombre',
+  provinciaId: 'provinciaId'
+} as const
+
+export type CiudadScalarFieldEnum = (typeof CiudadScalarFieldEnum)[keyof typeof CiudadScalarFieldEnum]
 
 
 export const ServicioScalarFieldEnum = {
@@ -1368,6 +1537,8 @@ export const ClientLocationsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   clienteId: 'clienteId',
+  provinciaId: 'provinciaId',
+  ciudadId: 'ciudadId',
   is_active: 'is_active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1689,6 +1860,8 @@ export interface PrismaClientOptions {
 export type GlobalOmitConfig = {
   test?: Prisma.TestOmit
   cliente?: Prisma.ClienteOmit
+  provincia?: Prisma.ProvinciaOmit
+  ciudad?: Prisma.CiudadOmit
   servicio?: Prisma.ServicioOmit
   items?: Prisma.ItemsOmit
   itemsOnServicios?: Prisma.ItemsOnServiciosOmit
