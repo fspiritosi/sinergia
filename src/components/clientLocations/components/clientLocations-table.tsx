@@ -1,9 +1,10 @@
 "use client"
 
 import { DataTable } from "@/components/tables/data-table";
-import { columns } from "./columns";
+import { columns, type ClientLocationWithRelations } from "./columns";
 import { clientLocations } from "./actions";
 import { createStringSearchFilter } from "@/components/tables/search-utils";
+import type { ColumnDef } from "@tanstack/react-table";
 
 
 // Opciones para filtros
@@ -30,19 +31,21 @@ const fechaOptions = [
 // Filtros por tipo de contacto y dominio de email - REMOVIDOS
 
 interface ClientLocationsTableProps {
-    data: clientLocations[]
+    data: ClientLocationWithRelations[]
 }
 
 export function ClientLocationsTable({ data }: ClientLocationsTableProps) {
-    const customSearchFilter = createStringSearchFilter<clientLocations>([
+    const customSearchFilter = createStringSearchFilter<ClientLocationWithRelations>([
         "name",
         (c) => c.cliente?.name,
+        (c) => c.provincia?.nombre,
+        (c) => c.ciudad?.nombre,
     ]);
 
     return (
         <DataTable
             data={data}
-            columns={columns}
+            columns={columns as ColumnDef<ClientLocationWithRelations, unknown>[]}
             searchKey="name"
             searchPlaceholder="Buscar por nombre o cliente..."
             customSearchFilter={customSearchFilter}
@@ -53,9 +56,30 @@ export function ClientLocationsTable({ data }: ClientLocationsTableProps) {
                     options: estadoOptions,
                 },
                 {
-                    columnKey: "type",
-                    title: "Tipo",
-                    options: typeOptions,
+                    columnKey: "provinciaNombre",
+                    title: "Provincia",
+                    options: Array.from(
+                        new Set(
+                            data
+                                .map((c) => c.provincia?.nombre)
+                                .filter((v): v is string => !!v)
+                        )
+                    )
+                        .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
+                        .map((p) => ({ value: p, label: p })),
+                },
+                {
+                    columnKey: "ciudadNombre",
+                    title: "Ciudad",
+                    options: Array.from(
+                        new Set(
+                            data
+                                .map((c) => c.ciudad?.nombre)
+                                .filter((v): v is string => !!v)
+                        )
+                    )
+                        .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
+                        .map((p) => ({ value: p, label: p })),
                 },
                 {
                     columnKey: "createdAt",

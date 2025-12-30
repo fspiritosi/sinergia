@@ -1,8 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ClientesTable } from "./clientes-table";
 import { AddClienteButton } from "./add-cliente-button";
-import { Cliente } from "@/generated/client";
 import { TableState } from "@/components/tables/table-state";
+import { type ClienteWithRelations } from "./columns";
+import { Cliente } from "@/generated/client";
 
 interface ClientesTableWrapperProps {
   data: Cliente[];
@@ -10,6 +11,11 @@ interface ClientesTableWrapperProps {
 
 export function ClientesTableWrapper({ data }: ClientesTableWrapperProps) {
   const isEmpty = data.length === 0;
+  const normalized = data.map((c) => ({
+    ...c,
+    provincia: (c as any).provincia ?? null,
+    ciudad: (c as any).ciudad ?? null,
+  })) as ClienteWithRelations[];
 
   return (
     <Card>
@@ -24,7 +30,7 @@ export function ClientesTableWrapper({ data }: ClientesTableWrapperProps) {
       </CardHeader>
       <CardContent>
         <TableState isEmpty={isEmpty} emptyMessage="No hay clientes cargados.">
-          <ClientesTable data={data} />
+          <ClientesTable data={normalized} />
         </TableState>
       </CardContent>
     </Card>

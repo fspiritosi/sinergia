@@ -11,6 +11,8 @@ export async function getClientLocations() {
           name: true,
         },
       },
+      provincia: true,
+      ciudad: true,
     },
     orderBy: [
       { is_active: "desc" },
@@ -24,6 +26,13 @@ export async function getActiveClientLocations(clienteId?: string) {
     where: {
       is_active: true,
       ...(clienteId ? { clienteId } : {}),
+    },
+    include: {
+      provincia: true,
+      ciudad: true,
+      cliente: {
+        select: { id: true, name: true },
+      },
     },
     orderBy: [{ name: "asc" }],
   });

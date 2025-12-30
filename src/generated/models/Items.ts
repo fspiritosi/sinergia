@@ -402,10 +402,6 @@ export type ItemsOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type ItemsCreateNestedOneWithoutServiciosInput = {
   create?: Prisma.XOR<Prisma.ItemsCreateWithoutServiciosInput, Prisma.ItemsUncheckedCreateWithoutServiciosInput>
   connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutServiciosInput

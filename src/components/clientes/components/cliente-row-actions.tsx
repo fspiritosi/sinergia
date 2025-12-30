@@ -1,6 +1,6 @@
 "use client"
 
-import { MoreHorizontal, Edit } from "lucide-react"
+import { MoreHorizontal, Edit, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -23,6 +23,8 @@ import { updateCliente, deleteCliente } from "./cliente-actions"
 import { Cliente } from "./actions"
 import { toast } from "sonner"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+
 
 interface ClienteRowActionsProps {
     cliente: Cliente
@@ -32,7 +34,7 @@ export function ClienteRowActions({ cliente }: ClienteRowActionsProps) {
     const [editOpen, setEditOpen] = useState(false)
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-
+    const router = useRouter()
     const handleEdit = async (data: any) => {
         setIsLoading(true)
         try {
@@ -77,6 +79,10 @@ export function ClienteRowActions({ cliente }: ClienteRowActionsProps) {
                     <DropdownMenuItem onClick={() => setEditOpen(true)}>
                         <Edit className="mr-2 h-4 w-4" />
                         Editar
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push(`/dashboard/clientes/${cliente.id}`)}>
+                        <Eye className="mr-2 h-4 w-4" />
+                        Ver Cliente
                     </DropdownMenuItem>
 
                 </DropdownMenuContent>

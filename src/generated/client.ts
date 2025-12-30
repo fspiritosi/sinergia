@@ -55,6 +55,16 @@ export type Test = Prisma.TestModel
  */
 export type Cliente = Prisma.ClienteModel
 /**
+ * Model Provincia
+ * 
+ */
+export type Provincia = Prisma.ProvinciaModel
+/**
+ * Model Ciudad
+ * 
+ */
+export type Ciudad = Prisma.CiudadModel
+/**
  * Model Servicio
  * 
  */

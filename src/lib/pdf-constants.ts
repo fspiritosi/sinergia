@@ -136,11 +136,23 @@ export const CONDICIONES_PARTICULARES: CondicionesParticulares[] = [
     {
         id: 15,
         type: 'Ajuste',
+        title: "Ajuste Trimestral 12%",
+        description: "El valor cotizado en el presente presupuesto tendrá un ajuste trimestral del 12"
+    },
+    {
+        id: 16,
+        type: 'Ajuste',
+        title: "Ajuste Trimestral 15%",
+        description: "El valor cotizado en el presente presupuesto tendrá un ajuste trimestral del 15"
+    },
+    {
+        id: 17,
+        type: 'Ajuste',
         title: "Ajuste Trimestral 20%",
         description: "El valor cotizado en el presente presupuesto tendrá un ajuste trimestral del 20"
     },
     {
-        id: 16,
+        id: 18,
         type: 'Ajuste',
         title: "Ajuste Trimestral IPC",
         description: "El valor cotizado en el presente presupuesto tendrá un ajuste trimestral por IPC"
