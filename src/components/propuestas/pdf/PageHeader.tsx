@@ -4,11 +4,12 @@ import { pdfStyles } from './styles'
 interface PageHeaderProps {
     serviceDescription: string
     showTitle?: boolean
+    fixed?: boolean
 }
 
-export function PageHeader({ serviceDescription, showTitle = false }: PageHeaderProps) {
+export function PageHeader({ serviceDescription, showTitle = false, fixed = false }: PageHeaderProps) {
     return (
-        <View>
+        <View fixed={fixed}>
             {showTitle && (
                 <View style={pdfStyles.headerTitle}>
                     <Text style={pdfStyles.title}>OFERTA TÉCNICA ECONÓMICA</Text>

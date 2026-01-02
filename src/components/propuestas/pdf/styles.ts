@@ -9,6 +9,10 @@ export const pdfStyles = StyleSheet.create({
         //padding: 20,
     },
 
+    padding: {
+        paddingTop: 20,
+    },
+
     // Header
     headerTitle: {
         backgroundColor: PDF_COLORS.lightGray,
@@ -63,19 +67,18 @@ export const pdfStyles = StyleSheet.create({
     // Content
     content: {
         padding: 0,
+        paddingBottom: 80, // reserva espacio para footer fijo sin agregar página vacía
         flex: 1,
     },
     twoColumns: {
         flexDirection: 'row',
         gap: 20,
-        height: '100%',
     },
     sidebar: {
         width: 205,
         backgroundColor: PDF_COLORS.cream,
         padding: 15,
         paddingTop: 40,
-        height: '100%',
     },
     sidebarItem: {
         flexDirection: 'row',
@@ -110,6 +113,7 @@ export const pdfStyles = StyleSheet.create({
     mainContent: {
         flex: 1,
         padding: 20,
+        paddingBottom: 40,
     },
     sectionTitle: {
         fontSize: 18,
@@ -128,7 +132,9 @@ export const pdfStyles = StyleSheet.create({
 
     },
     itemsList: {
-        marginTop: 10,
+        // marginTop: 10,
+        // paddingVertical: 20,
+        gap: 8,
     },
     listItem: {
         fontSize: 11,

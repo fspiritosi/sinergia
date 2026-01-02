@@ -234,7 +234,7 @@ export function ServiceForm({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] w-[95vw] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
                         {isEditing ? "Editar Servicio" : "Crear Nuevo Servicio"}
@@ -247,7 +247,8 @@ export function ServiceForm({
                 </DialogHeader>
 
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+                    <div className="max-h-[calc(90vh-140px)] overflow-y-auto pr-1">
+                        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <FormField
                                 control={form.control}
@@ -334,7 +335,7 @@ export function ServiceForm({
                             />
 
                             {isEditing && (
-                                <div className="col-span-2 space-y-3">
+                                <div className="col-span-2 space-y-3  pr-1">
                                     <FormLabel>Items asignados</FormLabel>
                                     {itemsLoading ? (
                                         <div className="space-y-2">
@@ -349,7 +350,7 @@ export function ServiceForm({
                                             {assignedItems.map((item) => (
                                                 <div
                                                     key={item.id}
-                                                    className="flex items-center justify-between rounded-md border border-border px-3 py-2"
+                                                    className="flex items-center justify-between rounded-md border border-border px-3 py-2 max-h-[40vh]"
                                                 >
                                                     <span className="text-sm font-medium">{item.name}</span>
                                                     <Button
@@ -463,7 +464,8 @@ export function ServiceForm({
                                         : "Crear Servicio"}
                             </Button>
                         </DialogFooter>
-                    </form>
+                        </form>
+                    </div>
                 </Form>
             </DialogContent>
         </Dialog>

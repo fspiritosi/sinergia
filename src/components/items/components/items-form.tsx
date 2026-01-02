@@ -200,7 +200,7 @@ export function ItemForm({
     return (
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent className="sm:max-w-[500px]">
+                <DialogContent className="sm:max-w-[500px] max-h-[90%] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>
                             {isEditing ? "Editar Item" : "Crear Nuevo Item"}
