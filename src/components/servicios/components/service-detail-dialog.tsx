@@ -71,7 +71,7 @@ export function ServiceDetailDialog({ open, onOpenChange, servicio, onEdit }: Se
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-xl">
+            <DialogContent className="sm:max-w-xl w-[95vw]  py-8 ">
                 <DialogHeader>
                     <DialogTitle>Detalle del servicio</DialogTitle>
                     <DialogDescription>
@@ -79,7 +79,7 @@ export function ServiceDetailDialog({ open, onOpenChange, servicio, onEdit }: Se
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="space-y-6">
+                <div className="space-y-6  pr-1 max-h-[calc(90vh-140px)] overflow-y-auto">
                     <section className="space-y-3">
                         <div className="flex items-start justify-between gap-4">
                             <div>
@@ -110,7 +110,7 @@ export function ServiceDetailDialog({ open, onOpenChange, servicio, onEdit }: Se
                         </div>
                     </section>
 
-                    <section className="space-y-3">
+                    <section className="space-y-3 ">
                         <div className="flex items-center justify-between">
                             <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                                 Items asignados
