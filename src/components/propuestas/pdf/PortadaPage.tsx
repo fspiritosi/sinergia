@@ -64,14 +64,14 @@ export function PortadaPage({
                         <View style={pdfStyles.titleDivider} />
                         <Text style={pdfStyles.sectionTitle}>DETALLE DEL SERVICIO</Text>
 
-                        <View style={pdfStyles.itemsList}>
+                        <View style={pdfStyles.itemsList} wrap >
                             {items.map((item, index) => (
-                                <View key={item.id}>
-                                    <Text style={pdfStyles.listItem}>
+                                <View key={item.id} wrap={false} minPresenceAhead={50}>
+                                    <Text style={[pdfStyles.listItem, { marginTop: 2 }]}>
                                         • {item.name}
                                     </Text>
                                     {item.description && (
-                                        <View>
+                                        <View wrap={false}>
                                             {item.description.split('/').map((part, partIndex) => (
                                                 <Text key={partIndex} style={[pdfStyles.listItem, { paddingLeft: 5 }]}>
                                                     - {part.trim()}

@@ -32,7 +32,7 @@ export function OfertaEconomicaPage({
               
 
                 {/* Oferta Económica */}
-                <View>
+                <View wrap={true} >
                     <Text style={[pdfStyles.sectionTitle, { textAlign: 'left', marginLeft: 20 }]}>Oferta Económica</Text>
 
                     <View style={pdfStyles.offerContainer}>
