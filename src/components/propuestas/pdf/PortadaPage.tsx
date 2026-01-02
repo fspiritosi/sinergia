@@ -22,6 +22,7 @@ export function PortadaPage({
     servicioDescripcion,
     items,
 }: PortadaPageProps) {
+    const noHyphenation = (word: string) => [word]
     const fechaFormateada = formatDateOnly(vigencia, 'es-AR')
 
     return (
@@ -64,16 +65,20 @@ export function PortadaPage({
                         <View style={pdfStyles.titleDivider} />
                         <Text style={pdfStyles.sectionTitle}>DETALLE DEL SERVICIO</Text>
 
-                        <View style={pdfStyles.itemsList} wrap >
+                        <View style={pdfStyles.itemsList} wrap>
                             {items.map((item, index) => (
-                                <View key={item.id} wrap={false} minPresenceAhead={50}>
-                                    <Text style={[pdfStyles.listItem, { marginTop: 2 }]}>
+                                <View key={item.id} minPresenceAhead={50}>
+                                    <Text style={[pdfStyles.listItem, { marginTop: 2 }]} hyphenationCallback={noHyphenation}>
                                         • {item.name}
                                     </Text>
                                     {item.description && (
-                                        <View wrap={false}>
+                                        <View>
                                             {item.description.split('/').map((part, partIndex) => (
-                                                <Text key={partIndex} style={[pdfStyles.listItem, { paddingLeft: 5 }]}>
+                                                <Text
+                                                    key={partIndex}
+                                                    style={[pdfStyles.listItem, { paddingLeft: 5 }]}
+                                                    hyphenationCallback={noHyphenation}
+                                                >
                                                     - {part.trim()}
                                                 </Text>
                                             ))}
