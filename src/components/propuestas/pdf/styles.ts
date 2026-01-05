@@ -42,8 +42,8 @@ export const pdfStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     logo: {
-        width: 150,
-        height: 150,
+        width: 180,
+        height: 180,
         objectFit: 'contain',
     },
     serviceDescription: {
