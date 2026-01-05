@@ -28,7 +28,9 @@ export function PageHeader({ serviceDescription, showTitle = false, fixed = fals
 
                 <View style={pdfStyles.serviceDescription}>
                     <Text style={pdfStyles.serviceTitle}>Descripción del Servicio:</Text>
-                    <Text style={pdfStyles.serviceText}>{serviceDescription}</Text>
+                    <Text style={pdfStyles.serviceText} hyphenationCallback={(word) => [word]}>
+                        {serviceDescription}
+                    </Text>
                 </View>
             </View>
         </View>
