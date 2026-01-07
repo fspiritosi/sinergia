@@ -19,9 +19,9 @@ export default async function Page({ children }: { children: React.ReactNode }) 
     <SidebarProvider>
       <DashboardTitleProvider>
         <AppSidebar />
-        <SidebarInset>
+        <SidebarInset className="overflow-x-hidden">
           <PageHeader />
-          <div className="h-full w-full p-8">
+          <div className="flex-1 overflow-x-auto p-8">
             {children}
           </div>
         </SidebarInset>
