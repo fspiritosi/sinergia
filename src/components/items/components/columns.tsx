@@ -46,21 +46,21 @@ export const columns: ColumnDef<Item>[] = [
             )
         },
     },
-    {
-        accessorKey: "description",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Descripción" />
-        ),
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
-                    </span>
-                </div>
-            )
-        }
-    },
+    // {
+    //     accessorKey: "description",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Descripción" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         return (
+    //             <div className="flex space-x-2">
+    //                 <span className="max-w-[500px] truncate font-medium">
+    //                     {row.getValue("description")}
+    //                 </span>
+    //             </div>
+    //         )
+    //     }
+    // },
     {
         accessorFn: (row) => (row as any).tipoDeInforme?.name ?? "",
         id: "tipoDeInformeNombre",
