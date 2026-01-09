@@ -77,35 +77,35 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
             )
         },
     },
-    {
-        accessorFn: (row) => row.servicios?.type ?? "",
-        id: "servicioTipo",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Tipo" />
-        ),
-        cell: ({ row }) => {
-            const servicioTipo = row.original.servicios?.type ?? "Sin tipo"
-            return (
-                <div className="text-sm capitalize">
-                    {servicioTipo}
-                </div>
-            )
-        },
-    },
-    {
-        accessorKey: "contacto",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Contacto" />
-        ),
-        cell: ({ row }) => {
-            const contacto = row.original.contacto
-            return (
-                <div className="text-sm">
-                    {contacto || "-"}
-                </div>
-            )
-        },
-    },
+    // {
+    //     accessorFn: (row) => row.servicios?.type ?? "",
+    //     id: "servicioTipo",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Tipo" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         const servicioTipo = row.original.servicios?.type ?? "Sin tipo"
+    //         return (
+    //             <div className="text-sm capitalize">
+    //                 {servicioTipo}
+    //             </div>
+    //         )
+    //     },
+    // },
+    // {
+    //     accessorKey: "contacto",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Contacto" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         const contacto = row.original.contacto
+    //         return (
+    //             <div className="text-sm">
+    //                 {contacto || "-"}
+    //             </div>
+    //         )
+    //     },
+    // },
     {
         id: "status",
         accessorFn: (row) => String(row.status),
@@ -140,40 +140,40 @@ export const columns: ColumnDef<PropuestaTecnica>[] = [
         },
     },
 
-    {
-        id: "valor",
-        accessorFn: (row) => row.valor,
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Valor" />
-        ),
-        cell: ({ row }) => {
-            const valor = row.original.valor
-            const moneda = row.original.moneda ?? "ARS"
+    // {
+    //     id: "valor",
+    //     accessorFn: (row) => row.valor,
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Valor" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         const valor = row.original.valor
+    //         const moneda = row.original.moneda ?? "ARS"
 
-            if (!Number.isFinite(valor)) {
-                return "-"
-            }
+    //         if (!Number.isFinite(valor)) {
+    //             return "-"
+    //         }
 
-            return valor.toLocaleString("es-AR", {
-                style: "currency",
-                currency: moneda,
-            })
-        },
-    },
+    //         return valor.toLocaleString("es-AR", {
+    //             style: "currency",
+    //             currency: moneda,
+    //         })
+    //     },
+    // },
 
-    {
-        accessorKey: "moneda",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Moneda" />
-        ),
-        cell: ({ row }) => {
-            const moneda = row.original.moneda ?? "-"
-            return <Badge variant="outline">{moneda}</Badge>
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id))
-        },
-    },
+    // {
+    //     accessorKey: "moneda",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Moneda" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         const moneda = row.original.moneda ?? "-"
+    //         return <Badge variant="outline">{moneda}</Badge>
+    //     },
+    //     filterFn: (row, id, value) => {
+    //         return value.includes(row.getValue(id))
+    //     },
+    // },
     {
         accessorKey: "createdAt",
         header: ({ column }) => (
