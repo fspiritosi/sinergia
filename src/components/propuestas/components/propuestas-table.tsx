@@ -69,19 +69,19 @@ export function PropuestasTable({ data }: PropuestasTableProps) {
                     title: "Fecha de Creación",
                     options: fechaOptions,
                 },
-                {
-                    columnKey: "moneda",
-                    title: "Moneda",
-                    options: [
-                        { value: "usd", label: "USD" },
-                        { value: "ars", label: "ARS" },
-                    ],
-                },
-                {
-                    columnKey: "servicioTipo",
-                    title: "Tipo",
-                    options: tipoOptions,
-                },
+                // {
+                //     columnKey: "moneda",
+                //     title: "Moneda",
+                //     options: [
+                //         { value: "usd", label: "USD" },
+                //         { value: "ars", label: "ARS" },
+                //     ],
+                // },
+                // {
+                //     columnKey: "servicioTipo",
+                //     title: "Tipo",
+                //     options: tipoOptions,
+                // },
             ]}
         />
     )
