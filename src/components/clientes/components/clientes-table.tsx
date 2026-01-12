@@ -33,8 +33,8 @@ export function ClientesTable({ data }: ClientesTableProps) {
     "name",
     "cuit",
     "email",
-    (c) => c.provincia?.nombre,
-    (c) => c.ciudad?.nombre,
+    // (c) => c.provincia?.nombre,
+    // (c) => c.ciudad?.nombre,
   ]);
 
   return (
@@ -55,32 +55,32 @@ export function ClientesTable({ data }: ClientesTableProps) {
           title: "Fecha de Creación",
           options: fechaOptions,
         },
-        {
-          columnKey: "provinciaNombre",
-          title: "Provincia",
-          options: Array.from(
-            new Set(
-              data
-                .map((c) => c.provincia?.nombre)
-                .filter((v): v is string => !!v)
-            )
-          )
-            .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
-            .map((p) => ({ value: p, label: p })),
-        },
-        {
-          columnKey: "ciudadNombre",
-          title: "Ciudad",
-          options: Array.from(
-            new Set(
-              data
-                .map((c) => c.ciudad?.nombre)
-                .filter((v): v is string => !!v)
-            )
-          )
-            .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
-            .map((p) => ({ value: p, label: p })),
-        },
+        // {
+        //   columnKey: "provinciaNombre",
+        //   title: "Provincia",
+        //   options: Array.from(
+        //     new Set(
+        //       data
+        //         .map((c) => c.provincia?.nombre)
+        //         .filter((v): v is string => !!v)
+        //     )
+        //   )
+        //     .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
+        //     .map((p) => ({ value: p, label: p })),
+        // },
+        // {
+        //   columnKey: "ciudadNombre",
+        //   title: "Ciudad",
+        //   options: Array.from(
+        //     new Set(
+        //       data
+        //         .map((c) => c.ciudad?.nombre)
+        //         .filter((v): v is string => !!v)
+        //     )
+        //   )
+        //     .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
+        //     .map((p) => ({ value: p, label: p })),
+        // },
       ]}
     />
   );
