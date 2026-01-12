@@ -23,6 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
 
 import type { PlanTrabajoWithProgramaciones } from "./actions"
 import {
@@ -86,6 +89,10 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const [ejecutarFile, setEjecutarFile] = useState<File | null>(null)
   const [ejecutarLoading, setEjecutarLoading] = useState(false)
   const [verAdjuntoProgramacionId, setVerAdjuntoProgramacionId] = useState<string | null>(null)
+  const [textoFiltro, setTextoFiltro] = useState("")
+  const [fechaFiltroDia, setFechaFiltroDia] = useState("")
+  const [fechaFiltroMes, setFechaFiltroMes] = useState("")
+  const [estadoFiltro, setEstadoFiltro] = useState<"todos" | "pendiente" | "ejecutado">("todos")
 
   const canProgramar = useMemo(() => {
     return (
@@ -110,6 +117,36 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const programacionConAdjunto = useMemo(() => {
     return plan.programaciones.find((p) => p.id === verAdjuntoProgramacionId) ?? null
   }, [verAdjuntoProgramacionId, plan.programaciones])
+
+  const programacionesFiltradas = useMemo(() => {
+    const texto = textoFiltro.trim().toLowerCase()
+
+    return plan.programaciones.filter((p) => {
+      const ejecutado = Boolean(p.ejecutadoAt) || p.informe?.estado === "entregado"
+      const matchesEstado =
+        estadoFiltro === "todos" ||
+        (estadoFiltro === "ejecutado" ? ejecutado : !ejecutado)
+
+      const fechaProgramadaDate =
+        p.fechaProgramada instanceof Date
+          ? p.fechaProgramada
+          : parseCalendarStringToDate(p.fechaProgramada as string)
+      const fechaProgramadaDia = toDateOnlyString(fechaProgramadaDate)
+      const fechaProgramadaMes = toMonthOnlyString(fechaProgramadaDate)
+
+      const matchesDia = !fechaFiltroDia || fechaProgramadaDia === fechaFiltroDia
+      const matchesMes = !fechaFiltroMes || fechaProgramadaMes === fechaFiltroMes
+
+      const textoBuscado = `${p.item.name} ${p.clientLocation?.name ?? ""}`.toLowerCase()
+      const matchesTexto = !texto || textoBuscado.includes(texto)
+
+      return matchesEstado && matchesDia && matchesMes && matchesTexto
+    })
+  }, [plan.programaciones, estadoFiltro, fechaFiltroDia, fechaFiltroMes, textoFiltro])
+
+  const filtrosActivos = Boolean(
+    textoFiltro.trim() || fechaFiltroDia || fechaFiltroMes || estadoFiltro !== "todos",
+  )
 
   useEffect(() => {
     setTitle(`${plan.cliente.name} - Propuesta ${plan.propuesta.codigo}`)
@@ -287,9 +324,132 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
           <CardDescription>Pendientes y ejecuciones dentro del plan</CardDescription>
         </CardHeader>
         <CardContent>
-          {plan.programaciones.length ? (
+          <div className="space-y-4 mb-4">
+            <div className="grid gap-4 md:grid-cols-4">
+              <div className="md:col-span-2">
+                <Label htmlFor="filtro-texto-programaciones">Buscar item</Label>
+                <Input
+                  id="filtro-texto-programaciones"
+                  placeholder="Nombre del item o locación"
+                  value={textoFiltro}
+                  onChange={(event) => setTextoFiltro(event.target.value)}
+                />
+              </div>
+              <div>
+                <Label>Fecha (día)</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !fechaFiltroDia && "text-muted-foreground",
+                      )}
+                    >
+                      {fechaFiltroDia
+                        ? formatDateOnly(fechaFiltroDia, "es-AR")
+                        : "Seleccioná un día"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0">
+                    <Calendar
+                      mode="single"
+                      captionLayout="dropdown"
+                      selected={fechaFiltroDia ? parseCalendarStringToDate(fechaFiltroDia) : undefined}
+                      onSelect={(date) => {
+                        if (!date) {
+                          setFechaFiltroDia("")
+                          return
+                        }
+                        setFechaFiltroDia(toDateOnlyString(date))
+                      }}
+                      defaultMonth={fechaFiltroDia ? parseCalendarStringToDate(fechaFiltroDia) : undefined}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div>
+                <Label>Mes</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !fechaFiltroMes && "text-muted-foreground",
+                      )}
+                    >
+                      {fechaFiltroMes
+                        ? parseMonthOnlyToLocalNoon(fechaFiltroMes).toLocaleDateString("es-AR", {
+                          year: "numeric",
+                          month: "long",
+                        })
+                        : "Seleccioná un mes"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0">
+                    <Calendar
+                      mode="single"
+                      captionLayout="dropdown"
+                      selected={fechaFiltroMes ? parseMonthOnlyToLocalNoon(fechaFiltroMes) : undefined}
+                      onMonthChange={(date) => {
+                        const monthValue = toMonthOnlyString(date)
+                        setFechaFiltroMes(monthValue)
+                      }}
+                      onSelect={(date) => {
+                        if (!date) {
+                          setFechaFiltroMes("")
+                          return
+                        }
+                        const monthValue = toMonthOnlyString(date)
+                        setFechaFiltroMes(monthValue)
+                      }}
+                      defaultMonth={fechaFiltroMes ? parseMonthOnlyToLocalNoon(fechaFiltroMes) : undefined}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div>
+                <Label>Estado</Label>
+                <Select value={estadoFiltro} onValueChange={(value: "todos" | "pendiente" | "ejecutado") => setEstadoFiltro(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccioná un estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="pendiente">Pendientes</SelectItem>
+                    <SelectItem value="ejecutado">Ejecutados</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex items-center justify-between gap-4 text-xs text-muted-foreground">
+              <span>
+                Mostrando {programacionesFiltradas.length} de {plan.programaciones.length} programaciones
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8"
+                onClick={() => {
+                  setTextoFiltro("")
+                  setFechaFiltroDia("")
+                  setFechaFiltroMes("")
+                  setEstadoFiltro("todos")
+                }}
+                disabled={!filtrosActivos}
+              >
+                Limpiar filtros
+              </Button>
+            </div>
+          </div>
+
+          {programacionesFiltradas.length ? (
             <div className="space-y-2">
-              {plan.programaciones.map((p) => {
+              {programacionesFiltradas.map((p) => {
                 const ejecutado = Boolean(p.ejecutadoAt) || p.informe?.estado === "entregado"
                 const requiereInforme = Boolean(p.item.tipoDeInformeId)
 
@@ -352,7 +512,11 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
               })}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Todavía no hay programaciones para este plan.</p>
+            <p className="text-sm text-muted-foreground">
+              {filtrosActivos
+                ? "No hay programaciones que coincidan con los filtros aplicados."
+                : "Todavía no hay programaciones para este plan."}
+            </p>
           )}
         </CardContent>
       </Card>
