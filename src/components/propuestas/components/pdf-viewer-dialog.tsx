@@ -33,8 +33,6 @@ export function PDFViewerDialog({
 
     // Generar PDF cuando se abre el modal
     useEffect(() => {
-        console.log(open, 'open')
-        console.log(pdfData, 'pdfData')
         if (open && !pdfData) {
             handleGeneratePDF()
         }
