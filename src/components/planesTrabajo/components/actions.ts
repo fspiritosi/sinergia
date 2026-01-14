@@ -16,16 +16,71 @@ import { uploadFileToR2 } from "@/lib/r2-upload";
 export type PlanTrabajoWithProgramaciones = PlanTrabajo & {
   cliente: { id: string; name: string };
   propuesta: { id: string; codigo: string; items: string[]; servicioId: string };
-  propuestaItemsDetalle: { id: string; name: string; tipoDeInformeId: string | null; esPlanificable: boolean }[];
+  propuestaItemsDetalle: {
+    id: string;
+    name: string;
+    tipoDeInformeId: string | null;
+    esPlanificable: boolean;
+    hasVariant: boolean;
+    variantTypeId: string | null;
+    variantType: { id: string; name: string } | null;
+  }[];
   programaciones: (PlanTrabajoProgramacion & {
-    item: { id: string; name: string; tipoDeInformeId: string | null; esPlanificable: boolean };
+    item: {
+      id: string;
+      name: string;
+      tipoDeInformeId: string | null;
+      esPlanificable: boolean;
+      hasVariant: boolean;
+      variantTypeId: string | null;
+      variantType: { id: string; name: string } | null;
+    };
+    detalleVariante: { id: string; name: string; variantTypeId: string; variantType: { id: string; name: string } } | null;
     clientLocation: { id: string; name: string } | null;
     informe: { id: string; estado: string; adjunto: string | null } | null;
   })[];
+  detallesVariante: { id: string; name: string; variantTypeId: string; variantType: { id: string; name: string } }[];
 };
 
 function isValidDate(value: Date): boolean {
   return !Number.isNaN(value.getTime());
+}
+
+async function resolveDetalleVarianteId(params: {
+  item: { hasVariant: boolean; variantTypeId: string | null };
+  detalleVarianteId?: string;
+}): Promise<string | null> {
+  const { item, detalleVarianteId } = params;
+
+  if (!item.hasVariant) {
+    if (detalleVarianteId) {
+      throw new Error("Este item no requiere un detalle de variante");
+    }
+    return null;
+  }
+
+  if (!item.variantTypeId) {
+    throw new Error("El item posee variantes pero no tiene un tipo de variante configurado");
+  }
+
+  if (!detalleVarianteId) {
+    throw new Error("Seleccioná el detalle de variante para este item");
+  }
+
+  const detalle = await prisma.detalleVariante.findUnique({
+    where: { id: detalleVarianteId },
+    select: { id: true, variantTypeId: true, is_active: true },
+  });
+
+  if (!detalle || !detalle.is_active) {
+    throw new Error("El detalle de variante seleccionado no está disponible");
+  }
+
+  if (detalle.variantTypeId !== item.variantTypeId) {
+    throw new Error("El detalle de variante no corresponde al tipo del item");
+  }
+
+  return detalle.id;
 }
 
 function normalizeProgramacionDate(
@@ -199,6 +254,7 @@ export type PlanTrabajoProgramacionCalendarItem = {
   itemId: string;
   itemNombre: string;
   requiereInforme: boolean;
+  detalleVarianteNombre: string | null;
   clientLocationNombre: string | null;
   fechaProgramada: string;
   precision: ProgramacionPrecision;
@@ -234,6 +290,7 @@ export async function getPlanTrabajoProgramacionesByRange(params: {
       },
       item: { select: { id: true, name: true, tipoDeInformeId: true } },
       clientLocation: { select: { name: true } },
+      detalleVariante: { select: { name: true } },
       informe: { select: { estado: true, adjunto: true } },
     },
     orderBy: { fechaProgramada: "asc" },
@@ -242,6 +299,7 @@ export async function getPlanTrabajoProgramacionesByRange(params: {
   return programaciones.map((p) => {
     const ejecutado = Boolean(p.ejecutadoAt) || (p.informe?.estado === "entregado" && Boolean(p.informe?.adjunto));
     const requiereInforme = Boolean(p.item.tipoDeInformeId);
+    const itemNombreBase = p.item.name;
 
     const fechaProgramada =
       p.precision === "mes" ? toMonthOnlyString(p.fechaProgramada) : toDateOnlyString(p.fechaProgramada);
@@ -254,8 +312,9 @@ export async function getPlanTrabajoProgramacionesByRange(params: {
       clienteNombre: p.planTrabajo.cliente.name,
       propuestaCodigo: p.planTrabajo.propuesta.codigo,
       itemId: p.itemId,
-      itemNombre: p.item.name,
+      itemNombre: itemNombreBase,
       requiereInforme,
+      detalleVarianteNombre: p.detalleVariante?.name ?? null,
       clientLocationNombre: p.clientLocation?.name ?? null,
       fechaProgramada,
       precision: p.precision as ProgramacionPrecision,
@@ -272,7 +331,25 @@ export async function getPlanTrabajo(planTrabajoId: string): Promise<PlanTrabajo
       propuesta: { select: { id: true, codigo: true, items: true, servicioId: true } },
       programaciones: {
         include: {
-          item: { select: { id: true, name: true, tipoDeInformeId: true, esPlanificable: true } },
+          item: {
+            select: {
+              id: true,
+              name: true,
+              tipoDeInformeId: true,
+              esPlanificable: true,
+              hasVariant: true,
+              variantTypeId: true,
+              variantType: { select: { id: true, name: true } },
+            },
+          },
+          detalleVariante: {
+            select: {
+              id: true,
+              name: true,
+              variantTypeId: true,
+              variantType: { select: { id: true, name: true } },
+            },
+          },
           clientLocation: { select: { id: true, name: true } },
           informe: { select: { id: true, estado: true, adjunto: true } },
         },
@@ -286,14 +363,50 @@ export async function getPlanTrabajo(planTrabajoId: string): Promise<PlanTrabajo
   const propuestaItemsDetalle = plan.propuesta.items.length
     ? await prisma.items.findMany({
         where: { id: { in: plan.propuesta.items } },
-        select: { id: true, name: true, tipoDeInformeId: true, esPlanificable: true },
+        select: {
+          id: true,
+          name: true,
+          tipoDeInformeId: true,
+          esPlanificable: true,
+          hasVariant: true,
+          variantTypeId: true,
+          variantType: { select: { id: true, name: true } },
+        },
         orderBy: { createdAt: "asc" },
+      })
+    : [];
+
+  const variantTypeIds = Array.from(
+    new Set(
+      propuestaItemsDetalle
+        .filter((item) => item.hasVariant && item.variantTypeId)
+        .map((item) => item.variantTypeId as string),
+    ),
+  );
+
+  const detallesVariante = variantTypeIds.length
+    ? await prisma.detalleVariante.findMany({
+        where: {
+          is_active: true,
+          variantTypeId: { in: variantTypeIds },
+        },
+        select: {
+          id: true,
+          name: true,
+          variantTypeId: true,
+          variantType: { select: { id: true, name: true } },
+        },
+        orderBy: { name: "asc" },
       })
     : [];
 
   await refreshPlanTrabajoEstado(plan.id);
 
-  return { ...(plan as unknown as Omit<PlanTrabajoWithProgramaciones, "propuestaItemsDetalle">), propuestaItemsDetalle };
+  return {
+    ...(plan as unknown as Omit<PlanTrabajoWithProgramaciones, "propuestaItemsDetalle" | "detallesVariante">),
+    propuestaItemsDetalle,
+    detallesVariante,
+  };
 }
 
 export async function getPlanTrabajoByPropuesta(propuestaId: string): Promise<PlanTrabajoWithProgramaciones | null> {
@@ -305,7 +418,25 @@ export async function getPlanTrabajoByPropuesta(propuestaId: string): Promise<Pl
       propuesta: { select: { id: true, codigo: true, items: true, servicioId: true } },
       programaciones: {
         include: {
-          item: { select: { id: true, name: true, tipoDeInformeId: true } },
+          item: {
+            select: {
+              id: true,
+              name: true,
+              tipoDeInformeId: true,
+              esPlanificable: true,
+              hasVariant: true,
+              variantTypeId: true,
+              variantType: { select: { id: true, name: true } },
+            },
+          },
+          detalleVariante: {
+            select: {
+              id: true,
+              name: true,
+              variantTypeId: true,
+              variantType: { select: { id: true, name: true } },
+            },
+          },
           clientLocation: { select: { id: true, name: true } },
           informe: { select: { id: true, estado: true, adjunto: true } },
         },
@@ -319,14 +450,50 @@ export async function getPlanTrabajoByPropuesta(propuestaId: string): Promise<Pl
   const propuestaItemsDetalle = plan.propuesta.items.length
     ? await prisma.items.findMany({
         where: { id: { in: plan.propuesta.items } },
-        select: { id: true, name: true, tipoDeInformeId: true, esPlanificable: true },
+        select: {
+          id: true,
+          name: true,
+          tipoDeInformeId: true,
+          esPlanificable: true,
+          hasVariant: true,
+          variantTypeId: true,
+          variantType: { select: { id: true, name: true } },
+        },
         orderBy: { createdAt: "asc" },
+      })
+    : [];
+
+  const variantTypeIds = Array.from(
+    new Set(
+      propuestaItemsDetalle
+        .filter((item) => item.hasVariant && item.variantTypeId)
+        .map((item) => item.variantTypeId as string),
+    ),
+  );
+
+  const detallesVariante = variantTypeIds.length
+    ? await prisma.detalleVariante.findMany({
+        where: {
+          is_active: true,
+          variantTypeId: { in: variantTypeIds },
+        },
+        select: {
+          id: true,
+          name: true,
+          variantTypeId: true,
+          variantType: { select: { id: true, name: true } },
+        },
+        orderBy: { name: "asc" },
       })
     : [];
 
   await refreshPlanTrabajoEstado(plan.id);
 
-  return { ...(plan as unknown as Omit<PlanTrabajoWithProgramaciones, "propuestaItemsDetalle">), propuestaItemsDetalle };
+  return {
+    ...(plan as unknown as Omit<PlanTrabajoWithProgramaciones, "propuestaItemsDetalle" | "detallesVariante">),
+    propuestaItemsDetalle,
+    detallesVariante,
+  };
 }
 
 export async function createPlanTrabajoProgramacion(params: {
@@ -335,6 +502,7 @@ export async function createPlanTrabajoProgramacion(params: {
   fechaProgramada: string;
   precision: ProgramacionPrecision;
   clientLocationId?: string;
+  detalleVarianteId?: string;
 }) {
   const plan = await prisma.planTrabajo.findUnique({
     where: { id: params.planTrabajoId },
@@ -351,7 +519,13 @@ export async function createPlanTrabajoProgramacion(params: {
 
   const item = await prisma.items.findUnique({
     where: { id: params.itemId },
-    select: { id: true, tipoDeInformeId: true, esPlanificable: true },
+    select: {
+      id: true,
+      tipoDeInformeId: true,
+      esPlanificable: true,
+      hasVariant: true,
+      variantTypeId: true,
+    },
   });
 
   if (!item) throw new Error("Item no encontrado");
@@ -373,6 +547,11 @@ export async function createPlanTrabajoProgramacion(params: {
     }
   }
 
+  const detalleVarianteId = await resolveDetalleVarianteId({
+    item: { hasVariant: item.hasVariant, variantTypeId: item.variantTypeId },
+    detalleVarianteId: params.detalleVarianteId,
+  });
+
   const programacion = await prisma.planTrabajoProgramacion.create({
     data: {
       planTrabajoId: plan.id,
@@ -380,6 +559,7 @@ export async function createPlanTrabajoProgramacion(params: {
       fechaProgramada: fecha,
       precision: params.precision,
       clientLocationId: params.clientLocationId ?? null,
+      detalleVarianteId,
     },
   });
 
@@ -407,6 +587,7 @@ export async function createPlanTrabajoProgramacionesMensuales(params: {
   planTrabajoId: string;
   itemId: string;
   mesInicio: string; // YYYY-MM
+  detalleVarianteId?: string;
 }) {
   const plan = await prisma.planTrabajo.findUnique({
     where: { id: params.planTrabajoId },
@@ -427,7 +608,12 @@ export async function createPlanTrabajoProgramacionesMensuales(params: {
 
   const item = await prisma.items.findUnique({
     where: { id: params.itemId },
-    select: { id: true, tipoDeInformeId: true, esPlanificable: true },
+    select: {
+      id: true,
+      tipoDeInformeId: true,
+      esPlanificable: true,
+      hasVariant: true,
+    },
   });
 
   if (!item) throw new Error("Item no encontrado");
@@ -436,6 +622,9 @@ export async function createPlanTrabajoProgramacionesMensuales(params: {
   }
   if (!item.esPlanificable) {
     throw new Error("El item no es planificable");
+  }
+  if (item.hasVariant) {
+    throw new Error("Los items con variantes no admiten planificación mensual masiva");
   }
 
   const planMonthStart = new Date(plan.fechaInicio.getFullYear(), plan.fechaInicio.getMonth(), 1);

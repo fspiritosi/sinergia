@@ -94,6 +94,16 @@ const data = {
           isActive: false,
         },
         {
+          title: "Tipos de Variantes",
+          url: "/dashboard/tipos-variante",
+          isActive: false,
+        },
+         {
+          title: "Detalle de Variantes",
+          url: "/dashboard/detalles-variante",
+          isActive: false,
+        },
+        {
           title: "Usuarios",
           url: "/dashboard/usuarios",
           isActive: false,

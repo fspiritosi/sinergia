@@ -90,6 +90,11 @@ export type PropuestaTecnica = Prisma.PropuestaTecnicaModel
  */
 export type TipoDeInforme = Prisma.TipoDeInformeModel
 /**
+ * Model TipoDeVariante
+ * 
+ */
+export type TipoDeVariante = Prisma.TipoDeVarianteModel
+/**
  * Model ClientLocations
  * 
  */
@@ -109,3 +114,8 @@ export type PlanTrabajo = Prisma.PlanTrabajoModel
  * 
  */
 export type PlanTrabajoProgramacion = Prisma.PlanTrabajoProgramacionModel
+/**
+ * Model DetalleVariante
+ * 
+ */
+export type DetalleVariante = Prisma.DetalleVarianteModel

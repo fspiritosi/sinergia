@@ -16,14 +16,22 @@ export async function createItem(data: Items) {
         : null;
     const esPlanificable =
       tipoDeInformeId !== null ? true : (data as any).esPlanificable ?? true;
+    const hasVariant = Boolean((data as any).hasVariant);
+    const variantTypeId =
+      hasVariant && (data as any).variantTypeId && (data as any).variantTypeId !== ""
+        ? (data as any).variantTypeId
+        : null;
 
     const cliente: Items = await prisma.items.create({
       data: {
         name: data.name,
         description: data.description,
+        detail: (data as any).detail ?? "",
         is_active: data.is_active,
         tipoDeInformeId,
         esPlanificable,
+        hasVariant,
+        variantTypeId,
       },
     });
 
@@ -154,6 +162,16 @@ export async function updateItem(data: Partial<Items>) {
           : (data as any).esPlanificable === undefined
             ? undefined
             : Boolean((data as any).esPlanificable);
+      const hasVariant =
+        (data as any).hasVariant === undefined ? undefined : Boolean((data as any).hasVariant);
+      const variantTypeId =
+        hasVariant === false
+          ? null
+          : (data as any).variantTypeId && (data as any).variantTypeId !== ""
+            ? (data as any).variantTypeId
+            : hasVariant === true
+              ? null
+              : undefined;
 
       await tx.items.update({
         where: {
@@ -162,9 +180,12 @@ export async function updateItem(data: Partial<Items>) {
         data: {
           ...(data.name !== undefined ? { name: data.name } : {}),
           ...(data.description !== undefined ? { description: data.description } : {}),
+           ...(data.detail !== undefined ? { detail: data.detail } : {}),
           ...(data.is_active !== undefined ? { is_active: data.is_active } : {}),
           ...(tipoDeInformeId !== undefined ? { tipoDeInformeId } : {}),
           ...(esPlanificable !== undefined ? { esPlanificable } : {}),
+          ...(hasVariant !== undefined ? { hasVariant } : {}),
+          ...(variantTypeId !== undefined ? { variantTypeId } : {}),
           updatedAt: new Date().toISOString(),
         },
       });

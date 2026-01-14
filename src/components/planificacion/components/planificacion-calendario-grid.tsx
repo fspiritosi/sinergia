@@ -14,15 +14,17 @@ interface PlanificacionCalendarioGridProps {
   eventos: CalendarioEvento[]
   selected?: Date
   onSelect?: (date: Date | undefined) => void
+  highlightedDates?: Set<string>
 }
 
 const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 
-export function PlanificacionCalendarioGrid({ 
-  fecha, 
-  eventos, 
+export function PlanificacionCalendarioGrid({
+  fecha,
+  eventos,
   selected,
-  onSelect 
+  onSelect,
+  highlightedDates,
 }: PlanificacionCalendarioGridProps) {
   const fechaMoment = moment.tz(fecha, TIMEZONE_ARGENTINA)
   const año = fechaMoment.year()
@@ -146,6 +148,7 @@ export function PlanificacionCalendarioGrid({
         {dias.map((diaInfo, index) => {
           const fechaKey = moment.tz(diaInfo.fecha, TIMEZONE_ARGENTINA).format('YYYY-MM-DD')
           const eventosDelDia = eventosPorFecha.get(fechaKey) ?? []
+          const isHighlighted = highlightedDates?.has(fechaKey)
           
           // Separar eventos por tipo
           const programaciones = eventosDelDia.filter(e => e.tipo === 'programacion')
@@ -160,6 +163,7 @@ export function PlanificacionCalendarioGrid({
                 !diaInfo.esDelMesActual && "bg-muted/50 text-muted-foreground",
                 esHoy(diaInfo.fecha) && "bg-primary/5 ring-2 ring-primary/20",
                 esSeleccionado(diaInfo.fecha) && "ring-2 ring-primary ring-offset-2",
+                isHighlighted && "bg-sinergia/10 ring-1 ring-sinergia/40",
                 "hover:bg-accent/50"
               )}
             >
