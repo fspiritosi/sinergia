@@ -44,17 +44,34 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { getActiveTiposInforme, type TipoDeInforme } from "@/components/tipos-informe/components/actions"
+import { getActiveTiposVariante, type TipoVarianteOption } from "@/components/tipos-variante/components/actions"
 
 
 
 
-const itemSchema = z.object({
-    name: z.string().min(1, "El nombre es requerido"),
-    description: z.string().min(1, "La descripción es requerida"),
-    tipoDeInformeId: z.string().optional(),
-    esPlanificable: z.boolean().default(true),
-    is_active: z.boolean(),
-})
+const itemSchema = z
+    .object({
+        name: z.string().min(1, "El nombre es requerido"),
+        description: z.string().min(1, "La descripción es requerida"),
+        detail: z.string().min(1, "El detalle es requerido"),
+        tipoDeInformeId: z.string().optional(),
+        esPlanificable: z.boolean().default(true),
+        hasVariant: z.boolean().default(false),
+        variantTypeId: z.string().optional(),
+        is_active: z.boolean(),
+    })
+    .refine(
+        (data) => {
+            if (data.hasVariant) {
+                return Boolean(data.variantTypeId)
+            }
+            return true
+        },
+        {
+            message: "Seleccioná un tipo de variante",
+            path: ["variantTypeId"],
+        },
+    )
 
 type ItemFormData = z.infer<typeof itemSchema>
 type ItemFormInput = z.input<typeof itemSchema>
@@ -79,14 +96,20 @@ export function ItemForm({
     const [tiposInforme, setTiposInforme] = useState<TipoDeInforme[]>([])
     const [tiposLoading, setTiposLoading] = useState(false)
     const [tiposError, setTiposError] = useState<string | null>(null)
+    const [tiposVariante, setTiposVariante] = useState<TipoVarianteOption[]>([])
+    const [tiposVarianteLoading, setTiposVarianteLoading] = useState(false)
+    const [tiposVarianteError, setTiposVarianteError] = useState<string | null>(null)
 
     const form = useForm<ItemFormInput, any, ItemFormData>({
         resolver: zodResolver(itemSchema),
         defaultValues: {
             name: "",
             description: "",
+            detail: "",
             tipoDeInformeId: undefined,
             esPlanificable: true,
+            hasVariant: false,
+            variantTypeId: undefined,
             is_active: true,
         },
     })
@@ -106,6 +129,8 @@ export function ItemForm({
                     description: item.description,
                     tipoDeInformeId: (item as any).tipoDeInformeId ?? undefined,
                     esPlanificable: (item as any).esPlanificable ?? true,
+                    hasVariant: item.hasVariant ?? false,
+                    variantTypeId: item.variantTypeId ?? undefined,
                     is_active: item.is_active,
                 } as any)
             } else {
@@ -114,6 +139,8 @@ export function ItemForm({
                     description: "",
                     tipoDeInformeId: undefined,
                     esPlanificable: true,
+                    hasVariant: false,
+                    variantTypeId: undefined,
                     is_active: true,
 
                 })
@@ -127,7 +154,7 @@ export function ItemForm({
         }
     }, [open, item, form])
 
-    // Cargar tipos de informe cuando se abre el modal
+    // Cargar tipos de informe y variantes cuando se abre el modal
     useEffect(() => {
         if (!open) {
             return
@@ -135,25 +162,33 @@ export function ItemForm({
 
         let isMounted = true
 
-        const loadTiposInforme = async () => {
+        const loadData = async () => {
             setTiposLoading(true)
             setTiposError(null)
+            setTiposVarianteLoading(true)
+            setTiposVarianteError(null)
 
             try {
-                const tipos = await getActiveTiposInforme()
+                const [tiposInformeResult, tiposVarianteResult] = await Promise.all([
+                    getActiveTiposInforme(),
+                    getActiveTiposVariante(),
+                ])
                 if (!isMounted) return
-                setTiposInforme(tipos)
+                setTiposInforme(tiposInformeResult)
+                setTiposVariante(tiposVarianteResult)
             } catch (error) {
-                console.error("Error al cargar tipos de informe:", error)
+                console.error("Error al cargar datos de item:", error)
                 if (!isMounted) return
                 setTiposError("No se pudieron cargar los tipos de informe.")
+                setTiposVarianteError("No se pudieron cargar los tipos de variante.")
             } finally {
                 if (!isMounted) return
                 setTiposLoading(false)
+                setTiposVarianteLoading(false)
             }
         }
 
-        void loadTiposInforme()
+        void loadData()
 
         return () => {
             isMounted = false
@@ -245,6 +280,20 @@ export function ItemForm({
 
                                 <FormField
                                     control={form.control}
+                                    name="detail"
+                                    render={({ field }) => (
+                                        <FormItem className="col-span-2">
+                                            <FormLabel>Detalle *</FormLabel>
+                                            <FormControl>
+                                                <Textarea placeholder="Detalle del item" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
                                     name="tipoDeInformeId"
                                     render={({ field }) => (
                                         <FormItem className="col-span-2">
@@ -281,7 +330,6 @@ export function ItemForm({
                                         </FormItem>
                                     )}
                                 />
-
                                 <FormField
                                     control={form.control}
                                     name="esPlanificable"
@@ -308,6 +356,74 @@ export function ItemForm({
                                                         disabled={tieneInforme}
                                                     />
                                                 </FormControl>
+                                            </FormItem>
+                                        )
+                                    }}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="hasVariant"
+                                    render={({ field }) => {
+                                        const checked = field.value
+                                        return (
+                                            <FormItem className="col-span-2 flex flex-col gap-3 rounded-lg border p-3">
+                                                <div className="flex w-full flex-row items-center justify-between">
+                                                    <div className="space-y-0.5">
+                                                        <FormLabel>Posee variantes</FormLabel>
+                                                        <div className="text-sm text-muted-foreground">
+                                                            Habilita la selección de un tipo de variante.
+                                                        </div>
+                                                    </div>
+                                                    <FormControl>
+                                                        <Switch
+                                                            checked={checked}
+                                                            onCheckedChange={(checkedValue) => {
+                                                                field.onChange(checkedValue)
+                                                                if (!checkedValue) {
+                                                                    form.setValue("variantTypeId", undefined, { shouldDirty: true })
+                                                                }
+                                                            }}
+                                                        />
+                                                    </FormControl>
+                                                </div>
+                                                {checked ? (
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="variantTypeId"
+                                                        render={({ field: variantField }) => (
+                                                            <FormItem className="col-span-2">
+                                                                <FormLabel>Tipo de Variante *</FormLabel>
+                                                                <FormControl className="w-full">
+                                                                    <Select
+                                                                        value={variantField.value ?? undefined}
+                                                                        onValueChange={(value) => variantField.onChange(value)}
+                                                                        disabled={tiposVarianteLoading || !!tiposVarianteError}
+                                                                    >
+                                                                        <SelectTrigger>
+                                                                            <SelectValue
+                                                                                placeholder={
+                                                                                    tiposVarianteLoading
+                                                                                        ? "Cargando tipos de variante..."
+                                                                                        : "Seleccioná un tipo de variante"
+                                                                                }
+                                                                            />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            {tiposVariante.map((tipo) => (
+                                                                                <SelectItem key={tipo.id} value={tipo.id}>
+                                                                                    {tipo.name}
+                                                                                </SelectItem>
+                                                                            ))}
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                ) : null}
+                                                <FormMessage />
                                             </FormItem>
                                         )
                                     }}

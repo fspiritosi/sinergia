@@ -39,6 +39,7 @@ import type { PropuestaTecnica } from "./actions"
 import { parseDateOnlyToLocalNoon, toDateOnlyString } from "@/lib/dates"
 import { Badge } from "@/components/ui/badge"
 import { CONDICIONES_PARTICULARES } from "@/lib/pdf-constants"
+import { Loader2 } from "lucide-react"
 
 
 
@@ -423,7 +424,7 @@ export function PropuestaForm({
             setItemsError(null)
             setItemsLoading(false)
             if (form.getValues("items").length) {
-                form.setValue("items", [], { shouldDirty: true, shouldValidate: true })
+                form.setValue("items", [], { shouldDirty: false, shouldValidate: true })
             }
             return
         }
@@ -747,7 +748,10 @@ export function PropuestaForm({
                                                             Seleccioná un servicio para ver sus items disponibles.
                                                         </p>
                                                     ) : itemsLoading ? (
-                                                        <p className="text-sm text-muted-foreground">Cargando items...</p>
+                                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                                            Cargando items...
+                                                        </div>
                                                     ) : itemsError ? (
                                                         <p className="text-sm text-destructive">{itemsError}</p>
                                                     ) : servicioItems.length ? (
@@ -794,7 +798,14 @@ export function PropuestaForm({
                                                     )}
                                                 </div>
                                             </FormControl>
-                                            <FormMessage />
+                                            {itemsLoading ? (
+                                                <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                    Cargando items del servicio seleccionado...
+                                                </p>
+                                            ) : (
+                                                <FormMessage />
+                                            )}
                                         </FormItem>
                                     )
                                 }}

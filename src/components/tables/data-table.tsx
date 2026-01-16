@@ -61,6 +61,11 @@ export function DataTable<TData, TValue>({
     )
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [globalFilter, setGlobalFilter] = React.useState("")
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    })
+
 
     const table = useReactTable({
         data,
@@ -71,6 +76,7 @@ export function DataTable<TData, TValue>({
             rowSelection,
             columnFilters,
             globalFilter,
+            pagination,
         },
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
@@ -78,6 +84,12 @@ export function DataTable<TData, TValue>({
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
         onGlobalFilterChange: setGlobalFilter,
+        onPaginationChange: (updater) => {
+            setPagination((prev) => {
+                const newPagination = typeof updater === 'function' ? updater(prev) : updater
+                return newPagination
+            })
+        },
         globalFilterFn: customSearchFilter ? (row, columnId, filterValue) => {
             return customSearchFilter(row.original, filterValue)
         } : undefined,
@@ -148,7 +160,12 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} />
+            <DataTablePagination 
+                table={table}
+                pageIndex={pagination.pageIndex}
+                pageSize={pagination.pageSize}
+                pageCount={table.getPageCount()}
+            />
         </div>
     )
 }

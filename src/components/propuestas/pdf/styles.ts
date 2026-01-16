@@ -4,16 +4,51 @@ import { PDF_COLORS } from '@/lib/pdf-constants'
 export const pdfStyles = StyleSheet.create({
     page: {
         flexDirection: 'column',
-        //backgroundColor: PDF_COLORS.white,
-         backgroundColor: PDF_COLORS.lightGray,
-        //padding: 20,
+        backgroundColor: PDF_COLORS.lightGray,
     },
 
     padding: {
         paddingTop: 20,
     },
 
+    // ==========================================
+    // PORTADA PAGE - Estructura específica
+    // ==========================================
+    portadaPage: {
+        flexDirection: 'column',
+        backgroundColor: PDF_COLORS.lightGray,
+    },
+    portadaBody: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    portadaLeftColumn: {
+        width: 205,
+        flexDirection: 'column',
+    },
+    portadaLogoSection: {
+        flexDirection: 'row',
+        minHeight: 180,
+    },
+    portadaSidebar: {
+        width: 205,
+        backgroundColor: PDF_COLORS.cream,
+        padding: 15,
+        paddingTop: 20,
+    },
+    portadaRightColumn: {
+        flex: 1,
+        flexDirection: 'column',
+    },
+    portadaMainContent: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: PDF_COLORS.lightGray,
+    },
+
+    // ==========================================
     // Header
+    // ==========================================
     headerTitle: {
         backgroundColor: PDF_COLORS.lightGray,
         padding: 20,
@@ -29,6 +64,7 @@ export const pdfStyles = StyleSheet.create({
     },
     headerContent: {
         flexDirection: 'row',
+        minHeight: 180,
     },
     verticalBar: {
         width: 25,
@@ -40,10 +76,11 @@ export const pdfStyles = StyleSheet.create({
         padding: 15,
         alignItems: 'center',
         justifyContent: 'center',
+        minHeight: 180,
     },
     logo: {
-        width: 150,
-        height: 150,
+        width: 180,
+        height: 180,
         objectFit: 'contain',
     },
     serviceDescription: {
@@ -51,6 +88,14 @@ export const pdfStyles = StyleSheet.create({
         backgroundColor: PDF_COLORS.darkGray,
         padding: 15,
         justifyContent: 'center',
+        minHeight: 180,
+    },
+    // Para la portada - altura mínima que coincide con el logo
+    portadaServiceDescription: {
+        backgroundColor: PDF_COLORS.darkGray,
+        padding: 15,
+        justifyContent: 'center',
+        minHeight: 180,
     },
     serviceTitle: {
         fontSize: 22,
@@ -64,21 +109,24 @@ export const pdfStyles = StyleSheet.create({
         color: PDF_COLORS.textDarkBlue,
     },
 
-    // Content
+    // ==========================================
+    // Content (para otras páginas)
+    // ==========================================
     content: {
         padding: 0,
-        paddingBottom: 80, // reserva espacio para footer fijo sin agregar página vacía
+        paddingBottom: 80,
         flex: 1,
     },
     twoColumns: {
         flexDirection: 'row',
-        gap: 20,
+        flex: 1,
     },
     sidebar: {
         width: 205,
         backgroundColor: PDF_COLORS.cream,
         padding: 15,
         paddingTop: 40,
+        minHeight: '100%',
     },
     sidebarItem: {
         flexDirection: 'row',

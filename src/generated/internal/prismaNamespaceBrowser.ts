@@ -58,10 +58,12 @@ export const ModelName = {
   ItemsOnServicios: 'ItemsOnServicios',
   PropuestaTecnica: 'PropuestaTecnica',
   TipoDeInforme: 'TipoDeInforme',
+  TipoDeVariante: 'TipoDeVariante',
   ClientLocations: 'ClientLocations',
   Informe: 'Informe',
   PlanTrabajo: 'PlanTrabajo',
-  PlanTrabajoProgramacion: 'PlanTrabajoProgramacion'
+  PlanTrabajoProgramacion: 'PlanTrabajoProgramacion',
+  DetalleVariante: 'DetalleVariante'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -139,8 +141,11 @@ export const ItemsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  detail: 'detail',
   is_active: 'is_active',
   esPlanificable: 'esPlanificable',
+  hasVariant: 'hasVariant',
+  variantTypeId: 'variantTypeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   tipoDeInformeId: 'tipoDeInformeId'
@@ -188,6 +193,18 @@ export const TipoDeInformeScalarFieldEnum = {
 } as const
 
 export type TipoDeInformeScalarFieldEnum = (typeof TipoDeInformeScalarFieldEnum)[keyof typeof TipoDeInformeScalarFieldEnum]
+
+
+export const TipoDeVarianteScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  is_active: 'is_active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TipoDeVarianteScalarFieldEnum = (typeof TipoDeVarianteScalarFieldEnum)[keyof typeof TipoDeVarianteScalarFieldEnum]
 
 
 export const ClientLocationsScalarFieldEnum = {
@@ -245,11 +262,25 @@ export const PlanTrabajoProgramacionScalarFieldEnum = {
   clientLocationId: 'clientLocationId',
   ejecutadoAt: 'ejecutadoAt',
   adjunto: 'adjunto',
+  detalleVarianteId: 'detalleVarianteId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type PlanTrabajoProgramacionScalarFieldEnum = (typeof PlanTrabajoProgramacionScalarFieldEnum)[keyof typeof PlanTrabajoProgramacionScalarFieldEnum]
+
+
+export const DetalleVarianteScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  is_active: 'is_active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  variantTypeId: 'variantTypeId'
+} as const
+
+export type DetalleVarianteScalarFieldEnum = (typeof DetalleVarianteScalarFieldEnum)[keyof typeof DetalleVarianteScalarFieldEnum]
 
 
 export const SortOrder = {

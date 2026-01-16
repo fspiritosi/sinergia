@@ -33,6 +33,7 @@ export type PlanTrabajoProgramacionMinAggregateOutputType = {
   clientLocationId: string | null
   ejecutadoAt: Date | null
   adjunto: string | null
+  detalleVarianteId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +47,7 @@ export type PlanTrabajoProgramacionMaxAggregateOutputType = {
   clientLocationId: string | null
   ejecutadoAt: Date | null
   adjunto: string | null
+  detalleVarianteId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,6 +61,7 @@ export type PlanTrabajoProgramacionCountAggregateOutputType = {
   clientLocationId: number
   ejecutadoAt: number
   adjunto: number
+  detalleVarianteId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -74,6 +77,7 @@ export type PlanTrabajoProgramacionMinAggregateInputType = {
   clientLocationId?: true
   ejecutadoAt?: true
   adjunto?: true
+  detalleVarianteId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,6 +91,7 @@ export type PlanTrabajoProgramacionMaxAggregateInputType = {
   clientLocationId?: true
   ejecutadoAt?: true
   adjunto?: true
+  detalleVarianteId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +105,7 @@ export type PlanTrabajoProgramacionCountAggregateInputType = {
   clientLocationId?: true
   ejecutadoAt?: true
   adjunto?: true
+  detalleVarianteId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -186,6 +192,7 @@ export type PlanTrabajoProgramacionGroupByOutputType = {
   clientLocationId: string | null
   ejecutadoAt: Date | null
   adjunto: string | null
+  detalleVarianteId: string | null
   createdAt: Date
   updatedAt: Date
   _count: PlanTrabajoProgramacionCountAggregateOutputType | null
@@ -220,12 +227,14 @@ export type PlanTrabajoProgramacionWhereInput = {
   clientLocationId?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
   ejecutadoAt?: Prisma.DateTimeNullableFilter<"PlanTrabajoProgramacion"> | Date | string | null
   adjunto?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
+  detalleVarianteId?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PlanTrabajoProgramacion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PlanTrabajoProgramacion"> | Date | string
   planTrabajo?: Prisma.XOR<Prisma.PlanTrabajoScalarRelationFilter, Prisma.PlanTrabajoWhereInput>
   item?: Prisma.XOR<Prisma.ItemsScalarRelationFilter, Prisma.ItemsWhereInput>
   clientLocation?: Prisma.XOR<Prisma.ClientLocationsNullableScalarRelationFilter, Prisma.ClientLocationsWhereInput> | null
   informe?: Prisma.XOR<Prisma.InformeNullableScalarRelationFilter, Prisma.InformeWhereInput> | null
+  detalleVariante?: Prisma.XOR<Prisma.DetalleVarianteNullableScalarRelationFilter, Prisma.DetalleVarianteWhereInput> | null
 }
 
 export type PlanTrabajoProgramacionOrderByWithRelationInput = {
@@ -237,12 +246,14 @@ export type PlanTrabajoProgramacionOrderByWithRelationInput = {
   clientLocationId?: Prisma.SortOrderInput | Prisma.SortOrder
   ejecutadoAt?: Prisma.SortOrderInput | Prisma.SortOrder
   adjunto?: Prisma.SortOrderInput | Prisma.SortOrder
+  detalleVarianteId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   planTrabajo?: Prisma.PlanTrabajoOrderByWithRelationInput
   item?: Prisma.ItemsOrderByWithRelationInput
   clientLocation?: Prisma.ClientLocationsOrderByWithRelationInput
   informe?: Prisma.InformeOrderByWithRelationInput
+  detalleVariante?: Prisma.DetalleVarianteOrderByWithRelationInput
 }
 
 export type PlanTrabajoProgramacionWhereUniqueInput = Prisma.AtLeast<{
@@ -257,12 +268,14 @@ export type PlanTrabajoProgramacionWhereUniqueInput = Prisma.AtLeast<{
   clientLocationId?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
   ejecutadoAt?: Prisma.DateTimeNullableFilter<"PlanTrabajoProgramacion"> | Date | string | null
   adjunto?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
+  detalleVarianteId?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PlanTrabajoProgramacion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PlanTrabajoProgramacion"> | Date | string
   planTrabajo?: Prisma.XOR<Prisma.PlanTrabajoScalarRelationFilter, Prisma.PlanTrabajoWhereInput>
   item?: Prisma.XOR<Prisma.ItemsScalarRelationFilter, Prisma.ItemsWhereInput>
   clientLocation?: Prisma.XOR<Prisma.ClientLocationsNullableScalarRelationFilter, Prisma.ClientLocationsWhereInput> | null
   informe?: Prisma.XOR<Prisma.InformeNullableScalarRelationFilter, Prisma.InformeWhereInput> | null
+  detalleVariante?: Prisma.XOR<Prisma.DetalleVarianteNullableScalarRelationFilter, Prisma.DetalleVarianteWhereInput> | null
 }, "id">
 
 export type PlanTrabajoProgramacionOrderByWithAggregationInput = {
@@ -274,6 +287,7 @@ export type PlanTrabajoProgramacionOrderByWithAggregationInput = {
   clientLocationId?: Prisma.SortOrderInput | Prisma.SortOrder
   ejecutadoAt?: Prisma.SortOrderInput | Prisma.SortOrder
   adjunto?: Prisma.SortOrderInput | Prisma.SortOrder
+  detalleVarianteId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PlanTrabajoProgramacionCountOrderByAggregateInput
@@ -293,6 +307,7 @@ export type PlanTrabajoProgramacionScalarWhereWithAggregatesInput = {
   clientLocationId?: Prisma.StringNullableWithAggregatesFilter<"PlanTrabajoProgramacion"> | string | null
   ejecutadoAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PlanTrabajoProgramacion"> | Date | string | null
   adjunto?: Prisma.StringNullableWithAggregatesFilter<"PlanTrabajoProgramacion"> | string | null
+  detalleVarianteId?: Prisma.StringNullableWithAggregatesFilter<"PlanTrabajoProgramacion"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PlanTrabajoProgramacion"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PlanTrabajoProgramacion"> | Date | string
 }
@@ -309,6 +324,7 @@ export type PlanTrabajoProgramacionCreateInput = {
   item: Prisma.ItemsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
   clientLocation?: Prisma.ClientLocationsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
   informe?: Prisma.InformeCreateNestedOneWithoutPlanTrabajoProgramacionInput
+  detalleVariante?: Prisma.DetalleVarianteCreateNestedOneWithoutPlanTrabajoProgramacionesInput
 }
 
 export type PlanTrabajoProgramacionUncheckedCreateInput = {
@@ -320,6 +336,7 @@ export type PlanTrabajoProgramacionUncheckedCreateInput = {
   clientLocationId?: string | null
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   informe?: Prisma.InformeUncheckedCreateNestedOneWithoutPlanTrabajoProgramacionInput
@@ -337,6 +354,7 @@ export type PlanTrabajoProgramacionUpdateInput = {
   item?: Prisma.ItemsUpdateOneRequiredWithoutPlanesTrabajoProgramacionesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneWithoutPlanesTrabajoProgramacionesNestedInput
   informe?: Prisma.InformeUpdateOneWithoutPlanTrabajoProgramacionNestedInput
+  detalleVariante?: Prisma.DetalleVarianteUpdateOneWithoutPlanTrabajoProgramacionesNestedInput
 }
 
 export type PlanTrabajoProgramacionUncheckedUpdateInput = {
@@ -348,6 +366,7 @@ export type PlanTrabajoProgramacionUncheckedUpdateInput = {
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   informe?: Prisma.InformeUncheckedUpdateOneWithoutPlanTrabajoProgramacionNestedInput
@@ -362,6 +381,7 @@ export type PlanTrabajoProgramacionCreateManyInput = {
   clientLocationId?: string | null
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -385,6 +405,7 @@ export type PlanTrabajoProgramacionUncheckedUpdateManyInput = {
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -413,6 +434,7 @@ export type PlanTrabajoProgramacionCountOrderByAggregateInput = {
   clientLocationId?: Prisma.SortOrder
   ejecutadoAt?: Prisma.SortOrder
   adjunto?: Prisma.SortOrder
+  detalleVarianteId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -426,6 +448,7 @@ export type PlanTrabajoProgramacionMaxOrderByAggregateInput = {
   clientLocationId?: Prisma.SortOrder
   ejecutadoAt?: Prisma.SortOrder
   adjunto?: Prisma.SortOrder
+  detalleVarianteId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -439,6 +462,7 @@ export type PlanTrabajoProgramacionMinOrderByAggregateInput = {
   clientLocationId?: Prisma.SortOrder
   ejecutadoAt?: Prisma.SortOrder
   adjunto?: Prisma.SortOrder
+  detalleVarianteId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -589,6 +613,48 @@ export type EnumProgramacionPrecisionFieldUpdateOperationsInput = {
   set?: $Enums.ProgramacionPrecision
 }
 
+export type PlanTrabajoProgramacionCreateNestedManyWithoutDetalleVarianteInput = {
+  create?: Prisma.XOR<Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput, Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput> | Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput[] | Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput[]
+  connectOrCreate?: Prisma.PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput[]
+  createMany?: Prisma.PlanTrabajoProgramacionCreateManyDetalleVarianteInputEnvelope
+  connect?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+}
+
+export type PlanTrabajoProgramacionUncheckedCreateNestedManyWithoutDetalleVarianteInput = {
+  create?: Prisma.XOR<Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput, Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput> | Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput[] | Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput[]
+  connectOrCreate?: Prisma.PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput[]
+  createMany?: Prisma.PlanTrabajoProgramacionCreateManyDetalleVarianteInputEnvelope
+  connect?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+}
+
+export type PlanTrabajoProgramacionUpdateManyWithoutDetalleVarianteNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput, Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput> | Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput[] | Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput[]
+  connectOrCreate?: Prisma.PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput[]
+  upsert?: Prisma.PlanTrabajoProgramacionUpsertWithWhereUniqueWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionUpsertWithWhereUniqueWithoutDetalleVarianteInput[]
+  createMany?: Prisma.PlanTrabajoProgramacionCreateManyDetalleVarianteInputEnvelope
+  set?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+  disconnect?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+  delete?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+  connect?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+  update?: Prisma.PlanTrabajoProgramacionUpdateWithWhereUniqueWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionUpdateWithWhereUniqueWithoutDetalleVarianteInput[]
+  updateMany?: Prisma.PlanTrabajoProgramacionUpdateManyWithWhereWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionUpdateManyWithWhereWithoutDetalleVarianteInput[]
+  deleteMany?: Prisma.PlanTrabajoProgramacionScalarWhereInput | Prisma.PlanTrabajoProgramacionScalarWhereInput[]
+}
+
+export type PlanTrabajoProgramacionUncheckedUpdateManyWithoutDetalleVarianteNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput, Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput> | Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput[] | Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput[]
+  connectOrCreate?: Prisma.PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput[]
+  upsert?: Prisma.PlanTrabajoProgramacionUpsertWithWhereUniqueWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionUpsertWithWhereUniqueWithoutDetalleVarianteInput[]
+  createMany?: Prisma.PlanTrabajoProgramacionCreateManyDetalleVarianteInputEnvelope
+  set?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+  disconnect?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+  delete?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+  connect?: Prisma.PlanTrabajoProgramacionWhereUniqueInput | Prisma.PlanTrabajoProgramacionWhereUniqueInput[]
+  update?: Prisma.PlanTrabajoProgramacionUpdateWithWhereUniqueWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionUpdateWithWhereUniqueWithoutDetalleVarianteInput[]
+  updateMany?: Prisma.PlanTrabajoProgramacionUpdateManyWithWhereWithoutDetalleVarianteInput | Prisma.PlanTrabajoProgramacionUpdateManyWithWhereWithoutDetalleVarianteInput[]
+  deleteMany?: Prisma.PlanTrabajoProgramacionScalarWhereInput | Prisma.PlanTrabajoProgramacionScalarWhereInput[]
+}
+
 export type PlanTrabajoProgramacionCreateWithoutItemInput = {
   id?: string
   fechaProgramada: Date | string
@@ -600,6 +666,7 @@ export type PlanTrabajoProgramacionCreateWithoutItemInput = {
   planTrabajo: Prisma.PlanTrabajoCreateNestedOneWithoutProgramacionesInput
   clientLocation?: Prisma.ClientLocationsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
   informe?: Prisma.InformeCreateNestedOneWithoutPlanTrabajoProgramacionInput
+  detalleVariante?: Prisma.DetalleVarianteCreateNestedOneWithoutPlanTrabajoProgramacionesInput
 }
 
 export type PlanTrabajoProgramacionUncheckedCreateWithoutItemInput = {
@@ -610,6 +677,7 @@ export type PlanTrabajoProgramacionUncheckedCreateWithoutItemInput = {
   clientLocationId?: string | null
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   informe?: Prisma.InformeUncheckedCreateNestedOneWithoutPlanTrabajoProgramacionInput
@@ -653,6 +721,7 @@ export type PlanTrabajoProgramacionScalarWhereInput = {
   clientLocationId?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
   ejecutadoAt?: Prisma.DateTimeNullableFilter<"PlanTrabajoProgramacion"> | Date | string | null
   adjunto?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
+  detalleVarianteId?: Prisma.StringNullableFilter<"PlanTrabajoProgramacion"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PlanTrabajoProgramacion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PlanTrabajoProgramacion"> | Date | string
 }
@@ -668,6 +737,7 @@ export type PlanTrabajoProgramacionCreateWithoutClientLocationInput = {
   planTrabajo: Prisma.PlanTrabajoCreateNestedOneWithoutProgramacionesInput
   item: Prisma.ItemsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
   informe?: Prisma.InformeCreateNestedOneWithoutPlanTrabajoProgramacionInput
+  detalleVariante?: Prisma.DetalleVarianteCreateNestedOneWithoutPlanTrabajoProgramacionesInput
 }
 
 export type PlanTrabajoProgramacionUncheckedCreateWithoutClientLocationInput = {
@@ -678,6 +748,7 @@ export type PlanTrabajoProgramacionUncheckedCreateWithoutClientLocationInput = {
   precision?: $Enums.ProgramacionPrecision
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   informe?: Prisma.InformeUncheckedCreateNestedOneWithoutPlanTrabajoProgramacionInput
@@ -720,6 +791,7 @@ export type PlanTrabajoProgramacionCreateWithoutInformeInput = {
   planTrabajo: Prisma.PlanTrabajoCreateNestedOneWithoutProgramacionesInput
   item: Prisma.ItemsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
   clientLocation?: Prisma.ClientLocationsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
+  detalleVariante?: Prisma.DetalleVarianteCreateNestedOneWithoutPlanTrabajoProgramacionesInput
 }
 
 export type PlanTrabajoProgramacionUncheckedCreateWithoutInformeInput = {
@@ -731,6 +803,7 @@ export type PlanTrabajoProgramacionUncheckedCreateWithoutInformeInput = {
   clientLocationId?: string | null
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -762,6 +835,7 @@ export type PlanTrabajoProgramacionUpdateWithoutInformeInput = {
   planTrabajo?: Prisma.PlanTrabajoUpdateOneRequiredWithoutProgramacionesNestedInput
   item?: Prisma.ItemsUpdateOneRequiredWithoutPlanesTrabajoProgramacionesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneWithoutPlanesTrabajoProgramacionesNestedInput
+  detalleVariante?: Prisma.DetalleVarianteUpdateOneWithoutPlanTrabajoProgramacionesNestedInput
 }
 
 export type PlanTrabajoProgramacionUncheckedUpdateWithoutInformeInput = {
@@ -773,6 +847,7 @@ export type PlanTrabajoProgramacionUncheckedUpdateWithoutInformeInput = {
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -788,6 +863,7 @@ export type PlanTrabajoProgramacionCreateWithoutPlanTrabajoInput = {
   item: Prisma.ItemsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
   clientLocation?: Prisma.ClientLocationsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
   informe?: Prisma.InformeCreateNestedOneWithoutPlanTrabajoProgramacionInput
+  detalleVariante?: Prisma.DetalleVarianteCreateNestedOneWithoutPlanTrabajoProgramacionesInput
 }
 
 export type PlanTrabajoProgramacionUncheckedCreateWithoutPlanTrabajoInput = {
@@ -798,6 +874,7 @@ export type PlanTrabajoProgramacionUncheckedCreateWithoutPlanTrabajoInput = {
   clientLocationId?: string | null
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   informe?: Prisma.InformeUncheckedCreateNestedOneWithoutPlanTrabajoProgramacionInput
@@ -829,6 +906,60 @@ export type PlanTrabajoProgramacionUpdateManyWithWhereWithoutPlanTrabajoInput = 
   data: Prisma.XOR<Prisma.PlanTrabajoProgramacionUpdateManyMutationInput, Prisma.PlanTrabajoProgramacionUncheckedUpdateManyWithoutPlanTrabajoInput>
 }
 
+export type PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput = {
+  id?: string
+  fechaProgramada: Date | string
+  precision?: $Enums.ProgramacionPrecision
+  ejecutadoAt?: Date | string | null
+  adjunto?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  planTrabajo: Prisma.PlanTrabajoCreateNestedOneWithoutProgramacionesInput
+  item: Prisma.ItemsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
+  clientLocation?: Prisma.ClientLocationsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput
+  informe?: Prisma.InformeCreateNestedOneWithoutPlanTrabajoProgramacionInput
+}
+
+export type PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput = {
+  id?: string
+  planTrabajoId: string
+  itemId: string
+  fechaProgramada: Date | string
+  precision?: $Enums.ProgramacionPrecision
+  clientLocationId?: string | null
+  ejecutadoAt?: Date | string | null
+  adjunto?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  informe?: Prisma.InformeUncheckedCreateNestedOneWithoutPlanTrabajoProgramacionInput
+}
+
+export type PlanTrabajoProgramacionCreateOrConnectWithoutDetalleVarianteInput = {
+  where: Prisma.PlanTrabajoProgramacionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput, Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput>
+}
+
+export type PlanTrabajoProgramacionCreateManyDetalleVarianteInputEnvelope = {
+  data: Prisma.PlanTrabajoProgramacionCreateManyDetalleVarianteInput | Prisma.PlanTrabajoProgramacionCreateManyDetalleVarianteInput[]
+  skipDuplicates?: boolean
+}
+
+export type PlanTrabajoProgramacionUpsertWithWhereUniqueWithoutDetalleVarianteInput = {
+  where: Prisma.PlanTrabajoProgramacionWhereUniqueInput
+  update: Prisma.XOR<Prisma.PlanTrabajoProgramacionUpdateWithoutDetalleVarianteInput, Prisma.PlanTrabajoProgramacionUncheckedUpdateWithoutDetalleVarianteInput>
+  create: Prisma.XOR<Prisma.PlanTrabajoProgramacionCreateWithoutDetalleVarianteInput, Prisma.PlanTrabajoProgramacionUncheckedCreateWithoutDetalleVarianteInput>
+}
+
+export type PlanTrabajoProgramacionUpdateWithWhereUniqueWithoutDetalleVarianteInput = {
+  where: Prisma.PlanTrabajoProgramacionWhereUniqueInput
+  data: Prisma.XOR<Prisma.PlanTrabajoProgramacionUpdateWithoutDetalleVarianteInput, Prisma.PlanTrabajoProgramacionUncheckedUpdateWithoutDetalleVarianteInput>
+}
+
+export type PlanTrabajoProgramacionUpdateManyWithWhereWithoutDetalleVarianteInput = {
+  where: Prisma.PlanTrabajoProgramacionScalarWhereInput
+  data: Prisma.XOR<Prisma.PlanTrabajoProgramacionUpdateManyMutationInput, Prisma.PlanTrabajoProgramacionUncheckedUpdateManyWithoutDetalleVarianteInput>
+}
+
 export type PlanTrabajoProgramacionCreateManyItemInput = {
   id?: string
   planTrabajoId: string
@@ -837,6 +968,7 @@ export type PlanTrabajoProgramacionCreateManyItemInput = {
   clientLocationId?: string | null
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -852,6 +984,7 @@ export type PlanTrabajoProgramacionUpdateWithoutItemInput = {
   planTrabajo?: Prisma.PlanTrabajoUpdateOneRequiredWithoutProgramacionesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneWithoutPlanesTrabajoProgramacionesNestedInput
   informe?: Prisma.InformeUpdateOneWithoutPlanTrabajoProgramacionNestedInput
+  detalleVariante?: Prisma.DetalleVarianteUpdateOneWithoutPlanTrabajoProgramacionesNestedInput
 }
 
 export type PlanTrabajoProgramacionUncheckedUpdateWithoutItemInput = {
@@ -862,6 +995,7 @@ export type PlanTrabajoProgramacionUncheckedUpdateWithoutItemInput = {
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   informe?: Prisma.InformeUncheckedUpdateOneWithoutPlanTrabajoProgramacionNestedInput
@@ -875,6 +1009,7 @@ export type PlanTrabajoProgramacionUncheckedUpdateManyWithoutItemInput = {
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -887,6 +1022,7 @@ export type PlanTrabajoProgramacionCreateManyClientLocationInput = {
   precision?: $Enums.ProgramacionPrecision
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -902,6 +1038,7 @@ export type PlanTrabajoProgramacionUpdateWithoutClientLocationInput = {
   planTrabajo?: Prisma.PlanTrabajoUpdateOneRequiredWithoutProgramacionesNestedInput
   item?: Prisma.ItemsUpdateOneRequiredWithoutPlanesTrabajoProgramacionesNestedInput
   informe?: Prisma.InformeUpdateOneWithoutPlanTrabajoProgramacionNestedInput
+  detalleVariante?: Prisma.DetalleVarianteUpdateOneWithoutPlanTrabajoProgramacionesNestedInput
 }
 
 export type PlanTrabajoProgramacionUncheckedUpdateWithoutClientLocationInput = {
@@ -912,6 +1049,7 @@ export type PlanTrabajoProgramacionUncheckedUpdateWithoutClientLocationInput = {
   precision?: Prisma.EnumProgramacionPrecisionFieldUpdateOperationsInput | $Enums.ProgramacionPrecision
   ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   informe?: Prisma.InformeUncheckedUpdateOneWithoutPlanTrabajoProgramacionNestedInput
@@ -925,6 +1063,7 @@ export type PlanTrabajoProgramacionUncheckedUpdateManyWithoutClientLocationInput
   precision?: Prisma.EnumProgramacionPrecisionFieldUpdateOperationsInput | $Enums.ProgramacionPrecision
   ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -937,6 +1076,7 @@ export type PlanTrabajoProgramacionCreateManyPlanTrabajoInput = {
   clientLocationId?: string | null
   ejecutadoAt?: Date | string | null
   adjunto?: string | null
+  detalleVarianteId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -952,10 +1092,66 @@ export type PlanTrabajoProgramacionUpdateWithoutPlanTrabajoInput = {
   item?: Prisma.ItemsUpdateOneRequiredWithoutPlanesTrabajoProgramacionesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneWithoutPlanesTrabajoProgramacionesNestedInput
   informe?: Prisma.InformeUpdateOneWithoutPlanTrabajoProgramacionNestedInput
+  detalleVariante?: Prisma.DetalleVarianteUpdateOneWithoutPlanTrabajoProgramacionesNestedInput
 }
 
 export type PlanTrabajoProgramacionUncheckedUpdateWithoutPlanTrabajoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemId?: Prisma.StringFieldUpdateOperationsInput | string
+  fechaProgramada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  precision?: Prisma.EnumProgramacionPrecisionFieldUpdateOperationsInput | $Enums.ProgramacionPrecision
+  clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  informe?: Prisma.InformeUncheckedUpdateOneWithoutPlanTrabajoProgramacionNestedInput
+}
+
+export type PlanTrabajoProgramacionUncheckedUpdateManyWithoutPlanTrabajoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemId?: Prisma.StringFieldUpdateOperationsInput | string
+  fechaProgramada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  precision?: Prisma.EnumProgramacionPrecisionFieldUpdateOperationsInput | $Enums.ProgramacionPrecision
+  clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  detalleVarianteId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PlanTrabajoProgramacionCreateManyDetalleVarianteInput = {
+  id?: string
+  planTrabajoId: string
+  itemId: string
+  fechaProgramada: Date | string
+  precision?: $Enums.ProgramacionPrecision
+  clientLocationId?: string | null
+  ejecutadoAt?: Date | string | null
+  adjunto?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PlanTrabajoProgramacionUpdateWithoutDetalleVarianteInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fechaProgramada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  precision?: Prisma.EnumProgramacionPrecisionFieldUpdateOperationsInput | $Enums.ProgramacionPrecision
+  ejecutadoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planTrabajo?: Prisma.PlanTrabajoUpdateOneRequiredWithoutProgramacionesNestedInput
+  item?: Prisma.ItemsUpdateOneRequiredWithoutPlanesTrabajoProgramacionesNestedInput
+  clientLocation?: Prisma.ClientLocationsUpdateOneWithoutPlanesTrabajoProgramacionesNestedInput
+  informe?: Prisma.InformeUpdateOneWithoutPlanTrabajoProgramacionNestedInput
+}
+
+export type PlanTrabajoProgramacionUncheckedUpdateWithoutDetalleVarianteInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  planTrabajoId?: Prisma.StringFieldUpdateOperationsInput | string
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   fechaProgramada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   precision?: Prisma.EnumProgramacionPrecisionFieldUpdateOperationsInput | $Enums.ProgramacionPrecision
@@ -967,8 +1163,9 @@ export type PlanTrabajoProgramacionUncheckedUpdateWithoutPlanTrabajoInput = {
   informe?: Prisma.InformeUncheckedUpdateOneWithoutPlanTrabajoProgramacionNestedInput
 }
 
-export type PlanTrabajoProgramacionUncheckedUpdateManyWithoutPlanTrabajoInput = {
+export type PlanTrabajoProgramacionUncheckedUpdateManyWithoutDetalleVarianteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  planTrabajoId?: Prisma.StringFieldUpdateOperationsInput | string
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   fechaProgramada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   precision?: Prisma.EnumProgramacionPrecisionFieldUpdateOperationsInput | $Enums.ProgramacionPrecision
@@ -990,12 +1187,14 @@ export type PlanTrabajoProgramacionSelect<ExtArgs extends runtime.Types.Extensio
   clientLocationId?: boolean
   ejecutadoAt?: boolean
   adjunto?: boolean
+  detalleVarianteId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   planTrabajo?: boolean | Prisma.PlanTrabajoDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ItemsDefaultArgs<ExtArgs>
   clientLocation?: boolean | Prisma.PlanTrabajoProgramacion$clientLocationArgs<ExtArgs>
   informe?: boolean | Prisma.PlanTrabajoProgramacion$informeArgs<ExtArgs>
+  detalleVariante?: boolean | Prisma.PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs>
 }, ExtArgs["result"]["planTrabajoProgramacion"]>
 
 export type PlanTrabajoProgramacionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1007,11 +1206,13 @@ export type PlanTrabajoProgramacionSelectCreateManyAndReturn<ExtArgs extends run
   clientLocationId?: boolean
   ejecutadoAt?: boolean
   adjunto?: boolean
+  detalleVarianteId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   planTrabajo?: boolean | Prisma.PlanTrabajoDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ItemsDefaultArgs<ExtArgs>
   clientLocation?: boolean | Prisma.PlanTrabajoProgramacion$clientLocationArgs<ExtArgs>
+  detalleVariante?: boolean | Prisma.PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs>
 }, ExtArgs["result"]["planTrabajoProgramacion"]>
 
 export type PlanTrabajoProgramacionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1023,11 +1224,13 @@ export type PlanTrabajoProgramacionSelectUpdateManyAndReturn<ExtArgs extends run
   clientLocationId?: boolean
   ejecutadoAt?: boolean
   adjunto?: boolean
+  detalleVarianteId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   planTrabajo?: boolean | Prisma.PlanTrabajoDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ItemsDefaultArgs<ExtArgs>
   clientLocation?: boolean | Prisma.PlanTrabajoProgramacion$clientLocationArgs<ExtArgs>
+  detalleVariante?: boolean | Prisma.PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs>
 }, ExtArgs["result"]["planTrabajoProgramacion"]>
 
 export type PlanTrabajoProgramacionSelectScalar = {
@@ -1039,26 +1242,30 @@ export type PlanTrabajoProgramacionSelectScalar = {
   clientLocationId?: boolean
   ejecutadoAt?: boolean
   adjunto?: boolean
+  detalleVarianteId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PlanTrabajoProgramacionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "planTrabajoId" | "itemId" | "fechaProgramada" | "precision" | "clientLocationId" | "ejecutadoAt" | "adjunto" | "createdAt" | "updatedAt", ExtArgs["result"]["planTrabajoProgramacion"]>
+export type PlanTrabajoProgramacionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "planTrabajoId" | "itemId" | "fechaProgramada" | "precision" | "clientLocationId" | "ejecutadoAt" | "adjunto" | "detalleVarianteId" | "createdAt" | "updatedAt", ExtArgs["result"]["planTrabajoProgramacion"]>
 export type PlanTrabajoProgramacionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   planTrabajo?: boolean | Prisma.PlanTrabajoDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ItemsDefaultArgs<ExtArgs>
   clientLocation?: boolean | Prisma.PlanTrabajoProgramacion$clientLocationArgs<ExtArgs>
   informe?: boolean | Prisma.PlanTrabajoProgramacion$informeArgs<ExtArgs>
+  detalleVariante?: boolean | Prisma.PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs>
 }
 export type PlanTrabajoProgramacionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   planTrabajo?: boolean | Prisma.PlanTrabajoDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ItemsDefaultArgs<ExtArgs>
   clientLocation?: boolean | Prisma.PlanTrabajoProgramacion$clientLocationArgs<ExtArgs>
+  detalleVariante?: boolean | Prisma.PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs>
 }
 export type PlanTrabajoProgramacionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   planTrabajo?: boolean | Prisma.PlanTrabajoDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ItemsDefaultArgs<ExtArgs>
   clientLocation?: boolean | Prisma.PlanTrabajoProgramacion$clientLocationArgs<ExtArgs>
+  detalleVariante?: boolean | Prisma.PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs>
 }
 
 export type $PlanTrabajoProgramacionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1068,6 +1275,7 @@ export type $PlanTrabajoProgramacionPayload<ExtArgs extends runtime.Types.Extens
     item: Prisma.$ItemsPayload<ExtArgs>
     clientLocation: Prisma.$ClientLocationsPayload<ExtArgs> | null
     informe: Prisma.$InformePayload<ExtArgs> | null
+    detalleVariante: Prisma.$DetalleVariantePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1078,6 +1286,7 @@ export type $PlanTrabajoProgramacionPayload<ExtArgs extends runtime.Types.Extens
     clientLocationId: string | null
     ejecutadoAt: Date | null
     adjunto: string | null
+    detalleVarianteId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["planTrabajoProgramacion"]>
@@ -1478,6 +1687,7 @@ export interface Prisma__PlanTrabajoProgramacionClient<T, Null = never, ExtArgs 
   item<T extends Prisma.ItemsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ItemsDefaultArgs<ExtArgs>>): Prisma.Prisma__ItemsClient<runtime.Types.Result.GetResult<Prisma.$ItemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   clientLocation<T extends Prisma.PlanTrabajoProgramacion$clientLocationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlanTrabajoProgramacion$clientLocationArgs<ExtArgs>>): Prisma.Prisma__ClientLocationsClient<runtime.Types.Result.GetResult<Prisma.$ClientLocationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   informe<T extends Prisma.PlanTrabajoProgramacion$informeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlanTrabajoProgramacion$informeArgs<ExtArgs>>): Prisma.Prisma__InformeClient<runtime.Types.Result.GetResult<Prisma.$InformePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  detalleVariante<T extends Prisma.PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs>>): Prisma.Prisma__DetalleVarianteClient<runtime.Types.Result.GetResult<Prisma.$DetalleVariantePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1515,6 +1725,7 @@ export interface PlanTrabajoProgramacionFieldRefs {
   readonly clientLocationId: Prisma.FieldRef<"PlanTrabajoProgramacion", 'String'>
   readonly ejecutadoAt: Prisma.FieldRef<"PlanTrabajoProgramacion", 'DateTime'>
   readonly adjunto: Prisma.FieldRef<"PlanTrabajoProgramacion", 'String'>
+  readonly detalleVarianteId: Prisma.FieldRef<"PlanTrabajoProgramacion", 'String'>
   readonly createdAt: Prisma.FieldRef<"PlanTrabajoProgramacion", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PlanTrabajoProgramacion", 'DateTime'>
 }
@@ -1948,6 +2159,25 @@ export type PlanTrabajoProgramacion$informeArgs<ExtArgs extends runtime.Types.Ex
    */
   include?: Prisma.InformeInclude<ExtArgs> | null
   where?: Prisma.InformeWhereInput
+}
+
+/**
+ * PlanTrabajoProgramacion.detalleVariante
+ */
+export type PlanTrabajoProgramacion$detalleVarianteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DetalleVariante
+   */
+  select?: Prisma.DetalleVarianteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DetalleVariante
+   */
+  omit?: Prisma.DetalleVarianteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DetalleVarianteInclude<ExtArgs> | null
+  where?: Prisma.DetalleVarianteWhereInput
 }
 
 /**

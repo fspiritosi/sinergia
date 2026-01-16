@@ -28,8 +28,11 @@ export type ItemsMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  detail: string | null
   is_active: boolean | null
   esPlanificable: boolean | null
+  hasVariant: boolean | null
+  variantTypeId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   tipoDeInformeId: string | null
@@ -39,8 +42,11 @@ export type ItemsMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  detail: string | null
   is_active: boolean | null
   esPlanificable: boolean | null
+  hasVariant: boolean | null
+  variantTypeId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   tipoDeInformeId: string | null
@@ -50,8 +56,11 @@ export type ItemsCountAggregateOutputType = {
   id: number
   name: number
   description: number
+  detail: number
   is_active: number
   esPlanificable: number
+  hasVariant: number
+  variantTypeId: number
   createdAt: number
   updatedAt: number
   tipoDeInformeId: number
@@ -63,8 +72,11 @@ export type ItemsMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  detail?: true
   is_active?: true
   esPlanificable?: true
+  hasVariant?: true
+  variantTypeId?: true
   createdAt?: true
   updatedAt?: true
   tipoDeInformeId?: true
@@ -74,8 +86,11 @@ export type ItemsMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  detail?: true
   is_active?: true
   esPlanificable?: true
+  hasVariant?: true
+  variantTypeId?: true
   createdAt?: true
   updatedAt?: true
   tipoDeInformeId?: true
@@ -85,8 +100,11 @@ export type ItemsCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  detail?: true
   is_active?: true
   esPlanificable?: true
+  hasVariant?: true
+  variantTypeId?: true
   createdAt?: true
   updatedAt?: true
   tipoDeInformeId?: true
@@ -169,8 +187,11 @@ export type ItemsGroupByOutputType = {
   id: string
   name: string
   description: string
+  detail: string
   is_active: boolean
   esPlanificable: boolean
+  hasVariant: boolean
+  variantTypeId: string | null
   createdAt: Date
   updatedAt: Date
   tipoDeInformeId: string | null
@@ -201,11 +222,15 @@ export type ItemsWhereInput = {
   id?: Prisma.StringFilter<"Items"> | string
   name?: Prisma.StringFilter<"Items"> | string
   description?: Prisma.StringFilter<"Items"> | string
+  detail?: Prisma.StringFilter<"Items"> | string
   is_active?: Prisma.BoolFilter<"Items"> | boolean
   esPlanificable?: Prisma.BoolFilter<"Items"> | boolean
+  hasVariant?: Prisma.BoolFilter<"Items"> | boolean
+  variantTypeId?: Prisma.StringNullableFilter<"Items"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
+  variantType?: Prisma.XOR<Prisma.TipoDeVarianteNullableScalarRelationFilter, Prisma.TipoDeVarianteWhereInput> | null
   servicios?: Prisma.ItemsOnServiciosListRelationFilter
   tipoDeInforme?: Prisma.XOR<Prisma.TipoDeInformeNullableScalarRelationFilter, Prisma.TipoDeInformeWhereInput> | null
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionListRelationFilter
@@ -215,11 +240,15 @@ export type ItemsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  detail?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   esPlanificable?: Prisma.SortOrder
+  hasVariant?: Prisma.SortOrder
+  variantTypeId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  variantType?: Prisma.TipoDeVarianteOrderByWithRelationInput
   servicios?: Prisma.ItemsOnServiciosOrderByRelationAggregateInput
   tipoDeInforme?: Prisma.TipoDeInformeOrderByWithRelationInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionOrderByRelationAggregateInput
@@ -232,11 +261,15 @@ export type ItemsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ItemsWhereInput | Prisma.ItemsWhereInput[]
   name?: Prisma.StringFilter<"Items"> | string
   description?: Prisma.StringFilter<"Items"> | string
+  detail?: Prisma.StringFilter<"Items"> | string
   is_active?: Prisma.BoolFilter<"Items"> | boolean
   esPlanificable?: Prisma.BoolFilter<"Items"> | boolean
+  hasVariant?: Prisma.BoolFilter<"Items"> | boolean
+  variantTypeId?: Prisma.StringNullableFilter<"Items"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
+  variantType?: Prisma.XOR<Prisma.TipoDeVarianteNullableScalarRelationFilter, Prisma.TipoDeVarianteWhereInput> | null
   servicios?: Prisma.ItemsOnServiciosListRelationFilter
   tipoDeInforme?: Prisma.XOR<Prisma.TipoDeInformeNullableScalarRelationFilter, Prisma.TipoDeInformeWhereInput> | null
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionListRelationFilter
@@ -246,8 +279,11 @@ export type ItemsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  detail?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   esPlanificable?: Prisma.SortOrder
+  hasVariant?: Prisma.SortOrder
+  variantTypeId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -263,8 +299,11 @@ export type ItemsScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Items"> | string
   name?: Prisma.StringWithAggregatesFilter<"Items"> | string
   description?: Prisma.StringWithAggregatesFilter<"Items"> | string
+  detail?: Prisma.StringWithAggregatesFilter<"Items"> | string
   is_active?: Prisma.BoolWithAggregatesFilter<"Items"> | boolean
   esPlanificable?: Prisma.BoolWithAggregatesFilter<"Items"> | boolean
+  hasVariant?: Prisma.BoolWithAggregatesFilter<"Items"> | boolean
+  variantTypeId?: Prisma.StringNullableWithAggregatesFilter<"Items"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Items"> | Date | string
   tipoDeInformeId?: Prisma.StringNullableWithAggregatesFilter<"Items"> | string | null
@@ -274,10 +313,13 @@ export type ItemsCreateInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  variantType?: Prisma.TipoDeVarianteCreateNestedOneWithoutItemsInput
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
   tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutItemInput
@@ -287,8 +329,11 @@ export type ItemsUncheckedCreateInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
@@ -300,10 +345,13 @@ export type ItemsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variantType?: Prisma.TipoDeVarianteUpdateOneWithoutItemsNestedInput
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutItemNestedInput
@@ -313,8 +361,11 @@ export type ItemsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  variantTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -326,8 +377,11 @@ export type ItemsCreateManyInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
@@ -337,8 +391,10 @@ export type ItemsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -347,8 +403,11 @@ export type ItemsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  variantTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -358,8 +417,11 @@ export type ItemsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  detail?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   esPlanificable?: Prisma.SortOrder
+  hasVariant?: Prisma.SortOrder
+  variantTypeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrder
@@ -369,8 +431,11 @@ export type ItemsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  detail?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   esPlanificable?: Prisma.SortOrder
+  hasVariant?: Prisma.SortOrder
+  variantTypeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrder
@@ -380,8 +445,11 @@ export type ItemsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  detail?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   esPlanificable?: Prisma.SortOrder
+  hasVariant?: Prisma.SortOrder
+  variantTypeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tipoDeInformeId?: Prisma.SortOrder
@@ -458,6 +526,48 @@ export type ItemsUncheckedUpdateManyWithoutTipoDeInformeNestedInput = {
   deleteMany?: Prisma.ItemsScalarWhereInput | Prisma.ItemsScalarWhereInput[]
 }
 
+export type ItemsCreateNestedManyWithoutVariantTypeInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutVariantTypeInput, Prisma.ItemsUncheckedCreateWithoutVariantTypeInput> | Prisma.ItemsCreateWithoutVariantTypeInput[] | Prisma.ItemsUncheckedCreateWithoutVariantTypeInput[]
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutVariantTypeInput | Prisma.ItemsCreateOrConnectWithoutVariantTypeInput[]
+  createMany?: Prisma.ItemsCreateManyVariantTypeInputEnvelope
+  connect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+}
+
+export type ItemsUncheckedCreateNestedManyWithoutVariantTypeInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutVariantTypeInput, Prisma.ItemsUncheckedCreateWithoutVariantTypeInput> | Prisma.ItemsCreateWithoutVariantTypeInput[] | Prisma.ItemsUncheckedCreateWithoutVariantTypeInput[]
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutVariantTypeInput | Prisma.ItemsCreateOrConnectWithoutVariantTypeInput[]
+  createMany?: Prisma.ItemsCreateManyVariantTypeInputEnvelope
+  connect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+}
+
+export type ItemsUpdateManyWithoutVariantTypeNestedInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutVariantTypeInput, Prisma.ItemsUncheckedCreateWithoutVariantTypeInput> | Prisma.ItemsCreateWithoutVariantTypeInput[] | Prisma.ItemsUncheckedCreateWithoutVariantTypeInput[]
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutVariantTypeInput | Prisma.ItemsCreateOrConnectWithoutVariantTypeInput[]
+  upsert?: Prisma.ItemsUpsertWithWhereUniqueWithoutVariantTypeInput | Prisma.ItemsUpsertWithWhereUniqueWithoutVariantTypeInput[]
+  createMany?: Prisma.ItemsCreateManyVariantTypeInputEnvelope
+  set?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  disconnect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  delete?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  connect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  update?: Prisma.ItemsUpdateWithWhereUniqueWithoutVariantTypeInput | Prisma.ItemsUpdateWithWhereUniqueWithoutVariantTypeInput[]
+  updateMany?: Prisma.ItemsUpdateManyWithWhereWithoutVariantTypeInput | Prisma.ItemsUpdateManyWithWhereWithoutVariantTypeInput[]
+  deleteMany?: Prisma.ItemsScalarWhereInput | Prisma.ItemsScalarWhereInput[]
+}
+
+export type ItemsUncheckedUpdateManyWithoutVariantTypeNestedInput = {
+  create?: Prisma.XOR<Prisma.ItemsCreateWithoutVariantTypeInput, Prisma.ItemsUncheckedCreateWithoutVariantTypeInput> | Prisma.ItemsCreateWithoutVariantTypeInput[] | Prisma.ItemsUncheckedCreateWithoutVariantTypeInput[]
+  connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutVariantTypeInput | Prisma.ItemsCreateOrConnectWithoutVariantTypeInput[]
+  upsert?: Prisma.ItemsUpsertWithWhereUniqueWithoutVariantTypeInput | Prisma.ItemsUpsertWithWhereUniqueWithoutVariantTypeInput[]
+  createMany?: Prisma.ItemsCreateManyVariantTypeInputEnvelope
+  set?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  disconnect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  delete?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  connect?: Prisma.ItemsWhereUniqueInput | Prisma.ItemsWhereUniqueInput[]
+  update?: Prisma.ItemsUpdateWithWhereUniqueWithoutVariantTypeInput | Prisma.ItemsUpdateWithWhereUniqueWithoutVariantTypeInput[]
+  updateMany?: Prisma.ItemsUpdateManyWithWhereWithoutVariantTypeInput | Prisma.ItemsUpdateManyWithWhereWithoutVariantTypeInput[]
+  deleteMany?: Prisma.ItemsScalarWhereInput | Prisma.ItemsScalarWhereInput[]
+}
+
 export type ItemsCreateNestedOneWithoutPlanesTrabajoProgramacionesInput = {
   create?: Prisma.XOR<Prisma.ItemsCreateWithoutPlanesTrabajoProgramacionesInput, Prisma.ItemsUncheckedCreateWithoutPlanesTrabajoProgramacionesInput>
   connectOrCreate?: Prisma.ItemsCreateOrConnectWithoutPlanesTrabajoProgramacionesInput
@@ -476,10 +586,13 @@ export type ItemsCreateWithoutServiciosInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  variantType?: Prisma.TipoDeVarianteCreateNestedOneWithoutItemsInput
   tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutItemInput
 }
@@ -488,8 +601,11 @@ export type ItemsUncheckedCreateWithoutServiciosInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
@@ -516,10 +632,13 @@ export type ItemsUpdateWithoutServiciosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variantType?: Prisma.TipoDeVarianteUpdateOneWithoutItemsNestedInput
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutItemNestedInput
 }
@@ -528,8 +647,11 @@ export type ItemsUncheckedUpdateWithoutServiciosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  variantTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -540,10 +662,13 @@ export type ItemsCreateWithoutTipoDeInformeInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  variantType?: Prisma.TipoDeVarianteCreateNestedOneWithoutItemsInput
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutItemInput
 }
@@ -552,8 +677,11 @@ export type ItemsUncheckedCreateWithoutTipoDeInformeInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   servicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutItemInput
@@ -593,21 +721,83 @@ export type ItemsScalarWhereInput = {
   id?: Prisma.StringFilter<"Items"> | string
   name?: Prisma.StringFilter<"Items"> | string
   description?: Prisma.StringFilter<"Items"> | string
+  detail?: Prisma.StringFilter<"Items"> | string
   is_active?: Prisma.BoolFilter<"Items"> | boolean
   esPlanificable?: Prisma.BoolFilter<"Items"> | boolean
+  hasVariant?: Prisma.BoolFilter<"Items"> | boolean
+  variantTypeId?: Prisma.StringNullableFilter<"Items"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Items"> | Date | string
   tipoDeInformeId?: Prisma.StringNullableFilter<"Items"> | string | null
+}
+
+export type ItemsCreateWithoutVariantTypeInput = {
+  id?: string
+  name: string
+  description: string
+  detail?: string
+  is_active?: boolean
+  esPlanificable?: boolean
+  hasVariant?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
+  tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionCreateNestedManyWithoutItemInput
+}
+
+export type ItemsUncheckedCreateWithoutVariantTypeInput = {
+  id?: string
+  name: string
+  description: string
+  detail?: string
+  is_active?: boolean
+  esPlanificable?: boolean
+  hasVariant?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tipoDeInformeId?: string | null
+  servicios?: Prisma.ItemsOnServiciosUncheckedCreateNestedManyWithoutItemInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedCreateNestedManyWithoutItemInput
+}
+
+export type ItemsCreateOrConnectWithoutVariantTypeInput = {
+  where: Prisma.ItemsWhereUniqueInput
+  create: Prisma.XOR<Prisma.ItemsCreateWithoutVariantTypeInput, Prisma.ItemsUncheckedCreateWithoutVariantTypeInput>
+}
+
+export type ItemsCreateManyVariantTypeInputEnvelope = {
+  data: Prisma.ItemsCreateManyVariantTypeInput | Prisma.ItemsCreateManyVariantTypeInput[]
+  skipDuplicates?: boolean
+}
+
+export type ItemsUpsertWithWhereUniqueWithoutVariantTypeInput = {
+  where: Prisma.ItemsWhereUniqueInput
+  update: Prisma.XOR<Prisma.ItemsUpdateWithoutVariantTypeInput, Prisma.ItemsUncheckedUpdateWithoutVariantTypeInput>
+  create: Prisma.XOR<Prisma.ItemsCreateWithoutVariantTypeInput, Prisma.ItemsUncheckedCreateWithoutVariantTypeInput>
+}
+
+export type ItemsUpdateWithWhereUniqueWithoutVariantTypeInput = {
+  where: Prisma.ItemsWhereUniqueInput
+  data: Prisma.XOR<Prisma.ItemsUpdateWithoutVariantTypeInput, Prisma.ItemsUncheckedUpdateWithoutVariantTypeInput>
+}
+
+export type ItemsUpdateManyWithWhereWithoutVariantTypeInput = {
+  where: Prisma.ItemsScalarWhereInput
+  data: Prisma.XOR<Prisma.ItemsUpdateManyMutationInput, Prisma.ItemsUncheckedUpdateManyWithoutVariantTypeInput>
 }
 
 export type ItemsCreateWithoutPlanesTrabajoProgramacionesInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  variantType?: Prisma.TipoDeVarianteCreateNestedOneWithoutItemsInput
   servicios?: Prisma.ItemsOnServiciosCreateNestedManyWithoutItemInput
   tipoDeInforme?: Prisma.TipoDeInformeCreateNestedOneWithoutItemsInput
 }
@@ -616,8 +806,11 @@ export type ItemsUncheckedCreateWithoutPlanesTrabajoProgramacionesInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tipoDeInformeId?: string | null
@@ -644,10 +837,13 @@ export type ItemsUpdateWithoutPlanesTrabajoProgramacionesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variantType?: Prisma.TipoDeVarianteUpdateOneWithoutItemsNestedInput
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
 }
@@ -656,8 +852,11 @@ export type ItemsUncheckedUpdateWithoutPlanesTrabajoProgramacionesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  variantTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -668,8 +867,11 @@ export type ItemsCreateManyTipoDeInformeInput = {
   id?: string
   name: string
   description: string
+  detail?: string
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -678,10 +880,13 @@ export type ItemsUpdateWithoutTipoDeInformeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variantType?: Prisma.TipoDeVarianteUpdateOneWithoutItemsNestedInput
   servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
   planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutItemNestedInput
 }
@@ -690,8 +895,11 @@ export type ItemsUncheckedUpdateWithoutTipoDeInformeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  variantTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutItemNestedInput
@@ -702,10 +910,69 @@ export type ItemsUncheckedUpdateManyWithoutTipoDeInformeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  variantTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ItemsCreateManyVariantTypeInput = {
+  id?: string
+  name: string
+  description: string
+  detail?: string
+  is_active?: boolean
+  esPlanificable?: boolean
+  hasVariant?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tipoDeInformeId?: string | null
+}
+
+export type ItemsUpdateWithoutVariantTypeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  servicios?: Prisma.ItemsOnServiciosUpdateManyWithoutItemNestedInput
+  tipoDeInforme?: Prisma.TipoDeInformeUpdateOneWithoutItemsNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUpdateManyWithoutItemNestedInput
+}
+
+export type ItemsUncheckedUpdateWithoutVariantTypeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  servicios?: Prisma.ItemsOnServiciosUncheckedUpdateManyWithoutItemNestedInput
+  planesTrabajoProgramaciones?: Prisma.PlanTrabajoProgramacionUncheckedUpdateManyWithoutItemNestedInput
+}
+
+export type ItemsUncheckedUpdateManyWithoutVariantTypeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  detail?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  esPlanificable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVariant?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tipoDeInformeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -752,11 +1019,15 @@ export type ItemsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   name?: boolean
   description?: boolean
+  detail?: boolean
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tipoDeInformeId?: boolean
+  variantType?: boolean | Prisma.Items$variantTypeArgs<ExtArgs>
   servicios?: boolean | Prisma.Items$serviciosArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
   planesTrabajoProgramaciones?: boolean | Prisma.Items$planesTrabajoProgramacionesArgs<ExtArgs>
@@ -767,11 +1038,15 @@ export type ItemsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   description?: boolean
+  detail?: boolean
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tipoDeInformeId?: boolean
+  variantType?: boolean | Prisma.Items$variantTypeArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
 }, ExtArgs["result"]["items"]>
 
@@ -779,11 +1054,15 @@ export type ItemsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   description?: boolean
+  detail?: boolean
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tipoDeInformeId?: boolean
+  variantType?: boolean | Prisma.Items$variantTypeArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
 }, ExtArgs["result"]["items"]>
 
@@ -791,30 +1070,37 @@ export type ItemsSelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
+  detail?: boolean
   is_active?: boolean
   esPlanificable?: boolean
+  hasVariant?: boolean
+  variantTypeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tipoDeInformeId?: boolean
 }
 
-export type ItemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "is_active" | "esPlanificable" | "createdAt" | "updatedAt" | "tipoDeInformeId", ExtArgs["result"]["items"]>
+export type ItemsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "detail" | "is_active" | "esPlanificable" | "hasVariant" | "variantTypeId" | "createdAt" | "updatedAt" | "tipoDeInformeId", ExtArgs["result"]["items"]>
 export type ItemsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  variantType?: boolean | Prisma.Items$variantTypeArgs<ExtArgs>
   servicios?: boolean | Prisma.Items$serviciosArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
   planesTrabajoProgramaciones?: boolean | Prisma.Items$planesTrabajoProgramacionesArgs<ExtArgs>
   _count?: boolean | Prisma.ItemsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ItemsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  variantType?: boolean | Prisma.Items$variantTypeArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
 }
 export type ItemsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  variantType?: boolean | Prisma.Items$variantTypeArgs<ExtArgs>
   tipoDeInforme?: boolean | Prisma.Items$tipoDeInformeArgs<ExtArgs>
 }
 
 export type $ItemsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Items"
   objects: {
+    variantType: Prisma.$TipoDeVariantePayload<ExtArgs> | null
     servicios: Prisma.$ItemsOnServiciosPayload<ExtArgs>[]
     tipoDeInforme: Prisma.$TipoDeInformePayload<ExtArgs> | null
     planesTrabajoProgramaciones: Prisma.$PlanTrabajoProgramacionPayload<ExtArgs>[]
@@ -823,8 +1109,11 @@ export type $ItemsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     name: string
     description: string
+    detail: string
     is_active: boolean
     esPlanificable: boolean
+    hasVariant: boolean
+    variantTypeId: string | null
     createdAt: Date
     updatedAt: Date
     tipoDeInformeId: string | null
@@ -1222,6 +1511,7 @@ readonly fields: ItemsFieldRefs;
  */
 export interface Prisma__ItemsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  variantType<T extends Prisma.Items$variantTypeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$variantTypeArgs<ExtArgs>>): Prisma.Prisma__TipoDeVarianteClient<runtime.Types.Result.GetResult<Prisma.$TipoDeVariantePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   servicios<T extends Prisma.Items$serviciosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$serviciosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemsOnServiciosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tipoDeInforme<T extends Prisma.Items$tipoDeInformeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$tipoDeInformeArgs<ExtArgs>>): Prisma.Prisma__TipoDeInformeClient<runtime.Types.Result.GetResult<Prisma.$TipoDeInformePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   planesTrabajoProgramaciones<T extends Prisma.Items$planesTrabajoProgramacionesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Items$planesTrabajoProgramacionesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanTrabajoProgramacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1257,8 +1547,11 @@ export interface ItemsFieldRefs {
   readonly id: Prisma.FieldRef<"Items", 'String'>
   readonly name: Prisma.FieldRef<"Items", 'String'>
   readonly description: Prisma.FieldRef<"Items", 'String'>
+  readonly detail: Prisma.FieldRef<"Items", 'String'>
   readonly is_active: Prisma.FieldRef<"Items", 'Boolean'>
   readonly esPlanificable: Prisma.FieldRef<"Items", 'Boolean'>
+  readonly hasVariant: Prisma.FieldRef<"Items", 'Boolean'>
+  readonly variantTypeId: Prisma.FieldRef<"Items", 'String'>
   readonly createdAt: Prisma.FieldRef<"Items", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Items", 'DateTime'>
   readonly tipoDeInformeId: Prisma.FieldRef<"Items", 'String'>
@@ -1655,6 +1948,25 @@ export type ItemsDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Items to delete.
    */
   limit?: number
+}
+
+/**
+ * Items.variantType
+ */
+export type Items$variantTypeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TipoDeVariante
+   */
+  select?: Prisma.TipoDeVarianteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TipoDeVariante
+   */
+  omit?: Prisma.TipoDeVarianteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TipoDeVarianteInclude<ExtArgs> | null
+  where?: Prisma.TipoDeVarianteWhereInput
 }
 
 /**

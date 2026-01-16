@@ -6,6 +6,14 @@ import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 import { ChevronLeft, ChevronRight, Calendar, List } from "lucide-react"
 import moment from "moment"
 import "moment/locale/es"
@@ -50,45 +58,102 @@ export function PlanificacionCalendarioView() {
   const [isLoading, setIsLoading] = useState(false)
   const [programaciones, setProgramaciones] = useState<PlanTrabajoProgramacionCalendarItem[]>([])
   const [informes, setInformes] = useState<InformeCalendarItem[]>([])
+  const [filtroTipo, setFiltroTipo] = useState<'todos' | 'programacion' | 'informe'>('todos')
+  const [clienteIdFiltro, setClienteIdFiltro] = useState<string>('todos')
+  const [highlightedMensualId, setHighlightedMensualId] = useState<string | null>(null)
 
   const fechaMoment = moment(fechaActual)
   const mesActual = fechaMoment.month()
   const añoActual = fechaMoment.year()
 
-  const loadMonth = async (targetMonth: Date) => {
-    const from = startOfMonth(targetMonth).toISOString()
-    const to = endOfMonth(targetMonth).toISOString()
+  useEffect(() => {
+    let isActive = true
 
-    setIsLoading(true)
-    try {
-      const [prog, inf] = await Promise.all([
-        getPlanTrabajoProgramacionesByRange({ from, to }),
-        getInformesByRange({ from, to }),
-      ])
+    const fetchMonthData = async () => {
+      setIsLoading(true)
 
-      setProgramaciones(prog)
-      setInformes(inf)
-    } catch (error: any) {
-      console.error(error)
-      toast.error(error?.message ?? "No se pudieron cargar las programaciones")
-    } finally {
-      setIsLoading(false)
+      try {
+        const from = startOfMonth(fechaActual).toISOString()
+        const to = endOfMonth(fechaActual).toISOString()
+        const [prog, inf] = await Promise.all([
+          getPlanTrabajoProgramacionesByRange({ from, to }),
+          getInformesByRange({ from, to }),
+        ])
+
+        if (!isActive) {
+          return
+        }
+
+        setProgramaciones(prog)
+        setInformes(inf)
+      } catch (error: any) {
+        if (!isActive) {
+          return
+        }
+
+        console.error(error)
+        toast.error(error?.message ?? "No se pudieron cargar las programaciones")
+      } finally {
+        if (!isActive) {
+          return
+        }
+
+        setIsLoading(false)
+      }
     }
-  }
+
+    void fetchMonthData()
+
+    return () => {
+      isActive = false
+    }
+  }, [fechaActual])
+
+  const mostrarProgramaciones = filtroTipo === 'todos' || filtroTipo === 'programacion'
+  const mostrarInformes = filtroTipo === 'todos' || filtroTipo === 'informe'
+
+  const clientesDisponibles = useMemo(() => {
+    const map = new Map<string, string>()
+    programaciones.forEach((p) => {
+      if (!map.has(p.clienteId)) {
+        map.set(p.clienteId, p.clienteNombre)
+      }
+    })
+    informes.forEach((i) => {
+      if (!map.has(i.clienteId)) {
+        map.set(i.clienteId, i.clienteNombre)
+      }
+    })
+    return Array.from(map.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name, 'es'))
+  }, [informes, programaciones])
 
   useEffect(() => {
-    loadMonth(fechaActual)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    setSelected(undefined)
+  }, [clienteIdFiltro])
 
   // Transformar eventos al formato unificado
   const eventos = useMemo(() => {
     return transformarEventos(programaciones, informes)
   }, [programaciones, informes])
 
+  const eventosFiltrados = useMemo(() => {
+    return eventos.filter((evento) => {
+      const matchesCliente = clienteIdFiltro === 'todos' || evento.cliente_id === clienteIdFiltro
+      if (evento.tipo === 'programacion') {
+          return matchesCliente && mostrarProgramaciones
+      }
+      if (evento.tipo === 'informe') {
+        return matchesCliente && mostrarInformes
+      }
+      return matchesCliente
+    })
+  }, [clienteIdFiltro, eventos, mostrarInformes, mostrarProgramaciones])
+
   // Filtrar eventos del mes actual
   const eventosDelMes = useMemo(() => {
-    return eventos.filter(evento => {
+    return eventosFiltrados.filter(evento => {
       const fechaEvento = moment(evento.fecha_programada)
       // Para eventos mensuales, verificar que el mes coincida
       if (evento.tipo === 'programacion' && evento.precision === 'mes') {
@@ -97,7 +162,7 @@ export function PlanificacionCalendarioView() {
       // Para eventos diarios, verificar día y mes
       return fechaEvento.month() === mesActual && fechaEvento.year() === añoActual
     })
-  }, [eventos, mesActual, añoActual])
+  }, [eventosFiltrados, mesActual, añoActual])
 
   const cambiarMes = (direccion: 'anterior' | 'siguiente') => {
     setFechaActual(prev => {
@@ -107,23 +172,19 @@ export function PlanificacionCalendarioView() {
       } else {
         nuevaFecha.add(1, 'month')
       }
-      const nuevaFechaDate = nuevaFecha.toDate()
-      loadMonth(nuevaFechaDate)
-      return nuevaFechaDate
+      return nuevaFecha.toDate()
     })
   }
 
   const irAHoy = () => {
-    const hoy = new Date()
-    setFechaActual(hoy)
-    loadMonth(hoy)
+    setFechaActual(new Date())
   }
 
   // Agrupar eventos por día para el panel de detalles
   const eventosPorDia = useMemo(() => {
     const map = new Map<string, CalendarioEvento[]>()
     
-    eventos.forEach(evento => {
+    eventosFiltrados.forEach(evento => {
       if (evento.tipo === 'programacion' && evento.precision === 'mes') {
         // Para eventos mensuales, agregar a todos los días del mes
         const mesKey = moment(evento.fecha_programada).format('YYYY-MM')
@@ -139,17 +200,47 @@ export function PlanificacionCalendarioView() {
     })
     
     return map
-  }, [eventos])
+  }, [eventosFiltrados])
 
   // Eventos mensuales del mes seleccionado
   const eventosMensuales = useMemo(() => {
-    return eventos.filter(e => 
+    if (!mostrarProgramaciones) {
+      return []
+    }
+
+    return eventosFiltrados.filter(e => 
       e.tipo === 'programacion' && 
       e.precision === 'mes' &&
       moment(e.fecha_programada).month() === mesActual &&
       moment(e.fecha_programada).year() === añoActual
     ) as Array<Extract<CalendarioEvento, { tipo: 'programacion' }>>
-  }, [eventos, mesActual, añoActual])
+  }, [eventosFiltrados, mesActual, añoActual, mostrarProgramaciones])
+
+  useEffect(() => {
+    if (highlightedMensualId && !eventosMensuales.some((e) => e.id === highlightedMensualId)) {
+      setHighlightedMensualId(null)
+    }
+  }, [eventosMensuales, highlightedMensualId])
+
+  const highlightedDates = useMemo(() => {
+    if (!highlightedMensualId) return undefined
+    const target = eventosMensuales.find((e) => e.id === highlightedMensualId)
+    if (!target) return undefined
+    const base = moment(target.fecha_programada)
+    const year = base.year()
+    const month = base.month()
+    const daysInMonth = base.daysInMonth()
+    const set = new Set<string>()
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = moment({ year, month, day }).format("YYYY-MM-DD")
+      set.add(date)
+    }
+    return set
+  }, [eventosMensuales, highlightedMensualId])
+
+  const eventosParaGrid = useMemo(() => {
+    return eventosDelMes.filter((evento) => evento.tipo !== "programacion" || evento.precision === "dia")
+  }, [eventosDelMes])
 
   const selectedKey = selected ? toDayKey(selected) : null
   const selectedMonthKey = selected ? monthKey(selected) : null
@@ -167,7 +258,7 @@ export function PlanificacionCalendarioView() {
                 Calendario de programaciones de planes de trabajo
               </CardDescription>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 lg:justify-end">
               {/* Selector de vista */}
               <div className="flex items-center gap-1 border rounded-lg p-1">
                 <Button
@@ -188,6 +279,58 @@ export function PlanificacionCalendarioView() {
                   <List className="h-4 w-4 mr-1" />
                   Agenda
                 </Button>
+              </div>
+
+              {/* Filtros */}
+              <div className="flex gap-1">
+                
+                <div className="flex items-center gap-1 border rounded-lg p-1">
+                  <Button
+                    variant={filtroTipo === 'todos' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setFiltroTipo('todos')}
+                    className="h-8"
+                  >
+                    Ambos
+                  </Button>
+                  <Button
+                    variant={filtroTipo === 'programacion' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setFiltroTipo('programacion')}
+                    className="h-8"
+                  >
+                    Planificados
+                  </Button>
+                  <Button
+                    variant={filtroTipo === 'informe' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setFiltroTipo('informe')}
+                    className="h-8"
+                  >
+                    Informes
+                  </Button>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <div >
+                    
+                    <Select
+                      value={clienteIdFiltro}
+                      onValueChange={(value) => setClienteIdFiltro(value)}
+                    >
+                      <SelectTrigger className="min-h-full">
+                        <SelectValue placeholder="Todos los clientes" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="todos">Todos</SelectItem>
+                        {clientesDisponibles.map((cliente) => (
+                          <SelectItem key={cliente.id} value={cliente.id}>
+                            {cliente.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center gap-2">
@@ -223,12 +366,58 @@ export function PlanificacionCalendarioView() {
         </CardHeader>
         <CardContent>
           {vista === 'calendario' ? (
-            <PlanificacionCalendarioGrid
-              fecha={fechaActual}
-              eventos={eventosDelMes}
-              selected={selected}
-              onSelect={setSelected}
-            />
+            <div className="space-y-4">
+              {eventosMensuales.length > 0 && (
+                <div className="rounded-lg border bg-muted/40 p-3">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="text-sm font-medium">
+                      Programaciones mensuales ({eventosMensuales.length})
+                    </div>
+                    {highlightedMensualId ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setHighlightedMensualId(null)}
+                      >
+                        Limpiar resaltado
+                      </Button>
+                    ) : null}
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {eventosMensuales.map((evento) => {
+                      const isActive = highlightedMensualId === evento.id
+                      return (
+                        <button
+                          key={evento.id}
+                          type="button"
+                          onClick={() =>
+                            setHighlightedMensualId((prev) => (prev === evento.id ? null : evento.id))
+                          }
+                          className={cn(
+                            "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                            isActive
+                              ? "border-sinergia bg-sinergia text-white"
+                              : "border-border bg-background text-foreground hover:border-sinergia hover:bg-sinergia/10",
+                          )}
+                        >
+                          <span className="block">{evento.item_nombre}</span>
+                          <span className="text-[11px] font-normal text-muted-foreground">
+                            {evento.cliente_nombre}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+              <PlanificacionCalendarioGrid
+                fecha={fechaActual}
+                eventos={eventosParaGrid}
+                selected={selected}
+                onSelect={setSelected}
+                highlightedDates={highlightedDates}
+              />
+            </div>
           ) : (
             <PlanificacionCalendarioAgenda
               fecha={fechaActual}

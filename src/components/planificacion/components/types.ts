@@ -36,19 +36,21 @@ export type CalendarioEvento =
 // Función para transformar los datos actuales al formato unificado
 export function transformarEventos(
   programaciones: PlanTrabajoProgramacionCalendarItem[],
-  informes: InformeCalendarItem[]
+  informes: InformeCalendarItem[],
 ): CalendarioEvento[] {
   const eventos: CalendarioEvento[] = []
   
   // Transformar programaciones
-  programaciones.forEach(p => {
+  programaciones.forEach((p) => {
+    const itemNombre = p.detalleVarianteNombre ? `${p.itemNombre} - ${p.detalleVarianteNombre}` : p.itemNombre
+
     eventos.push({
       tipo: 'programacion',
       id: p.id,
       fecha_programada: p.fechaProgramada,
       precision: p.precision,
       cliente_nombre: p.clienteNombre,
-      item_nombre: p.itemNombre,
+      item_nombre: itemNombre,
       propuesta_codigo: p.propuestaCodigo,
       client_location_nombre: p.clientLocationNombre,
       requiere_informe: p.requiereInforme,

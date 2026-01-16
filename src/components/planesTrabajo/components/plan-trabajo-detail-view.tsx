@@ -23,6 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
 
 import type { PlanTrabajoWithProgramaciones } from "./actions"
 import {
@@ -86,6 +89,10 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const [ejecutarFile, setEjecutarFile] = useState<File | null>(null)
   const [ejecutarLoading, setEjecutarLoading] = useState(false)
   const [verAdjuntoProgramacionId, setVerAdjuntoProgramacionId] = useState<string | null>(null)
+  const [textoFiltro, setTextoFiltro] = useState("")
+  const [fechaFiltroDia, setFechaFiltroDia] = useState("")
+  const [fechaFiltroMes, setFechaFiltroMes] = useState("")
+  const [estadoFiltro, setEstadoFiltro] = useState<"todos" | "pendiente" | "ejecutado">("todos")
 
   const canProgramar = useMemo(() => {
     return (
@@ -110,6 +117,37 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const programacionConAdjunto = useMemo(() => {
     return plan.programaciones.find((p) => p.id === verAdjuntoProgramacionId) ?? null
   }, [verAdjuntoProgramacionId, plan.programaciones])
+
+  const programacionesFiltradas = useMemo(() => {
+    const texto = textoFiltro.trim().toLowerCase()
+
+    return plan.programaciones.filter((p) => {
+      const ejecutado = Boolean(p.ejecutadoAt) || p.informe?.estado === "entregado"
+      const matchesEstado =
+        estadoFiltro === "todos" ||
+        (estadoFiltro === "ejecutado" ? ejecutado : !ejecutado)
+
+      const fechaProgramadaDate =
+        p.fechaProgramada instanceof Date
+          ? p.fechaProgramada
+          : parseCalendarStringToDate(p.fechaProgramada as string)
+      const fechaProgramadaDia = toDateOnlyString(fechaProgramadaDate)
+      const fechaProgramadaMes = toMonthOnlyString(fechaProgramadaDate)
+
+      const matchesDia = !fechaFiltroDia || fechaProgramadaDia === fechaFiltroDia
+      const matchesMes = !fechaFiltroMes || fechaProgramadaMes === fechaFiltroMes
+
+      const itemNombre = p.detalleVariante ? `${p.item.name} - ${p.detalleVariante.name}` : p.item.name
+      const textoBuscado = `${itemNombre} ${p.clientLocation?.name ?? ""}`.toLowerCase()
+      const matchesTexto = !texto || textoBuscado.includes(texto)
+
+      return matchesEstado && matchesDia && matchesMes && matchesTexto
+    })
+  }, [plan.programaciones, estadoFiltro, fechaFiltroDia, fechaFiltroMes, textoFiltro])
+
+  const filtrosActivos = Boolean(
+    textoFiltro.trim() || fechaFiltroDia || fechaFiltroMes || estadoFiltro !== "todos",
+  )
 
   useEffect(() => {
     setTitle(`${plan.cliente.name} - Propuesta ${plan.propuesta.codigo}`)
@@ -217,7 +255,11 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
           {programacionAEjecutar ? (
             <div className="space-y-4 py-2">
               <div className="space-y-1">
-                <div className="text-sm font-medium">{programacionAEjecutar.item.name}</div>
+                <div className="text-sm font-medium">
+                  {programacionAEjecutar.detalleVariante
+                    ? `${programacionAEjecutar.item.name} - ${programacionAEjecutar.detalleVariante.name}`
+                    : programacionAEjecutar.item.name}
+                </div>
                 <div className="text-xs text-muted-foreground">
                   Programado: {formatDate(programacionAEjecutar.fechaProgramada)}
                   {programacionAEjecutar.precision === "mes" ? " (mes)" : ""}
@@ -287,16 +329,140 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
           <CardDescription>Pendientes y ejecuciones dentro del plan</CardDescription>
         </CardHeader>
         <CardContent>
-          {plan.programaciones.length ? (
+          <div className="space-y-4 mb-4">
+            <div className="grid gap-4 md:grid-cols-4">
+              <div className="md:col-span-2">
+                <Label htmlFor="filtro-texto-programaciones">Buscar item</Label>
+                <Input
+                  id="filtro-texto-programaciones"
+                  placeholder="Nombre del item o locación"
+                  value={textoFiltro}
+                  onChange={(event) => setTextoFiltro(event.target.value)}
+                />
+              </div>
+              <div>
+                <Label>Fecha (día)</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !fechaFiltroDia && "text-muted-foreground",
+                      )}
+                    >
+                      {fechaFiltroDia
+                        ? formatDateOnly(fechaFiltroDia, "es-AR")
+                        : "Seleccioná un día"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0">
+                    <Calendar
+                      mode="single"
+                      captionLayout="dropdown"
+                      selected={fechaFiltroDia ? parseCalendarStringToDate(fechaFiltroDia) : undefined}
+                      onSelect={(date) => {
+                        if (!date) {
+                          setFechaFiltroDia("")
+                          return
+                        }
+                        setFechaFiltroDia(toDateOnlyString(date))
+                      }}
+                      defaultMonth={fechaFiltroDia ? parseCalendarStringToDate(fechaFiltroDia) : undefined}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div>
+                <Label>Mes</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !fechaFiltroMes && "text-muted-foreground",
+                      )}
+                    >
+                      {fechaFiltroMes
+                        ? parseMonthOnlyToLocalNoon(fechaFiltroMes).toLocaleDateString("es-AR", {
+                          year: "numeric",
+                          month: "long",
+                        })
+                        : "Seleccioná un mes"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0">
+                    <Calendar
+                      mode="single"
+                      captionLayout="dropdown"
+                      selected={fechaFiltroMes ? parseMonthOnlyToLocalNoon(fechaFiltroMes) : undefined}
+                      onMonthChange={(date) => {
+                        const monthValue = toMonthOnlyString(date)
+                        setFechaFiltroMes(monthValue)
+                      }}
+                      onSelect={(date) => {
+                        if (!date) {
+                          setFechaFiltroMes("")
+                          return
+                        }
+                        const monthValue = toMonthOnlyString(date)
+                        setFechaFiltroMes(monthValue)
+                      }}
+                      defaultMonth={fechaFiltroMes ? parseMonthOnlyToLocalNoon(fechaFiltroMes) : undefined}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div>
+                <Label>Estado</Label>
+                <Select value={estadoFiltro} onValueChange={(value: "todos" | "pendiente" | "ejecutado") => setEstadoFiltro(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccioná un estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="pendiente">Pendientes</SelectItem>
+                    <SelectItem value="ejecutado">Ejecutados</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="flex items-center justify-between gap-4 text-xs text-muted-foreground">
+              <span>
+                Mostrando {programacionesFiltradas.length} de {plan.programaciones.length} programaciones
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8"
+                onClick={() => {
+                  setTextoFiltro("")
+                  setFechaFiltroDia("")
+                  setFechaFiltroMes("")
+                  setEstadoFiltro("todos")
+                }}
+                disabled={!filtrosActivos}
+              >
+                Limpiar filtros
+              </Button>
+            </div>
+          </div>
+
+          {programacionesFiltradas.length ? (
             <div className="space-y-2">
-              {plan.programaciones.map((p) => {
+              {programacionesFiltradas.map((p) => {
                 const ejecutado = Boolean(p.ejecutadoAt) || p.informe?.estado === "entregado"
                 const requiereInforme = Boolean(p.item.tipoDeInformeId)
+                const itemNombre = p.detalleVariante ? `${p.item.name} - ${p.detalleVariante.name}` : p.item.name
 
                 return (
                   <div key={p.id} className="flex flex-col gap-2 rounded-md border p-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="space-y-1">
-                      <div className="text-sm font-medium">{p.item.name}</div>
+                      <div className="text-sm font-medium">{itemNombre}</div>
                       <div className="text-xs text-muted-foreground">
                         Programado: {formatDate(p.fechaProgramada)}
                         {p.precision === "mes" ? " (mes)" : ""}
@@ -352,7 +518,11 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
               })}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Todavía no hay programaciones para este plan.</p>
+            <p className="text-sm text-muted-foreground">
+              {filtrosActivos
+                ? "No hay programaciones que coincidan con los filtros aplicados."
+                : "Todavía no hay programaciones para este plan."}
+            </p>
           )}
         </CardContent>
       </Card>
@@ -808,6 +978,7 @@ function EditarFechasDialog({
               </div>
             </div>
           ) : null}
+
         </div>
 
         <DialogFooter>
@@ -844,6 +1015,7 @@ function ProgramarDialog({
   const [mesInicioSerie, setMesInicioSerie] = useState("")
   const [planificarTodosLosMeses, setPlanificarTodosLosMeses] = useState(false)
   const [locationId, setLocationId] = useState("")
+  const [detalleVarianteId, setDetalleVarianteId] = useState("")
   const [locations, setLocations] = useState<ClientLocationBasic[]>([])
   const [locationsLoading, setLocationsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -872,6 +1044,7 @@ function ProgramarDialog({
       setMesInicioSerie("")
       setPlanificarTodosLosMeses(false)
       setLocationId("")
+      setDetalleVarianteId("")
       return
     }
   }, [open])
@@ -881,6 +1054,38 @@ function ProgramarDialog({
     setPrecision("dia")
     setFechaMes("")
   }, [requiereInforme])
+
+  const requiereDetalleVariante = Boolean(selectedItem?.hasVariant)
+
+  const detallesDisponibles = useMemo(() => {
+    if (!requiereDetalleVariante || !selectedItem?.variantTypeId) {
+      return []
+    }
+    return plan.detallesVariante.filter((detalle) => detalle.variantTypeId === selectedItem.variantTypeId)
+  }, [plan.detallesVariante, requiereDetalleVariante, selectedItem])
+
+  useEffect(() => {
+    if (!requiereDetalleVariante) {
+      setDetalleVarianteId("")
+      return
+    }
+
+    if (detallesDisponibles.length === 0) {
+      setDetalleVarianteId("")
+      return
+    }
+
+    const stillValid = detallesDisponibles.some((detalle) => detalle.id === detalleVarianteId)
+    if (!stillValid) {
+      setDetalleVarianteId("")
+    }
+  }, [requiereDetalleVariante, detallesDisponibles, detalleVarianteId])
+
+  useEffect(() => {
+    if (requiereDetalleVariante && planificarTodosLosMeses) {
+      setPlanificarTodosLosMeses(false)
+    }
+  }, [planificarTodosLosMeses, requiereDetalleVariante])
 
   useEffect(() => {
     if (!open) return
@@ -971,6 +1176,17 @@ function ProgramarDialog({
       }
     }
 
+    if (requiereDetalleVariante) {
+      if (detallesDisponibles.length === 0) {
+        toast.error("No hay detalles de variante disponibles para este item")
+        return
+      }
+      if (!detalleVarianteId) {
+        toast.error("Seleccioná el detalle de variante")
+        return
+      }
+    }
+
     const fechaProgramada = precision === "mes" ? `${fechaMes}-01` : fechaDia
 
     setIsSubmitting(true)
@@ -993,6 +1209,7 @@ function ProgramarDialog({
           fechaProgramada,
           precision,
           clientLocationId: requiereInforme ? locationId : undefined,
+          detalleVarianteId: requiereDetalleVariante ? detalleVarianteId : undefined,
         })
         toast.success("Programación creada")
       }
@@ -1074,10 +1291,16 @@ function ProgramarDialog({
                     setPrecision("mes")
                   }
                 }}
+                disabled={requiereDetalleVariante}
               />
               <Label htmlFor="planificar-serie" className="text-sm">
                 Planificar en todos los meses del plan
               </Label>
+              {requiereDetalleVariante ? (
+                <p className="text-xs text-muted-foreground">
+                  Los items con variantes se planifican individualmente.
+                </p>
+              ) : null}
             </div>
           ) : null}
 
@@ -1135,6 +1358,39 @@ function ProgramarDialog({
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+          ) : null}
+
+          {requiereDetalleVariante ? (
+            <div className="space-y-2">
+              <Label>Detalle de Variante *</Label>
+              <Select
+                value={detalleVarianteId || undefined}
+                onValueChange={setDetalleVarianteId}
+                disabled={detallesDisponibles.length === 0}
+              >
+                <SelectTrigger>
+                  <SelectValue
+                    placeholder={
+                      detallesDisponibles.length
+                        ? "Seleccioná un detalle"
+                        : "No hay detalles activos para esta variante"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {detallesDisponibles.map((detalle) => (
+                    <SelectItem key={detalle.id} value={detalle.id}>
+                      {detalle.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {!detallesDisponibles.length ? (
+                <p className="text-xs text-muted-foreground">
+                  Creá detalles activos para esta variante antes de planificar.
+                </p>
+              ) : null}
             </div>
           ) : null}
         </div>

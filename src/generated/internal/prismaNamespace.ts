@@ -399,10 +399,12 @@ export const ModelName = {
   ItemsOnServicios: 'ItemsOnServicios',
   PropuestaTecnica: 'PropuestaTecnica',
   TipoDeInforme: 'TipoDeInforme',
+  TipoDeVariante: 'TipoDeVariante',
   ClientLocations: 'ClientLocations',
   Informe: 'Informe',
   PlanTrabajo: 'PlanTrabajo',
-  PlanTrabajoProgramacion: 'PlanTrabajoProgramacion'
+  PlanTrabajoProgramacion: 'PlanTrabajoProgramacion',
+  DetalleVariante: 'DetalleVariante'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -418,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion"
+    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1088,6 +1090,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TipoDeVariante: {
+      payload: Prisma.$TipoDeVariantePayload<ExtArgs>
+      fields: Prisma.TipoDeVarianteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TipoDeVarianteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TipoDeVarianteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>
+        }
+        findFirst: {
+          args: Prisma.TipoDeVarianteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TipoDeVarianteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>
+        }
+        findMany: {
+          args: Prisma.TipoDeVarianteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>[]
+        }
+        create: {
+          args: Prisma.TipoDeVarianteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>
+        }
+        createMany: {
+          args: Prisma.TipoDeVarianteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TipoDeVarianteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>[]
+        }
+        delete: {
+          args: Prisma.TipoDeVarianteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>
+        }
+        update: {
+          args: Prisma.TipoDeVarianteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>
+        }
+        deleteMany: {
+          args: Prisma.TipoDeVarianteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TipoDeVarianteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TipoDeVarianteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>[]
+        }
+        upsert: {
+          args: Prisma.TipoDeVarianteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TipoDeVariantePayload>
+        }
+        aggregate: {
+          args: Prisma.TipoDeVarianteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTipoDeVariante>
+        }
+        groupBy: {
+          args: Prisma.TipoDeVarianteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TipoDeVarianteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TipoDeVarianteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TipoDeVarianteCountAggregateOutputType> | number
+        }
+      }
+    }
     ClientLocations: {
       payload: Prisma.$ClientLocationsPayload<ExtArgs>
       fields: Prisma.ClientLocationsFieldRefs
@@ -1384,6 +1460,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DetalleVariante: {
+      payload: Prisma.$DetalleVariantePayload<ExtArgs>
+      fields: Prisma.DetalleVarianteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DetalleVarianteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DetalleVarianteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>
+        }
+        findFirst: {
+          args: Prisma.DetalleVarianteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DetalleVarianteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>
+        }
+        findMany: {
+          args: Prisma.DetalleVarianteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>[]
+        }
+        create: {
+          args: Prisma.DetalleVarianteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>
+        }
+        createMany: {
+          args: Prisma.DetalleVarianteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DetalleVarianteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>[]
+        }
+        delete: {
+          args: Prisma.DetalleVarianteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>
+        }
+        update: {
+          args: Prisma.DetalleVarianteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>
+        }
+        deleteMany: {
+          args: Prisma.DetalleVarianteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DetalleVarianteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DetalleVarianteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>[]
+        }
+        upsert: {
+          args: Prisma.DetalleVarianteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleVariantePayload>
+        }
+        aggregate: {
+          args: Prisma.DetalleVarianteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDetalleVariante>
+        }
+        groupBy: {
+          args: Prisma.DetalleVarianteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DetalleVarianteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DetalleVarianteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DetalleVarianteCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1482,8 +1632,11 @@ export const ItemsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  detail: 'detail',
   is_active: 'is_active',
   esPlanificable: 'esPlanificable',
+  hasVariant: 'hasVariant',
+  variantTypeId: 'variantTypeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   tipoDeInformeId: 'tipoDeInformeId'
@@ -1531,6 +1684,18 @@ export const TipoDeInformeScalarFieldEnum = {
 } as const
 
 export type TipoDeInformeScalarFieldEnum = (typeof TipoDeInformeScalarFieldEnum)[keyof typeof TipoDeInformeScalarFieldEnum]
+
+
+export const TipoDeVarianteScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  is_active: 'is_active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TipoDeVarianteScalarFieldEnum = (typeof TipoDeVarianteScalarFieldEnum)[keyof typeof TipoDeVarianteScalarFieldEnum]
 
 
 export const ClientLocationsScalarFieldEnum = {
@@ -1588,11 +1753,25 @@ export const PlanTrabajoProgramacionScalarFieldEnum = {
   clientLocationId: 'clientLocationId',
   ejecutadoAt: 'ejecutadoAt',
   adjunto: 'adjunto',
+  detalleVarianteId: 'detalleVarianteId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type PlanTrabajoProgramacionScalarFieldEnum = (typeof PlanTrabajoProgramacionScalarFieldEnum)[keyof typeof PlanTrabajoProgramacionScalarFieldEnum]
+
+
+export const DetalleVarianteScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  is_active: 'is_active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  variantTypeId: 'variantTypeId'
+} as const
+
+export type DetalleVarianteScalarFieldEnum = (typeof DetalleVarianteScalarFieldEnum)[keyof typeof DetalleVarianteScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1867,10 +2046,12 @@ export type GlobalOmitConfig = {
   itemsOnServicios?: Prisma.ItemsOnServiciosOmit
   propuestaTecnica?: Prisma.PropuestaTecnicaOmit
   tipoDeInforme?: Prisma.TipoDeInformeOmit
+  tipoDeVariante?: Prisma.TipoDeVarianteOmit
   clientLocations?: Prisma.ClientLocationsOmit
   informe?: Prisma.InformeOmit
   planTrabajo?: Prisma.PlanTrabajoOmit
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionOmit
+  detalleVariante?: Prisma.DetalleVarianteOmit
 }
 
 /* Types for Logging */

@@ -50,21 +50,21 @@ export const columns: ColumnDef<ClienteWithRelations>[] = [
             )
         },
     },
-        {
-        accessorKey: "domicilio",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Domicilio" />
-        ),
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("domicilio")}
-                    </span>
-                </div>
-            )
-        },
-    },
+    //     {
+    //     accessorKey: "domicilio",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Domicilio" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         return (
+    //             <div className="flex space-x-2">
+    //                 <span className="max-w-[500px] truncate font-medium">
+    //                     {row.getValue("domicilio")}
+    //                 </span>
+    //             </div>
+    //         )
+    //     },
+    // },
     {
         accessorKey: "cuit",
         header: ({ column }) => (
@@ -97,56 +97,56 @@ export const columns: ColumnDef<ClienteWithRelations>[] = [
             })
         },
     },
-    {
-        accessorKey: "email",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Email" />
-        ),
-        cell: ({ row }) => {
-            const email = row.getValue("email") as string | null
-            return (
-                <div className="text-sm text-muted-foreground">
-                    {email || "Sin email"}
-                </div>
-            )
-        },
-    },
-    {
-        accessorKey: "telefono",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Teléfono" />
-        ),
-        cell: ({ row }) => {
-            const telefono = row.getValue("telefono") as string | null
-            return (
-                <div className="text-sm">
-                    {telefono || "Sin teléfono"}
-                </div>
-            )
-        },
-    },
-    {
-        accessorFn: (row) => row.provincia?.nombre ?? "",
-        id: "provinciaNombre",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Provincia" />
-        ),
-        cell: ({ row }) => {
-            const provincia = row.original.provincia?.nombre ?? "—"
-            return <div className="text-sm">{provincia}</div>
-        },
-    },
-    {
-        accessorFn: (row) => row.ciudad?.nombre ?? "",
-        id: "ciudadNombre",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Ciudad" />
-        ),
-        cell: ({ row }) => {
-            const ciudad = row.original.ciudad?.nombre ?? "—"
-            return <div className="text-sm">{ciudad}</div>
-        },
-    },
+    // {
+    //     accessorKey: "email",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Email" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         const email = row.getValue("email") as string | null
+    //         return (
+    //             <div className="text-sm text-muted-foreground">
+    //                 {email || "Sin email"}
+    //             </div>
+    //         )
+    //     },
+    // },
+    // {
+    //     accessorKey: "telefono",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Teléfono" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         const telefono = row.getValue("telefono") as string | null
+    //         return (
+    //             <div className="text-sm">
+    //                 {telefono || "Sin teléfono"}
+    //             </div>
+    //         )
+    //     },
+    // },
+    // {
+    //     accessorFn: (row) => row.provincia?.nombre ?? "",
+    //     id: "provinciaNombre",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Provincia" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         const provincia = row.original.provincia?.nombre ?? "—"
+    //         return <div className="text-sm">{provincia}</div>
+    //     },
+    // },
+    // {
+    //     accessorFn: (row) => row.ciudad?.nombre ?? "",
+    //     id: "ciudadNombre",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Ciudad" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         const ciudad = row.original.ciudad?.nombre ?? "—"
+    //         return <div className="text-sm">{ciudad}</div>
+    //     },
+    // },
     // {
     //     accessorKey: "moneda",
     //     header: ({ column }) => (
