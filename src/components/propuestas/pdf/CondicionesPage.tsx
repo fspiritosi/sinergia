@@ -37,10 +37,10 @@ export function CondicionesPage({
             {/* Contenedor principal de 2 columnas que ocupa todo el espacio hasta el footer */}
             <View style={pdfStyles.portadaBody}>
                 {/* Columna izquierda: Sidebar vacío */}
-                <View style={pdfStyles.portadaSidebar} />
+                {/* <View style={pdfStyles.portadaSidebar} /> */}
 
                 {/* Columna derecha: Contenido principal - Consideraciones */}
-                <View style={pdfStyles.portadaMainContent}>
+                <View style={pdfStyles.conditionsMainContent}>
                     {/* Consideraciones Generales */}
                     <Text style={pdfStyles.consideracionesTitle}>Consideraciones Generales</Text>
                     {CONSIDERACIONES_GENERALES.map((item, index) => (
