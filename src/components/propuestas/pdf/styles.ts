@@ -42,7 +42,7 @@ export const pdfStyles = StyleSheet.create({
     },
     portadaMainContent: {
         flex: 1,
-        padding: 20,
+        padding: 0,
         backgroundColor: PDF_COLORS.lightGray,
     },
 
@@ -109,9 +109,20 @@ export const pdfStyles = StyleSheet.create({
         color: PDF_COLORS.textDarkBlue,
     },
 
+    conditionsMainContent:{
+        flex: 1,
+        padding: 20,
+        backgroundColor: PDF_COLORS.lightGray,
+    },
+
     // ==========================================
     // Content (para otras páginas)
     // ==========================================
+    contentMainContainer:{
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+
+    },
     content: {
         padding: 0,
         paddingBottom: 80,
@@ -167,9 +178,10 @@ export const pdfStyles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: PDF_COLORS.darkBlue,
-        marginBottom: 15,
-        marginTop: 15,
-        textAlign: 'center',
+        marginBottom: 5,
+        marginTop: 5,
+        textAlign: 'left',
+        paddingLeft: 10,
     },
     titleDivider: {
         height: 2,

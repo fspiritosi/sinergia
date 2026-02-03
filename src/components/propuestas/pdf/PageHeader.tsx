@@ -10,11 +10,11 @@ interface PageHeaderProps {
 export function PageHeader({ serviceDescription, showTitle = false, fixed = false }: PageHeaderProps) {
     return (
         <View fixed={fixed}>
-            {showTitle && (
+            {/* {showTitle && (
                 <View style={pdfStyles.headerTitle}>
                     <Text style={pdfStyles.title}>OFERTA TÉCNICA ECONÓMICA</Text>
                 </View>
-            )}
+            )} */}
 
             <View style={pdfStyles.headerContent}>
                 <View style={pdfStyles.verticalBar} />
@@ -33,6 +33,12 @@ export function PageHeader({ serviceDescription, showTitle = false, fixed = fals
                     </Text>
                 </View>
             </View>
+            
+             {showTitle && (
+                <View style={pdfStyles.headerTitle}>
+                    <Text style={pdfStyles.title}>OFERTA TÉCNICA ECONÓMICA</Text>
+                </View>
+            )}
         </View>
     )
 }
