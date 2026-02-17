@@ -3,10 +3,18 @@
 import { revalidatePath } from "next/cache";
 import { Cliente as ClienteType } from "@/generated/client";
 import { clienteRepository } from "@/repositories/cliente.repository";
+import {
+  validateClienteCreate,
+  validateClienteUpdate,
+  type ClienteCreateInput,
+  type ClienteUpdateInput,
+} from "@/lib/validations/cliente.schema";
+import { dbLogger } from "@/lib/logger";
 
 export async function createCliente(data: ClienteType) {
   try {
-    await clienteRepository.create({
+    // Validate input data with Zod schema
+    const validatedData = validateClienteCreate({
       name: data.name,
       cuit: data.cuit,
       email: data.email,
@@ -17,9 +25,15 @@ export async function createCliente(data: ClienteType) {
       is_active: data.is_active,
     });
 
+    await clienteRepository.create(validatedData as ClienteCreateInput);
+
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
+    // Log validation errors for debugging
+    if (error instanceof Error && error.name === "ZodError") {
+      dbLogger.error({ error, data }, "Validation error in createCliente");
+    }
     throw error;
   }
 }
@@ -30,7 +44,9 @@ export async function updateCliente(data: Partial<ClienteType>) {
       throw new Error("ID is required for update");
     }
 
-    await clienteRepository.update(data.id, {
+    // Validate input data with Zod schema
+    const validatedData = validateClienteUpdate({
+      id: data.id,
       name: data.name,
       cuit: data.cuit,
       email: data.email,
@@ -41,9 +57,15 @@ export async function updateCliente(data: Partial<ClienteType>) {
       is_active: data.is_active,
     });
 
+    await clienteRepository.update(validatedData.id, validatedData as ClienteUpdateInput);
+
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
+    // Log validation errors for debugging
+    if (error instanceof Error && error.name === "ZodError") {
+      dbLogger.error({ error, data }, "Validation error in updateCliente");
+    }
     throw error;
   }
 }

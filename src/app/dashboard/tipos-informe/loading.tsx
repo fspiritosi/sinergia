@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function TiposInformeLoading() {
   return (
@@ -15,5 +15,5 @@ export default function TiposInformeLoading() {
       </div>
       <Skeleton className="h-8 w-[250px]" />
     </div>
-  )
+  );
 }
