@@ -45,13 +45,13 @@ Actualmente estos tests están marcados con `test.skip()` porque requieren confi
 1. Crea un archivo `e2e/auth.setup.ts`:
 
 ```typescript
-import { test as setup } from '@playwright/test';
+import { test as setup } from "@playwright/test";
 
-const authFile = '.auth/user.json';
+const authFile = ".auth/user.json";
 
-setup('authenticate', async ({ page }) => {
+setup("authenticate", async ({ page }) => {
   // Navegar a la página de login
-  await page.goto('/sign-in');
+  await page.goto("/sign-in");
 
   // Completar el flujo de autenticación de Clerk
   // NOTA: Necesitas credenciales de prueba configuradas en Clerk
@@ -60,7 +60,7 @@ setup('authenticate', async ({ page }) => {
   await page.click('button[type="submit"]');
 
   // Esperar a que termine la autenticación
-  await page.waitForURL('/dashboard');
+  await page.waitForURL("/dashboard");
 
   // Guardar el estado de autenticación
   await page.context().storageState({ path: authFile });
@@ -74,22 +74,23 @@ export default defineConfig({
   // ... otras configuraciones
   projects: [
     // Setup project
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    { name: "setup", testMatch: /.*\.setup\.ts/ },
 
     // Chromium con autenticación
     {
-      name: 'chromium',
+      name: "chromium",
       use: {
-        ...devices['Desktop Chrome'],
-        storageState: '.auth/user.json',
+        ...devices["Desktop Chrome"],
+        storageState: ".auth/user.json",
       },
-      dependencies: ['setup'],
+      dependencies: ["setup"],
     },
   ],
 });
 ```
 
 3. Crea variables de entorno para las credenciales de prueba:
+
 ```env
 TEST_USER_EMAIL=test@example.com
 TEST_USER_PASSWORD=test-password-123
@@ -119,21 +120,25 @@ Cada archivo de test sigue este patrón:
 ## 🔍 Debugging
 
 ### Ver tests en modo UI
+
 ```bash
 npm run test:e2e:ui
 ```
 
 ### Ejecutar con headed mode (ver el navegador)
+
 ```bash
 npx playwright test --headed
 ```
 
 ### Ejecutar con debug mode
+
 ```bash
 npx playwright test --debug
 ```
 
 ### Ver trace de un test fallido
+
 ```bash
 npx playwright show-trace trace.zip
 ```
@@ -147,6 +152,7 @@ npm run test:e2e:report
 ```
 
 Los reportes incluyen:
+
 - Screenshots de tests fallidos
 - Traces de navegación
 - Logs de consola

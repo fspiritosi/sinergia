@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 /**
  * IMPORTANTE: Estos tests requieren autenticación.
@@ -13,28 +13,28 @@ import { test, expect } from '@playwright/test';
  * - Usar ese estado en estos tests con: test.use({ storageState: 'auth.json' })
  */
 
-test.describe('Cliente Management', () => {
+test.describe("Cliente Management", () => {
   // Skip tests by default since they require authentication
-  test.skip(({ browserName }) => true, 'Requires authentication setup');
+  test.skip(({ browserName }) => true, "Requires authentication setup");
 
   test.beforeEach(async ({ page }) => {
     // Navegar a la página de clientes
-    await page.goto('/dashboard/clientes');
-    await page.waitForLoadState('networkidle');
+    await page.goto("/dashboard/clientes");
+    await page.waitForLoadState("networkidle");
   });
 
-  test('should display clientes page', async ({ page }) => {
+  test("should display clientes page", async ({ page }) => {
     // Verificar que estamos en la página correcta
-    await expect(page).toHaveURL('/dashboard/clientes');
+    await expect(page).toHaveURL("/dashboard/clientes");
 
     // Verificar que existe el título o heading de la página
-    const heading = page.locator('h1, h2').filter({ hasText: /clientes/i });
+    const heading = page.locator("h1, h2").filter({ hasText: /clientes/i });
     await expect(heading).toBeVisible();
   });
 
-  test('should open create cliente dialog', async ({ page }) => {
+  test("should open create cliente dialog", async ({ page }) => {
     // Buscar el botón para crear nuevo cliente
-    const createButton = page.locator('button').filter({ hasText: /nuevo|agregar|crear/i });
+    const createButton = page.locator("button").filter({ hasText: /nuevo|agregar|crear/i });
     await createButton.first().click();
 
     // Verificar que se abre el dialog/modal
@@ -42,23 +42,23 @@ test.describe('Cliente Management', () => {
     await expect(dialog).toBeVisible();
   });
 
-  test('should create a new cliente', async ({ page }) => {
+  test("should create a new cliente", async ({ page }) => {
     // Datos de prueba con timestamp para evitar duplicados
     const timestamp = Date.now();
     const testCliente = {
       name: `Test Cliente E2E ${timestamp}`,
       cuit: `20-${String(timestamp).slice(-8)}-9`,
       email: `test-e2e-${timestamp}@example.com`,
-      telefono: '1234567890',
-      domicilio: 'Calle Test 123',
+      telefono: "1234567890",
+      domicilio: "Calle Test 123",
     };
 
     // Abrir dialog de creación
-    const createButton = page.locator('button').filter({ hasText: /nuevo|agregar|crear/i });
+    const createButton = page.locator("button").filter({ hasText: /nuevo|agregar|crear/i });
     await createButton.first().click();
 
     // Esperar a que el formulario esté visible
-    const form = page.locator('form').first();
+    const form = page.locator("form").first();
     await expect(form).toBeVisible();
 
     // Llenar el formulario
@@ -69,7 +69,9 @@ test.describe('Cliente Management', () => {
     await page.fill('input[name="domicilio"], input#domicilio', testCliente.domicilio);
 
     // Enviar el formulario
-    const submitButton = page.locator('button[type="submit"]').filter({ hasText: /guardar|crear/i });
+    const submitButton = page
+      .locator('button[type="submit"]')
+      .filter({ hasText: /guardar|crear/i });
     await submitButton.click();
 
     // Esperar a que se cierre el dialog y se actualice la tabla
@@ -83,13 +85,15 @@ test.describe('Cliente Management', () => {
     // Esto requeriría hacer click en el botón de eliminar, pero lo dejamos como ejercicio
   });
 
-  test('should filter clientes by search', async ({ page }) => {
+  test("should filter clientes by search", async ({ page }) => {
     // Buscar el input de búsqueda
-    const searchInput = page.locator('input[type="search"], input[placeholder*="buscar" i], input[placeholder*="search" i]');
+    const searchInput = page.locator(
+      'input[type="search"], input[placeholder*="buscar" i], input[placeholder*="search" i]'
+    );
 
-    if (await searchInput.count() > 0) {
+    if ((await searchInput.count()) > 0) {
       // Escribir un término de búsqueda
-      await searchInput.first().fill('Test');
+      await searchInput.first().fill("Test");
 
       // Esperar a que se actualice la tabla
       await page.waitForTimeout(1000);
@@ -106,14 +110,14 @@ test.describe('Cliente Management', () => {
     }
   });
 
-  test('should paginate through clientes', async ({ page }) => {
+  test("should paginate through clientes", async ({ page }) => {
     // Buscar botones de paginación
-    const nextButton = page.locator('button').filter({ hasText: /siguiente|next|›|»/i });
-    const previousButton = page.locator('button').filter({ hasText: /anterior|previous|‹|«/i });
+    const nextButton = page.locator("button").filter({ hasText: /siguiente|next|›|»/i });
+    const previousButton = page.locator("button").filter({ hasText: /anterior|previous|‹|«/i });
 
-    if (await nextButton.count() > 0) {
+    if ((await nextButton.count()) > 0) {
       // Verificar que el botón "anterior" está deshabilitado en la primera página
-      if (await previousButton.count() > 0) {
+      if ((await previousButton.count()) > 0) {
         await expect(previousButton.first()).toBeDisabled();
       }
 
@@ -123,7 +127,7 @@ test.describe('Cliente Management', () => {
         await page.waitForTimeout(1000);
 
         // Ahora el botón anterior debería estar habilitado
-        if (await previousButton.count() > 0) {
+        if ((await previousButton.count()) > 0) {
           await expect(previousButton.first()).toBeEnabled();
         }
       }
