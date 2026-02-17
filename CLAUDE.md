@@ -16,9 +16,11 @@ This is a business management application built with Next.js 16 (App Router) for
 - **Environment Variables**: @t3-oss/env-nextjs (type-safe env vars with Zod validation)
 - **Logging**: Pino (structured logging with context)
 - **Data Fetching**: TanStack Query (React Query) for client-side caching
+- **State Management**: Zustand (user preferences with localStorage persistence)
 - **Testing**: Vitest (unit/integration), Playwright (E2E)
 - **File Storage**: Cloudflare R2 (S3-compatible)
 - **PDF Generation**: @react-pdf/renderer
+- **Virtual Scrolling**: @tanstack/react-virtual (for large tables)
 - **Icons**: Lucide React
 - **Date Handling**: date-fns, moment, moment-timezone
 
@@ -232,6 +234,153 @@ import Image from "next/image"
 - **Server Actions**: Marked with `"use server"` directive, typically in lib files or component files
 - **Error Handling**: Each route has `error.tsx` for error boundaries and `loading.tsx` for loading states
 - **Loading States**: Use Skeleton components from shadcn/ui for consistent loading UX
+
+### User Preferences with Zustand
+
+The application uses **Zustand** for client-side state management of user preferences:
+
+**Store Location:** [/src/stores/user-preferences.store.ts](src/stores/user-preferences.store.ts)
+
+**Available Preferences:**
+
+1. **Theme** (`light` | `dark` | `system`)
+   - User's preferred color scheme
+   - Automatically syncs with system preference when set to "system"
+   - Persisted to localStorage
+
+2. **Table Density** (`compact` | `comfortable` | `spacious`)
+   - Controls spacing in table rows
+   - Affects readability and information density
+
+3. **Sidebar Collapsed** (boolean)
+   - Saves sidebar open/closed state
+   - Provides more screen space when collapsed
+
+4. **Default Page Size** (10 | 25 | 50 | 100)
+   - Default number of rows to show in paginated tables
+   - Applied when tables are first loaded
+
+**Usage Example:**
+
+```typescript
+"use client";
+
+import { useUserPreferencesStore } from "@/stores/user-preferences.store";
+
+function SettingsComponent() {
+  const { theme, setTheme, tableDensity, setTableDensity } = useUserPreferencesStore();
+
+  return (
+    <div>
+      <select value={theme} onChange={(e) => setTheme(e.target.value as Theme)}>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="system">System</option>
+      </select>
+
+      <select
+        value={tableDensity}
+        onChange={(e) => setTableDensity(e.target.value as TableDensity)}
+      >
+        <option value="compact">Compact</option>
+        <option value="comfortable">Comfortable</option>
+        <option value="spacious">Spacious</option>
+      </select>
+    </div>
+  );
+}
+```
+
+**Theme Provider:**
+
+The [ThemeProvider](src/components/providers/theme-provider.tsx) component automatically applies the user's theme preference to the document. It should be mounted in the root layout.
+
+**Benefits:**
+
+- Automatic persistence to localStorage
+- Type-safe with TypeScript
+- Minimal bundle size (< 3KB)
+- No prop drilling needed
+- Easy to extend with new preferences
+
+### Virtual Scrolling for Large Tables
+
+The application provides **DataTableVirtual** for handling large datasets (>100 rows) efficiently:
+
+**Component:** [/src/components/tables/data-table-virtual.tsx](src/components/tables/data-table-virtual.tsx)
+
+**Features:**
+
+- Automatically enables virtualization for datasets with >100 rows
+- Only renders visible rows in the viewport (improves performance)
+- Maintains all DataTable features (sorting, filtering, search, pagination)
+- Sticky header that remains visible while scrolling
+- Configurable estimated row height and overscan
+
+**Usage Example:**
+
+```typescript
+import { DataTableVirtual } from "@/components/tables";
+
+function LargeTableComponent() {
+  const { data } = useQuery({
+    queryKey: ["large-dataset"],
+    queryFn: getLargeDataset, // Returns 1000+ rows
+  });
+
+  return (
+    <DataTableVirtual
+      columns={columns}
+      data={data || []}
+      searchKey="name"
+      searchPlaceholder="Search..."
+      // Auto-enables virtualization when data.length > 100
+    />
+  );
+}
+```
+
+**Configuration Options:**
+
+```typescript
+<DataTableVirtual
+  columns={columns}
+  data={largeDataset}
+  enableVirtualization={true} // Force enable/disable (default: auto)
+  estimatedRowHeight={53} // Average height of each row in pixels
+  overscan={5} // Number of items to render outside visible area
+/>
+```
+
+**When to Use:**
+
+- ✅ Use `DataTableVirtual` for tables with >100 rows
+- ✅ Use when you need smooth scrolling with large datasets
+- ✅ Use when you experience performance issues with regular `DataTable`
+- ❌ Use regular `DataTable` for small datasets (<100 rows)
+- ❌ Use regular `DataTable` if you need row selection across all pages
+
+**Performance Benefits:**
+
+- Regular DataTable (1000 rows): Renders 1000 DOM elements
+- DataTableVirtual (1000 rows): Renders ~20 DOM elements (only visible ones)
+- Result: 50x fewer DOM nodes, significantly faster rendering and scrolling
+
+**Migration from DataTable:**
+
+To migrate an existing table to virtual scrolling:
+
+```typescript
+// Before
+import { DataTable } from "@/components/tables";
+<DataTable columns={columns} data={data} />;
+
+// After
+import { DataTableVirtual } from "@/components/tables";
+<DataTableVirtual columns={columns} data={data} />;
+```
+
+The API is identical, so migration is straightforward!
 
 ### DTOs (Data Transfer Objects)
 
@@ -1134,3 +1283,8 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID;
 - Conventional Commits enforced via commitlint for standardized commit messages
 - Pre-commit hook runs lint-staged on staged files only (faster than full project scan)
 - Commit-msg hook validates commit message format before creating commit
+- Zustand configured for client-side state management with localStorage persistence
+- User preferences store includes: theme, tableDensity, sidebarCollapsed, defaultPageSize
+- DataTableVirtual component available for handling large datasets (>100 rows)
+- Virtual scrolling automatically enabled for performance with large tables
+- ThemeProvider component applies user theme preferences automatically
