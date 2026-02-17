@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { uploadFileToR2 } from "@/lib/r2-upload";
 import { refreshPlanTrabajoEstado } from "@/components/planesTrabajo/components/actions";
 import { parseCalendarStringToDate, toDateOnlyString } from "@/lib/dates";
+import { dbLogger } from "@/lib/logger";
 
 type InformeWithRelations = Prisma.InformeGetPayload<{
   include: {
@@ -129,6 +130,74 @@ export async function getInformes(): Promise<SerializedInforme[]> {
   if (!informes) return [];
 
   return informes.map(serializeInforme);
+}
+
+export async function getInformesPaginated(params: {
+  page: number
+  pageSize: number
+  search?: string
+  filters?: Record<string, any>
+}) {
+  try {
+    const skip = (params.page - 1) * params.pageSize
+
+    const where = {
+      ...(params.search && {
+        OR: [
+          { cliente: { name: { contains: params.search, mode: "insensitive" as const } } },
+          { tipoDeInforme: { name: { contains: params.search, mode: "insensitive" as const } } },
+        ],
+      }),
+      ...params.filters,
+    }
+
+    const [informes, total] = await Promise.all([
+      prisma.informe.findMany({
+        where,
+        skip,
+        take: params.pageSize,
+        include: {
+          cliente: { select: { id: true, name: true } },
+          tipoDeInforme: { select: { id: true, name: true } },
+          clientLocation: { select: { id: true, name: true } },
+          propuesta: {
+            select: {
+              id: true,
+              codigo: true,
+              clienteId: true,
+              servicioId: true,
+              vigencia: true,
+              status: true,
+              items: true,
+              contacto: true,
+              valor: true,
+              moneda: true,
+              is_active: true,
+              condicionesParticulares: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        },
+        orderBy: [
+          { estado: "asc" },
+          { fechaVencimiento: "asc" },
+        ],
+      }),
+      prisma.informe.count({ where }),
+    ])
+
+    const data = informes.map(serializeInforme)
+
+    return {
+      data,
+      total,
+      pageCount: Math.ceil(total / params.pageSize),
+    }
+  } catch (error) {
+    dbLogger.error({ error, params }, "Error al obtener informes paginados")
+    throw error
+  }
 }
 
 export async function getPendingInformes(): Promise<SerializedInforme[]> {

@@ -19,9 +19,20 @@ const fechaOptions = [
 
 interface InformesTableProps {
   data: Informe[]
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
-export function InformesTable({ data }: InformesTableProps) {
+export function InformesTable({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+}: InformesTableProps) {
   const customSearchFilter = (informe: Informe, searchValue: string): boolean => {
     if (!searchValue) return true
 
@@ -39,6 +50,9 @@ export function InformesTable({ data }: InformesTableProps) {
       searchKey="clienteNombre"
       searchPlaceholder="Buscar por cliente o tipo de informe..."
       customSearchFilter={customSearchFilter}
+      pageCount={pageCount}
+      pagination={pagination}
+      onPaginationChange={onPaginationChange}
       filters={[
         {
           columnKey: "estado",

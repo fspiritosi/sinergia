@@ -1,14 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { getItems } from "./components/actions"
+import { getItemsPaginated } from "./components/actions"
 import { ItemsTableWrapper } from "./components/items-table-wrapper"
 import { Skeleton } from "@/components/ui/skeleton"
 
 function Items() {
-  const { data: items, isLoading, error } = useQuery({
-    queryKey: ["items"],
-    queryFn: getItems,
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["items", pagination.pageIndex + 1, pagination.pageSize],
+    queryFn: () =>
+      getItemsPaginated({
+        page: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+      }),
   })
 
   if (isLoading) {
@@ -28,7 +38,14 @@ function Items() {
     )
   }
 
-  return <ItemsTableWrapper data={items || []} />
+  return (
+    <ItemsTableWrapper
+      data={data?.data || []}
+      pageCount={data?.pageCount || 0}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+    />
+  )
 }
 
 export default Items

@@ -26,9 +26,20 @@ const fechaOptions = [
 
 interface ClientesTableProps {
   data: ClienteWithRelations[];
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
-export function ClientesTable({ data }: ClientesTableProps) {
+export function ClientesTable({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+}: ClientesTableProps) {
   const customSearchFilter = createStringSearchFilter<ClienteWithRelations>([
     "name",
     "cuit",
@@ -44,6 +55,9 @@ export function ClientesTable({ data }: ClientesTableProps) {
       searchKey="name"
       searchPlaceholder="Buscar por nombre, CUIT o email..."
       customSearchFilter={customSearchFilter}
+      pageCount={pageCount}
+      pagination={pagination}
+      onPaginationChange={onPaginationChange}
       filters={[
         {
           columnKey: "is_active",

@@ -1,14 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { getPlanesTrabajo } from "./components/actions"
+import { getPlanesTrabajoPaginated } from "./components/actions"
 import { PlanesTrabajoTableWrapper } from "./components/planes-table-wrapper"
 import { Skeleton } from "@/components/ui/skeleton"
 
 function PlanesTrabajo() {
-  const { data: planes, isLoading, error } = useQuery({
-    queryKey: ["planes-trabajo"],
-    queryFn: getPlanesTrabajo,
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["planes-trabajo", pagination.pageIndex + 1, pagination.pageSize],
+    queryFn: () =>
+      getPlanesTrabajoPaginated({
+        page: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+      }),
   })
 
   if (isLoading) {
@@ -28,7 +38,14 @@ function PlanesTrabajo() {
     )
   }
 
-  return <PlanesTrabajoTableWrapper data={planes || []} />
+  return (
+    <PlanesTrabajoTableWrapper
+      data={data?.data || []}
+      pageCount={data?.pageCount || 0}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+    />
+  )
 }
 
 export default PlanesTrabajo

@@ -1,14 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { getInformes } from "./components/actions"
+import { getInformesPaginated } from "./components/actions"
 import { InformesTableWrapper } from "./components/informes-table-wrapper"
 import { Skeleton } from "@/components/ui/skeleton"
 
 function Informes() {
-  const { data: informes, isLoading, error } = useQuery({
-    queryKey: ["informes"],
-    queryFn: getInformes,
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["informes", pagination.pageIndex + 1, pagination.pageSize],
+    queryFn: () =>
+      getInformesPaginated({
+        page: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+      }),
   })
 
   if (isLoading) {
@@ -28,7 +38,14 @@ function Informes() {
     )
   }
 
-  return <InformesTableWrapper data={informes || []} />
+  return (
+    <InformesTableWrapper
+      data={data?.data || []}
+      pageCount={data?.pageCount || 0}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+    />
+  )
 }
 
 export default Informes

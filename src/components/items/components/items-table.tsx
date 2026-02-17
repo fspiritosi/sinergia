@@ -25,9 +25,20 @@ const fechaOptions = [
 
 interface ItemsTableProps {
     data: Item[]
+    pageCount?: number;
+    pagination?: {
+        pageIndex: number;
+        pageSize: number;
+    };
+    onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
-export function ItemsTable({ data }: ItemsTableProps) {
+export function ItemsTable({
+    data,
+    pageCount,
+    pagination,
+    onPaginationChange,
+}: ItemsTableProps) {
     // Función de filtro personalizada para buscar por nombre, CUIT o email
     const customSearchFilter = (item: Item, searchValue: string): boolean => {
         if (!searchValue) return true
@@ -50,6 +61,9 @@ export function ItemsTable({ data }: ItemsTableProps) {
             searchKey="name"
             searchPlaceholder="Buscar por nombre..."
             customSearchFilter={customSearchFilter}
+            pageCount={pageCount}
+            pagination={pagination}
+            onPaginationChange={onPaginationChange}
             filters={[
                 {
                     columnKey: "is_active",

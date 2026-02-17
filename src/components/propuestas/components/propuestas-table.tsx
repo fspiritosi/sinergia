@@ -42,9 +42,20 @@ const tipoOptions = [
 
 interface PropuestasTableProps {
     data: PropuestaTecnica[]
+    pageCount?: number;
+    pagination?: {
+        pageIndex: number;
+        pageSize: number;
+    };
+    onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
-export function PropuestasTable({ data }: PropuestasTableProps) {
+export function PropuestasTable({
+    data,
+    pageCount,
+    pagination,
+    onPaginationChange,
+}: PropuestasTableProps) {
     const customSearchFilter = createStringSearchFilter<PropuestaTecnica>([
         "codigo",
         (p) => p.cliente?.name,
@@ -58,6 +69,9 @@ export function PropuestasTable({ data }: PropuestasTableProps) {
             searchKey="codigo"
             searchPlaceholder="Buscar por código, cliente o servicio..."
             customSearchFilter={customSearchFilter}
+            pageCount={pageCount}
+            pagination={pagination}
+            onPaginationChange={onPaginationChange}
             filters={[
                 {
                     columnKey: "status",

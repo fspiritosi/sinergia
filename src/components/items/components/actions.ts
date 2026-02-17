@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { dbLogger } from "@/lib/logger";
 
 export async function getItems() {
   const items = await prisma.items.findMany({
@@ -47,6 +48,56 @@ export async function getActiveItems() {
   });
 
   return itemsOrdenados;
+}
+
+export async function getItemsPaginated(params: {
+  page: number
+  pageSize: number
+  search?: string
+  filters?: Record<string, any>
+}) {
+  try {
+    const skip = (params.page - 1) * params.pageSize
+
+    const where = {
+      ...(params.search && {
+        OR: [
+          { name: { contains: params.search, mode: "insensitive" as const } },
+        ],
+      }),
+      ...params.filters,
+    }
+
+    const [items, total] = await Promise.all([
+      prisma.items.findMany({
+        where,
+        skip,
+        take: params.pageSize,
+        include: {
+          tipoDeInforme: true,
+        },
+        orderBy: [
+          { is_active: "desc" },
+          { name: "asc" },
+        ],
+      }),
+      prisma.items.count({ where }),
+    ])
+
+    const data = items.map((item) => ({
+      ...item,
+      is_active: String(item.is_active)
+    }))
+
+    return {
+      data,
+      total,
+      pageCount: Math.ceil(total / params.pageSize),
+    }
+  } catch (error) {
+    dbLogger.error({ error, params }, "Error al obtener items paginados")
+    throw error
+  }
 }
 
 

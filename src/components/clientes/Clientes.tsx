@@ -1,14 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { getClientes } from "./components/actions"
+import { getClientesPaginated } from "./components/actions"
 import { ClientesTableWrapper } from "./components/clientes-table-wrapper"
 import { Skeleton } from "@/components/ui/skeleton"
 
 function Clientes() {
-  const { data: clientes, isLoading, error } = useQuery({
-    queryKey: ["clientes"],
-    queryFn: getClientes,
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["clientes", pagination.pageIndex + 1, pagination.pageSize],
+    queryFn: () =>
+      getClientesPaginated({
+        page: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+      }),
   })
 
   if (isLoading) {
@@ -28,7 +38,14 @@ function Clientes() {
     )
   }
 
-  return <ClientesTableWrapper data={clientes || []} />
+  return (
+    <ClientesTableWrapper
+      data={data?.data || []}
+      pageCount={data?.pageCount || 0}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+    />
+  )
 }
 
 export default Clientes

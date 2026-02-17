@@ -7,11 +7,22 @@ import { Item } from "./actions"
 
 interface ItemsTableWrapperProps {
     data: Item[]
+    pageCount?: number;
+    pagination?: {
+        pageIndex: number;
+        pageSize: number;
+    };
+    onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
 
 
-export function ItemsTableWrapper({ data }: ItemsTableWrapperProps) {
+export function ItemsTableWrapper({
+    data,
+    pageCount,
+    pagination,
+    onPaginationChange,
+}: ItemsTableWrapperProps) {
     return (
         <Card>
             <CardHeader>
@@ -29,7 +40,12 @@ export function ItemsTableWrapper({ data }: ItemsTableWrapperProps) {
                 </div>
             </CardHeader>
             <CardContent>
-                <ItemsTable data={data} />
+                <ItemsTable
+                    data={data}
+                    pageCount={pageCount}
+                    pagination={pagination}
+                    onPaginationChange={onPaginationChange}
+                />
             </CardContent>
         </Card>
     )

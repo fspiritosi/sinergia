@@ -7,9 +7,20 @@ import { Cliente } from "@/generated/client";
 
 interface ClientesTableWrapperProps {
   data: Cliente[];
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
-export function ClientesTableWrapper({ data }: ClientesTableWrapperProps) {
+export function ClientesTableWrapper({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+}: ClientesTableWrapperProps) {
   const isEmpty = data.length === 0;
   const normalized = data.map((c) => ({
     ...c,
@@ -30,7 +41,12 @@ export function ClientesTableWrapper({ data }: ClientesTableWrapperProps) {
       </CardHeader>
       <CardContent>
         <TableState isEmpty={isEmpty} emptyMessage="No hay clientes cargados.">
-          <ClientesTable data={normalized} />
+          <ClientesTable
+            data={normalized}
+            pageCount={pageCount}
+            pagination={pagination}
+            onPaginationChange={onPaginationChange}
+          />
         </TableState>
       </CardContent>
     </Card>

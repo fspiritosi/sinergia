@@ -6,6 +6,12 @@ import type { PlanTrabajoListItem } from "./actions"
 
 interface PlanesTrabajoTableProps {
   data: PlanTrabajoListItem[]
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
 const estadoOptions = [
@@ -17,7 +23,12 @@ const estadoOptions = [
   { value: "finalizado_completo", label: "Finalizado completo" },
 ]
 
-export function PlanesTrabajoTable({ data }: PlanesTrabajoTableProps) {
+export function PlanesTrabajoTable({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+}: PlanesTrabajoTableProps) {
   const customSearchFilter = (plan: PlanTrabajoListItem, searchValue: string): boolean => {
     if (!searchValue) return true
 
@@ -35,6 +46,9 @@ export function PlanesTrabajoTable({ data }: PlanesTrabajoTableProps) {
       searchKey="clienteNombre"
       searchPlaceholder="Buscar por cliente o propuesta..."
       customSearchFilter={customSearchFilter}
+      pageCount={pageCount}
+      pagination={pagination}
+      onPaginationChange={onPaginationChange}
       filters={[
         {
           columnKey: "estado",

@@ -1,14 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { getPropuestas } from "./components/actions"
+import { getPropuestasPaginated } from "./components/actions"
 import { PropuestasTableWrapper } from "@/components/propuestas/components/propuestas-table-wrapper"
 import { Skeleton } from "@/components/ui/skeleton"
 
 function Propuestas() {
-  const { data: propuestas, isLoading, error } = useQuery({
-    queryKey: ["propuestas"],
-    queryFn: getPropuestas,
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["propuestas", pagination.pageIndex + 1, pagination.pageSize],
+    queryFn: () =>
+      getPropuestasPaginated({
+        page: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+      }),
   })
 
   if (isLoading) {
@@ -28,7 +38,14 @@ function Propuestas() {
     )
   }
 
-  return <PropuestasTableWrapper data={propuestas || []} />
+  return (
+    <PropuestasTableWrapper
+      data={data?.data || []}
+      pageCount={data?.pageCount || 0}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+    />
+  )
 }
 
 export default Propuestas

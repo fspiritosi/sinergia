@@ -12,6 +12,7 @@ import {
   toMonthOnlyString,
 } from "@/lib/dates";
 import { uploadFileToR2 } from "@/lib/r2-upload";
+import { dbLogger } from "@/lib/logger";
 
 export type PlanTrabajoWithProgramaciones = PlanTrabajo & {
   cliente: { id: string; name: string };
@@ -240,6 +241,51 @@ export async function getPlanesTrabajo() {
   if (!planes) return [];
 
   return planes;
+}
+
+export async function getPlanesTrabajoPaginated(params: {
+  page: number
+  pageSize: number
+  search?: string
+  filters?: Record<string, any>
+}) {
+  try {
+    const skip = (params.page - 1) * params.pageSize
+
+    const where = {
+      ...(params.search && {
+        OR: [
+          { propuesta: { codigo: { contains: params.search, mode: "insensitive" as const } } },
+        ],
+      }),
+      ...params.filters,
+    }
+
+    const [data, total] = await Promise.all([
+      prisma.planTrabajo.findMany({
+        where,
+        skip,
+        take: params.pageSize,
+        include: {
+          cliente: { select: { id: true, name: true } },
+          propuesta: { select: { id: true, codigo: true } },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      prisma.planTrabajo.count({ where }),
+    ])
+
+    return {
+      data,
+      total,
+      pageCount: Math.ceil(total / params.pageSize),
+    }
+  } catch (error) {
+    dbLogger.error({ error, params }, "Error al obtener planes de trabajo paginados")
+    throw error
+  }
 }
 
 export type PlanTrabajoListItem = Awaited<ReturnType<typeof getPlanesTrabajo>>[0];

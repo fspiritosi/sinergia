@@ -4,9 +4,20 @@ import type { PlanTrabajoListItem } from "./actions"
 
 interface PlanesTrabajoTableWrapperProps {
   data: PlanTrabajoListItem[]
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
-export function PlanesTrabajoTableWrapper({ data }: PlanesTrabajoTableWrapperProps) {
+export function PlanesTrabajoTableWrapper({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+}: PlanesTrabajoTableWrapperProps) {
   return (
     <Card>
       <CardHeader>
@@ -20,7 +31,12 @@ export function PlanesTrabajoTableWrapper({ data }: PlanesTrabajoTableWrapperPro
         </div>
       </CardHeader>
       <CardContent>
-        <PlanesTrabajoTable data={data} />
+        <PlanesTrabajoTable
+          data={data}
+          pageCount={pageCount}
+          pagination={pagination}
+          onPaginationChange={onPaginationChange}
+        />
       </CardContent>
     </Card>
   )

@@ -43,6 +43,13 @@ interface DataTableProps<TData, TValue> {
             icon?: React.ComponentType<{ className?: string }>
         }[]
     }[]
+    // Server-side pagination props (optional)
+    pageCount?: number
+    pagination?: {
+        pageIndex: number
+        pageSize: number
+    }
+    onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -52,6 +59,9 @@ export function DataTable<TData, TValue>({
     searchPlaceholder,
     customSearchFilter,
     filters,
+    pageCount: serverPageCount,
+    pagination: serverPagination,
+    onPaginationChange: onServerPaginationChange,
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({})
     const [columnVisibility, setColumnVisibility] =
@@ -61,15 +71,20 @@ export function DataTable<TData, TValue>({
     )
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [globalFilter, setGlobalFilter] = React.useState("")
-    const [pagination, setPagination] = React.useState({
+    const [clientPagination, setClientPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     })
+
+    // Use server pagination if provided, otherwise use client pagination
+    const isServerSide = !!serverPagination && !!onServerPaginationChange
+    const pagination = isServerSide ? serverPagination : clientPagination
 
 
     const table = useReactTable({
         data,
         columns,
+        pageCount: isServerSide ? serverPageCount : undefined,
         state: {
             sorting,
             columnVisibility,
@@ -85,17 +100,23 @@ export function DataTable<TData, TValue>({
         onColumnVisibilityChange: setColumnVisibility,
         onGlobalFilterChange: setGlobalFilter,
         onPaginationChange: (updater) => {
-            setPagination((prev) => {
-                const newPagination = typeof updater === 'function' ? updater(prev) : updater
-                return newPagination
-            })
+            if (isServerSide && onServerPaginationChange) {
+                const newPagination = typeof updater === 'function' ? updater(pagination) : updater
+                onServerPaginationChange(newPagination)
+            } else {
+                setClientPagination((prev) => {
+                    const newPagination = typeof updater === 'function' ? updater(prev) : updater
+                    return newPagination
+                })
+            }
         },
         globalFilterFn: customSearchFilter ? (row, columnId, filterValue) => {
             return customSearchFilter(row.original, filterValue)
         } : undefined,
+        manualPagination: isServerSide,
         getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
+        getFilteredRowModel: isServerSide ? undefined : getFilteredRowModel(),
+        getPaginationRowModel: isServerSide ? undefined : getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),

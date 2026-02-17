@@ -4,9 +4,20 @@ import { Informe } from "./actions"
 
 interface InformesTableWrapperProps {
   data: Informe[]
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
-export function InformesTableWrapper({ data }: InformesTableWrapperProps) {
+export function InformesTableWrapper({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+}: InformesTableWrapperProps) {
   return (
     <Card>
       <CardHeader>
@@ -20,7 +31,12 @@ export function InformesTableWrapper({ data }: InformesTableWrapperProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <InformesTable data={data} />
+        <InformesTable
+          data={data}
+          pageCount={pageCount}
+          pagination={pagination}
+          onPaginationChange={onPaginationChange}
+        />
       </CardContent>
     </Card>
   )

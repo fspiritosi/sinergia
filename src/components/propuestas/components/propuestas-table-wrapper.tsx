@@ -6,9 +6,20 @@ import { TableState } from "@/components/tables/table-state";
 
 interface PropuestasTableWrapperProps {
   data: PropuestaTecnica[];
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
 
-export function PropuestasTableWrapper({ data }: PropuestasTableWrapperProps) {
+export function PropuestasTableWrapper({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+}: PropuestasTableWrapperProps) {
   const isEmpty = data.length === 0;
 
   return (
@@ -24,7 +35,12 @@ export function PropuestasTableWrapper({ data }: PropuestasTableWrapperProps) {
       </CardHeader>
       <CardContent>
         <TableState isEmpty={isEmpty} emptyMessage="No hay propuestas cargadas.">
-          <PropuestasTable data={data} />
+          <PropuestasTable
+            data={data}
+            pageCount={pageCount}
+            pagination={pagination}
+            onPaginationChange={onPaginationChange}
+          />
         </TableState>
       </CardContent>
     </Card>

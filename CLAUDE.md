@@ -382,6 +382,111 @@ Standard query keys used in the application:
 - Keep server actions in separate files (actions.ts)
 - Use mutations for data updates (create, update, delete)
 
+### Server-Side Pagination
+
+The application supports server-side pagination for large datasets to improve performance:
+
+**Server Action Pattern:**
+```typescript
+// components/[module]/components/actions.ts
+export async function get[Module]Paginated(params: {
+  page: number
+  pageSize: number
+  search?: string
+  filters?: Record<string, any>
+}) {
+  const skip = (params.page - 1) * params.pageSize
+
+  const where = {
+    ...(params.search && {
+      OR: [
+        { name: { contains: params.search, mode: "insensitive" } },
+        { email: { contains: params.search, mode: "insensitive" } },
+      ],
+    }),
+    ...params.filters,
+  }
+
+  const [data, total] = await Promise.all([
+    prisma.[module].findMany({
+      where,
+      skip,
+      take: params.pageSize,
+      orderBy: [{ is_active: "desc" }, { name: "asc" }],
+    }),
+    prisma.[module].count({ where }),
+  ])
+
+  return {
+    data,
+    total,
+    pageCount: Math.ceil(total / params.pageSize),
+  }
+}
+```
+
+**Component Pattern with React Query:**
+```typescript
+"use client"
+
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+
+function Component() {
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["resource", pagination.pageIndex + 1, pagination.pageSize],
+    queryFn: () =>
+      getResourcePaginated({
+        page: pagination.pageIndex + 1,
+        pageSize: pagination.pageSize,
+      }),
+  })
+
+  return (
+    <TableWrapper
+      data={data?.data || []}
+      pageCount={data?.pageCount || 0}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+    />
+  )
+}
+```
+
+**DataTable Support:**
+The DataTable component automatically detects server-side pagination when these props are provided:
+- `pageCount` - Total number of pages from server
+- `pagination` - Current pagination state
+- `onPaginationChange` - Callback to update pagination
+
+When these props are present, DataTable uses `manualPagination: true` and skips client-side filtering.
+
+**Benefits:**
+- Only fetches data for current page
+- Reduces memory usage for large datasets
+- Faster initial load times
+- Better performance with 1000+ records
+- Search and filtering done on database level
+
+**Implemented in all major CRUD modules:**
+- ✅ Clientes - Search: name, cuit, email
+- ✅ Propuestas - Search: codigo, cliente name, servicio name
+- ✅ Planes de Trabajo - Search: plan number
+- ✅ Informes - Search: cliente name, tipo informe name
+- ✅ Items - Search: name
+
+**Implementation pattern:**
+Each module has:
+1. `get[Module]Paginated` function in actions.ts with server-side filtering
+2. Component using pagination state with React Query
+3. Props passed through TableWrapper → Table → DataTable
+4. DataTable automatically detects and uses server-side mode
+
 ### Server Actions
 
 Server actions should be marked with `"use server"` and handle errors appropriately. They are commonly used for form submissions and data mutations.
@@ -456,3 +561,6 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
 - Pino logger is configured as server-only package in `next.config.ts`
 - React Query is configured globally in `/src/app/providers.tsx` with 60s staleTime
 - All main CRUD pages use React Query for data fetching (11 components migrated)
+- Server-side pagination implemented in 5 major modules (Clientes, Propuestas, Planes, Informes, Items)
+- DataTable component supports both client-side and server-side pagination automatically
+- Database queries optimized with pagination (skip/take) and leverages the 49 indices
