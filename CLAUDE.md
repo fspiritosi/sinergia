@@ -15,6 +15,7 @@ This is a business management application built with Next.js 16 (App Router) for
 - **Forms**: React Hook Form + Zod validation
 - **Environment Variables**: @t3-oss/env-nextjs (type-safe env vars with Zod validation)
 - **Logging**: Pino (structured logging with context)
+- **Data Fetching**: TanStack Query (React Query) for client-side caching
 - **File Storage**: Cloudflare R2 (S3-compatible)
 - **PDF Generation**: @react-pdf/renderer
 - **Icons**: Lucide React
@@ -61,6 +62,8 @@ npx prisma generate           # Regenerate Prisma Client
   - `r2-upload.ts` - File upload to Cloudflare R2
   - `pdf-constants.ts` - PDF generation constants
   - `dates.ts` - Date manipulation utilities
+- `/src/app/` - Next.js App Router
+  - `providers.tsx` - React Query provider (client component)
 - `/src/generated/` - Prisma generated client (DO NOT EDIT)
 - `/prisma/` - Database schema and migrations
   - `schema.prisma` - Database schema definition
@@ -305,6 +308,80 @@ export default function Loading() {
 - Provide clear recovery options (retry, navigate)
 - **Important**: Cannot use Pino logger in error.tsx (client component) - use console.error
 
+### Data Fetching with React Query
+
+The application uses **TanStack Query (React Query)** for client-side data fetching and caching:
+
+**Setup:**
+- QueryClient configured in [/src/app/providers.tsx](src/app/providers.tsx)
+- Wrapped in root layout for global access
+- Default staleTime: 60 seconds
+- Disabled refetch on window focus
+
+**Pattern for data fetching components:**
+```typescript
+"use client"
+
+import { useQuery } from "@tanstack/react-query"
+import { getClientes } from "./components/actions"
+import { Skeleton } from "@/components/ui/skeleton"
+
+function Clientes() {
+  const { data: clientes, isLoading, error } = useQuery({
+    queryKey: ["clientes"],
+    queryFn: getClientes,
+  })
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-10 w-full max-w-sm" />
+        <Skeleton className="h-[400px] w-full" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 text-destructive">
+        Error: {error.message}
+      </div>
+    )
+  }
+
+  return <TableWrapper data={clientes || []} />
+}
+```
+
+**Query Keys:**
+Standard query keys used in the application:
+- `["clientes"]` - All clients
+- `["propuestas"]` - All proposals
+- `["planes-trabajo"]` - All work plans
+- `["items"]` - All items
+- `["servicios"]` - All services
+- `["usuarios"]` - All users
+- `["informes"]` - All reports
+- `["tipos-informe"]` - All report types
+- `["tipos-variante"]` - All variant types
+- `["detalles-variante"]` - All variant details
+- `["client-locations"]` - All client locations
+
+**Benefits:**
+- Automatic caching with configurable stale time
+- Automatic background refetching
+- Optimistic updates support
+- Request deduplication
+- Built-in loading and error states
+- DevTools for debugging (development only)
+
+**Best practices:**
+- Always handle loading and error states
+- Use descriptive query keys
+- Provide fallback empty arrays for data
+- Keep server actions in separate files (actions.ts)
+- Use mutations for data updates (create, update, delete)
+
 ### Server Actions
 
 Server actions should be marked with `"use server"` and handle errors appropriately. They are commonly used for form submissions and data mutations.
@@ -377,3 +454,5 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
 - Error boundaries (`error.tsx`) and loading states (`loading.tsx`) are implemented at route level
 - Database includes 49 performance indices for optimized queries (migration: `add_performance_indexes`)
 - Pino logger is configured as server-only package in `next.config.ts`
+- React Query is configured globally in `/src/app/providers.tsx` with 60s staleTime
+- All main CRUD pages use React Query for data fetching (11 components migrated)
