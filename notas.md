@@ -10,3 +10,5 @@ Modelo Condiciones:
 
 Drag and drop:
 - En Crear o editar propuestas, los items deben tener un drag and drop para ordenarlos, esto debe modificar la posición del Array para que despues cuando generemos la propuesta, esten en el orden elegido.    
+
+test de commit.
