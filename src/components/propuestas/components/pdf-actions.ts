@@ -4,6 +4,7 @@ import prisma from "@/lib/db"
 import { renderToBuffer } from '@react-pdf/renderer'
 import { PropuestaPDF } from '../pdf/PropuestaPDF'
 import { toDateOnlyString } from "@/lib/dates"
+import { pdfLogger } from "@/lib/logger"
 
 export async function generatePropuestaPDF(propuestaId: string) {
     try {
@@ -54,7 +55,7 @@ export async function generatePropuestaPDF(propuestaId: string) {
             filename: `PROPUESTA-${propuesta.codigo}.pdf`,
         }
     } catch (error) {
-        console.error("Error generating PDF:", error)
+        pdfLogger.error({ error, propuestaId }, "Error al generar PDF de propuesta")
         return {
             success: false,
             error: error instanceof Error ? error.message : "Error desconocido",

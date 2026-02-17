@@ -53,7 +53,6 @@ export function ItemRowActions({ item }: ItemsRowActionsProps) {
             toast.success("Item eliminado exitosamente")
             setDeleteOpen(false)
         } catch (error) {
-            console.error(error)
             toast.error("Error al eliminar el item")
         } finally {
             setIsLoading(false)

@@ -1,12 +1,11 @@
 "use server";
 
-
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { Cliente as ClienteType } from "@/generated/client"
+import { Cliente as ClienteType } from "@/generated/client";
+import { dbLogger } from "@/lib/logger";
 
 export async function createCliente(data: ClienteType) {
-  console.log('create client data',data);
   try {
     const cliente: ClienteType = await prisma.cliente.create({
       data: {
@@ -22,14 +21,14 @@ export async function createCliente(data: ClienteType) {
   });
 
     if (!cliente) {
-      console.error("Error creating cliente:");
+      dbLogger.error({ clienteName: data.name }, "Error al crear cliente: registro no creado");
       throw new Error("Error al crear el cliente");
     }
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
-    console.error("Error in createCliente:", error);
+    dbLogger.error({ error, clienteName: data.name }, "Error al crear cliente");
     throw error;
   }
 }
@@ -55,14 +54,14 @@ export async function updateCliente(data: Partial<ClienteType>) {
     });
 
     if (!cliente) {
-      console.error("Error updating cliente:");
+      dbLogger.error({ clienteId: data.id }, "Error al actualizar cliente: registro no actualizado");
       throw new Error("Error al actualizar el cliente");
     }
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
-    console.error("Error in updateCliente:", error);
+    dbLogger.error({ error, clienteId: data.id }, "Error al actualizar cliente");
     throw error;
   }
 }
@@ -76,14 +75,14 @@ export async function deleteCliente(id: string) {
     });
 
     if (!cliente) {
-      console.error("Error deleting cliente:");
+      dbLogger.error({ clienteId: id }, "Error al eliminar cliente: registro no eliminado");
       throw new Error("Error al eliminar el cliente");
     }
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteCliente:", error);
+    dbLogger.error({ error, clienteId: id }, "Error al eliminar cliente");
     throw error;
   }
 }

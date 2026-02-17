@@ -1,9 +1,9 @@
 "use server";
 
-
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { TipoDeInforme } from "@/generated/client"
+import { TipoDeInforme } from "@/generated/client";
+import { dbLogger } from "@/lib/logger";
 
 
 
@@ -19,14 +19,14 @@ export async function createTipoDeInforme(data: TipoDeInforme) {
   });
 
     if (!cliente) {
-      console.error("Error creating servicio:");
+      dbLogger.error({ tipoInformeName: data.name }, "Error al crear tipo de informe: registro no creado");
       throw new Error("Error al crear el servicio");
     }
 
     revalidatePath("/dashboard/servicios");
     return { success: true };
   } catch (error) {
-    console.error("Error in createServicio:", error);
+    dbLogger.error({ error, tipoInformeName: data.name }, "Error al crear tipo de informe");
     throw error;
   }
 }
@@ -47,14 +47,14 @@ export async function updateTipoDeInforme(data: Partial<TipoDeInforme>) {
     });
 
     if (!tipoDeInforme) {
-      console.error("Error updating tipo de informe:");
+      dbLogger.error({ tipoInformeId: data.id }, "Error al actualizar tipo de informe: registro no actualizado");
       throw new Error("Error al actualizar el tipo de informe");
     }
 
     revalidatePath("/dashboard/tipos-informe");
     return { success: true };
   } catch (error) {
-    console.error("Error in updateTipoDeInforme:", error);
+    dbLogger.error({ error, tipoInformeId: data.id }, "Error al actualizar tipo de informe");
     throw error;
   }
 }
@@ -68,14 +68,14 @@ export async function deleteTipoDeInforme(id: string) {
     });
 
     if (!tipoDeInforme) {
-      console.error("Error deleting Tipo de Informe:");
+      dbLogger.error({ tipoInformeId: id }, "Error al eliminar tipo de informe: registro no eliminado");
       throw new Error("Error al eliminar el tipo de informe");
     }
 
     revalidatePath("/dashboard/tipos-informe");
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteTipoDeInforme:", error);
+    dbLogger.error({ error, tipoInformeId: id }, "Error al eliminar tipo de informe");
     throw error;
   }
 }
@@ -93,14 +93,14 @@ export async function getTipoDeInforme(id: string): Promise<TipoDeInformeDetail>
         });
 
         if (!tipoDeInforme) {
-            console.error("Tipo de Informe no encontrado:", id);
+            dbLogger.error({ tipoInformeId: id }, "Tipo de Informe no encontrado");
             throw new Error("Tipo de Informe no encontrado");
         }
 
-        
+
         return { tipoDeInforme };
     } catch (error) {
-        console.error("Error al obtener tipo de informe:", error);
+        dbLogger.error({ error, tipoInformeId: id }, "Error al obtener tipo de informe");
         throw error;
     }
 }

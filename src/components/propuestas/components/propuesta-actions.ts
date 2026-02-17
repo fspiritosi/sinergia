@@ -4,6 +4,7 @@ import { Moneda, PropuestaStatus, PropuestaTecnica } from "@/generated/client";
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { parseDateOnlyToLocalNoon } from "@/lib/dates";
+import { dbLogger } from "@/lib/logger";
 
 interface CreatePropuestaInput {
   codigo: string;
@@ -40,7 +41,7 @@ export async function createPropuesta(data: CreatePropuestaInput) {
     revalidatePath("/dashboard/clientes/propuestas");
     return { success: true };
   } catch (error) {
-    console.error("Error al crear la propuesta técnica:", error);
+    dbLogger.error({ error, propuestaCodigo: data.codigo }, "Error al crear la propuesta técnica");
     throw error;
   }
 }
@@ -76,14 +77,14 @@ export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
     });
 
     if (!propuesta) {
-      console.error("Error updating propuesta:");
+      dbLogger.error({ propuestaId: data.id }, "Error al actualizar propuesta: registro no actualizado");
       throw new Error("Error al actualizar la propuesta");
     }
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
-    console.error("Error in updatePropuesta:", error);
+    dbLogger.error({ error, propuestaId: data.id }, "Error al actualizar propuesta");
     throw error;
   }
 }
@@ -97,14 +98,14 @@ export async function deletePropuesta(id: string) {
     });
 
     if (!propuesta) {
-      console.error("Error deleting propuesta:");
+      dbLogger.error({ propuestaId: id }, "Error al eliminar propuesta: registro no eliminado");
       throw new Error("Error al eliminar la propuesta");
     }
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
-    console.error("Error in deletePropuesta:", error);
+    dbLogger.error({ error, propuestaId: id }, "Error al eliminar propuesta");
     throw error;
   }
 }

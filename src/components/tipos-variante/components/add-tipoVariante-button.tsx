@@ -19,7 +19,6 @@ export function AddTipoVarianteButton() {
       toast.success("Tipo de variante creado");
       setOpen(false);
     } catch (error) {
-      console.error(error);
       toast.error("No se pudo crear el tipo de variante");
       throw error;
     } finally {

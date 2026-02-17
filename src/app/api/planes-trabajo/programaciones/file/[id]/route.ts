@@ -2,32 +2,22 @@
 
 import prisma from "@/lib/db"
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { env } from "@/lib/env"
+import { apiLogger } from "@/lib/logger"
 
-const R2_ENDPOINT = process.env.CLOUDFLARE_S3_API
-const R2_ACCESS_KEY_ID = process.env.CLOUDFLARE_ACCESS_KEY_ID
-const R2_SECRET_ACCESS_KEY = process.env.CLOUDFLARE_SECRET_ACCESS_KEY
-const R2_BUCKET = process.env.CLOUDFLARE_R2_BUCKET
-
-const r2Client =
-  R2_ENDPOINT && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY
-    ? new S3Client({
-        region: "auto",
-        endpoint: R2_ENDPOINT,
-        credentials: {
-          accessKeyId: R2_ACCESS_KEY_ID,
-          secretAccessKey: R2_SECRET_ACCESS_KEY,
-        },
-      })
-    : null
+const r2Client = new S3Client({
+  region: "auto",
+  endpoint: env.CLOUDFLARE_S3_API,
+  credentials: {
+    accessKeyId: env.CLOUDFLARE_ACCESS_KEY_ID,
+    secretAccessKey: env.CLOUDFLARE_SECRET_ACCESS_KEY,
+  },
+})
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  if (!r2Client || !R2_BUCKET) {
-    return new Response("Cloudflare R2 no está configurado", { status: 500 })
-  }
-
   const { id } = await params
 
   const programacion = await prisma.planTrabajoProgramacion.findUnique({
@@ -44,7 +34,7 @@ export async function GET(
   try {
     const result = await r2Client.send(
       new GetObjectCommand({
-        Bucket: R2_BUCKET,
+        Bucket: env.CLOUDFLARE_R2_BUCKET,
         Key: key,
       }),
     )
@@ -62,7 +52,7 @@ export async function GET(
 
     return new Response(stream, { headers })
   } catch (error) {
-    console.error("Error al obtener archivo de R2:", error)
+    apiLogger.error({ error, programacionId: id, key }, "Error al obtener archivo de R2")
     return new Response("Error al obtener el archivo", { status: 500 })
   }
 }

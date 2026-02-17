@@ -55,7 +55,6 @@ export function ClienteRowActions({ cliente }: ClienteRowActionsProps) {
             toast.success("Cliente eliminado exitosamente")
             setDeleteOpen(false)
         } catch (error) {
-            console.error(error)
             toast.error("Error al eliminar el cliente")
         } finally {
             setIsLoading(false)

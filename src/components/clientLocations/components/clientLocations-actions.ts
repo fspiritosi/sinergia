@@ -1,9 +1,9 @@
 "use server";
 
-
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { ClientLocations } from "@/generated/client"
+import { ClientLocations } from "@/generated/client";
+import { dbLogger } from "@/lib/logger";
 
 
 
@@ -21,14 +21,14 @@ export async function createClientLocation(data: ClientLocations) {
   });
 
     if (!clientLocation) {
-      console.error("Error creating client location:");
+      dbLogger.error({ locationName: data.name }, "Error al crear locación de cliente: registro no creado");
       throw new Error("Error al crear la locacion del cliente");
     }
 
     revalidatePath("/dashboard/clientes/locaciones");
     return { success: true };
   } catch (error) {
-    console.error("Error in createServicio:", error);
+    dbLogger.error({ error, locationName: data.name }, "Error al crear locación de cliente");
     throw error;
   }
 }
@@ -51,14 +51,14 @@ export async function updateClientLocation(data: Partial<ClientLocations>) {
     });
 
     if (!clientLocation) {
-      console.error("Error updating clientLocation:");
+      dbLogger.error({ locationId: data.id }, "Error al actualizar locación de cliente: registro no actualizado");
       throw new Error("Error al actualizar la locacion del cliente");
     }
 
     revalidatePath("/dashboard/clientes/locaciones");
     return { success: true };
   } catch (error) {
-    console.error("Error in updateClientLocation:", error);
+    dbLogger.error({ error, locationId: data.id }, "Error al actualizar locación de cliente");
     throw error;
   }
 }
@@ -72,14 +72,14 @@ export async function deleteClientLocation(id: string) {
     });
 
     if (!clientLocation) {
-      console.error("Error deleting clientLocation:");
+      dbLogger.error({ locationId: id }, "Error al eliminar locación de cliente: registro no eliminado");
       throw new Error("Error al eliminar la locacion del cliente");
     }
 
     revalidatePath("/dashboard/clientes/locaciones");
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteClientLocation:", error);
+    dbLogger.error({ error, locationId: id }, "Error al eliminar locación de cliente");
     throw error;
   }
 }
@@ -97,14 +97,14 @@ export async function getClientLocation(id: string): Promise<ClientLocationDetai
         });
 
         if (!clientLocation) {
-            console.error("ClientLocation no encontrado:", id);
+            dbLogger.error({ locationId: id }, "ClientLocation no encontrado");
             throw new Error("ClientLocation no encontrado");
         }
 
-        
+
         return { clientLocation };
     } catch (error) {
-        console.error("Error al obtener clientLocation:", error);
+        dbLogger.error({ error, locationId: id }, "Error al obtener clientLocation");
         throw error;
     }
 }

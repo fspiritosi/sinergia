@@ -177,7 +177,6 @@ export function ItemForm({
                 setTiposInforme(tiposInformeResult)
                 setTiposVariante(tiposVarianteResult)
             } catch (error) {
-                console.error("Error al cargar datos de item:", error)
                 if (!isMounted) return
                 setTiposError("No se pudieron cargar los tipos de informe.")
                 setTiposVarianteError("No se pudieron cargar los tipos de variante.")
@@ -208,7 +207,6 @@ export function ItemForm({
             const servicios = await getServiciosByItem(item.id)
             setAssociatedServicios(servicios)
         } catch (error) {
-            console.error("Error al obtener servicios asociados:", error)
             setServiciosError("No se pudieron cargar los servicios asociados al item.")
         } finally {
             setServiciosLoading(false)
@@ -228,7 +226,7 @@ export function ItemForm({
             await onSubmit(data)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar item:", error)
+            // Error ya manejado por el componente padre
         }
     }
 

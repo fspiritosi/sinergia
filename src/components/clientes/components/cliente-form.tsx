@@ -99,7 +99,7 @@ export function ClienteForm({
             const data = await res.json()
             setProvincias(data)
         }
-        loadProvincias().catch(console.error)
+        void loadProvincias()
     }, [open])
 
     useEffect(() => {
@@ -150,7 +150,9 @@ export function ClienteForm({
                     form.setValue("ciudadId", "")
                 }
             })
-            .catch(console.error)
+            .catch(() => {
+                // Error al cargar ciudades
+            })
             .finally(() => setLoadingCiudades(false))
     }, [selectedProvinciaId, form])
 
@@ -159,7 +161,7 @@ export function ClienteForm({
             await onSubmit(data)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar cliente:", error)
+            // Error ya manejado por el componente padre
         }
     }
 

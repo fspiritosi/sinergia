@@ -19,7 +19,6 @@ export function AddDetalleVarianteButton() {
       toast.success("Detalle de variante creado");
       setOpen(false);
     } catch (error) {
-      console.error(error);
       toast.error("No se pudo crear el detalle");
       throw error;
     } finally {

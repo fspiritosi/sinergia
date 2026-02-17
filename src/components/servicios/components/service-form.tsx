@@ -228,7 +228,7 @@ export function ServiceForm({
             await onSubmit(payload)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar servicio:", error)
+            // Error ya manejado por el componente padre
         }
     }
 

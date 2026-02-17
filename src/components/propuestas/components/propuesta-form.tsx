@@ -352,7 +352,6 @@ export function PropuestaForm({
                     setServicios(uniqueServicios)
                 }
             } catch (error) {
-                console.error("Error al cargar clientes o servicios:", error)
                 if (isMounted) {
                     setClientesError("No se pudieron cargar los clientes.")
                     setServiciosError("No se pudieron cargar los servicios.")
@@ -389,7 +388,6 @@ export function PropuestaForm({
                             const activos = items.filter((item) => item.is_active)
                             return [servicio.id, activos.length > 0] as const
                         } catch (error) {
-                            console.error("Error al cargar items del servicio:", servicio.id, error)
                             return [servicio.id, false] as const
                         }
                     })
@@ -403,7 +401,7 @@ export function PropuestaForm({
                 }
                 setServiciosConItems(map)
             } catch (error) {
-                console.error("Error al cargar información de items por servicio:", error)
+                // Error al cargar info de items, se ignora
             }
         }
 
@@ -451,7 +449,6 @@ export function PropuestaForm({
                 form.setValue("items", nextItems, { shouldDirty: false, shouldValidate: true })
             })
             .catch((error) => {
-                console.error("Error al cargar items del servicio:", error)
                 if (!isMounted) return
                 setItemsError("No se pudieron cargar los items del servicio seleccionado.")
                 setServicioItems([])
@@ -485,7 +482,7 @@ export function PropuestaForm({
             await onSubmit(payload)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar propuesta:", error)
+            // Error ya manejado por el componente padre
         }
     }
 

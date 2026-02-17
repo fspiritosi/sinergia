@@ -46,7 +46,6 @@ export function TipoVarianteRowActions({
       toast.success("Tipo de variante actualizado");
       setEditOpen(false);
     } catch (error) {
-      console.error(error);
       toast.error("Error al actualizar el tipo de variante");
       throw error;
     } finally {
@@ -61,7 +60,6 @@ export function TipoVarianteRowActions({
       toast.success("Tipo de variante eliminado");
       setDeleteOpen(false);
     } catch (error) {
-      console.error(error);
       toast.error("No se pudo eliminar");
     } finally {
       setIsLoading(false);

@@ -3,6 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import type { TipoDeVariante } from "@/generated/client";
+import { dbLogger } from "@/lib/logger";
 
 export async function createTipoDeVariante(data: TipoDeVariante) {
   try {
@@ -21,7 +22,7 @@ export async function createTipoDeVariante(data: TipoDeVariante) {
     revalidatePath("/dashboard/tipos-variante");
     return { success: true };
   } catch (error) {
-    console.error("Error in createTipoDeVariante:", error);
+    dbLogger.error({ error, tipoVarianteName: data.name }, "Error al crear tipo de variante");
     throw error;
   }
 }
@@ -49,7 +50,7 @@ export async function updateTipoDeVariante(data: Partial<TipoDeVariante>) {
     revalidatePath("/dashboard/tipos-variante");
     return { success: true };
   } catch (error) {
-    console.error("Error in updateTipoDeVariante:", error);
+    dbLogger.error({ error, tipoVarianteId: data.id }, "Error al actualizar tipo de variante");
     throw error;
   }
 }
@@ -71,7 +72,7 @@ export async function deleteTipoDeVariante(id: string) {
     revalidatePath("/dashboard/tipos-variante");
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteTipoDeVariante:", error);
+    dbLogger.error({ error, tipoVarianteId: id }, "Error al eliminar tipo de variante");
     throw error;
   }
 }
@@ -92,7 +93,7 @@ export async function getTipoDeVariante(id: string): Promise<TipoDeVarianteDetai
 
     return { tipoDeVariante };
   } catch (error) {
-    console.error("Error al obtener tipo de variante:", error);
+    dbLogger.error({ error, tipoVarianteId: id }, "Error al obtener tipo de variante");
     throw error;
   }
 }

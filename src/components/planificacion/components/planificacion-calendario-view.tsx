@@ -91,7 +91,6 @@ export function PlanificacionCalendarioView() {
           return
         }
 
-        console.error(error)
         toast.error(error?.message ?? "No se pudieron cargar las programaciones")
       } finally {
         if (!isActive) {
