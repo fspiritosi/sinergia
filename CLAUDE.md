@@ -16,6 +16,7 @@ This is a business management application built with Next.js 16 (App Router) for
 - **Environment Variables**: @t3-oss/env-nextjs (type-safe env vars with Zod validation)
 - **Logging**: Pino (structured logging with context)
 - **Data Fetching**: TanStack Query (React Query) for client-side caching
+- **Testing**: Vitest (unit/integration), Playwright (E2E)
 - **File Storage**: Cloudflare R2 (S3-compatible)
 - **PDF Generation**: @react-pdf/renderer
 - **Icons**: Lucide React
@@ -35,6 +36,15 @@ npm start
 
 # Run linter
 npm run lint
+
+# Testing
+npm test                      # Run unit/integration tests in watch mode
+npm test -- --run             # Run unit/integration tests once
+npm run test:ui               # Run tests with UI
+npm run test:coverage         # Run tests with coverage report
+npm run test:e2e              # Run E2E tests with Playwright
+npm run test:e2e:ui           # Run E2E tests with interactive UI
+npm run test:e2e:report       # View E2E test HTML report
 
 # Database operations (Prisma)
 npx prisma studio              # Open Prisma Studio GUI
@@ -557,6 +567,169 @@ Server actions should be marked with `"use server"` and handle errors appropriat
 
 The project uses the React 19 compiler (`reactCompiler: true` in next.config.ts with babel-plugin-react-compiler)
 
+### Testing
+
+The application uses **Vitest** as the testing framework with **Testing Library** for React component testing:
+
+**Setup:**
+- Vitest configured in [/vitest.config.ts](vitest.config.ts)
+- Setup file at [/vitest.setup.ts](vitest.setup.ts) with Testing Library matchers
+- Coverage configured with v8 provider
+- Tests automatically cleanup after each test
+
+**Test File Structure:**
+```
+src/
+  lib/
+    __tests__/
+      utils.test.ts
+      dates.test.ts
+  components/
+    clientes/
+      __tests__/
+        actions.test.ts
+```
+
+**Pattern for Unit Tests:**
+```typescript
+// src/lib/__tests__/utils.test.ts
+import { describe, it, expect } from "vitest"
+import { cn } from "../utils"
+
+describe("cn utility function", () => {
+  it("should merge class names", () => {
+    const result = cn("text-red-500", "bg-blue-500")
+    expect(result).toBe("text-red-500 bg-blue-500")
+  })
+
+  it("should handle conditional classes", () => {
+    const result = cn("base-class", false && "hidden", "visible")
+    expect(result).toBe("base-class visible")
+  })
+})
+```
+
+**Pattern for Component Tests:**
+```typescript
+// src/components/ui/__tests__/button.test.tsx
+import { describe, it, expect } from "vitest"
+import { render, screen } from "@testing-library/react"
+import { Button } from "../button"
+
+describe("Button component", () => {
+  it("should render button with text", () => {
+    render(<Button>Click me</Button>)
+    expect(screen.getByText("Click me")).toBeInTheDocument()
+  })
+})
+```
+
+**Pattern for Server Action Tests:**
+```typescript
+// src/components/clientes/__tests__/actions.test.ts
+import { describe, it, expect, beforeAll, afterAll } from "vitest"
+import { getClientes, createCliente } from "../components/actions"
+import prisma from "@/lib/db"
+
+describe("Cliente Actions", () => {
+  let testClienteId: string
+
+  afterAll(async () => {
+    // Cleanup test data
+    if (testClienteId) {
+      await prisma.cliente.delete({ where: { id: testClienteId } })
+    }
+  })
+
+  it("should get all clientes", async () => {
+    const clientes = await getClientes()
+    expect(clientes).toBeInstanceOf(Array)
+  })
+})
+```
+
+**Running Tests:**
+```bash
+npm test              # Watch mode
+npm test -- --run     # Run once
+npm run test:ui       # Interactive UI
+npm run test:coverage # Generate coverage report
+```
+
+**Best practices:**
+- Place tests in `__tests__` folders next to the code being tested
+- Name test files with `.test.ts` or `.test.tsx` extension
+- Use descriptive test names that explain what is being tested
+- Clean up test data in `afterAll` or `afterEach` hooks
+- Mock external dependencies (APIs, databases) when needed
+- Aim for >70% code coverage in critical paths
+
+**Coverage Configuration:**
+- Provider: v8 (faster than Istanbul)
+- Reports: text, json, html
+- Excludes: node_modules, generated files, config files, type definitions
+
+### E2E Testing with Playwright
+
+The application uses **Playwright** for end-to-end testing of critical user flows:
+
+**Setup:**
+- Playwright configured in [/playwright.config.ts](playwright.config.ts)
+- E2E tests located in [/e2e](e2e) directory
+- Tests use Chromium browser by default
+- Automatically starts dev server before running tests
+
+**Test Structure:**
+```
+e2e/
+  auth.spec.ts       # Authentication flow tests
+  cliente.spec.ts    # Cliente management tests
+  propuesta.spec.ts  # Propuesta técnica tests
+  pdf.spec.ts        # PDF generation tests
+  README.md          # Documentation and setup guide
+```
+
+**Running E2E Tests:**
+```bash
+npm run test:e2e          # Run all E2E tests
+npm run test:e2e:ui       # Run tests with interactive UI
+npm run test:e2e:report   # View HTML report
+npx playwright test --headed  # See browser during tests
+npx playwright test --debug   # Debug mode
+```
+
+**Important Notes:**
+- Most E2E tests require authentication to run
+- Tests for authenticated routes are currently skipped by default
+- See [/e2e/README.md](e2e/README.md) for authentication setup options
+- Options include: manual login, storage state, or @clerk/testing package
+
+**Pattern for E2E Tests:**
+```typescript
+// e2e/cliente.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Cliente Management', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/dashboard/clientes');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('should display clientes page', async ({ page }) => {
+    await expect(page).toHaveURL('/dashboard/clientes');
+    const heading = page.locator('h1, h2').filter({ hasText: /clientes/i });
+    await expect(heading).toBeVisible();
+  });
+});
+```
+
+**Best Practices:**
+- Use stable selectors (data-testid, ARIA roles, visible text)
+- Prefer explicit waits over timeouts
+- Clean up test data after tests complete
+- Use timestamps in test data to avoid conflicts
+- Keep tests independent and idempotent
+
 ## Environment Variables
 
 ### Type-Safe Environment Variables with @t3-oss/env-nextjs
@@ -622,3 +795,5 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
 - Database queries optimized with pagination (skip/take) and leverages the 49 indices
 - Next.js Image optimization configured with Cloudflare R2 remote patterns
 - PDF image assets centralized in SINERGIA_ASSETS constant (pdf-constants.ts)
+- Vitest configured for unit and integration testing with Testing Library
+- Test files located in `__tests__` folders with `.test.ts` extensions
