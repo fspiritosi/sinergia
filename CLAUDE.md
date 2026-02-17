@@ -243,17 +243,81 @@ This ensures:
 - Runtime type checking with Zod
 - No typos in variable names
 
-### Database Access
+### Database Access - Repository Pattern
 
-Always use the Prisma client from `@/lib/db`:
+**IMPORTANT**: Use repositories instead of accessing Prisma directly. This provides:
+- Better separation of concerns
+- Consistent data access patterns
+- Easier testing and mocking
+- Centralized query logic
 
 ```typescript
+// ❌ WRONG - Direct Prisma access in server actions
 import prisma from "@/lib/db"
+const clientes = await prisma.cliente.findMany({ include: { provincia: true } })
 
-const clientes = await prisma.cliente.findMany()
+// ✅ CORRECT - Use repository
+import { clienteRepository } from "@/repositories/cliente.repository"
+const clientes = await clienteRepository.findMany()
 ```
 
-Prisma client is generated to `/src/generated/` instead of `node_modules/.prisma/client` (see prisma.config.ts)
+**Available Repositories:**
+- `clienteRepository` - Cliente entity operations
+- `propuestaRepository` - PropuestaTecnica operations
+- `planTrabajoRepository` - PlanTrabajo operations
+
+**Common Repository Methods:**
+```typescript
+// Find operations
+await repository.findMany({ where, include, orderBy })
+await repository.findById(id)
+await repository.findPaginated({ page, pageSize, search, filters })
+
+// Create/Update/Delete operations
+await repository.create(data)
+await repository.update(id, data)
+await repository.delete(id)
+
+// Utility methods
+await repository.count(where)
+await repository.exists(id)
+```
+
+**Creating New Repositories:**
+
+1. Extend `BaseRepository` from `/src/repositories/base.repository.ts`
+2. Implement abstract methods: `getDelegate()`, `buildSearchWhere()`
+3. Override `getDefaultInclude()` and `getDefaultOrderBy()` as needed
+4. Add entity-specific methods (e.g., `findByCuit()` for Cliente)
+
+Example:
+```typescript
+export class ClienteRepository extends BaseRepository<Cliente> {
+  protected modelName = "Cliente";
+
+  protected getDelegate() {
+    return this.prisma.cliente;
+  }
+
+  protected buildSearchWhere(search: string) {
+    return {
+      OR: [
+        { name: { contains: search, mode: "insensitive" } },
+        { cuit: { contains: search, mode: "insensitive" } },
+      ],
+    };
+  }
+
+  // Entity-specific method
+  async findByCuit(cuit: string) {
+    return this.prisma.cliente.findUnique({ where: { cuit } });
+  }
+}
+
+export const clienteRepository = new ClienteRepository();
+```
+
+**Note:** Prisma client is generated to `/src/generated/` instead of `node_modules/.prisma/client` (see prisma.config.ts)
 
 ### Logging with Pino
 
