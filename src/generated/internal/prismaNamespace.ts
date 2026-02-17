@@ -404,7 +404,8 @@ export const ModelName = {
   Informe: 'Informe',
   PlanTrabajo: 'PlanTrabajo',
   PlanTrabajoProgramacion: 'PlanTrabajoProgramacion',
-  DetalleVariante: 'DetalleVariante'
+  DetalleVariante: 'DetalleVariante',
+  Condicion: 'Condicion'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante"
+    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante" | "condicion"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1534,6 +1535,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Condicion: {
+      payload: Prisma.$CondicionPayload<ExtArgs>
+      fields: Prisma.CondicionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CondicionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CondicionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>
+        }
+        findFirst: {
+          args: Prisma.CondicionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CondicionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>
+        }
+        findMany: {
+          args: Prisma.CondicionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>[]
+        }
+        create: {
+          args: Prisma.CondicionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>
+        }
+        createMany: {
+          args: Prisma.CondicionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CondicionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>[]
+        }
+        delete: {
+          args: Prisma.CondicionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>
+        }
+        update: {
+          args: Prisma.CondicionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>
+        }
+        deleteMany: {
+          args: Prisma.CondicionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CondicionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CondicionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>[]
+        }
+        upsert: {
+          args: Prisma.CondicionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CondicionPayload>
+        }
+        aggregate: {
+          args: Prisma.CondicionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCondicion>
+        }
+        groupBy: {
+          args: Prisma.CondicionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CondicionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CondicionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CondicionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1774,6 +1849,21 @@ export const DetalleVarianteScalarFieldEnum = {
 export type DetalleVarianteScalarFieldEnum = (typeof DetalleVarianteScalarFieldEnum)[keyof typeof DetalleVarianteScalarFieldEnum]
 
 
+export const CondicionScalarFieldEnum = {
+  id: 'id',
+  tipo: 'tipo',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  is_active: 'is_active',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CondicionScalarFieldEnum = (typeof CondicionScalarFieldEnum)[keyof typeof CondicionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1938,6 +2028,20 @@ export type ListEnumProgramacionPrecisionFieldRefInput<$PrismaModel> = FieldRefI
 
 
 /**
+ * Reference to a field of type 'CondicionTipo'
+ */
+export type EnumCondicionTipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CondicionTipo'>
+    
+
+
+/**
+ * Reference to a field of type 'CondicionTipo[]'
+ */
+export type ListEnumCondicionTipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CondicionTipo[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1948,6 +2052,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -2052,6 +2170,7 @@ export type GlobalOmitConfig = {
   planTrabajo?: Prisma.PlanTrabajoOmit
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionOmit
   detalleVariante?: Prisma.DetalleVarianteOmit
+  condicion?: Prisma.CondicionOmit
 }
 
 /* Types for Logging */

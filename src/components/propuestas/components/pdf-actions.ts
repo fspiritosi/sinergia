@@ -5,6 +5,7 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { PropuestaPDF } from "../pdf/PropuestaPDF";
 import { toDateOnlyString } from "@/lib/dates";
 import { pdfLogger } from "@/lib/logger";
+import { getActiveCondicionesByTipo } from "@/components/condiciones/components/actions";
 
 export async function generatePropuestaPDF(propuestaId: string) {
   try {
@@ -35,6 +36,9 @@ export async function generatePropuestaPDF(propuestaId: string) {
       .map((itemId) => itemsMap.get(itemId))
       .filter((item): item is NonNullable<typeof item> => item !== undefined);
 
+    // Obtener condiciones generales desde la base de datos
+    const condicionesGenerales = await getActiveCondicionesByTipo("general");
+
     // Renderizar el PDF a buffer
     const pdfBuffer = await renderToBuffer(
       PropuestaPDF({
@@ -50,6 +54,7 @@ export async function generatePropuestaPDF(propuestaId: string) {
         items,
         valor: Number(propuesta.valor),
         moneda: propuesta.moneda,
+        condicionesGenerales: condicionesGenerales.map((c) => c.description),
         condicionesParticulares: propuesta.condicionesParticulares ?? [],
       })
     );

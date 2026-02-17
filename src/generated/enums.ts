@@ -63,3 +63,11 @@ export const ServiceType = {
 } as const
 
 export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType]
+
+
+export const CondicionTipo = {
+  general: 'general',
+  particular: 'particular'
+} as const
+
+export type CondicionTipo = (typeof CondicionTipo)[keyof typeof CondicionTipo]

@@ -1,13 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Minus, Plus } from "lucide-react"
+import * as React from "react";
+import { Minus, Plus } from "lucide-react";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -21,11 +17,11 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { SignedIn, UserButton, useUser } from "@clerk/nextjs"
-import Image from "next/image"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+} from "@/components/ui/sidebar";
+import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // This is sample data.
 const data = {
@@ -49,7 +45,6 @@ const data = {
           url: "/dashboard/clientes/propuestas",
           isActive: false,
         },
-       
       ],
     },
     {
@@ -71,7 +66,6 @@ const data = {
           url: "/dashboard/informes",
           isActive: false,
         },
- 
       ],
     },
     {
@@ -98,9 +92,14 @@ const data = {
           url: "/dashboard/tipos-variante",
           isActive: false,
         },
-         {
+        {
           title: "Detalle de Variantes",
           url: "/dashboard/detalles-variante",
+          isActive: false,
+        },
+        {
+          title: "Condiciones",
+          url: "/dashboard/condiciones",
           isActive: false,
         },
         {
@@ -108,16 +107,15 @@ const data = {
           url: "/dashboard/usuarios",
           isActive: false,
         },
- 
       ],
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const pathname = usePathname()
-  const { user } = useUser()
-  const isAdmin = user?.publicMetadata?.role === "admin"
+  const pathname = usePathname();
+  const { user } = useUser();
+  const isAdmin = user?.publicMetadata?.role === "admin";
 
   return (
     <Sidebar {...props}>
@@ -138,9 +136,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             {data.navMain.map((item, index) => {
               const isSectionActive = item.items?.some((child) => {
-                if (!pathname) return false
-                return pathname === child.url || pathname.startsWith(`${child.url}/`)
-              })
+                if (!pathname) return false;
+                return pathname === child.url || pathname.startsWith(`${child.url}/`);
+              });
 
               return (
                 <Collapsible
@@ -161,27 +159,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         <SidebarMenuSub>
                           {item.items.map((child) => {
                             if (child.url === "/dashboard/usuarios" && !isAdmin) {
-                              return null
+                              return null;
                             }
-                            const isActive = pathname === child.url
+                            const isActive = pathname === child.url;
 
                             return (
                               <SidebarMenuSubItem key={child.title}>
-                                <SidebarMenuSubButton
-                                  asChild
-                                  isActive={isActive}
-                                >
+                                <SidebarMenuSubButton asChild isActive={isActive}>
                                   <Link href={child.url}>{child.title}</Link>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
-                            )
+                            );
                           })}
                         </SidebarMenuSub>
                       </CollapsibleContent>
                     ) : null}
                   </SidebarMenuItem>
                 </Collapsible>
-              )
+              );
             })}
           </SidebarMenu>
         </SidebarGroup>
@@ -201,5 +196,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

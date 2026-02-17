@@ -39,7 +39,7 @@ import type { PropuestaTecnica } from "./actions";
 import { parseDateOnlyToLocalNoon, toDateOnlyString } from "@/lib/dates";
 import { Badge } from "@/components/ui/badge";
 import { SortableItemsList } from "./sortable-items-list";
-import { CONDICIONES_PARTICULARES } from "@/lib/pdf-constants";
+import { getActiveCondicionesByTipo } from "@/components/condiciones/components/actions";
 import { Loader2 } from "lucide-react";
 
 const MONEDA_OPTIONS = ["ARS", "USD", "EUR"] as const;
@@ -79,12 +79,6 @@ const propuestaSchema = z.object({
 });
 
 type PropuestaFormData = z.infer<typeof propuestaSchema>;
-type CondicionesParticulares = {
-  id: number;
-  type: string;
-  title: string;
-  description: string;
-};
 
 // export const CONDICIONES_PARTICULARES: CondicionesParticulares[] = [
 //     {
@@ -246,12 +240,17 @@ export function PropuestaForm({
   const [itemsLoading, setItemsLoading] = useState(false);
   const [itemsError, setItemsError] = useState<string | null>(null);
 
+  const [condicionesParticulares, setCondicionesParticulares] = useState<
+    Awaited<ReturnType<typeof getActiveCondicionesByTipo>>
+  >([]);
+  const [condicionesLoading, setCondicionesLoading] = useState(false);
+
   const selectedServicioId = form.watch("servicioId");
 
   const condicionesParticularesGrouped = useMemo(() => {
-    const groups = new Map<string, CondicionesParticulares[]>();
-    for (const condicion of CONDICIONES_PARTICULARES) {
-      const key = condicion.type;
+    const groups = new Map<string, typeof condicionesParticulares>();
+    for (const condicion of condicionesParticulares) {
+      const key = condicion.category || "Sin categoría";
       const existing = groups.get(key);
       if (existing) {
         existing.push(condicion);
@@ -262,13 +261,13 @@ export function PropuestaForm({
 
     const entries = Array.from(groups.entries())
       .map(([type, condiciones]) => {
-        const sorted = [...condiciones].sort((a, b) => a.title.localeCompare(b.title, "es"));
+        const sorted = [...condiciones].sort((a, b) => a.order - b.order);
         return [type, sorted] as const;
       })
       .sort(([a], [b]) => a.localeCompare(b, "es"));
 
     return entries;
-  }, []);
+  }, [condicionesParticulares]);
 
   // Resetear el formulario cuando cambie el cliente o se abra/cierre el modal
   useEffect(() => {
@@ -313,18 +312,23 @@ export function PropuestaForm({
     const loadClientesYServicios = async () => {
       setClientesLoading(true);
       setServiciosLoading(true);
+      setCondicionesLoading(true);
       setClientesError(null);
       setServiciosError(null);
 
       try {
-        const [clientesResponse, serviciosResponse] = await Promise.all([
+        const [clientesResponse, serviciosResponse, condicionesResponse] = await Promise.all([
           getClientes(),
           getActiveServicios(),
+          getActiveCondicionesByTipo("particular"),
         ]);
 
         if (isMounted) {
           const activeClientes = clientesResponse.filter((cliente) => cliente.is_active);
           const activeServicios = serviciosResponse.filter((servicio) => servicio.is_active);
+
+          setCondicionesParticulares(condicionesResponse);
+          setCondicionesLoading(false);
 
           if (propuesta) {
             const selectedCliente = clientesResponse.find(

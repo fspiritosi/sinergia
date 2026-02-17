@@ -308,7 +308,22 @@ model DetalleVariante {
   @@index([is_active])
 }
 
+model Condicion {
+  id          String         @id @default(uuid())
+  tipo        CondicionTipo
+  title       String
+  description String         @db.Text
+  category    String?
+  is_active   Boolean        @default(true)
+  order       Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
+  @@index([tipo])
+  @@index([is_active])
+  @@index([category])
+  @@index([order])
+}
 
 
 
@@ -350,4 +365,9 @@ enum Moneda {
 enum ServiceType {
   mensual
   unitario
+}
+
+enum CondicionTipo {
+  general
+  particular
 }
