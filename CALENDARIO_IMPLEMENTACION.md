@@ -21,11 +21,13 @@ Esta documentación describe en detalle la implementación del sistema de calend
 ## 📝 Descripción General
 
 El sistema de calendario está compuesto por:
+
 - **CalendarioView**: Componente principal que gestiona la vista y navegación
 - **CalendarioGrid**: Vista de calendario tipo grid (mes completo)
 - **CalendarioAgenda**: Vista de agenda (lista ordenada por fecha)
 
 ### Características principales:
+
 - ✅ Dos vistas: Grid (mes) y Agenda (lista)
 - ✅ Navegación entre meses (anterior/siguiente)
 - ✅ Botón "Hoy" para volver al mes actual
@@ -60,6 +62,7 @@ El sistema de calendario está compuesto por:
 ### Componentes UI (shadcn/ui)
 
 Necesitarás instalar los siguientes componentes de shadcn/ui:
+
 - `card` - Para el contenedor principal
 - `button` - Para los controles de navegación
 - `badge` - Para mostrar contadores (opcional)
@@ -92,24 +95,24 @@ El calendario espera un array de objetos con la siguiente estructura:
 
 ```typescript
 interface CalendarioItem {
-  id: string
-  numero_inspeccion: string        // Identificador/número del evento
-  cliente_nombre: string           // Nombre del cliente (o título)
-  equipo: string                   // Equipo o subtítulo
-  lugar: string                    // Ubicación
-  responsable: string              // Responsable
-  fecha_programada: string         // Fecha en formato YYYY-MM-DD
-  estado?: string                  // Estado opcional
-  [key: string]: any              // Otros campos adicionales
+  id: string;
+  numero_inspeccion: string; // Identificador/número del evento
+  cliente_nombre: string; // Nombre del cliente (o título)
+  equipo: string; // Equipo o subtítulo
+  lugar: string; // Ubicación
+  responsable: string; // Responsable
+  fecha_programada: string; // Fecha en formato YYYY-MM-DD
+  estado?: string; // Estado opcional
+  [key: string]: any; // Otros campos adicionales
 }
 
-type CalendarioItems = CalendarioItem[]
+type CalendarioItems = CalendarioItem[];
 ```
 
 ### Tipo de Vista
 
 ```typescript
-type VistaCalendario = 'calendario' | 'agenda'
+type VistaCalendario = "calendario" | "agenda";
 ```
 
 ---
@@ -567,11 +570,11 @@ export function CalendarioAgenda({ fecha, eventos }: CalendarioAgendaProps) {
 El componente `cn()` es una utilidad para combinar clases de Tailwind CSS. Si no la tienes, créala en `lib/utils.ts`:
 
 ```typescript
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 ```
 
@@ -622,9 +625,9 @@ export default Calendario
 
 ```typescript
 async function getEventos() {
-  const res = await fetch('https://api.ejemplo.com/eventos')
-  if (!res.ok) throw new Error('Error al obtener eventos')
-  return res.json()
+  const res = await fetch("https://api.ejemplo.com/eventos");
+  if (!res.ok) throw new Error("Error al obtener eventos");
+  return res.json();
 }
 ```
 
@@ -638,11 +641,11 @@ Edita la constante `TIMEZONE_ARGENTINA` en `calendario-grid.tsx` y `calendario-a
 
 ```typescript
 // Ejemplos de timezones comunes
-const TIMEZONE = 'America/Mexico_City'      // México
-const TIMEZONE = 'America/Bogota'           // Colombia
-const TIMEZONE = 'America/Santiago'         // Chile
-const TIMEZONE = 'America/Lima'             // Perú
-const TIMEZONE = 'UTC'                      // UTC
+const TIMEZONE = "America/Mexico_City"; // México
+const TIMEZONE = "America/Bogota"; // Colombia
+const TIMEZONE = "America/Santiago"; // Chile
+const TIMEZONE = "America/Lima"; // Perú
+const TIMEZONE = "UTC"; // UTC
 ```
 
 ### Cambiar los Campos Mostrados
@@ -650,6 +653,7 @@ const TIMEZONE = 'UTC'                      // UTC
 Para personalizar qué campos se muestran, edita los componentes:
 
 **En calendario-grid.tsx** (líneas ~129-135):
+
 ```typescript
 <div className="font-medium truncate">
   {evento.numero_inspeccion}  {/* Cambia este campo */}
@@ -660,6 +664,7 @@ Para personalizar qué campos se muestran, edita los componentes:
 ```
 
 **En calendario-agenda.tsx** (líneas ~72-78):
+
 ```typescript
 <div className="font-medium">{evento.numero_inspeccion}</div>
 <div className="text-muted-foreground text-xs">
@@ -675,18 +680,20 @@ Para personalizar qué campos se muestran, edita los componentes:
 El calendario está configurado para español. Para cambiar el idioma:
 
 1. Importa el locale correspondiente de moment:
+
 ```typescript
-import "moment/locale/en"  // Para inglés
-import "moment/locale/pt"  // Para portugués
+import "moment/locale/en"; // Para inglés
+import "moment/locale/pt"; // Para portugués
 ```
 
 2. Cambia el formato de fecha:
+
 ```typescript
 // En lugar de:
-fecha.locale('es').format('dddd, D [de] MMMM')
+fecha.locale("es").format("dddd, D [de] MMMM");
 
 // Usa:
-fecha.locale('en').format('dddd, MMMM D')  // Inglés
+fecha.locale("en").format("dddd, MMMM D"); // Inglés
 ```
 
 ### Personalizar Colores y Estilos
@@ -725,10 +732,11 @@ const handleEventoClick = (evento: CalendarioItem) => {
 ### 1. Formato de Fecha
 
 Los eventos **deben** tener la fecha en formato `YYYY-MM-DD` (ISO 8601):
+
 ```typescript
-fecha_programada: '2024-12-15'  // ✅ Correcto
-fecha_programada: '15/12/2024'  // ❌ Incorrecto
-fecha_programada: '2024-12-15T10:30:00'  // ✅ Funciona, se toma solo la fecha
+fecha_programada: "2024-12-15"; // ✅ Correcto
+fecha_programada: "15/12/2024"; // ❌ Incorrecto
+fecha_programada: "2024-12-15T10:30:00"; // ✅ Funciona, se toma solo la fecha
 ```
 
 ### 2. Moment.js y Timezone
@@ -737,15 +745,16 @@ Asegúrate de tener `moment-timezone` instalado y configurado correctamente. Si 
 
 ```typescript
 // En lugar de:
-moment.tz(fecha, TIMEZONE_ARGENTINA)
+moment.tz(fecha, TIMEZONE_ARGENTINA);
 
 // Usa:
-moment(fecha)
+moment(fecha);
 ```
 
 ### 3. Componentes UI Requeridos
 
 Asegúrate de tener instalados los componentes de shadcn/ui:
+
 - `card` - Contenedor principal
 - `button` - Controles de navegación
 - `badge` - Contador de eventos (solo en agenda)
@@ -753,6 +762,7 @@ Asegúrate de tener instalados los componentes de shadcn/ui:
 ### 4. Performance
 
 Para grandes cantidades de eventos, considera:
+
 - Paginación o filtrado
 - Lazy loading
 - Memoización con `useMemo` en cálculos pesados
@@ -760,6 +770,7 @@ Para grandes cantidades de eventos, considera:
 ### 5. Responsive Design
 
 El grid está optimizado para pantallas grandes. Para móviles, considera:
+
 - Mostrar solo la vista de agenda en móviles
 - Ajustar el `min-h-[120px]` del grid
 - Usar media queries para ocultar algunos controles
@@ -824,4 +835,3 @@ export default Calendario
 ---
 
 ¡Con esta documentación deberías poder replicar el sistema de calendario en cualquier proyecto! 🎉
-

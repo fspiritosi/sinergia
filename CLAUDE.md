@@ -34,8 +34,11 @@ npm run build
 # Start production server
 npm start
 
-# Run linter
-npm run lint
+# Run linter and formatter
+npm run lint                       # Run ESLint
+npm run lint:fix                   # Run ESLint and auto-fix issues
+npm run format                     # Format all files with Prettier
+npm run format:check               # Check if files are formatted correctly
 
 # Testing
 npm test                      # Run unit/integration tests in watch mode
@@ -91,6 +94,7 @@ npx prisma generate           # Regenerate Prisma Client
 The application manages a complex workflow from proposals to work plans to reports:
 
 **Core Entities:**
+
 - `Cliente` - Clients with locations (provincia/ciudad)
 - `ClientLocations` - Multiple locations per client
 - `Servicio` - Services (monthly or unitary)
@@ -101,12 +105,14 @@ The application manages a complex workflow from proposals to work plans to repor
 - `Informe` - Reports generated from executed work plan tasks
 
 **Supporting Entities:**
+
 - `TipoDeInforme` - Report types
 - `TipoDeVariante` - Variant types for items
 - `DetalleVariante` - Specific variant details
 - `Provincia` / `Ciudad` - Geographic data
 
 **Key Relationships:**
+
 - A `PropuestaTecnica` belongs to one `Cliente` and one `Servicio`
 - A `PlanTrabajo` is created from an approved `PropuestaTecnica`
 - A `PlanTrabajo` contains multiple `PlanTrabajoProgramacion` entries
@@ -114,6 +120,7 @@ The application manages a complex workflow from proposals to work plans to repor
 - `Items` can have variants (`TipoDeVariante` + `DetalleVariante`)
 
 **Important Enums:**
+
 - `PropuestaStatus`: pendiente, aprobada, rechazada, en_progreso, finalizada
 - `PlanTrabajoEstado`: pendiente_programacion, programado_incompleto, programado_completo, en_desarrollo, finalizado_con_pendientes, finalizado_completo
 - `InformeEstado`: pendiente, entregado
@@ -121,6 +128,7 @@ The application manages a complex workflow from proposals to work plans to repor
 
 **Performance Optimization:**
 The database schema includes **49 strategic indices** for query optimization:
+
 - Foreign key indices for all relationships
 - Status/state field indices (`is_active`, `status`, `estado`)
 - Common filter fields (`name`, `createdAt`, `fechaProgramada`)
@@ -128,6 +136,7 @@ The database schema includes **49 strategic indices** for query optimization:
 - Composite indices for common query patterns
 
 These indices significantly improve query performance for:
+
 - Filtering by status/active records
 - Sorting by name or date
 - Foreign key lookups (joins)
@@ -148,11 +157,13 @@ Files are stored in Cloudflare R2 (S3-compatible storage):
 ### PDF Generation
 
 Uses `@react-pdf/renderer` for generating PDFs:
+
 - PDF constants and styles defined in [/src/lib/pdf-constants.ts](src/lib/pdf-constants.ts)
 - Generate PDFs on the server and upload to R2
 - Example usage in informes and planes-trabajo features
 
 **Image assets for PDFs:**
+
 - Logo URLs are centralized in `SINERGIA_ASSETS` constant in [/src/lib/pdf-constants.ts](src/lib/pdf-constants.ts)
 - PDF components use `@react-pdf/renderer` Image component (NOT next/image)
 - Always import and use constants instead of hardcoded URLs
@@ -171,10 +182,12 @@ import { SINERGIA_ASSETS } from '@/lib/pdf-constants'
 The application uses Next.js Image optimization for UI images:
 
 **Configuration:**
+
 - Remote patterns configured in [/next.config.ts](next.config.ts) for Cloudflare R2
 - Allows loading images from `pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev`
 
 **Usage in UI components:**
+
 ```typescript
 import Image from "next/image"
 
@@ -197,11 +210,13 @@ import Image from "next/image"
 ```
 
 **Important distinctions:**
+
 - **UI Components**: Use `next/image` for optimized delivery, lazy loading, and responsive images
 - **PDF Components**: Use `@react-pdf/renderer` Image with direct URLs (cannot use next/image)
 - **Static assets**: Store in `/public` directory for local files
 
 **Benefits:**
+
 - Automatic image optimization and resizing
 - WebP/AVIF format conversion
 - Lazy loading by default
@@ -218,6 +233,72 @@ import Image from "next/image"
 - **Error Handling**: Each route has `error.tsx` for error boundaries and `loading.tsx` for loading states
 - **Loading States**: Use Skeleton components from shadcn/ui for consistent loading UX
 
+### DTOs (Data Transfer Objects)
+
+**IMPORTANT**: Use DTOs to transform database entities into API responses. This provides:
+
+- Clean separation between internal DB structure and external API contract
+- Ability to hide sensitive fields
+- Data formatting (dates as ISO strings, decimals as strings)
+- Computed fields (counts, percentages, status displays)
+
+**Available DTOs:**
+
+- `ClienteDto` / `ClienteWithLocationDto` / `ClienteDetailedDto` / `ClienteSummaryDto`
+- `PropuestaDto` / `PropuestaWithRelationsDto` / `PropuestaDetailedDto` / `PropuestaSummaryDto`
+- `PlanTrabajoDto` / `PlanTrabajoWithRelationsDto` / `PlanTrabajoDetailedDto` / `PlanTrabajoSummaryDto`
+
+**Pattern for using DTOs:**
+
+```typescript
+// ❌ AVOID - Exposing raw database entity
+export async function getCliente(id: string) {
+  const cliente = await clienteRepository.findById(id);
+  return cliente; // Raw Prisma entity with all fields
+}
+
+// ✅ CORRECT - Transform to DTO before returning
+import { toClienteWithLocationDto, type ClienteWithLocationDto } from "@/dtos";
+
+export async function getCliente(id: string): Promise<ClienteWithLocationDto | null> {
+  const cliente = await clienteRepository.findById(id);
+  if (!cliente) return null;
+
+  return toClienteWithLocationDto(cliente);
+}
+```
+
+**Choosing the right DTO level:**
+
+- **Basic DTO** (`toClienteDto`): Essential fields only, no relations
+- **With Relations** (`toClienteWithLocationDto`): Includes immediate relations (provincia, ciudad)
+- **Detailed** (`toClienteDetailedDto`): Full relations + counts (clientLocations, propuestasCount)
+- **Summary** (`toClienteSummaryDto`): Minimal fields for lists/selections (id, name, cuit)
+
+**DTO transformation functions:**
+
+```typescript
+// Single entity transformation
+const dto = toClienteDto(cliente);
+
+// Array transformation
+const dtos = toClienteDtos(clientes);
+
+// With relations
+const dtoWithLocation = toClienteWithLocationDto(clienteWithRelations);
+
+// Detailed with all relations
+const detailedDto = toClienteDetailedDto(clienteWithAllRelations);
+```
+
+**Benefits:**
+
+- Consistent date formatting (ISO strings)
+- Decimal numbers as strings (avoid precision loss)
+- Computed fields (porcentajeCompletado, hasActivePlanTrabajo)
+- Type-safe responses
+- Easy to version APIs (create v2 DTOs without changing DB)
+
 ### Path Aliases
 
 TypeScript path alias `@/*` maps to `./src/*` (configured in tsconfig.json)
@@ -230,14 +311,15 @@ TypeScript path alias `@/*` maps to `./src/*` (configured in tsconfig.json)
 
 ```typescript
 // ❌ WRONG - Will not have type-safety or validation
-const bucket = process.env.CLOUDFLARE_R2_BUCKET
+const bucket = process.env.CLOUDFLARE_R2_BUCKET;
 
 // ✅ CORRECT - Type-safe and validated
-import { env } from "@/lib/env"
-const bucket = env.CLOUDFLARE_R2_BUCKET
+import { env } from "@/lib/env";
+const bucket = env.CLOUDFLARE_R2_BUCKET;
 ```
 
 This ensures:
+
 - TypeScript autocomplete
 - Build-time validation (build fails if vars are missing)
 - Runtime type checking with Zod
@@ -246,6 +328,7 @@ This ensures:
 ### Database Access - Repository Pattern
 
 **IMPORTANT**: Use repositories instead of accessing Prisma directly. This provides:
+
 - Better separation of concerns
 - Consistent data access patterns
 - Easier testing and mocking
@@ -253,34 +336,36 @@ This ensures:
 
 ```typescript
 // ❌ WRONG - Direct Prisma access in server actions
-import prisma from "@/lib/db"
-const clientes = await prisma.cliente.findMany({ include: { provincia: true } })
+import prisma from "@/lib/db";
+const clientes = await prisma.cliente.findMany({ include: { provincia: true } });
 
 // ✅ CORRECT - Use repository
-import { clienteRepository } from "@/repositories/cliente.repository"
-const clientes = await clienteRepository.findMany()
+import { clienteRepository } from "@/repositories/cliente.repository";
+const clientes = await clienteRepository.findMany();
 ```
 
 **Available Repositories:**
+
 - `clienteRepository` - Cliente entity operations
 - `propuestaRepository` - PropuestaTecnica operations
 - `planTrabajoRepository` - PlanTrabajo operations
 
 **Common Repository Methods:**
+
 ```typescript
 // Find operations
-await repository.findMany({ where, include, orderBy })
-await repository.findById(id)
-await repository.findPaginated({ page, pageSize, search, filters })
+await repository.findMany({ where, include, orderBy });
+await repository.findById(id);
+await repository.findPaginated({ page, pageSize, search, filters });
 
 // Create/Update/Delete operations
-await repository.create(data)
-await repository.update(id, data)
-await repository.delete(id)
+await repository.create(data);
+await repository.update(id, data);
+await repository.delete(id);
 
 // Utility methods
-await repository.count(where)
-await repository.exists(id)
+await repository.count(where);
+await repository.exists(id);
 ```
 
 **Creating New Repositories:**
@@ -291,6 +376,7 @@ await repository.exists(id)
 4. Add entity-specific methods (e.g., `findByCuit()` for Cliente)
 
 Example:
+
 ```typescript
 export class ClienteRepository extends BaseRepository<Cliente> {
   protected modelName = "Cliente";
@@ -325,54 +411,59 @@ export const clienteRepository = new ClienteRepository();
 
 ```typescript
 // ❌ WRONG - Will not have structured logging
-console.log("Cliente creado:", cliente)
-console.error("Error:", error)
+console.log("Cliente creado:", cliente);
+console.error("Error:", error);
 
 // ✅ CORRECT - Structured logging with context
-import { dbLogger } from "@/lib/logger"
-dbLogger.info({ cliente }, "Cliente creado")
-dbLogger.error({ error, clienteId }, "Error al crear cliente")
+import { dbLogger } from "@/lib/logger";
+dbLogger.info({ cliente }, "Cliente creado");
+dbLogger.error({ error, clienteId }, "Error al crear cliente");
 ```
 
 **Available loggers:**
+
 - `logger` - General purpose logger
-- `dbLogger` - Database operations (use in *-actions.ts files)
+- `dbLogger` - Database operations (use in \*-actions.ts files)
 - `authLogger` - Authentication operations
 - `pdfLogger` - PDF generation operations
 - `apiLogger` - API route handlers
 - `uploadLogger` - File upload operations
 
 **Log levels:**
+
 - `logger.debug()` - Debugging information (only in development)
 - `logger.info()` - Normal operations
 - `logger.warn()` - Warning conditions
 - `logger.error()` - Error conditions
 
 **Best practices:**
+
 - Always include relevant context (IDs, names, etc.) as the first parameter (object)
 - Use descriptive messages as the second parameter (string)
 - Never log sensitive data (passwords, tokens, etc.)
 - Use the appropriate logger for the module/feature
 
 **Example patterns:**
+
 ```typescript
 // Database operations
-import { dbLogger } from "@/lib/logger"
-dbLogger.info({ clienteId, name: data.name }, "Cliente creado exitosamente")
-dbLogger.error({ error, clienteId }, "Error al actualizar cliente")
+import { dbLogger } from "@/lib/logger";
+dbLogger.info({ clienteId, name: data.name }, "Cliente creado exitosamente");
+dbLogger.error({ error, clienteId }, "Error al actualizar cliente");
 
 // API routes
-import { apiLogger } from "@/lib/logger"
-apiLogger.info({ userId, method: request.method }, "API request received")
-apiLogger.error({ error, path: request.url }, "API request failed")
+import { apiLogger } from "@/lib/logger";
+apiLogger.info({ userId, method: request.method }, "API request received");
+apiLogger.error({ error, path: request.url }, "API request failed");
 
 // PDF generation
-import { pdfLogger } from "@/lib/logger"
-pdfLogger.info({ propuestaId }, "Generando PDF de propuesta")
-pdfLogger.error({ error, propuestaId }, "Error al generar PDF")
+import { pdfLogger } from "@/lib/logger";
+pdfLogger.info({ propuestaId }, "Generando PDF de propuesta");
+pdfLogger.error({ error, propuestaId }, "Error al generar PDF");
 ```
 
 This ensures:
+
 - Structured logging with searchable context
 - Automatic timestamps and log levels
 - Pretty printing in development
@@ -384,6 +475,7 @@ This ensures:
 The application implements Next.js error boundaries and loading states for better UX:
 
 **Error Boundaries (`error.tsx`):**
+
 - Must be client components (`"use client"`)
 - Automatically catch errors in the route segment and children
 - Display user-friendly error messages
@@ -412,6 +504,7 @@ export default function Error({ error, reset }: {
 ```
 
 **Loading States (`loading.tsx`):**
+
 - Automatically shown while route segment is loading
 - Use Skeleton components from shadcn/ui
 - Should match the layout structure of the actual page
@@ -432,6 +525,7 @@ export default function Loading() {
 ```
 
 **Best practices:**
+
 - Create specific loading states for each major route
 - Match skeleton structure to actual page layout
 - Keep error messages user-friendly and actionable
@@ -443,12 +537,14 @@ export default function Loading() {
 The application uses **TanStack Query (React Query)** for client-side data fetching and caching:
 
 **Setup:**
+
 - QueryClient configured in [/src/app/providers.tsx](src/app/providers.tsx)
 - Wrapped in root layout for global access
 - Default staleTime: 60 seconds
 - Disabled refetch on window focus
 
 **Pattern for data fetching components:**
+
 ```typescript
 "use client"
 
@@ -485,6 +581,7 @@ function Clientes() {
 
 **Query Keys:**
 Standard query keys used in the application:
+
 - `["clientes"]` - All clients
 - `["propuestas"]` - All proposals
 - `["planes-trabajo"]` - All work plans
@@ -498,6 +595,7 @@ Standard query keys used in the application:
 - `["client-locations"]` - All client locations
 
 **Benefits:**
+
 - Automatic caching with configurable stale time
 - Automatic background refetching
 - Optimistic updates support
@@ -506,6 +604,7 @@ Standard query keys used in the application:
 - DevTools for debugging (development only)
 
 **Best practices:**
+
 - Always handle loading and error states
 - Use descriptive query keys
 - Provide fallback empty arrays for data
@@ -517,6 +616,7 @@ Standard query keys used in the application:
 The application supports server-side pagination for large datasets to improve performance:
 
 **Server Action Pattern:**
+
 ```typescript
 // components/[module]/components/actions.ts
 export async function get[Module]Paginated(params: {
@@ -556,6 +656,7 @@ export async function get[Module]Paginated(params: {
 ```
 
 **Component Pattern with React Query:**
+
 ```typescript
 "use client"
 
@@ -590,6 +691,7 @@ function Component() {
 
 **DataTable Support:**
 The DataTable component automatically detects server-side pagination when these props are provided:
+
 - `pageCount` - Total number of pages from server
 - `pagination` - Current pagination state
 - `onPaginationChange` - Callback to update pagination
@@ -597,6 +699,7 @@ The DataTable component automatically detects server-side pagination when these 
 When these props are present, DataTable uses `manualPagination: true` and skips client-side filtering.
 
 **Benefits:**
+
 - Only fetches data for current page
 - Reduces memory usage for large datasets
 - Faster initial load times
@@ -604,6 +707,7 @@ When these props are present, DataTable uses `manualPagination: true` and skips 
 - Search and filtering done on database level
 
 **Implemented in all major CRUD modules:**
+
 - ✅ Clientes - Search: name, cuit, email
 - ✅ Propuestas - Search: codigo, cliente name, servicio name
 - ✅ Planes de Trabajo - Search: plan number
@@ -612,6 +716,7 @@ When these props are present, DataTable uses `manualPagination: true` and skips 
 
 **Implementation pattern:**
 Each module has:
+
 1. `get[Module]Paginated` function in actions.ts with server-side filtering
 2. Component using pagination state with React Query
 3. Props passed through TableWrapper → Table → DataTable
@@ -636,12 +741,14 @@ The project uses the React 19 compiler (`reactCompiler: true` in next.config.ts 
 The application uses **Vitest** as the testing framework with **Testing Library** for React component testing:
 
 **Setup:**
+
 - Vitest configured in [/vitest.config.ts](vitest.config.ts)
 - Setup file at [/vitest.setup.ts](vitest.setup.ts) with Testing Library matchers
 - Coverage configured with v8 provider
 - Tests automatically cleanup after each test
 
 **Test File Structure:**
+
 ```
 src/
   lib/
@@ -655,25 +762,27 @@ src/
 ```
 
 **Pattern for Unit Tests:**
+
 ```typescript
 // src/lib/__tests__/utils.test.ts
-import { describe, it, expect } from "vitest"
-import { cn } from "../utils"
+import { describe, it, expect } from "vitest";
+import { cn } from "../utils";
 
 describe("cn utility function", () => {
   it("should merge class names", () => {
-    const result = cn("text-red-500", "bg-blue-500")
-    expect(result).toBe("text-red-500 bg-blue-500")
-  })
+    const result = cn("text-red-500", "bg-blue-500");
+    expect(result).toBe("text-red-500 bg-blue-500");
+  });
 
   it("should handle conditional classes", () => {
-    const result = cn("base-class", false && "hidden", "visible")
-    expect(result).toBe("base-class visible")
-  })
-})
+    const result = cn("base-class", false && "hidden", "visible");
+    expect(result).toBe("base-class visible");
+  });
+});
 ```
 
 **Pattern for Component Tests:**
+
 ```typescript
 // src/components/ui/__tests__/button.test.tsx
 import { describe, it, expect } from "vitest"
@@ -689,30 +798,32 @@ describe("Button component", () => {
 ```
 
 **Pattern for Server Action Tests:**
+
 ```typescript
 // src/components/clientes/__tests__/actions.test.ts
-import { describe, it, expect, beforeAll, afterAll } from "vitest"
-import { getClientes, createCliente } from "../components/actions"
-import prisma from "@/lib/db"
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { getClientes, createCliente } from "../components/actions";
+import prisma from "@/lib/db";
 
 describe("Cliente Actions", () => {
-  let testClienteId: string
+  let testClienteId: string;
 
   afterAll(async () => {
     // Cleanup test data
     if (testClienteId) {
-      await prisma.cliente.delete({ where: { id: testClienteId } })
+      await prisma.cliente.delete({ where: { id: testClienteId } });
     }
-  })
+  });
 
   it("should get all clientes", async () => {
-    const clientes = await getClientes()
-    expect(clientes).toBeInstanceOf(Array)
-  })
-})
+    const clientes = await getClientes();
+    expect(clientes).toBeInstanceOf(Array);
+  });
+});
 ```
 
 **Running Tests:**
+
 ```bash
 npm test              # Watch mode
 npm test -- --run     # Run once
@@ -721,6 +832,7 @@ npm run test:coverage # Generate coverage report
 ```
 
 **Best practices:**
+
 - Place tests in `__tests__` folders next to the code being tested
 - Name test files with `.test.ts` or `.test.tsx` extension
 - Use descriptive test names that explain what is being tested
@@ -729,6 +841,7 @@ npm run test:coverage # Generate coverage report
 - Aim for >70% code coverage in critical paths
 
 **Coverage Configuration:**
+
 - Provider: v8 (faster than Istanbul)
 - Reports: text, json, html
 - Excludes: node_modules, generated files, config files, type definitions
@@ -738,12 +851,14 @@ npm run test:coverage # Generate coverage report
 The application uses **Playwright** for end-to-end testing of critical user flows:
 
 **Setup:**
+
 - Playwright configured in [/playwright.config.ts](playwright.config.ts)
 - E2E tests located in [/e2e](e2e) directory
 - Tests use Chromium browser by default
 - Automatically starts dev server before running tests
 
 **Test Structure:**
+
 ```
 e2e/
   auth.spec.ts       # Authentication flow tests
@@ -754,6 +869,7 @@ e2e/
 ```
 
 **Running E2E Tests:**
+
 ```bash
 npm run test:e2e          # Run all E2E tests
 npm run test:e2e:ui       # Run tests with interactive UI
@@ -763,36 +879,184 @@ npx playwright test --debug   # Debug mode
 ```
 
 **Important Notes:**
+
 - Most E2E tests require authentication to run
 - Tests for authenticated routes are currently skipped by default
 - See [/e2e/README.md](e2e/README.md) for authentication setup options
 - Options include: manual login, storage state, or @clerk/testing package
 
 **Pattern for E2E Tests:**
+
 ```typescript
 // e2e/cliente.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Cliente Management', () => {
+test.describe("Cliente Management", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/dashboard/clientes');
-    await page.waitForLoadState('networkidle');
+    await page.goto("/dashboard/clientes");
+    await page.waitForLoadState("networkidle");
   });
 
-  test('should display clientes page', async ({ page }) => {
-    await expect(page).toHaveURL('/dashboard/clientes');
-    const heading = page.locator('h1, h2').filter({ hasText: /clientes/i });
+  test("should display clientes page", async ({ page }) => {
+    await expect(page).toHaveURL("/dashboard/clientes");
+    const heading = page.locator("h1, h2").filter({ hasText: /clientes/i });
     await expect(heading).toBeVisible();
   });
 });
 ```
 
 **Best Practices:**
+
 - Use stable selectors (data-testid, ARIA roles, visible text)
 - Prefer explicit waits over timeouts
 - Clean up test data after tests complete
 - Use timestamps in test data to avoid conflicts
 - Keep tests independent and idempotent
+
+## Developer Experience
+
+### Code Formatting and Linting
+
+The project uses **Prettier** for code formatting and **ESLint** for linting:
+
+**Prettier Configuration:**
+
+- Config file: [/.prettierrc](.prettierrc)
+- Ignores: [/.prettierignore](.prettierignore)
+- Auto-formats on save (if IDE configured)
+- Enforces consistent code style across the project
+
+**ESLint Configuration:**
+
+- Config file: [/eslint.config.mjs](eslint.config.mjs)
+- Extends: `eslint-config-next` (includes TypeScript support)
+- Integrates with Prettier (no conflicts)
+- Custom rules:
+  - `no-console`: Warn on console.log (allow warn/error)
+  - `@typescript-eslint/no-unused-vars`: Warn (allow `_` prefix)
+  - `@typescript-eslint/no-explicit-any`: Warn
+  - `prefer-const`: Warn
+  - `no-var`: Error
+
+**Commands:**
+
+```bash
+npm run format         # Format all files with Prettier
+npm run format:check   # Check if files are formatted
+npm run lint           # Run ESLint
+npm run lint:fix       # Run ESLint and auto-fix issues
+```
+
+### Git Hooks with Husky and Lint-staged
+
+The project uses **Husky** for Git hooks and **lint-staged** to run checks on staged files:
+
+**Configured Hooks:**
+
+1. **pre-commit** ([/.husky/pre-commit](.husky/pre-commit))
+   - Runs lint-staged on all staged files
+   - Automatically formats code with Prettier
+   - Automatically fixes ESLint issues
+   - Prevents commits if linting fails
+
+2. **commit-msg** ([/.husky/commit-msg](.husky/commit-msg))
+   - Validates commit messages with commitlint
+   - Enforces Conventional Commits format
+   - Prevents commits with invalid messages
+
+**Lint-staged Configuration:**
+
+```json
+{
+  "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+  "*.{json,css,scss,md}": ["prettier --write"]
+}
+```
+
+**Benefits:**
+
+- Ensures all committed code is formatted consistently
+- Catches linting errors before they reach the repository
+- Prevents merge conflicts from formatting differences
+- Maintains code quality automatically
+
+### Conventional Commits
+
+The project enforces **Conventional Commits** specification for commit messages:
+
+**Configuration:**
+
+- Config file: [/commitlint.config.js](commitlint.config.js)
+- Extends: `@commitlint/config-conventional`
+
+**Commit Message Format:**
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Allowed Types:**
+
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, missing semi-colons)
+- `refactor`: Code refactoring
+- `perf`: Performance improvements
+- `test`: Adding or updating tests
+- `build`: Build system or external dependencies
+- `ci`: CI configuration changes
+- `chore`: Other changes (tooling, etc.)
+- `revert`: Revert a previous commit
+
+**Rules:**
+
+- Subject must not be empty
+- Type must not be empty
+- Header max length: 100 characters
+- Body lines max length: 100 characters
+- Body must have blank line before it
+- Footer must have blank line before it
+
+**Examples:**
+
+```bash
+# ✅ Valid commits
+git commit -m "feat: add user authentication"
+git commit -m "fix: resolve login redirect issue"
+git commit -m "docs: update API documentation"
+
+# ❌ Invalid commits (will be rejected)
+git commit -m "fixed stuff"           # Missing type
+git commit -m "update"                # Not descriptive
+git commit -m "feat add feature"      # Missing colon
+```
+
+**Multi-line Commit Example:**
+
+```bash
+git commit -m "$(cat <<'EOF'
+feat: add user authentication system
+
+Implemented JWT-based authentication with refresh tokens.
+Added login, logout, and token refresh endpoints.
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+EOF
+)"
+```
+
+**Benefits:**
+
+- Clear commit history that's easy to read
+- Automatic changelog generation possible
+- Easy to identify type of change (feature, fix, etc.)
+- Better collaboration through standardized messages
+- Semantic versioning support
 
 ## Environment Variables
 
@@ -804,14 +1068,15 @@ This project uses `@t3-oss/env-nextjs` for runtime validation and type-safety of
 
 ```typescript
 // ❌ NEVER DO THIS
-const apiKey = process.env.CLOUDFLARE_ACCESS_KEY_ID
+const apiKey = process.env.CLOUDFLARE_ACCESS_KEY_ID;
 
 // ✅ ALWAYS DO THIS
-import { env } from "@/lib/env"
-const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
+import { env } from "@/lib/env";
+const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID;
 ```
 
 **Benefits:**
+
 - Build fails if required variables are missing
 - TypeScript autocomplete for all env vars
 - Runtime validation with Zod
@@ -822,6 +1087,7 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
 **Required environment variables** (see .env.example):
 
 **Server-only:**
+
 - `DATABASE_URL` - PostgreSQL connection string (must be valid URL)
 - `CLERK_SECRET_KEY` - Clerk secret key
 - `CLOUDFLARE_S3_API` - Cloudflare R2 endpoint URL
@@ -829,7 +1095,8 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
 - `CLOUDFLARE_SECRET_ACCESS_KEY` - R2 secret key
 - `CLOUDFLARE_R2_BUCKET` - R2 bucket name
 
-**Client-exposed (NEXT_PUBLIC_*):**
+**Client-exposed (NEXT*PUBLIC*\*):**
+
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk publishable key
 - `NEXT_PUBLIC_APP_URL` - Application base URL
 - `NEXT_PUBLIC_CLERK_SIGN_IN_URL` - Sign in route (default: "/sign-in")
@@ -838,6 +1105,7 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
 - `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` - Post-signup redirect (default: "/dashboard")
 
 **Adding new environment variables:**
+
 1. Add to the appropriate section in `/src/lib/env.ts` (server or client)
 2. Add Zod validation schema
 3. Add to `runtimeEnv` mapping
@@ -861,3 +1129,8 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
 - PDF image assets centralized in SINERGIA_ASSETS constant (pdf-constants.ts)
 - Vitest configured for unit and integration testing with Testing Library
 - Test files located in `__tests__` folders with `.test.ts` extensions
+- Prettier and ESLint configured for automatic code formatting and linting
+- Git hooks (Husky + lint-staged) automatically format and lint code before commits
+- Conventional Commits enforced via commitlint for standardized commit messages
+- Pre-commit hook runs lint-staged on staged files only (faster than full project scan)
+- Commit-msg hook validates commit message format before creating commit
