@@ -5,6 +5,10 @@ export const SINERGIA_CONTACT = {
     address: 'Ing. Silvio Tosello 1531 - Neuquén'
 }
 
+export const SINERGIA_ASSETS = {
+    logoVertical: 'https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev/LogoVertical.jpg'
+}
+
 export const PDF_COLORS = {
     primary: '#2398A1',
     secondary: '#84B631',

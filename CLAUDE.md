@@ -142,6 +142,62 @@ Uses `@react-pdf/renderer` for generating PDFs:
 - Generate PDFs on the server and upload to R2
 - Example usage in informes and planes-trabajo features
 
+**Image assets for PDFs:**
+- Logo URLs are centralized in `SINERGIA_ASSETS` constant in [/src/lib/pdf-constants.ts](src/lib/pdf-constants.ts)
+- PDF components use `@react-pdf/renderer` Image component (NOT next/image)
+- Always import and use constants instead of hardcoded URLs
+
+```typescript
+// ❌ WRONG - Hardcoded URL
+<Image src="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev/LogoVertical.jpg" />
+
+// ✅ CORRECT - Use constant
+import { SINERGIA_ASSETS } from '@/lib/pdf-constants'
+<Image src={SINERGIA_ASSETS.logoVertical} />
+```
+
+### Image Optimization
+
+The application uses Next.js Image optimization for UI images:
+
+**Configuration:**
+- Remote patterns configured in [/next.config.ts](next.config.ts) for Cloudflare R2
+- Allows loading images from `pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev`
+
+**Usage in UI components:**
+```typescript
+import Image from "next/image"
+
+// Local images (from /public)
+<Image
+  src="/LogoHorizontal.webp"
+  alt="Logo"
+  width={200}
+  height={64}
+  priority
+/>
+
+// Remote images (from R2)
+<Image
+  src="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev/image.jpg"
+  alt="Description"
+  width={400}
+  height={300}
+/>
+```
+
+**Important distinctions:**
+- **UI Components**: Use `next/image` for optimized delivery, lazy loading, and responsive images
+- **PDF Components**: Use `@react-pdf/renderer` Image with direct URLs (cannot use next/image)
+- **Static assets**: Store in `/public` directory for local files
+
+**Benefits:**
+- Automatic image optimization and resizing
+- WebP/AVIF format conversion
+- Lazy loading by default
+- Responsive images with srcset
+- Blur placeholder support
+
 ### Component Patterns
 
 - **UI Components**: Located in `/src/components/ui/`, based on shadcn/ui with Radix UI primitives
@@ -564,3 +620,5 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID
 - Server-side pagination implemented in 5 major modules (Clientes, Propuestas, Planes, Informes, Items)
 - DataTable component supports both client-side and server-side pagination automatically
 - Database queries optimized with pagination (skip/take) and leverages the 49 indices
+- Next.js Image optimization configured with Cloudflare R2 remote patterns
+- PDF image assets centralized in SINERGIA_ASSETS constant (pdf-constants.ts)

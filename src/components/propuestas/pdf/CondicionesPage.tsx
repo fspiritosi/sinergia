@@ -1,7 +1,7 @@
 import { Page, View, Text, Image } from '@react-pdf/renderer'
 import { pdfStyles } from './styles'
 import { PageFooter } from './PageFooter'
-import { CONSIDERACIONES_GENERALES } from '@/lib/pdf-constants'
+import { CONSIDERACIONES_GENERALES, SINERGIA_ASSETS } from '@/lib/pdf-constants'
 import type { Items, Moneda, PropuestaTecnica } from '@/generated/client'
 
 interface CondicionesPageProps {
@@ -24,7 +24,7 @@ export function CondicionesPage({
                 <View style={pdfStyles.verticalBar} />
                 <View style={pdfStyles.logoContainer}>
                     <Image
-                        src="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev/LogoVertical.jpg"
+                        src={SINERGIA_ASSETS.logoVertical}
                         style={pdfStyles.logo}
                     />
                 </View>
