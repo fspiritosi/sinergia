@@ -752,8 +752,9 @@ export function PropuestaForm({
                                 <Select
                                   value=""
                                   onValueChange={(itemId) => {
-                                    if (itemId && !selectedItems.includes(itemId)) {
-                                      field.onChange([...selectedItems, itemId]);
+                                    const current = form.getValues("items");
+                                    if (itemId && !current.includes(itemId)) {
+                                      field.onChange([...current, itemId]);
                                     }
                                   }}
                                 >
@@ -796,9 +797,10 @@ export function PropuestaForm({
                                     items={servicioItems}
                                     selectedItemIds={selectedItems}
                                     onReorder={(newOrder) => field.onChange(newOrder)}
-                                    onRemove={(itemId) =>
-                                      field.onChange(selectedItems.filter((id) => id !== itemId))
-                                    }
+                                    onRemove={(itemId) => {
+                                      const current = form.getValues("items");
+                                      field.onChange(current.filter((id) => id !== itemId));
+                                    }}
                                   />
                                 </div>
                               )}
