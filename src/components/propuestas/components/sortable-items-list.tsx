@@ -75,7 +75,10 @@ export function SortableItemsList({
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const selectedItems = items.filter((item) => selectedItemIds.includes(item.id));
+  // Map selectedItemIds to items in the correct order
+  const selectedItems = selectedItemIds
+    .map((id) => items.find((item) => item.id === id))
+    .filter((item): item is Item => item !== undefined);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
