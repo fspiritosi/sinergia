@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
@@ -743,46 +744,51 @@ export function PropuestaForm({
                             <p className="text-sm text-destructive">{itemsError}</p>
                           ) : servicioItems.length ? (
                             <div className="space-y-4">
-                              {/* Items Disponibles - Checkboxes */}
+                              {/* Agregar Items - Select */}
                               <div className="space-y-2">
-                                <p className="text-sm font-semibold">Items Disponibles</p>
-                                {servicioItems.map((item) => {
-                                  const checked = selectedItems.includes(item.id);
-                                  return (
-                                    <div
-                                      key={item.id}
-                                      className="flex items-start justify-between gap-3 rounded-md border border-border px-3 py-2"
-                                    >
-                                      <div className="flex flex-1 items-start gap-2">
-                                        <Checkbox
-                                          checked={checked}
-                                          onCheckedChange={(value) => {
-                                            const current = form.getValues("items");
-                                            if (value === true) {
-                                              field.onChange([...current, item.id]);
-                                              return;
-                                            }
-
-                                            field.onChange(current.filter((id) => id !== item.id));
-                                          }}
-                                        />
-                                        <div>
-                                          <p className="text-sm font-medium">{item.name}</p>
-                                          {item.description ? (
-                                            <p className="text-xs text-muted-foreground">
-                                              {item.description}
-                                            </p>
-                                          ) : null}
-                                        </div>
+                                <Label htmlFor="add-item" className="text-sm font-semibold">
+                                  Agregar Item
+                                </Label>
+                                <Select
+                                  value=""
+                                  onValueChange={(itemId) => {
+                                    if (itemId && !selectedItems.includes(itemId)) {
+                                      field.onChange([...selectedItems, itemId]);
+                                    }
+                                  }}
+                                >
+                                  <SelectTrigger id="add-item">
+                                    <SelectValue placeholder="Seleccioná un item para agregar" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {servicioItems
+                                      .filter((item) => !selectedItems.includes(item.id))
+                                      .map((item) => (
+                                        <SelectItem key={item.id} value={item.id}>
+                                          <div className="flex flex-col">
+                                            <span className="font-medium">{item.name}</span>
+                                            {item.description && (
+                                              <span className="text-xs text-muted-foreground">
+                                                {item.description}
+                                              </span>
+                                            )}
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    {servicioItems.filter(
+                                      (item) => !selectedItems.includes(item.id)
+                                    ).length === 0 && (
+                                      <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                                        Todos los items ya están seleccionados
                                       </div>
-                                    </div>
-                                  );
-                                })}
+                                    )}
+                                  </SelectContent>
+                                </Select>
                               </div>
 
                               {/* Items Seleccionados - Drag & Drop */}
                               {selectedItems.length > 0 && (
-                                <div className="space-y-2 pt-4 border-t">
+                                <div className="space-y-2">
                                   <p className="text-sm font-semibold">
                                     Items Seleccionados (arrastrá para ordenar)
                                   </p>
