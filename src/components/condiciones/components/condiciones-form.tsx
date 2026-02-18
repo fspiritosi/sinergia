@@ -30,7 +30,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { CondicionTipo, type Condicion } from "@/generated/client";
+import { CondicionTipo } from "@/generated/enums";
+import type { Condicion } from "@/generated/client";
 import { useEffect } from "react";
 
 const condicionSchema = z.object({
@@ -61,8 +62,8 @@ export function CondicionForm({
 }: CondicionFormProps) {
   const isEditing = !!condicion;
 
-  const form = useForm<CondicionFormData>({
-    resolver: zodResolver(condicionSchema),
+  const form = useForm({
+    resolver: zodResolver(condicionSchema) as any,
     defaultValues: {
       title: "",
       description: "",

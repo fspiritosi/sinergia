@@ -37,8 +37,7 @@ export interface ClienteWithLocationDto extends ClienteDto {
 export interface ClienteDetailedDto extends ClienteWithLocationDto {
   clientLocations: {
     id: string;
-    nombre: string;
-    domicilio: string;
+    name: string;
     provincia: {
       id: string;
       nombre: string;
@@ -125,8 +124,7 @@ export function toClienteDetailedDto(
     clientLocations:
       cliente.clientLocations?.map((location) => ({
         id: location.id,
-        nombre: location.nombre,
-        domicilio: location.domicilio,
+        name: location.name,
         provincia: location.provincia
           ? {
               id: location.provincia.id,

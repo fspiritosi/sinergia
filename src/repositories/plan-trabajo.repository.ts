@@ -95,10 +95,7 @@ export class PlanTrabajoRepository extends BaseRepository<
   /**
    * Find planes de trabajo within a date range
    */
-  async findByDateRange(
-    fechaInicio: Date,
-    fechaFin: Date
-  ): Promise<PlanTrabajo[]> {
+  async findByDateRange(fechaInicio: Date, fechaFin: Date): Promise<PlanTrabajo[]> {
     try {
       return await this.prisma.planTrabajo.findMany({
         where: {
@@ -116,10 +113,7 @@ export class PlanTrabajoRepository extends BaseRepository<
               },
             },
             {
-              AND: [
-                { fechaInicio: { lte: fechaInicio } },
-                { fechaFin: { gte: fechaFin } },
-              ],
+              AND: [{ fechaInicio: { lte: fechaInicio } }, { fechaFin: { gte: fechaFin } }],
             },
           ],
         },
@@ -138,10 +132,7 @@ export class PlanTrabajoRepository extends BaseRepository<
   /**
    * Update plan de trabajo estado
    */
-  async updateEstado(
-    id: string,
-    estado: PlanTrabajoEstado
-  ): Promise<PlanTrabajo> {
+  async updateEstado(id: string, estado: PlanTrabajoEstado): Promise<PlanTrabajo> {
     return this.update(id, { estado });
   }
 
@@ -216,9 +207,9 @@ export class PlanTrabajoRepository extends BaseRepository<
             include: {
               item: {
                 include: {
-                  tipoDeVariante: {
+                  variantType: {
                     include: {
-                      detallesVariantes: true,
+                      detalles: true,
                     },
                   },
                 },
@@ -243,10 +234,7 @@ export class PlanTrabajoRepository extends BaseRepository<
         },
       });
     } catch (error) {
-      dbLogger.error(
-        { error, id },
-        "Error finding plan de trabajo by ID with full details"
-      );
+      dbLogger.error({ error, id }, "Error finding plan de trabajo by ID with full details");
       throw error;
     }
   }

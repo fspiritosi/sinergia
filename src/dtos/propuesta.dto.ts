@@ -113,8 +113,8 @@ export function toPropuestaWithRelationsDto(
     servicio: propuesta.servicios
       ? {
           id: propuesta.servicios.id,
-          nombre: propuesta.servicios.nombre,
-          tipo: propuesta.servicios.tipo,
+          nombre: propuesta.servicios.name,
+          tipo: propuesta.servicios.type,
         }
       : {
           id: propuesta.servicioId,
@@ -158,7 +158,7 @@ export function toPropuestaSummaryDto(
     id: propuesta.id,
     codigo: propuesta.codigo,
     clienteNombre: propuesta.cliente?.name || "N/A",
-    servicioNombre: propuesta.servicios?.nombre || "N/A",
+    servicioNombre: propuesta.servicios?.name || "N/A",
     status: propuesta.status,
     valor: propuesta.valor.toString(),
     moneda: propuesta.moneda,

@@ -26,23 +26,17 @@ export type PropuestaStatus = z.infer<typeof propuestaStatusEnum>;
  */
 export const propuestaBaseSchema = z.object({
   codigo: z
-    .string({ required_error: "El código es requerido" })
+    .string()
     .min(1, "El código es requerido")
     .max(50, "El código no puede exceder 50 caracteres")
     .trim(),
 
-  clienteId: z
-    .string({ required_error: "El cliente es requerido" })
-    .min(1, "Seleccioná un cliente")
-    .uuid("ID de cliente inválido"),
+  clienteId: z.string().min(1, "Seleccioná un cliente").uuid("ID de cliente inválido"),
 
-  servicioId: z
-    .string({ required_error: "El servicio es requerido" })
-    .min(1, "Seleccioná un servicio")
-    .uuid("ID de servicio inválido"),
+  servicioId: z.string().min(1, "Seleccioná un servicio").uuid("ID de servicio inválido"),
 
   vigencia: z
-    .date({ required_error: "La vigencia es requerida" })
+    .date()
     .or(
       z
         .string()
@@ -55,12 +49,7 @@ export const propuestaBaseSchema = z.object({
     .nullable()
     .optional(),
 
-  items: z
-    .array(z.string(), {
-      required_error: "Los items son requeridos",
-    })
-    .min(1, "Seleccioná al menos un item")
-    .default([]),
+  items: z.array(z.string()).min(1, "Seleccioná al menos un item").default([]),
 
   contacto: z
     .string()
@@ -71,10 +60,7 @@ export const propuestaBaseSchema = z.object({
     .nullable(),
 
   valor: z
-    .number({
-      required_error: "El valor es requerido",
-      invalid_type_error: "El valor debe ser un número",
-    })
+    .number()
     .nonnegative("El valor debe ser mayor o igual a 0")
     .or(
       z
@@ -94,9 +80,7 @@ export const propuestaBaseSchema = z.object({
   status: propuestaStatusEnum.default("pendiente"),
 
   condicionesParticulares: z
-    .array(z.string(), {
-      required_error: "Las condiciones particulares son requeridas",
-    })
+    .array(z.string())
     .min(1, "Seleccioná al menos una condición particular")
     .default([]),
 
@@ -124,18 +108,14 @@ export const propuestaUpdateSchema = propuestaBaseSchema.partial().extend({
  */
 export const propuestaFormSchema = z.object({
   codigo: z
-    .string({ required_error: "El código es requerido" })
+    .string()
     .min(1, "El código es requerido")
     .max(50, "El código no puede exceder 50 caracteres")
     .trim(),
 
-  clienteId: z
-    .string({ required_error: "El cliente es requerido" })
-    .min(1, "Seleccioná un cliente"),
+  clienteId: z.string().min(1, "Seleccioná un cliente"),
 
-  servicioId: z
-    .string({ required_error: "El servicio es requerido" })
-    .min(1, "Seleccioná un servicio"),
+  servicioId: z.string().min(1, "Seleccioná un servicio"),
 
   vigencia: z
     .string()

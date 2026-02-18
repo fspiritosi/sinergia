@@ -109,7 +109,7 @@ export function toPlanTrabajoWithRelationsDto(
   plan: PlanTrabajo & {
     cliente?: Cliente;
     propuesta?: PropuestaTecnica & {
-      servicios?: { nombre: string };
+      servicios?: { name: string };
     };
     programaciones?: PlanTrabajoProgramacion[];
   }
@@ -139,7 +139,7 @@ export function toPlanTrabajoWithRelationsDto(
       ? {
           id: plan.propuesta.id,
           codigo: plan.propuesta.codigo,
-          servicioNombre: plan.propuesta.servicios?.nombre,
+          servicioNombre: plan.propuesta.servicios?.name,
         }
       : {
           id: plan.propuestaId,
@@ -158,7 +158,7 @@ export function toPlanTrabajoDetailedDto(
   plan: PlanTrabajo & {
     cliente?: Cliente;
     propuesta?: PropuestaTecnica & {
-      servicios?: { nombre: string };
+      servicios?: { name: string };
     };
     programaciones?: (PlanTrabajoProgramacion & {
       item?: Items;
@@ -187,11 +187,11 @@ export function toPlanTrabajoProgramacionDto(
     id: programacion.id,
     planTrabajoId: programacion.planTrabajoId,
     itemId: programacion.itemId,
-    itemNombre: programacion.item?.nombre || "Item no disponible",
+    itemNombre: programacion.item?.name || "Item no disponible",
     fechaProgramada: programacion.fechaProgramada.toISOString(),
     precision: programacion.precision,
     clientLocationId: programacion.clientLocationId,
-    clientLocationNombre: programacion.clientLocation?.nombre || null,
+    clientLocationNombre: programacion.clientLocation?.name || null,
     ejecutadoAt: programacion.ejecutadoAt?.toISOString() || null,
     adjunto: programacion.adjunto,
     informeId: programacion.informe?.id || null,
@@ -242,7 +242,7 @@ export function toPlanTrabajoWithRelationsDtos(
   planes: (PlanTrabajo & {
     cliente?: Cliente;
     propuesta?: PropuestaTecnica & {
-      servicios?: { nombre: string };
+      servicios?: { name: string };
     };
     programaciones?: PlanTrabajoProgramacion[];
   })[]

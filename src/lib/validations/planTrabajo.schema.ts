@@ -26,17 +26,11 @@ export type ProgramacionPrecision = z.infer<typeof programacionPrecisionEnum>;
  * Common validation rules for PlanTrabajo entity
  */
 export const planTrabajoBaseSchema = z.object({
-  clienteId: z
-    .string({ required_error: "El cliente es requerido" })
-    .min(1, "Seleccioná un cliente")
-    .uuid("ID de cliente inválido"),
+  clienteId: z.string().min(1, "Seleccioná un cliente").uuid("ID de cliente inválido"),
 
-  propuestaId: z
-    .string({ required_error: "La propuesta es requerida" })
-    .min(1, "Seleccioná una propuesta")
-    .uuid("ID de propuesta inválido"),
+  propuestaId: z.string().min(1, "Seleccioná una propuesta").uuid("ID de propuesta inválido"),
 
-  fechaInicio: z.date({ required_error: "La fecha de inicio es requerida" }).or(
+  fechaInicio: z.date().or(
     z
       .string()
       .min(1, "La fecha de inicio es requerida")
@@ -46,7 +40,7 @@ export const planTrabajoBaseSchema = z.object({
       .transform((value) => new Date(value))
   ),
 
-  fechaFin: z.date({ required_error: "La fecha de fin es requerida" }).or(
+  fechaFin: z.date().or(
     z
       .string()
       .min(1, "La fecha de fin es requerida")
@@ -90,13 +84,9 @@ export const planTrabajoUpdateSchema = planTrabajoBaseSchema.partial().extend({
  */
 export const planTrabajoFormSchema = z
   .object({
-    clienteId: z
-      .string({ required_error: "El cliente es requerido" })
-      .min(1, "Seleccioná un cliente"),
+    clienteId: z.string().min(1, "Seleccioná un cliente"),
 
-    propuestaId: z
-      .string({ required_error: "La propuesta es requerida" })
-      .min(1, "Seleccioná una propuesta"),
+    propuestaId: z.string().min(1, "Seleccioná una propuesta"),
 
     fechaInicio: z
       .string()
@@ -130,13 +120,11 @@ export const planTrabajoFormSchema = z
  * Base Plan de Trabajo Programacion Schema
  */
 export const planTrabajoProgramacionBaseSchema = z.object({
-  planTrabajoId: z
-    .string({ required_error: "El plan de trabajo es requerido" })
-    .uuid("ID de plan de trabajo inválido"),
+  planTrabajoId: z.string().uuid("ID de plan de trabajo inválido"),
 
-  itemId: z.string({ required_error: "El item es requerido" }).uuid("ID de item inválido"),
+  itemId: z.string().uuid("ID de item inválido"),
 
-  fechaProgramada: z.date({ required_error: "La fecha programada es requerida" }).or(
+  fechaProgramada: z.date().or(
     z
       .string()
       .min(1, "La fecha programada es requerida")
@@ -186,11 +174,9 @@ export const planTrabajoProgramacionUpdateSchema = planTrabajoProgramacionBaseSc
  * Schema for Programacion form (client-side)
  */
 export const planTrabajoProgramacionFormSchema = z.object({
-  planTrabajoId: z
-    .string({ required_error: "El plan de trabajo es requerido" })
-    .min(1, "Seleccioná un plan de trabajo"),
+  planTrabajoId: z.string().min(1, "Seleccioná un plan de trabajo"),
 
-  itemId: z.string({ required_error: "El item es requerido" }).min(1, "Seleccioná un item"),
+  itemId: z.string().min(1, "Seleccioná un item"),
 
   fechaProgramada: z
     .string()

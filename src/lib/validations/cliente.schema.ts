@@ -12,13 +12,13 @@ const cuitRegex = /^(\d{2}-?\d{8}-?\d{1}|\d{11})$/;
  */
 export const clienteBaseSchema = z.object({
   name: z
-    .string({ required_error: "El nombre es requerido" })
+    .string()
     .min(1, "El nombre es requerido")
     .max(255, "El nombre no puede exceder 255 caracteres")
     .trim(),
 
   cuit: z
-    .string({ required_error: "El CUIT es requerido" })
+    .string()
     .min(11, "El CUIT debe tener al menos 11 caracteres")
     .max(13, "El CUIT no puede exceder 13 caracteres")
     .regex(cuitRegex, "Formato de CUIT inválido (debe ser XX-XXXXXXXX-X)")
@@ -47,14 +47,14 @@ export const clienteBaseSchema = z.object({
     .or(z.literal("")),
 
   provinciaId: z
-    .string({ required_error: "La provincia es requerida" })
+    .string()
     .min(1, "La provincia es requerida")
     .uuid("ID de provincia inválido")
     .optional()
     .or(z.literal("")),
 
   ciudadId: z
-    .string({ required_error: "La ciudad es requerida" })
+    .string()
     .min(1, "La ciudad es requerida")
     .uuid("ID de ciudad inválido")
     .optional()
