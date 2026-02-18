@@ -12,6 +12,7 @@ interface PropuestasTableWrapperProps {
     pageSize: number;
   };
   onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
+  onFiltersChange?: (filters: Record<string, any>) => void;
 }
 
 export function PropuestasTableWrapper({
@@ -19,6 +20,7 @@ export function PropuestasTableWrapper({
   pageCount,
   pagination,
   onPaginationChange,
+  onFiltersChange,
 }: PropuestasTableWrapperProps) {
   const isEmpty = data.length === 0;
 
@@ -40,6 +42,7 @@ export function PropuestasTableWrapper({
             pageCount={pageCount}
             pagination={pagination}
             onPaginationChange={onPaginationChange}
+            onFiltersChange={onFiltersChange}
           />
         </TableState>
       </CardContent>
