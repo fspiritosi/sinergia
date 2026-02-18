@@ -30,7 +30,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import type { Condicion, CondicionTipo } from "@/generated/client";
+import { CondicionTipo, type Condicion } from "@/generated/client";
 import { useEffect } from "react";
 
 const condicionSchema = z.object({

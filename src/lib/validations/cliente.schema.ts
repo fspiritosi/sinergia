@@ -60,7 +60,7 @@ export const clienteBaseSchema = z.object({
     .optional()
     .or(z.literal("")),
 
-  is_active: z.boolean().default(true),
+  is_active: z.boolean().optional().default(true),
 });
 
 /**

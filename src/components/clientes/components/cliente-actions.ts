@@ -3,12 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { Cliente as ClienteType } from "@/generated/client";
 import { clienteRepository } from "@/repositories/cliente.repository";
-import {
-  validateClienteCreate,
-  validateClienteUpdate,
-  type ClienteCreateInput,
-  type ClienteUpdateInput,
-} from "@/lib/validations/cliente.schema";
+import { validateClienteCreate, validateClienteUpdate } from "@/lib/validations/cliente.schema";
 import { dbLogger } from "@/lib/logger";
 
 export async function createCliente(data: ClienteType) {
@@ -25,7 +20,7 @@ export async function createCliente(data: ClienteType) {
       is_active: data.is_active,
     });
 
-    await clienteRepository.create(validatedData as ClienteCreateInput);
+    await clienteRepository.create(validatedData as any);
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
@@ -57,7 +52,7 @@ export async function updateCliente(data: Partial<ClienteType>) {
       is_active: data.is_active,
     });
 
-    await clienteRepository.update(validatedData.id, validatedData as ClienteUpdateInput);
+    await clienteRepository.update(validatedData.id, validatedData as any);
 
     revalidatePath("/dashboard/clientes");
     return { success: true };

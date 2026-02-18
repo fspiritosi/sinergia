@@ -11,4 +11,3 @@ export { CondicionesTableWrapper } from "./condiciones-table-wrapper";
 export { CondicionForm } from "./condiciones-form";
 export { CondicionRowActions } from "./condiciones-row-actions";
 export { AddCondicionButton } from "./add-condicion-button";
-export type { Condicion } from "./actions";

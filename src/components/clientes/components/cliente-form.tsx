@@ -62,8 +62,8 @@ export function ClienteForm({
   const [newCiudadNombre, setNewCiudadNombre] = useState("");
   const [inlineError, setInlineError] = useState<string | null>(null);
 
-  const form = useForm<ClienteFormData>({
-    resolver: zodResolver(clienteFormSchema),
+  const form = useForm({
+    resolver: zodResolver(clienteFormSchema) as any,
     defaultValues: {
       name: "",
       cuit: "",

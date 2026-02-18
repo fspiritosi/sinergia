@@ -73,10 +73,7 @@ export class ClienteRepository extends BaseRepository<
         include: this.getDefaultInclude(),
       });
     } catch (error) {
-      dbLogger.error(
-        { error, cuit },
-        "Error finding cliente by CUIT"
-      );
+      dbLogger.error({ error, cuit }, "Error finding cliente by CUIT");
       throw error;
     }
   }
@@ -84,7 +81,7 @@ export class ClienteRepository extends BaseRepository<
   /**
    * Find a cliente by ID with full details including propuestas
    */
-  async findByIdWithDetails(id: string): Promise<Cliente | null> {
+  async findByIdWithDetails(id: string) {
     try {
       return await this.prisma.cliente.findUnique({
         where: { id },
@@ -112,10 +109,7 @@ export class ClienteRepository extends BaseRepository<
         },
       });
     } catch (error) {
-      dbLogger.error(
-        { error, id },
-        "Error finding cliente by ID with details"
-      );
+      dbLogger.error({ error, id }, "Error finding cliente by ID with details");
       throw error;
     }
   }
@@ -152,10 +146,7 @@ export class ClienteRepository extends BaseRepository<
         is_active: !cliente.is_active,
       });
     } catch (error) {
-      dbLogger.error(
-        { error, id },
-        "Error toggling cliente active status"
-      );
+      dbLogger.error({ error, id }, "Error toggling cliente active status");
       throw error;
     }
   }
