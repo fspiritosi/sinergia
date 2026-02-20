@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { getPropuestasPaginated } from "./components/actions";
 import { PropuestasTableWrapper } from "@/components/propuestas/components/propuestas-table-wrapper";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,8 +23,7 @@ function Propuestas() {
   const { __search__, ...columnFilters } = filters;
   const searchValue = typeof __search__ === "string" ? __search__ : undefined;
 
-  const { data, isLoading, error } = useQuery({
-    // Use JSON.stringify for stable queryKey comparison
+  const { data, isLoading, isFetching, error } = useQuery({
     queryKey: [
       "propuestas",
       pagination.pageIndex + 1,
@@ -39,6 +38,7 @@ function Propuestas() {
         search: searchValue,
         filters: columnFilters,
       }),
+    placeholderData: keepPreviousData,
   });
 
   if (isLoading) {
@@ -55,13 +55,22 @@ function Propuestas() {
   }
 
   return (
-    <PropuestasTableWrapper
-      data={data?.data || []}
-      pageCount={data?.pageCount || 0}
-      pagination={pagination}
-      onPaginationChange={setPagination}
-      onFiltersChange={handleFiltersChange}
-    />
+    <div
+      className={
+        isFetching
+          ? "opacity-60 pointer-events-none transition-opacity duration-150"
+          : "transition-opacity duration-150"
+      }
+    >
+      <PropuestasTableWrapper
+        data={data?.data || []}
+        pageCount={data?.pageCount || 0}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        onFiltersChange={handleFiltersChange}
+        facetCounts={data?.facetCounts}
+      />
+    </div>
   );
 }
 

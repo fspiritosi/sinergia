@@ -1,15 +1,17 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { InformesTable } from "./informes-table"
-import { Informe } from "./actions"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { InformesTable } from "./informes-table";
+import { Informe } from "./actions";
 
 interface InformesTableWrapperProps {
-  data: Informe[]
+  data: Informe[];
   pageCount?: number;
   pagination?: {
     pageIndex: number;
     pageSize: number;
   };
   onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
+  onFiltersChange?: (filters: Record<string, any>) => void;
+  facetCounts?: Record<string, Record<string, number>>;
 }
 
 export function InformesTableWrapper({
@@ -17,6 +19,8 @@ export function InformesTableWrapper({
   pageCount,
   pagination,
   onPaginationChange,
+  onFiltersChange,
+  facetCounts,
 }: InformesTableWrapperProps) {
   return (
     <Card>
@@ -36,8 +40,10 @@ export function InformesTableWrapper({
           pageCount={pageCount}
           pagination={pagination}
           onPaginationChange={onPaginationChange}
+          onFiltersChange={onFiltersChange}
+          facetCounts={facetCounts}
         />
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,10 +1,9 @@
-"use client"
+"use client";
 
 import { DataTable } from "@/components/tables/data-table";
 import { columns, type ClienteWithRelations } from "./columns";
 import type { ColumnDef } from "@tanstack/react-table";
 import { createStringSearchFilter } from "@/components/tables/search-utils";
-
 
 // Opciones para filtros
 
@@ -32,6 +31,8 @@ interface ClientesTableProps {
     pageSize: number;
   };
   onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
+  onFiltersChange?: (filters: Record<string, any>) => void;
+  facetCounts?: Record<string, Record<string, number>>;
 }
 
 export function ClientesTable({
@@ -39,6 +40,8 @@ export function ClientesTable({
   pageCount,
   pagination,
   onPaginationChange,
+  onFiltersChange,
+  facetCounts,
 }: ClientesTableProps) {
   const customSearchFilter = createStringSearchFilter<ClienteWithRelations>([
     "name",
@@ -58,6 +61,8 @@ export function ClientesTable({
       pageCount={pageCount}
       pagination={pagination}
       onPaginationChange={onPaginationChange}
+      onFiltersChange={onFiltersChange}
+      facetCounts={facetCounts}
       filters={[
         {
           columnKey: "is_active",

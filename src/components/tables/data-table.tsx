@@ -51,6 +51,7 @@ interface DataTableProps<TData, TValue> {
   };
   onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
   onFiltersChange?: (filters: Record<string, any>) => void;
+  facetCounts?: Record<string, Record<string, number>>;
 }
 
 export function DataTable<TData, TValue>({
@@ -64,6 +65,7 @@ export function DataTable<TData, TValue>({
   pagination: serverPagination,
   onPaginationChange: onServerPaginationChange,
   onFiltersChange,
+  facetCounts,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -160,6 +162,7 @@ export function DataTable<TData, TValue>({
         searchPlaceholder={searchPlaceholder}
         customSearchFilter={customSearchFilter}
         filters={filters}
+        serverFacetCounts={facetCounts}
       />
       <div className="rounded-md border">
         <Table>

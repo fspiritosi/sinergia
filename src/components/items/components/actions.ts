@@ -24,8 +24,8 @@ export async function getItems() {
 
   return itemsOrdenados.map((item) => ({
     ...item,
-    is_active: String(item.is_active)
-  }))
+    is_active: String(item.is_active),
+  }));
 }
 
 export async function getActiveItems() {
@@ -42,7 +42,6 @@ export async function getActiveItems() {
 
   // Ordenamiento personalizado: activos primero (alfabéticamente), luego inactivos (alfabéticamente)
   const itemsOrdenados = items.sort((a, b) => {
-
     // Si ambos tienen el mismo estado (ambos activos o ambos inactivos), ordenar alfabéticamente por nombre
     return a.name.localeCompare(b.name, "es", { sensitivity: "base" });
   });
@@ -51,57 +50,66 @@ export async function getActiveItems() {
 }
 
 export async function getItemsPaginated(params: {
-  page: number
-  pageSize: number
-  search?: string
-  filters?: Record<string, any>
+  page: number;
+  pageSize: number;
+  search?: string;
+  filters?: Record<string, any>;
 }) {
   try {
-    const skip = (params.page - 1) * params.pageSize
+    const skip = (params.page - 1) * params.pageSize;
 
-    const where = {
-      ...(params.search && {
-        OR: [
-          { name: { contains: params.search, mode: "insensitive" as const } },
-        ],
-      }),
-      ...params.filters,
+    const where: any = {};
+
+    if (params.search) {
+      where.OR = [{ name: { contains: params.search, mode: "insensitive" as const } }];
     }
 
-    const [items, total] = await Promise.all([
+    if (
+      params.filters?.is_active &&
+      Array.isArray(params.filters.is_active) &&
+      params.filters.is_active.length > 0
+    ) {
+      const boolValues = params.filters.is_active.map((v: string) => v === "true");
+      if (boolValues.length === 1) {
+        where.is_active = boolValues[0];
+      }
+      // si se seleccionan ambos (true y false), no aplicar filtro (mostrar todos)
+    }
+
+    const [items, total, isActiveGroupBy] = await Promise.all([
       prisma.items.findMany({
         where,
         skip,
         take: params.pageSize,
-        include: {
-          tipoDeInforme: true,
-        },
-        orderBy: [
-          { is_active: "desc" },
-          { name: "asc" },
-        ],
+        include: { tipoDeInforme: true },
+        orderBy: [{ is_active: "desc" }, { name: "asc" }],
       }),
       prisma.items.count({ where }),
-    ])
+      prisma.items.groupBy({ by: ["is_active"], _count: { _all: true } }),
+    ]);
+
+    const facetCounts: Record<string, Record<string, number>> = {
+      is_active: Object.fromEntries(
+        isActiveGroupBy.map((r) => [String(r.is_active), r._count._all])
+      ),
+    };
 
     const data = items.map((item) => ({
       ...item,
-      is_active: String(item.is_active)
-    }))
+      is_active: String(item.is_active),
+    }));
 
     return {
       data,
       total,
       pageCount: Math.ceil(total / params.pageSize),
-    }
+      facetCounts,
+    };
   } catch (error) {
-    dbLogger.error({ error, params }, "Error al obtener items paginados")
-    throw error
+    dbLogger.error({ error, params }, "Error al obtener items paginados");
+    throw error;
   }
 }
-
-
-
 
 // Exportamos el tipo de retorno de la función
 export type Item = Awaited<ReturnType<typeof getItems>>[0];

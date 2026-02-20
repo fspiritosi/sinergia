@@ -31,11 +31,6 @@ const fechaOptions = [
   { value: "year", label: "Este año" },
 ];
 
-const tipoOptions = [
-  { value: "mensual", label: "Mensual" },
-  { value: "unitario", label: "Unitario" },
-];
-
 // Filtros por tipo de contacto y dominio de email - REMOVIDOS
 
 interface PropuestasTableProps {
@@ -47,6 +42,7 @@ interface PropuestasTableProps {
   };
   onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
   onFiltersChange?: (filters: Record<string, any>) => void;
+  facetCounts?: Record<string, Record<string, number>>;
 }
 
 export function PropuestasTable({
@@ -55,6 +51,7 @@ export function PropuestasTable({
   pagination,
   onPaginationChange,
   onFiltersChange,
+  facetCounts,
 }: PropuestasTableProps) {
   const customSearchFilter = createStringSearchFilter<PropuestaTecnica>([
     "codigo",
@@ -73,6 +70,7 @@ export function PropuestasTable({
       pagination={pagination}
       onPaginationChange={onPaginationChange}
       onFiltersChange={onFiltersChange}
+      facetCounts={facetCounts}
       filters={[
         {
           columnKey: "status",

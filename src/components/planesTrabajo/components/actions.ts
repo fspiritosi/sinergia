@@ -36,11 +36,21 @@ export type PlanTrabajoWithProgramaciones = PlanTrabajo & {
       variantTypeId: string | null;
       variantType: { id: string; name: string } | null;
     };
-    detalleVariante: { id: string; name: string; variantTypeId: string; variantType: { id: string; name: string } } | null;
+    detalleVariante: {
+      id: string;
+      name: string;
+      variantTypeId: string;
+      variantType: { id: string; name: string };
+    } | null;
     clientLocation: { id: string; name: string } | null;
     informe: { id: string; estado: string; adjunto: string | null } | null;
   })[];
-  detallesVariante: { id: string; name: string; variantTypeId: string; variantType: { id: string; name: string } }[];
+  detallesVariante: {
+    id: string;
+    name: string;
+    variantTypeId: string;
+    variantType: { id: string; name: string };
+  }[];
 };
 
 function isValidDate(value: Date): boolean {
@@ -84,10 +94,7 @@ async function resolveDetalleVarianteId(params: {
   return detalle.id;
 }
 
-function normalizeProgramacionDate(
-  raw: string,
-  precision: ProgramacionPrecision,
-): Date {
+function normalizeProgramacionDate(raw: string, precision: ProgramacionPrecision): Date {
   if (precision === "mes") {
     const monthValue = raw.length >= 7 ? raw.slice(0, 7) : raw;
     return parseMonthOnlyToLocalNoon(monthValue);
@@ -120,11 +127,11 @@ function computePlanTrabajoEstado(params: {
   const todosItemsTienenProgramacion = totalItems > 0 && programadosPorItem >= totalItems;
 
   const hayAlgunaEjecucion = params.programaciones.some(
-    (p) => Boolean(p.ejecutadoAt) || p.informeEntregado,
+    (p) => Boolean(p.ejecutadoAt) || p.informeEntregado
   );
 
   const hayPendientesSinEjecutar = params.programaciones.some(
-    (p) => !p.ejecutadoAt && !p.informeEntregado,
+    (p) => !p.ejecutadoAt && !p.informeEntregado
   );
 
   if (fechaFinSuperada) {
@@ -160,11 +167,17 @@ export async function refreshPlanTrabajoEstado(planTrabajoId: string) {
   const estado = computePlanTrabajoEstado({
     fechaFin: plan.fechaFin,
     propuestaItems: plan.propuesta.items,
-    programaciones: plan.programaciones.map((p: { itemId: string; ejecutadoAt: Date | null; informe?: { estado: string; adjunto: string | null } | null }) => ({
-      itemId: p.itemId,
-      ejecutadoAt: p.ejecutadoAt,
-      informeEntregado: p.informe?.estado === "entregado" && Boolean(p.informe?.adjunto),
-    })),
+    programaciones: plan.programaciones.map(
+      (p: {
+        itemId: string;
+        ejecutadoAt: Date | null;
+        informe?: { estado: string; adjunto: string | null } | null;
+      }) => ({
+        itemId: p.itemId,
+        ejecutadoAt: p.ejecutadoAt,
+        informeEntregado: p.informe?.estado === "entregado" && Boolean(p.informe?.adjunto),
+      })
+    ),
   });
 
   if (plan.estado !== estado) {
@@ -244,24 +257,32 @@ export async function getPlanesTrabajo() {
 }
 
 export async function getPlanesTrabajoPaginated(params: {
-  page: number
-  pageSize: number
-  search?: string
-  filters?: Record<string, any>
+  page: number;
+  pageSize: number;
+  search?: string;
+  filters?: Record<string, any>;
 }) {
   try {
-    const skip = (params.page - 1) * params.pageSize
+    const skip = (params.page - 1) * params.pageSize;
 
-    const where = {
-      ...(params.search && {
-        OR: [
-          { propuesta: { codigo: { contains: params.search, mode: "insensitive" as const } } },
-        ],
-      }),
-      ...params.filters,
+    const where: any = {};
+
+    if (params.search) {
+      where.OR = [
+        { propuesta: { codigo: { contains: params.search, mode: "insensitive" as const } } },
+        { cliente: { name: { contains: params.search, mode: "insensitive" as const } } },
+      ];
     }
 
-    const [data, total] = await Promise.all([
+    if (
+      params.filters?.estado &&
+      Array.isArray(params.filters.estado) &&
+      params.filters.estado.length > 0
+    ) {
+      where.estado = { in: params.filters.estado };
+    }
+
+    const [data, total, estadoGroupBy] = await Promise.all([
       prisma.planTrabajo.findMany({
         where,
         skip,
@@ -270,21 +291,25 @@ export async function getPlanesTrabajoPaginated(params: {
           cliente: { select: { id: true, name: true } },
           propuesta: { select: { id: true, codigo: true } },
         },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: { createdAt: "desc" },
       }),
       prisma.planTrabajo.count({ where }),
-    ])
+      prisma.planTrabajo.groupBy({ by: ["estado"], _count: { _all: true } }),
+    ]);
+
+    const facetCounts: Record<string, Record<string, number>> = {
+      estado: Object.fromEntries(estadoGroupBy.map((r) => [r.estado, r._count._all])),
+    };
 
     return {
       data,
       total,
       pageCount: Math.ceil(total / params.pageSize),
-    }
+      facetCounts,
+    };
   } catch (error) {
-    dbLogger.error({ error, params }, "Error al obtener planes de trabajo paginados")
-    throw error
+    dbLogger.error({ error, params }, "Error al obtener planes de trabajo paginados");
+    throw error;
   }
 }
 
@@ -343,12 +368,15 @@ export async function getPlanTrabajoProgramacionesByRange(params: {
   });
 
   return programaciones.map((p) => {
-    const ejecutado = Boolean(p.ejecutadoAt) || (p.informe?.estado === "entregado" && Boolean(p.informe?.adjunto));
+    const ejecutado =
+      Boolean(p.ejecutadoAt) || (p.informe?.estado === "entregado" && Boolean(p.informe?.adjunto));
     const requiereInforme = Boolean(p.item.tipoDeInformeId);
     const itemNombreBase = p.item.name;
 
     const fechaProgramada =
-      p.precision === "mes" ? toMonthOnlyString(p.fechaProgramada) : toDateOnlyString(p.fechaProgramada);
+      p.precision === "mes"
+        ? toMonthOnlyString(p.fechaProgramada)
+        : toDateOnlyString(p.fechaProgramada);
 
     return {
       id: p.id,
@@ -369,7 +397,9 @@ export async function getPlanTrabajoProgramacionesByRange(params: {
   });
 }
 
-export async function getPlanTrabajo(planTrabajoId: string): Promise<PlanTrabajoWithProgramaciones | null> {
+export async function getPlanTrabajo(
+  planTrabajoId: string
+): Promise<PlanTrabajoWithProgramaciones | null> {
   const plan = await prisma.planTrabajo.findUnique({
     where: { id: planTrabajoId },
     include: {
@@ -426,8 +456,8 @@ export async function getPlanTrabajo(planTrabajoId: string): Promise<PlanTrabajo
     new Set(
       propuestaItemsDetalle
         .filter((item) => item.hasVariant && item.variantTypeId)
-        .map((item) => item.variantTypeId as string),
-    ),
+        .map((item) => item.variantTypeId as string)
+    )
   );
 
   const detallesVariante = variantTypeIds.length
@@ -449,13 +479,18 @@ export async function getPlanTrabajo(planTrabajoId: string): Promise<PlanTrabajo
   await refreshPlanTrabajoEstado(plan.id);
 
   return {
-    ...(plan as unknown as Omit<PlanTrabajoWithProgramaciones, "propuestaItemsDetalle" | "detallesVariante">),
+    ...(plan as unknown as Omit<
+      PlanTrabajoWithProgramaciones,
+      "propuestaItemsDetalle" | "detallesVariante"
+    >),
     propuestaItemsDetalle,
     detallesVariante,
   };
 }
 
-export async function getPlanTrabajoByPropuesta(propuestaId: string): Promise<PlanTrabajoWithProgramaciones | null> {
+export async function getPlanTrabajoByPropuesta(
+  propuestaId: string
+): Promise<PlanTrabajoWithProgramaciones | null> {
   const plan = await prisma.planTrabajo.findFirst({
     where: { propuestaId },
     orderBy: { createdAt: "desc" },
@@ -513,8 +548,8 @@ export async function getPlanTrabajoByPropuesta(propuestaId: string): Promise<Pl
     new Set(
       propuestaItemsDetalle
         .filter((item) => item.hasVariant && item.variantTypeId)
-        .map((item) => item.variantTypeId as string),
-    ),
+        .map((item) => item.variantTypeId as string)
+    )
   );
 
   const detallesVariante = variantTypeIds.length
@@ -536,7 +571,10 @@ export async function getPlanTrabajoByPropuesta(propuestaId: string): Promise<Pl
   await refreshPlanTrabajoEstado(plan.id);
 
   return {
-    ...(plan as unknown as Omit<PlanTrabajoWithProgramaciones, "propuestaItemsDetalle" | "detallesVariante">),
+    ...(plan as unknown as Omit<
+      PlanTrabajoWithProgramaciones,
+      "propuestaItemsDetalle" | "detallesVariante"
+    >),
     propuestaItemsDetalle,
     detallesVariante,
   };
@@ -697,12 +735,10 @@ export async function createPlanTrabajoProgramacionesMensuales(params: {
   const existingMonthKeys = new Set(
     (plan.programaciones ?? [])
       .filter((p) => p.precision === "mes")
-      .map((p) => toMonthOnlyString(p.fechaProgramada)),
+      .map((p) => toMonthOnlyString(p.fechaProgramada))
   );
 
-  const monthsToCreate = months.filter(
-    (m) => !existingMonthKeys.has(toMonthOnlyString(m)),
-  );
+  const monthsToCreate = months.filter((m) => !existingMonthKeys.has(toMonthOnlyString(m)));
 
   if (!monthsToCreate.length) {
     return { success: true, programacionIds: [] };
@@ -748,7 +784,7 @@ export async function marcarProgramacionEjecutada(params: {
     where: { id: programacion.id },
     data: {
       ejecutadoAt: params.ejecutada ? new Date() : null,
-      adjunto: params.ejecutada ? programacion.adjunto ?? null : null,
+      adjunto: params.ejecutada ? (programacion.adjunto ?? null) : null,
     },
   });
 
@@ -887,12 +923,19 @@ export async function previewUpdatePlanTrabajoFechas(params: {
   if (!plan) throw new Error("Plan de trabajo no encontrado");
 
   const fueraDeRango = plan.programaciones
-    .filter((p) => p.fechaProgramada.getTime() < fechaInicio.getTime() || p.fechaProgramada.getTime() > fechaFin.getTime())
+    .filter(
+      (p) =>
+        p.fechaProgramada.getTime() < fechaInicio.getTime() ||
+        p.fechaProgramada.getTime() > fechaFin.getTime()
+    )
     .map((p) => ({
       programacionId: p.id,
       itemId: p.itemId,
       itemName: p.item.name,
-      fechaProgramada: p.precision === "mes" ? toMonthOnlyString(p.fechaProgramada) : toDateOnlyString(p.fechaProgramada),
+      fechaProgramada:
+        p.precision === "mes"
+          ? toMonthOnlyString(p.fechaProgramada)
+          : toDateOnlyString(p.fechaProgramada),
       precision: p.precision,
       requiereInforme: Boolean(p.item.tipoDeInformeId),
       informeId: p.informe?.id ?? null,
@@ -912,7 +955,11 @@ export async function updatePlanTrabajoFechas(params: {
   const preview = await previewUpdatePlanTrabajoFechas(params);
 
   if (preview.fueraDeRango.length > 0) {
-    return { success: false, reason: "Hay programaciones fuera del rango", fueraDeRango: preview.fueraDeRango };
+    return {
+      success: false,
+      reason: "Hay programaciones fuera del rango",
+      fueraDeRango: preview.fueraDeRango,
+    };
   }
 
   const fechaInicio = parseDateOnlyToLocalNoon(params.fechaInicio);

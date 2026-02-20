@@ -157,7 +157,7 @@ export async function getPropuestasPaginated(params: {
       }
     }
 
-    const [propuestas, total] = await Promise.all([
+    const [propuestas, total, statusGroupBy] = await Promise.all([
       prisma.propuestaTecnica.findMany({
         where,
         skip,
@@ -180,6 +180,7 @@ export async function getPropuestasPaginated(params: {
         orderBy: [{ is_active: "desc" }, { codigo: "asc" }],
       }),
       prisma.propuestaTecnica.count({ where }),
+      prisma.propuestaTecnica.groupBy({ by: ["status"], _count: { _all: true } }),
     ]);
 
     const data = propuestas.map((propuesta) => ({
@@ -201,10 +202,15 @@ export async function getPropuestasPaginated(params: {
       condicionesParticulares: propuesta.condicionesParticulares,
     }));
 
+    const facetCounts: Record<string, Record<string, number>> = {
+      status: Object.fromEntries(statusGroupBy.map((r) => [r.status, r._count._all])),
+    };
+
     return {
       data,
       total,
       pageCount: Math.ceil(total / params.pageSize),
+      facetCounts,
     };
   } catch (error) {
     dbLogger.error({ error, params }, "Error al obtener propuestas paginadas");

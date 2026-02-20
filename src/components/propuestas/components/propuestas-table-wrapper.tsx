@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PropuestasTable } from "@/components/propuestas/components/propuestas-table";
 import type { PropuestaTecnica } from "./actions";
@@ -13,6 +16,7 @@ interface PropuestasTableWrapperProps {
   };
   onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
   onFiltersChange?: (filters: Record<string, any>) => void;
+  facetCounts?: Record<string, Record<string, number>>;
 }
 
 export function PropuestasTableWrapper({
@@ -21,8 +25,20 @@ export function PropuestasTableWrapper({
   pagination,
   onPaginationChange,
   onFiltersChange,
+  facetCounts,
 }: PropuestasTableWrapperProps) {
-  const isEmpty = data.length === 0;
+  const [hasActiveFilters, setHasActiveFilters] = useState(false);
+
+  const handleFiltersChange = (filters: Record<string, any>) => {
+    const active = Object.entries(filters).some(([k, v]) => {
+      if (k === "__search__") return typeof v === "string" && v.length > 0;
+      return Array.isArray(v) ? v.length > 0 : v !== undefined && v !== null;
+    });
+    setHasActiveFilters(active);
+    onFiltersChange?.(filters);
+  };
+
+  const isEmpty = data.length === 0 && !hasActiveFilters;
 
   return (
     <Card>
@@ -42,7 +58,8 @@ export function PropuestasTableWrapper({
             pageCount={pageCount}
             pagination={pagination}
             onPaginationChange={onPaginationChange}
-            onFiltersChange={onFiltersChange}
+            onFiltersChange={handleFiltersChange}
+            facetCounts={facetCounts}
           />
         </TableState>
       </CardContent>
