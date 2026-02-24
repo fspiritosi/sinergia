@@ -159,7 +159,7 @@ export function UserForm({
             await onSubmit(payload)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar usuario:", error)
+            // Error ya manejado por el componente padre
         }
     }
 

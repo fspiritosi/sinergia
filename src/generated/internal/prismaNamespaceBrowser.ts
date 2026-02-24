@@ -63,7 +63,8 @@ export const ModelName = {
   Informe: 'Informe',
   PlanTrabajo: 'PlanTrabajo',
   PlanTrabajoProgramacion: 'PlanTrabajoProgramacion',
-  DetalleVariante: 'DetalleVariante'
+  DetalleVariante: 'DetalleVariante',
+  Condicion: 'Condicion'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -281,6 +282,21 @@ export const DetalleVarianteScalarFieldEnum = {
 } as const
 
 export type DetalleVarianteScalarFieldEnum = (typeof DetalleVarianteScalarFieldEnum)[keyof typeof DetalleVarianteScalarFieldEnum]
+
+
+export const CondicionScalarFieldEnum = {
+  id: 'id',
+  tipo: 'tipo',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  is_active: 'is_active',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CondicionScalarFieldEnum = (typeof CondicionScalarFieldEnum)[keyof typeof CondicionScalarFieldEnum]
 
 
 export const SortOrder = {

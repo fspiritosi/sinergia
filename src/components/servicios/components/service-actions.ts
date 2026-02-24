@@ -1,9 +1,9 @@
 "use server";
 
-
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { Items, Servicio as ServicioType } from "@/generated/client"
+import { Items, Servicio as ServicioType } from "@/generated/client";
+import { dbLogger } from "@/lib/logger";
 
 
 
@@ -20,14 +20,14 @@ export async function createServicio(data: ServicioType) {
   });
 
     if (!cliente) {
-      console.error("Error creating servicio:");
+      dbLogger.error({ serviceName: data.name }, "Error al crear servicio: registro no creado");
       throw new Error("Error al crear el servicio");
     }
 
     revalidatePath("/dashboard/servicios");
     return { success: true };
   } catch (error) {
-    console.error("Error in createServicio:", error);
+    dbLogger.error({ error, serviceName: data.name }, "Error al crear servicio");
     throw error;
   }
 }
@@ -49,14 +49,14 @@ export async function updateServicio(data: Partial<ServicioType>) {
     });
 
     if (!cliente) {
-      console.error("Error updating servicio:");
+      dbLogger.error({ servicioId: data.id }, "Error al actualizar servicio: registro no actualizado");
       throw new Error("Error al actualizar el servicio");
     }
 
     revalidatePath("/dashboard/servicios");
     return { success: true };
   } catch (error) {
-    console.error("Error in updateServicio:", error);
+    dbLogger.error({ error, servicioId: data.id }, "Error al actualizar servicio");
     throw error;
   }
 }
@@ -70,14 +70,14 @@ export async function deleteServicio(id: string) {
     });
 
     if (!cliente) {
-      console.error("Error deleting servicio:");
+      dbLogger.error({ servicioId: id }, "Error al eliminar servicio: registro no eliminado");
       throw new Error("Error al eliminar el servicio");
     }
 
     revalidatePath("/dashboard/servicios");
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteServicio:", error);
+    dbLogger.error({ error, servicioId: id }, "Error al eliminar servicio");
     throw error;
   }
 }
@@ -96,7 +96,7 @@ export async function getItemsService(id: string): Promise<ServicioDetail> {
         });
 
         if (!servicio) {
-            console.error("Servicio no encontrado:", id);
+            dbLogger.error({ servicioId: id }, "Servicio no encontrado");
             throw new Error("Servicio no encontrado");
         }
 
@@ -115,7 +115,7 @@ export async function getItemsService(id: string): Promise<ServicioDetail> {
 
         return { servicio, items };
     } catch (error) {
-        console.error("Error al obtener items del servicio:", error);
+        dbLogger.error({ error, servicioId: id }, "Error al obtener items del servicio");
         throw error;
     }
 }
@@ -151,7 +151,7 @@ export async function updateServicioItems({ servicioId, itemIds }: UpdateServici
 
     return { success: true };
   } catch (error) {
-    console.error("Error al actualizar los items del servicio:", error);
+    dbLogger.error({ error, servicioId }, "Error al actualizar los items del servicio");
     throw error;
   }
 }

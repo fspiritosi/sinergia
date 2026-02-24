@@ -1,5 +1,6 @@
 import { View, Text, Image } from '@react-pdf/renderer'
 import { pdfStyles } from './styles'
+import { SINERGIA_ASSETS } from '@/lib/pdf-constants'
 
 interface PageHeaderProps {
     serviceDescription: string
@@ -21,7 +22,7 @@ export function PageHeader({ serviceDescription, showTitle = false, fixed = fals
 
                 <View style={pdfStyles.logoContainer}>
                     <Image
-                        src="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev/LogoVertical.jpg"
+                        src={SINERGIA_ASSETS.logoVertical}
                         style={pdfStyles.logo}
                     />
                 </View>

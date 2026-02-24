@@ -133,15 +133,21 @@ export const columns: ColumnDef<Task>[] = [
                 actions={[
                     {
                         label: "Edit",
-                        onClick: (task) => console.log("Edit task:", task),
+                        onClick: (task) => {
+                            // Acción de editar - implementar lógica
+                        },
                     },
                     {
                         label: "Duplicate",
-                        onClick: (task) => console.log("Duplicate task:", task),
+                        onClick: (task) => {
+                            // Acción de duplicar - implementar lógica
+                        },
                     },
                     {
                         label: "Delete",
-                        onClick: (task) => console.log("Delete task:", task),
+                        onClick: (task) => {
+                            // Acción de eliminar - implementar lógica
+                        },
                         variant: "destructive",
                     },
                 ]}

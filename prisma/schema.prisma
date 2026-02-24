@@ -23,7 +23,7 @@ model Test {
 
 model Cliente {
   id String @id @default(uuid())
-  name String 
+  name String
   cuit String @unique
   domicilio String
   telefono String
@@ -40,6 +40,12 @@ model Cliente {
   clientLocations ClientLocations[]
   informes Informe[]
   planesTrabajo PlanTrabajo[]
+
+  @@index([is_active])
+  @@index([name])
+  @@index([provinciaId])
+  @@index([ciudadId])
+  @@index([createdAt])
 }
 
 model Provincia {
@@ -57,11 +63,13 @@ model Ciudad {
   provinciaId String
   clientes Cliente[]
   clientLocations ClientLocations[]
+
+  @@index([provinciaId])
 }
 
 model Servicio {
   id String @id @default(uuid())
-  name String 
+  name String
   description String
   type ServiceType @default(mensual)
   is_active Boolean @default(true)
@@ -70,6 +78,9 @@ model Servicio {
 
   itemsOnServicios ItemsOnServicios[]
   propuestas PropuestaTecnica[]
+
+  @@index([is_active])
+  @@index([type])
 }
 
 model Items {
@@ -90,6 +101,12 @@ model Items {
   tipoDeInformeId String?
 
   planesTrabajoProgramaciones PlanTrabajoProgramacion[]
+
+  @@index([is_active])
+  @@index([esPlanificable])
+  @@index([hasVariant])
+  @@index([variantTypeId])
+  @@index([tipoDeInformeId])
 }
 
 model ItemsOnServicios {
@@ -126,6 +143,12 @@ model PropuestaTecnica {
   informes Informe[]
   planesTrabajo PlanTrabajo[]
 
+  @@index([clienteId])
+  @@index([servicioId])
+  @@index([status])
+  @@index([is_active])
+  @@index([vigencia])
+  @@index([createdAt])
 }
 
 model TipoDeInforme {
@@ -167,6 +190,11 @@ model ClientLocations {
   informes Informe[]
 
   planesTrabajoProgramaciones PlanTrabajoProgramacion[]
+
+  @@index([clienteId])
+  @@index([provinciaId])
+  @@index([ciudadId])
+  @@index([is_active])
 }
 
 model Informe {
@@ -194,6 +222,14 @@ model Informe {
 
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @default(now())
+
+  @@index([clienteId])
+  @@index([tipoDeInformeId])
+  @@index([propuestaId])
+  @@index([clientLocationId])
+  @@index([estado])
+  @@index([fechaVencimiento])
+  @@index([createdAt])
 }
 
 model PlanTrabajo {
@@ -213,6 +249,13 @@ model PlanTrabajo {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  @@index([clienteId])
+  @@index([propuestaId])
+  @@index([estado])
+  @@index([fechaInicio])
+  @@index([fechaFin])
+  @@index([createdAt])
 }
 
 model PlanTrabajoProgramacion {
@@ -239,6 +282,13 @@ model PlanTrabajoProgramacion {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  @@index([planTrabajoId])
+  @@index([itemId])
+  @@index([fechaProgramada])
+  @@index([clientLocationId])
+  @@index([ejecutadoAt])
+  @@index([detalleVarianteId])
 }
 
 model DetalleVariante {
@@ -253,9 +303,27 @@ model DetalleVariante {
   variantTypeId String
 
   planTrabajoProgramaciones PlanTrabajoProgramacion[]
+
+  @@index([variantTypeId])
+  @@index([is_active])
 }
 
+model Condicion {
+  id          String         @id @default(uuid())
+  tipo        CondicionTipo
+  title       String
+  description String         @db.Text
+  category    String?
+  is_active   Boolean        @default(true)
+  order       Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
+  @@index([tipo])
+  @@index([is_active])
+  @@index([category])
+  @@index([order])
+}
 
 
 
@@ -297,4 +365,9 @@ enum Moneda {
 enum ServiceType {
   mensual
   unitario
+}
+
+enum CondicionTipo {
+  general
+  particular
 }

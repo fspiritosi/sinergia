@@ -53,7 +53,6 @@ export function TipoInformeRowActions({ tipoInforme }: TipoInformeRowActionsProp
             toast.success("Tipo de informe eliminado exitosamente")
             setDeleteOpen(false)
         } catch (error) {
-            console.error(error)
             toast.error("Error al eliminar el tipo de informe")
         } finally {
             setIsLoading(false)

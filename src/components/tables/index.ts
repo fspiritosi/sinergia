@@ -1,4 +1,5 @@
 export { DataTable } from "./data-table";
+export { DataTableVirtual } from "./data-table-virtual";
 export { DataTableColumnHeader } from "./data-table-column-header";
 export { DataTableFacetedFilter } from "./data-table-faceted-filter";
 export { DataTablePagination } from "./data-table-pagination";

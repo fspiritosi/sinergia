@@ -119,3 +119,8 @@ export type PlanTrabajoProgramacion = Prisma.PlanTrabajoProgramacionModel
  * 
  */
 export type DetalleVariante = Prisma.DetalleVarianteModel
+/**
+ * Model Condicion
+ * 
+ */
+export type Condicion = Prisma.CondicionModel

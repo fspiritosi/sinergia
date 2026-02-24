@@ -85,7 +85,6 @@ export function DetalleVarianteForm({
         if (!isMounted) return;
         setTiposVariante(tipos);
       } catch (error) {
-        console.error("Error al cargar tipos de variante:", error);
         if (!isMounted) return;
         setTiposVarianteError("No se pudieron cargar los tipos de variante.");
       } finally {

@@ -1,173 +1,168 @@
-import * as React from "react"
-import { Column } from "@tanstack/react-table"
-import { Check, PlusCircle } from "lucide-react"
+import * as React from "react";
+import { Column } from "@tanstack/react-table";
+import { Check, PlusCircle } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-} from "@/components/ui/command"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { Separator } from "@/components/ui/separator"
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
-    column?: Column<TData, TValue>
-    title?: string
-    options: {
-        label: string
-        value: string
-        icon?: React.ComponentType<{ className?: string }>
-    }[]
+  column?: Column<TData, TValue>;
+  title?: string;
+  options: {
+    label: string;
+    value: string;
+    icon?: React.ComponentType<{ className?: string }>;
+  }[];
+  serverCounts?: Record<string, number>;
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
-    column,
-    title,
-    options,
+  column,
+  title,
+  options,
+  serverCounts,
 }: DataTableFacetedFilterProps<TData, TValue>) {
-    if (!column) {
-        return null
+  const facets = column?.getFacetedUniqueValues();
+  const filterValue = column?.getFilterValue();
+
+  // Estado local para manejo inmediato de la UI
+  const [selectedValues, setSelectedValues] = React.useState<Set<string>>(new Set());
+
+  // Sincronizar estado local con el valor del filtro de la columna
+  React.useEffect(() => {
+    const newSet = new Set<string>();
+    if (Array.isArray(filterValue)) {
+      filterValue.forEach((v) => newSet.add(String(v)));
+    } else if (filterValue !== undefined && filterValue !== null) {
+      newSet.add(String(filterValue));
     }
+    setSelectedValues(newSet);
+  }, [filterValue]);
 
-    const facets = column.getFacetedUniqueValues()
-    const filterValue = column.getFilterValue()
+  if (!column) {
+    return null;
+  }
 
-    // Estado local para manejo inmediato de la UI
-    const [selectedValues, setSelectedValues] = React.useState<Set<string>>(new Set())
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" size="sm" className="h-8 border-dashed">
+          <PlusCircle className="mr-2 h-4 w-4" />
+          {title}
+          {selectedValues?.size > 0 && (
+            <>
+              <Separator orientation="vertical" className="mx-2 h-4" />
+              <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
+                {selectedValues.size}
+              </Badge>
+              <div className="hidden space-x-1 lg:flex">
+                {selectedValues.size > 2 ? (
+                  <Badge variant="secondary" className="rounded-sm px-1 font-normal">
+                    {selectedValues.size} seleccionados
+                  </Badge>
+                ) : (
+                  options
+                    .filter((option) => selectedValues.has(option.value))
+                    .map((option) => (
+                      <Badge
+                        variant="secondary"
+                        key={option.value}
+                        className="rounded-sm px-1 font-normal"
+                      >
+                        {option.label}
+                      </Badge>
+                    ))
+                )}
+              </div>
+            </>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0" align="start">
+        <Command>
+          <CommandInput placeholder={title} />
+          <CommandList>
+            <CommandEmpty>No se encontraron resultados.</CommandEmpty>
+            <CommandGroup>
+              {options.map((option) => {
+                const isSelected = selectedValues.has(option.value);
+                return (
+                  <CommandItem
+                    key={option.value}
+                    onSelect={() => {
+                      const newSet = new Set(selectedValues);
+                      if (isSelected) {
+                        newSet.delete(option.value);
+                      } else {
+                        newSet.add(option.value);
+                      }
+                      // Actualizar estado local inmediatamente
+                      setSelectedValues(newSet);
 
-    // Sincronizar estado local con el valor del filtro de la columna
-    React.useEffect(() => {
-        const newSet = new Set<string>()
-        if (Array.isArray(filterValue)) {
-            filterValue.forEach(v => newSet.add(String(v)))
-        } else if (filterValue !== undefined && filterValue !== null) {
-            newSet.add(String(filterValue))
-        }
-        setSelectedValues(newSet)
-    }, [filterValue])
-
-    return (
-        <Popover>
-            <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8 border-dashed">
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    {title}
-                    {selectedValues?.size > 0 && (
-                        <>
-                            <Separator orientation="vertical" className="mx-2 h-4" />
-                            <Badge
-                                variant="secondary"
-                                className="rounded-sm px-1 font-normal lg:hidden"
-                            >
-                                {selectedValues.size}
-                            </Badge>
-                            <div className="hidden space-x-1 lg:flex">
-                                {selectedValues.size > 2 ? (
-                                    <Badge
-                                        variant="secondary"
-                                        className="rounded-sm px-1 font-normal"
-                                    >
-                                        {selectedValues.size} seleccionados
-                                    </Badge>
-                                ) : (
-                                    options
-                                        .filter((option) => selectedValues.has(option.value))
-                                        .map((option) => (
-                                            <Badge
-                                                variant="secondary"
-                                                key={option.value}
-                                                className="rounded-sm px-1 font-normal"
-                                            >
-                                                {option.label}
-                                            </Badge>
-                                        ))
-                                )}
-                            </div>
-                        </>
-                    )}
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0" align="start">
-                <Command>
-                    <CommandInput placeholder={title} />
-                    <CommandList>
-                        <CommandEmpty>No se encontraron resultados.</CommandEmpty>
-                        <CommandGroup>
-                            {options.map((option) => {
-                                const isSelected = selectedValues.has(option.value)
-                                return (
-                                    <CommandItem
-                                        key={option.value}
-                                        onSelect={() => {
-                                            const newSet = new Set(selectedValues)
-                                            if (isSelected) {
-                                                newSet.delete(option.value)
-                                            } else {
-                                                newSet.add(option.value)
-                                            }
-                                            // Actualizar estado local inmediatamente
-                                            setSelectedValues(newSet)
-
-                                            // Actualizar filtro de columna
-                                            const filterValues = Array.from(newSet)
-                                            column?.setFilterValue(
-                                                filterValues.length ? filterValues : undefined
-                                            )
-                                        }}
-                                    >
-                                        <div
-                                            className={cn(
-                                                "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                                isSelected
-                                                    ? "bg-primary text-primary-foreground"
-                                                    : "opacity-50 [&_svg]:invisible"
-                                            )}
-                                        >
-                                            <Check className="h-4 w-4" />
-                                        </div>
-                                        {option.icon && (
-                                            <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                                        )}
-                                        <span>{option.label}</span>
-                                        {facets?.get && facets.get(option.value) && (
-                                            <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-                                                {facets.get(option.value)}
-                                            </span>
-                                        )}
-                                    </CommandItem>
-                                )
-                            })}
-                        </CommandGroup>
-                        {selectedValues.size > 0 && (
-                            <>
-                                <CommandSeparator />
-                                <CommandGroup>
-                                    <CommandItem
-                                        onSelect={() => {
-                                            setSelectedValues(new Set())
-                                            column?.setFilterValue(undefined)
-                                        }}
-                                        className="justify-center text-center"
-                                    >
-                                        Limpiar filtros
-                                    </CommandItem>
-                                </CommandGroup>
-                            </>
+                      // Actualizar filtro de columna
+                      const filterValues = Array.from(newSet);
+                      column?.setFilterValue(filterValues.length ? filterValues : undefined);
+                    }}
+                  >
+                    <div
+                      className={cn(
+                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                        isSelected
+                          ? "bg-primary text-primary-foreground"
+                          : "opacity-50 [&_svg]:invisible"
+                      )}
+                    >
+                      <Check className="h-4 w-4" />
+                    </div>
+                    {option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+                    <span>{option.label}</span>
+                    {serverCounts
+                      ? serverCounts[option.value] != null && (
+                          <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
+                            {serverCounts[option.value]}
+                          </span>
+                        )
+                      : facets?.get &&
+                        facets.get(option.value) && (
+                          <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
+                            {facets.get(option.value)}
+                          </span>
                         )}
-                    </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
-    )
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+            {selectedValues.size > 0 && (
+              <>
+                <CommandSeparator />
+                <CommandGroup>
+                  <CommandItem
+                    onSelect={() => {
+                      setSelectedValues(new Set());
+                      column?.setFilterValue(undefined);
+                    }}
+                    className="justify-center text-center"
+                  >
+                    Limpiar filtros
+                  </CommandItem>
+                </CommandGroup>
+              </>
+            )}
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
 }

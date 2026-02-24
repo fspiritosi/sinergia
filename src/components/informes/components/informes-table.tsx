@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { DataTable } from "@/components/tables/data-table"
-import { columns } from "./columns"
-import { Informe } from "./actions"
+import { DataTable } from "@/components/tables/data-table";
+import { columns } from "./columns";
+import { Informe } from "./actions";
 
 const estadoOptions = [
   { value: "pendiente", label: "Pendiente" },
   { value: "entregado", label: "Entregado" },
-]
+];
 
 const fechaOptions = [
   { value: "today", label: "Hoy" },
@@ -15,22 +15,37 @@ const fechaOptions = [
   { value: "month", label: "Este mes" },
   { value: "quarter", label: "Este trimestre" },
   { value: "year", label: "Este año" },
-]
+];
 
 interface InformesTableProps {
-  data: Informe[]
+  data: Informe[];
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
+  onFiltersChange?: (filters: Record<string, any>) => void;
+  facetCounts?: Record<string, Record<string, number>>;
 }
 
-export function InformesTable({ data }: InformesTableProps) {
+export function InformesTable({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+  onFiltersChange,
+  facetCounts,
+}: InformesTableProps) {
   const customSearchFilter = (informe: Informe, searchValue: string): boolean => {
-    if (!searchValue) return true
+    if (!searchValue) return true;
 
-    const searchLower = searchValue.toLowerCase()
-    const cliente = informe.cliente?.name?.toLowerCase() || ""
-    const tipo = informe.tipoDeInforme?.name?.toLowerCase() || ""
+    const searchLower = searchValue.toLowerCase();
+    const cliente = informe.cliente?.name?.toLowerCase() || "";
+    const tipo = informe.tipoDeInforme?.name?.toLowerCase() || "";
 
-    return cliente.includes(searchLower) || tipo.includes(searchLower)
-  }
+    return cliente.includes(searchLower) || tipo.includes(searchLower);
+  };
 
   return (
     <DataTable
@@ -39,6 +54,11 @@ export function InformesTable({ data }: InformesTableProps) {
       searchKey="clienteNombre"
       searchPlaceholder="Buscar por cliente o tipo de informe..."
       customSearchFilter={customSearchFilter}
+      pageCount={pageCount}
+      pagination={pagination}
+      onPaginationChange={onPaginationChange}
+      onFiltersChange={onFiltersChange}
+      facetCounts={facetCounts}
       filters={[
         {
           columnKey: "estado",
@@ -52,5 +72,5 @@ export function InformesTable({ data }: InformesTableProps) {
         },
       ]}
     />
-  )
+  );
 }

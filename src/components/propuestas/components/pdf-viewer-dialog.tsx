@@ -41,9 +41,7 @@ export function PDFViewerDialog({
     const handleGeneratePDF = async () => {
         setIsLoading(true)
         try {
-            console.log(propuestaId, 'propuestaId')
             const result = await generatePropuestaPDF(propuestaId)
-            console.log(result, 'result')
 
             if (result.success && result.data) {
                 setPdfData(result.data)
@@ -53,7 +51,6 @@ export function PDFViewerDialog({
                 onOpenChange(false)
             }
         } catch (error) {
-            console.error("Error:", error)
             toast.error("Error al generar PDF")
             onOpenChange(false)
         } finally {

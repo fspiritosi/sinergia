@@ -90,7 +90,7 @@ export function AsignItemForm({
                 const response = await getActiveItems()
                 setItems(response as any)
             } catch (error) {
-                console.error("Error al obtener items:", error)
+                // Error al obtener items
             }
         }
 
@@ -103,7 +103,7 @@ export function AsignItemForm({
                 const response = await getActiveServicios()
                 setServicios(response)
             } catch (error) {
-                console.error("Error al obtener servicios:", error)
+                // Error al obtener servicios
             }
         }
         fetchServicios()
@@ -115,7 +115,7 @@ export function AsignItemForm({
             await onSubmit(data)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al asignar items:", error)
+            // Error ya manejado por el componente padre
         }
     }
 

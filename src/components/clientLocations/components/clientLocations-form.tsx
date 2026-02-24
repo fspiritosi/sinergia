@@ -130,7 +130,6 @@ export function ClientLocationForm({
                 const activeClientes = clientesResponse.filter((cliente) => cliente.is_active)
                 setClientes(activeClientes)
             } catch (error) {
-                console.error("Error al cargar clientes:", error)
                 if (!isMounted) return
                 setClientesError("No se pudieron cargar los clientes.")
             } finally {
@@ -153,7 +152,7 @@ export function ClientLocationForm({
             const data = await res.json()
             setProvincias(data)
         }
-        loadProvincias().catch(console.error)
+        void loadProvincias()
     }, [open])
 
     const selectedProvinciaId = form.watch("provinciaId")
@@ -174,7 +173,9 @@ export function ClientLocationForm({
                     form.setValue("ciudadId", "")
                 }
             })
-            .catch(console.error)
+            .catch(() => {
+                // Error al cargar ciudades
+            })
             .finally(() => setLoadingCiudades(false))
     }, [selectedProvinciaId, form])
     const handleSubmit = async (data: any) => {
@@ -182,7 +183,7 @@ export function ClientLocationForm({
             await onSubmit(data)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar locacion:", error)
+            // Error ya manejado por el componente padre
         }
     }
 

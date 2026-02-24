@@ -1,9 +1,9 @@
 "use server";
 
-
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { Items, Servicio } from "@/generated/client";
+import { dbLogger } from "@/lib/logger";
 
 
 
@@ -36,14 +36,14 @@ export async function createItem(data: Items) {
     });
 
     if (!cliente) {
-      console.error("Error creating item:");
+      dbLogger.error({ itemName: data.name }, "Error al crear item: registro no creado");
       throw new Error("Error al crear el item");
     }
 
     revalidatePath("/dashboard/items");
     return { success: true };
   } catch (error) {
-    console.error("Error in createItem:", error);
+    dbLogger.error({ error, itemName: data.name }, "Error al crear item");
     throw error;
   }
 }
@@ -122,7 +122,7 @@ export async function assignItemsToServicio({
 
     return { success: true };
   } catch (error) {
-    console.error("Error al asignar items al servicio:", error);
+    dbLogger.error({ error, servicioId, itemIds }, "Error al asignar items al servicio");
     throw error;
   }
 }
@@ -146,7 +146,7 @@ export async function updateItem(data: Partial<Items>) {
       });
 
       if (!existingItem) {
-        console.error("Item not found for update", data.id);
+        dbLogger.error({ itemId: data.id }, "Item no encontrado para actualizar");
         throw new Error("Item no encontrado");
       }
 
@@ -208,7 +208,7 @@ export async function updateItem(data: Partial<Items>) {
 
     return { success: true };
   } catch (error) {
-    console.error("Error in updateItem:", error);
+    dbLogger.error({ error, itemId: data.id }, "Error al actualizar item");
     throw error;
   }
 }
@@ -222,14 +222,14 @@ export async function deleteItem(id: string) {
     });
 
     if (!cliente) {
-      console.error("Error deleting item:");
+      dbLogger.error({ itemId: id }, "Error al eliminar item: registro no eliminado");
       throw new Error("Error al eliminar el item");
     }
 
     revalidatePath("/dashboard/items");
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteItem:", error);
+    dbLogger.error({ error, itemId: id }, "Error al eliminar item");
     throw error;
   }
 }

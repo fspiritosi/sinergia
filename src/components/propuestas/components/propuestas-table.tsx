@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { DataTable } from "@/components/tables/data-table";
 import { columns } from "./columns";
@@ -12,9 +12,7 @@ const Estado = {
   finalizada: "finalizada",
 } as const;
 
-
 // Opciones para filtros
-
 
 const estadoOptions = [
   { value: Estado.pendiente, label: "Pendiente" },
@@ -23,7 +21,7 @@ const estadoOptions = [
   { value: Estado.en_progreso, label: "En Progreso" },
   { value: Estado.finalizada, label: "Finalizada" },
 ];
-    
+
 // Filtros por rango de fechas (últimos períodos)
 const fechaOptions = [
   { value: "today", label: "Hoy" },
@@ -33,56 +31,71 @@ const fechaOptions = [
   { value: "year", label: "Este año" },
 ];
 
-const tipoOptions = [
-  { value: "mensual", label: "Mensual" },
-  { value: "unitario", label: "Unitario" },
-];
-
 // Filtros por tipo de contacto y dominio de email - REMOVIDOS
 
 interface PropuestasTableProps {
-    data: PropuestaTecnica[]
+  data: PropuestaTecnica[];
+  pageCount?: number;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange?: (pagination: { pageIndex: number; pageSize: number }) => void;
+  onFiltersChange?: (filters: Record<string, any>) => void;
+  facetCounts?: Record<string, Record<string, number>>;
 }
 
-export function PropuestasTable({ data }: PropuestasTableProps) {
-    const customSearchFilter = createStringSearchFilter<PropuestaTecnica>([
-        "codigo",
-        (p) => p.cliente?.name,
-        (p) => p.servicios?.name,
-    ]);
+export function PropuestasTable({
+  data,
+  pageCount,
+  pagination,
+  onPaginationChange,
+  onFiltersChange,
+  facetCounts,
+}: PropuestasTableProps) {
+  const customSearchFilter = createStringSearchFilter<PropuestaTecnica>([
+    "codigo",
+    (p) => p.cliente?.name,
+    (p) => p.servicios?.name,
+  ]);
 
-    return (
-        <DataTable
-            data={data}
-            columns={columns}
-            searchKey="codigo"
-            searchPlaceholder="Buscar por código, cliente o servicio..."
-            customSearchFilter={customSearchFilter}
-            filters={[
-                {
-                    columnKey: "status",
-                    title: "Estado",
-                    options: estadoOptions,
-                },
-                {
-                    columnKey: "createdAt",
-                    title: "Fecha de Creación",
-                    options: fechaOptions,
-                },
-                // {
-                //     columnKey: "moneda",
-                //     title: "Moneda",
-                //     options: [
-                //         { value: "usd", label: "USD" },
-                //         { value: "ars", label: "ARS" },
-                //     ],
-                // },
-                // {
-                //     columnKey: "servicioTipo",
-                //     title: "Tipo",
-                //     options: tipoOptions,
-                // },
-            ]}
-        />
-    )
+  return (
+    <DataTable
+      data={data}
+      columns={columns}
+      searchKey="codigo"
+      searchPlaceholder="Buscar por código, cliente o servicio..."
+      customSearchFilter={customSearchFilter}
+      pageCount={pageCount}
+      pagination={pagination}
+      onPaginationChange={onPaginationChange}
+      onFiltersChange={onFiltersChange}
+      facetCounts={facetCounts}
+      filters={[
+        {
+          columnKey: "status",
+          title: "Estado",
+          options: estadoOptions,
+        },
+        {
+          columnKey: "createdAt",
+          title: "Fecha de Creación",
+          options: fechaOptions,
+        },
+        // {
+        //     columnKey: "moneda",
+        //     title: "Moneda",
+        //     options: [
+        //         { value: "usd", label: "USD" },
+        //         { value: "ars", label: "ARS" },
+        //     ],
+        // },
+        // {
+        //     columnKey: "servicioTipo",
+        //     title: "Tipo",
+        //     options: tipoOptions,
+        // },
+      ]}
+    />
+  );
 }

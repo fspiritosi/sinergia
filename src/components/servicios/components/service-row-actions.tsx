@@ -64,7 +64,6 @@ export function ServiceRowActions({ servicio }: ServiceRowActionsProps) {
             toast.success("Servicio eliminado exitosamente")
             setDeleteOpen(false)
         } catch (error) {
-            console.error(error)
             toast.error("Error al eliminar el servicio")
         } finally {
             setIsLoading(false)

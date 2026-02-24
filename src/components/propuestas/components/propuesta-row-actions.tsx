@@ -96,7 +96,6 @@ export function PropuestaRowActions({ propuesta }: PropuestaRowActionsProps) {
             toast.success("Propuesta eliminada exitosamente")
             setDeleteOpen(false)
         } catch (error) {
-            console.error(error)
             toast.error("Error al eliminar la propuesta")
         } finally {
             setIsLoading(false)
@@ -231,7 +230,6 @@ function GenerarInformesDialog({
                 setLocations(result)
             })
             .catch((error) => {
-                console.error("Error al cargar locaciones del cliente:", error)
                 if (!isMounted) return
                 toast.error("No se pudieron cargar las locaciones del cliente")
             })
@@ -279,7 +277,6 @@ function GenerarInformesDialog({
             clearPendingUpdate()
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al generar informes desde la propuesta:", error)
             toast.error("Error al generar los informes")
         } finally {
             setIsSubmitting(false)
@@ -411,7 +408,6 @@ function CrearPlanTrabajoDialog({
             clearPendingUpdate()
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al crear plan de trabajo:", error)
             toast.error("Error al crear el plan de trabajo")
         } finally {
             setIsSubmitting(false)

@@ -53,7 +53,6 @@ export function ClientLocationRowActions({ clientLocation }: ClientLocationRowAc
             toast.success("Locación del cliente eliminada exitosamente")
             setDeleteOpen(false)
         } catch (error) {
-            console.error(error)
             toast.error("Error al eliminar la locación del cliente")
         } finally {
             setIsLoading(false)

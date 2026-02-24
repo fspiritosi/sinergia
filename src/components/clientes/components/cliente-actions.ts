@@ -1,89 +1,77 @@
 "use server";
 
-
-import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { Cliente as ClienteType } from "@/generated/client"
+import { Cliente as ClienteType } from "@/generated/client";
+import { clienteRepository } from "@/repositories/cliente.repository";
+import { validateClienteCreate, validateClienteUpdate } from "@/lib/validations/cliente.schema";
+import { dbLogger } from "@/lib/logger";
 
 export async function createCliente(data: ClienteType) {
-  console.log('create client data',data);
   try {
-    const cliente: ClienteType = await prisma.cliente.create({
-      data: {
-        name: data.name,
-        cuit: data.cuit,  
-        email: data.email,
-        telefono: data.telefono,
-        domicilio: data.domicilio,
-        provinciaId: data.provinciaId,
-        ciudadId: data.ciudadId,
-        is_active: data.is_active,
-    }
-  });
+    // Validate input data with Zod schema
+    const validatedData = validateClienteCreate({
+      name: data.name,
+      cuit: data.cuit,
+      email: data.email,
+      telefono: data.telefono,
+      domicilio: data.domicilio,
+      provinciaId: data.provinciaId,
+      ciudadId: data.ciudadId,
+      is_active: data.is_active,
+    });
 
-    if (!cliente) {
-      console.error("Error creating cliente:");
-      throw new Error("Error al crear el cliente");
-    }
+    await clienteRepository.create(validatedData as any);
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
-    console.error("Error in createCliente:", error);
+    // Log validation errors for debugging
+    if (error instanceof Error && error.name === "ZodError") {
+      dbLogger.error({ error, data }, "Validation error in createCliente");
+    }
     throw error;
   }
 }
 
 export async function updateCliente(data: Partial<ClienteType>) {
-
   try {
-    const cliente = await prisma.cliente.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        name: data.name,    
-        cuit: data.cuit,
-        email: data.email,
-        telefono: data.telefono,
-        domicilio: data.domicilio,
-        provinciaId: data.provinciaId,
-        ciudadId: data.ciudadId,
-        is_active: data.is_active,
-        updatedAt: new Date().toISOString(),
-      }
+    if (!data.id) {
+      throw new Error("ID is required for update");
+    }
+
+    // Validate input data with Zod schema
+    const validatedData = validateClienteUpdate({
+      id: data.id,
+      name: data.name,
+      cuit: data.cuit,
+      email: data.email,
+      telefono: data.telefono,
+      domicilio: data.domicilio,
+      provinciaId: data.provinciaId,
+      ciudadId: data.ciudadId,
+      is_active: data.is_active,
     });
 
-    if (!cliente) {
-      console.error("Error updating cliente:");
-      throw new Error("Error al actualizar el cliente");
-    }
+    await clienteRepository.update(validatedData.id, validatedData as any);
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
-    console.error("Error in updateCliente:", error);
+    // Log validation errors for debugging
+    if (error instanceof Error && error.name === "ZodError") {
+      dbLogger.error({ error, data }, "Validation error in updateCliente");
+    }
     throw error;
   }
 }
 
 export async function deleteCliente(id: string) {
   try {
-    const cliente = await prisma.cliente.delete({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!cliente) {
-      console.error("Error deleting cliente:");
-      throw new Error("Error al eliminar el cliente");
-    }
+    await clienteRepository.delete(id);
 
     revalidatePath("/dashboard/clientes");
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteCliente:", error);
     throw error;
   }
 }

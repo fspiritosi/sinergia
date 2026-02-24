@@ -47,7 +47,6 @@ export function DetalleVarianteRowActions({
       toast.success("Detalle de variante actualizado");
       setEditOpen(false);
     } catch (error) {
-      console.error(error);
       toast.error("No se pudo actualizar");
       throw error;
     } finally {
@@ -62,7 +61,6 @@ export function DetalleVarianteRowActions({
       toast.success("Detalle eliminado");
       setDeleteOpen(false);
     } catch (error) {
-      console.error(error);
       toast.error("No se pudo eliminar");
     } finally {
       setIsLoading(false);

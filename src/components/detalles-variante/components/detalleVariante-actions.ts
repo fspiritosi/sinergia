@@ -3,6 +3,7 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import type { DetalleVariante } from "@/generated/client";
+import { dbLogger } from "@/lib/logger";
 
 const REVALIDATE_PATH = "/dashboard/detalles-variante";
 
@@ -24,7 +25,7 @@ export async function createDetalleVariante(data: DetalleVariante) {
     revalidatePath(REVALIDATE_PATH);
     return { success: true };
   } catch (error) {
-    console.error("Error in createDetalleVariante:", error);
+    dbLogger.error({ error, detalleVariante: data.name }, "Error al crear detalle de variante");
     throw error;
   }
 }
@@ -53,7 +54,7 @@ export async function updateDetalleVariante(data: Partial<DetalleVariante>) {
     revalidatePath(REVALIDATE_PATH);
     return { success: true };
   } catch (error) {
-    console.error("Error in updateDetalleVariante:", error);
+    dbLogger.error({ error, detalleVarianteId: data.id }, "Error al actualizar detalle de variante");
     throw error;
   }
 }
@@ -75,7 +76,7 @@ export async function deleteDetalleVariante(id: string) {
     revalidatePath(REVALIDATE_PATH);
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteDetalleVariante:", error);
+    dbLogger.error({ error, detalleVarianteId: id }, "Error al eliminar detalle de variante");
     throw error;
   }
 }
@@ -96,7 +97,7 @@ export async function getDetalleVariante(id: string): Promise<DetalleVarianteDet
 
     return { detalleVariante };
   } catch (error) {
-    console.error("Error al obtener detalle de variante:", error);
+    dbLogger.error({ error, detalleVarianteId: id }, "Error al obtener detalle de variante");
     throw error;
   }
 }

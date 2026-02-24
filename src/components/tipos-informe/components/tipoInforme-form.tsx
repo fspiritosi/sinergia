@@ -85,7 +85,7 @@ export function TipoInformeForm({
             await onSubmit(data)
             onOpenChange(false)
         } catch (error) {
-            console.error("Error al guardar tipo de informe:", error)
+            // Error ya manejado por el componente padre
         }
     }
 

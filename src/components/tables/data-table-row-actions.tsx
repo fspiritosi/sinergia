@@ -26,15 +26,21 @@ export function DataTableRowActions<TData>({
     actions = [
         {
             label: "Editar",
-            onClick: () => console.log("Editar", row.original),
+            onClick: () => {
+                // Acción de editar - implementar lógica
+            },
         },
         {
             label: "Copiar",
-            onClick: () => console.log("Copiar", row.original),
+            onClick: () => {
+                // Acción de copiar - implementar lógica
+            },
         },
         {
             label: "Eliminar",
-            onClick: () => console.log("Eliminar", row.original),
+            onClick: () => {
+                // Acción de eliminar - implementar lógica
+            },
             variant: "destructive" as const,
         },
     ],

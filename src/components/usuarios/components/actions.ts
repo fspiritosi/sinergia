@@ -2,6 +2,8 @@
 
 import { auth, currentUser, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { env } from "@/lib/env";
+import { authLogger } from "@/lib/logger";
 
 export type AppUser = {
   id: string;
@@ -47,13 +49,13 @@ export async function createUserAction(data: CreateUserPayload): Promise<void> {
   try {
     await client.invitations.createInvitation({
       emailAddress: email,
-      redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+      redirectUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard`,
       publicMetadata: {
         role: newUserRole === "admin" ? "admin" : "user",
       },
     });
   } catch (error: unknown) {
-    console.error("Clerk createUser error", JSON.stringify(error, null, 2));
+    authLogger.error({ error, email }, "Error al crear usuario en Clerk");
 
     const anyError = error as any;
     const firstMessage =

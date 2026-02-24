@@ -6,12 +6,13 @@ import { revalidatePath } from "next/cache";
 import { uploadFileToR2 } from "@/lib/r2-upload";
 import { refreshPlanTrabajoEstado } from "@/components/planesTrabajo/components/actions";
 import { parseCalendarStringToDate, toDateOnlyString } from "@/lib/dates";
+import { dbLogger } from "@/lib/logger";
 
 type InformeWithRelations = Prisma.InformeGetPayload<{
   include: {
-    cliente: { select: { id: true, name: true } };
-    tipoDeInforme: { select: { id: true, name: true } };
-    clientLocation: { select: { id: true, name: true } };
+    cliente: { select: { id: true; name: true } };
+    tipoDeInforme: { select: { id: true; name: true } };
+    clientLocation: { select: { id: true; name: true } };
     propuesta: {
       select: {
         id: true;
@@ -67,7 +68,9 @@ function serializeInforme(i: InformeWithRelations): SerializedInforme {
     id: i.id,
     cliente: i.cliente ? { id: i.cliente.id, name: i.cliente.name } : null,
     tipoDeInforme: i.tipoDeInforme ? { id: i.tipoDeInforme.id, name: i.tipoDeInforme.name } : null,
-    clientLocation: i.clientLocation ? { id: i.clientLocation.id, name: i.clientLocation.name } : null,
+    clientLocation: i.clientLocation
+      ? { id: i.clientLocation.id, name: i.clientLocation.name }
+      : null,
     propuesta: i.propuesta
       ? {
           id: i.propuesta.id,
@@ -120,15 +123,122 @@ export async function getInformes(): Promise<SerializedInforme[]> {
         },
       },
     },
-    orderBy: [
-      { estado: "asc" },
-      { fechaVencimiento: "asc" },
-    ],
+    orderBy: [{ estado: "asc" }, { fechaVencimiento: "asc" }],
   });
 
   if (!informes) return [];
 
   return informes.map(serializeInforme);
+}
+
+export async function getInformesPaginated(params: {
+  page: number;
+  pageSize: number;
+  search?: string;
+  filters?: Record<string, any>;
+}) {
+  try {
+    const skip = (params.page - 1) * params.pageSize;
+
+    const where: any = {};
+
+    if (params.search) {
+      where.OR = [
+        { cliente: { name: { contains: params.search, mode: "insensitive" as const } } },
+        { tipoDeInforme: { name: { contains: params.search, mode: "insensitive" as const } } },
+      ];
+    }
+
+    if (
+      params.filters?.estado &&
+      Array.isArray(params.filters.estado) &&
+      params.filters.estado.length > 0
+    ) {
+      where.estado = { in: params.filters.estado };
+    }
+
+    if (
+      params.filters?.fechaVencimiento &&
+      Array.isArray(params.filters.fechaVencimiento) &&
+      params.filters.fechaVencimiento.length > 0
+    ) {
+      const now = new Date();
+      const dateConditions: Date[] = [];
+      params.filters.fechaVencimiento.forEach((filterValue: string) => {
+        let dateFrom: Date | null = null;
+        switch (filterValue) {
+          case "today":
+            dateFrom = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            break;
+          case "week":
+            dateFrom = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            break;
+          case "month":
+            dateFrom = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+            break;
+          case "quarter":
+            dateFrom = new Date(now.getFullYear(), now.getMonth() - 3, now.getDate());
+            break;
+          case "year":
+            dateFrom = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+            break;
+        }
+        if (dateFrom) dateConditions.push(dateFrom);
+      });
+      if (dateConditions.length > 0) {
+        const oldestDate = new Date(Math.min(...dateConditions.map((d) => d.getTime())));
+        where.fechaVencimiento = { gte: oldestDate };
+      }
+    }
+
+    const [informes, total, estadoGroupBy] = await Promise.all([
+      prisma.informe.findMany({
+        where,
+        skip,
+        take: params.pageSize,
+        include: {
+          cliente: { select: { id: true, name: true } },
+          tipoDeInforme: { select: { id: true, name: true } },
+          clientLocation: { select: { id: true, name: true } },
+          propuesta: {
+            select: {
+              id: true,
+              codigo: true,
+              clienteId: true,
+              servicioId: true,
+              vigencia: true,
+              status: true,
+              items: true,
+              contacto: true,
+              valor: true,
+              moneda: true,
+              is_active: true,
+              condicionesParticulares: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        },
+        orderBy: [{ estado: "asc" }, { fechaVencimiento: "asc" }],
+      }),
+      prisma.informe.count({ where }),
+      prisma.informe.groupBy({ by: ["estado"], _count: { _all: true } }),
+    ]);
+
+    const facetCounts: Record<string, Record<string, number>> = {
+      estado: Object.fromEntries(estadoGroupBy.map((r) => [r.estado, r._count._all])),
+    };
+
+    return {
+      data: informes.map(serializeInforme),
+      total,
+      pageCount: Math.ceil(total / params.pageSize),
+      facetCounts,
+    };
+  } catch (error) {
+    dbLogger.error({ error, params }, "Error al obtener informes paginados");
+    throw error;
+  }
 }
 
 export async function getPendingInformes(): Promise<SerializedInforme[]> {
@@ -168,27 +278,27 @@ export async function getPendingInformes(): Promise<SerializedInforme[]> {
 }
 
 export type InformeCalendarItem = {
-  id: string
-  clienteId: string
-  clienteNombre: string
-  propuestaId: string
-  propuestaCodigo: string
-  tipoDeInformeId: string
-  tipoDeInformeNombre: string
-  fechaVencimiento: string
-  estado: string
-  adjunto: string | null
-}
+  id: string;
+  clienteId: string;
+  clienteNombre: string;
+  propuestaId: string;
+  propuestaCodigo: string;
+  tipoDeInformeId: string;
+  tipoDeInformeNombre: string;
+  fechaVencimiento: string;
+  estado: string;
+  adjunto: string | null;
+};
 
 export async function getInformesByRange(params: {
-  from: string
-  to: string
+  from: string;
+  to: string;
 }): Promise<InformeCalendarItem[]> {
-  const from = new Date(params.from)
-  const to = new Date(params.to)
+  const from = new Date(params.from);
+  const to = new Date(params.to);
 
   if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) {
-    throw new Error("Rango de fechas inválido")
+    throw new Error("Rango de fechas inválido");
   }
 
   const informes = await prisma.informe.findMany({
@@ -204,7 +314,7 @@ export async function getInformesByRange(params: {
       tipoDeInforme: { select: { id: true, name: true } },
     },
     orderBy: { fechaVencimiento: "asc" },
-  })
+  });
 
   return informes.map((i) => ({
     id: i.id,
@@ -217,7 +327,7 @@ export async function getInformesByRange(params: {
     fechaVencimiento: toDateOnlyString(i.fechaVencimiento),
     estado: String(i.estado),
     adjunto: i.adjunto ?? null,
-  }))
+  }));
 }
 
 export async function createInforme(data: any) {

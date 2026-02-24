@@ -4,6 +4,7 @@ import { PageFooter } from './PageFooter'
 import { pdfStyles } from './styles'
 import { formatDateOnly } from '@/lib/dates'
 import { PageHeader } from './PageHeader'
+import { SINERGIA_ASSETS } from '@/lib/pdf-constants'
 
 interface PortadaPageProps {
     codigo: string
@@ -37,7 +38,7 @@ export function PortadaPage({
                 <View style={pdfStyles.verticalBar} />
                 <View style={pdfStyles.logoContainer}>
                     <Image
-                        src="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev/LogoVertical.jpg"
+                        src={SINERGIA_ASSETS.logoVertical}
                         style={pdfStyles.logo}
                     />
                 </View>
@@ -85,7 +86,7 @@ export function PortadaPage({
                         <View style={pdfStyles.verticalBar} />
                             <View style={pdfStyles.logoContainer}>
                                 <Image
-                                    src="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev/LogoVertical.jpg"
+                                    src={SINERGIA_ASSETS.logoVertical}
                                     style={pdfStyles.logo}
                                 />
                             </View>

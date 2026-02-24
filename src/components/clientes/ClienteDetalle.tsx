@@ -1,6 +1,7 @@
 import { getClienteById, type ClienteById } from "./components/actions";
 import { ClienteIdWrapper } from "./components/cliente-id-wrapper";
 import { toDateOnlyString } from "@/lib/dates";
+import type { PropuestaTecnica } from "@/generated/client";
 
 type BaseCliente = NonNullable<ClienteById>;
 
@@ -10,11 +11,11 @@ type SerializedPropuesta = {
   clienteId: string;
   servicioId: string;
   vigencia: string | null;
-  status: BaseCliente["propuestas"][number]["status"];
+  status: PropuestaTecnica["status"];
   items: string[];
   contacto: string | null;
   valor: number;
-  moneda: BaseCliente["propuestas"][number]["moneda"];
+  moneda: PropuestaTecnica["moneda"];
   is_active: boolean;
   createdAt: string;
   updatedAt: string;
@@ -84,29 +85,25 @@ function serializeCliente(cliente: BaseCliente): SerializedCliente {
         : null,
       condicionesParticulares: p.condicionesParticulares ?? [],
     })),
-    clientLocations: (cliente.clientLocations ?? []).map<SerializedClientLocation>(
-      (loc) => ({
-        id: loc.id,
-        name: loc.name,
-        is_active: loc.is_active,
-        createdAt: loc.createdAt.toISOString(),
-        updatedAt: loc.updatedAt.toISOString(),
-        clienteId: loc.clienteId,
-        cliente: loc.cliente ? { id: loc.cliente.id, name: loc.cliente.name } : null,
-        provinciaId: loc.provinciaId ?? null,
-        ciudadId: loc.ciudadId ?? null,
-        provincia: loc.provincia
-          ? { id: loc.provincia.id, nombre: loc.provincia.nombre }
-          : null,
-        ciudad: loc.ciudad
-          ? {
-              id: loc.ciudad.id,
-              nombre: loc.ciudad.nombre,
-              provinciaId: loc.ciudad.provinciaId,
-            }
-          : null,
-      })
-    ),
+    clientLocations: (cliente.clientLocations ?? []).map<SerializedClientLocation>((loc) => ({
+      id: loc.id,
+      name: loc.name,
+      is_active: loc.is_active,
+      createdAt: loc.createdAt.toISOString(),
+      updatedAt: loc.updatedAt.toISOString(),
+      clienteId: loc.clienteId,
+      cliente: loc.cliente ? { id: loc.cliente.id, name: loc.cliente.name } : null,
+      provinciaId: loc.provinciaId ?? null,
+      ciudadId: loc.ciudadId ?? null,
+      provincia: loc.provincia ? { id: loc.provincia.id, nombre: loc.provincia.nombre } : null,
+      ciudad: loc.ciudad
+        ? {
+            id: loc.ciudad.id,
+            nombre: loc.ciudad.nombre,
+            provinciaId: loc.ciudad.provinciaId,
+          }
+        : null,
+    })),
   };
 }
 

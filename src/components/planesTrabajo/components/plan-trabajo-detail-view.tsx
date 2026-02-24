@@ -310,7 +310,6 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
                   setEjecutarFile(null)
                   router.refresh()
                 } catch (error: any) {
-                  console.error(error)
                   toast.error(error?.message ?? "No se pudo ejecutar la programación")
                 } finally {
                   setEjecutarLoading(false)
@@ -655,7 +654,6 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
                   setEditarProgramacionId(null)
                   router.refresh()
                 } catch (error: any) {
-                  console.error(error)
                   toast.error(error?.message ?? "No se pudo actualizar la fecha")
                 } finally {
                   setEditarProgramacionSaving(false)
@@ -779,7 +777,6 @@ function EditarFechasDialog({
         toast.success("Sin conflictos. Podés guardar las nuevas fechas.")
       }
     } catch (error: any) {
-      console.error(error)
       toast.error(error?.message ?? "No se pudo previsualizar")
     } finally {
       setIsPreviewing(false)
@@ -815,7 +812,6 @@ function EditarFechasDialog({
       onOpenChange(false)
       onSaved()
     } catch (error: any) {
-      console.error(error)
       toast.error(error?.message ?? "No se pudieron actualizar las fechas")
     } finally {
       setIsSaving(false)
@@ -957,7 +953,6 @@ function EditarFechasDialog({
                               toast.success("Programación reprogramada")
                               await handlePreview()
                             } catch (error: any) {
-                              console.error(error)
                               toast.error(error?.message ?? "No se pudo reprogramar")
                             } finally {
                               setReprogramandoIds((prev) => ({ ...prev, [p.programacionId]: false }))
@@ -1099,7 +1094,6 @@ function ProgramarDialog({
         setLocations(result)
       })
       .catch((error) => {
-        console.error("Error al cargar locaciones del cliente:", error)
         if (!isMounted) return
         toast.error("No se pudieron cargar las locaciones del cliente")
       })
@@ -1216,7 +1210,6 @@ function ProgramarDialog({
       onOpenChange(false)
       router.refresh()
     } catch (error: any) {
-      console.error(error)
       toast.error(error?.message ?? "No se pudo crear la programación")
     } finally {
       setIsSubmitting(false)

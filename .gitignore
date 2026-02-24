@@ -13,6 +13,12 @@
 # testing
 /coverage
 
+# playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/.auth/
+
 # next.js
 /.next/
 /out/
@@ -44,3 +50,8 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+PLAN_DE_MEJORAS.md
+CHECKLIST_MEJORAS.md
+CALENDARIO_IMPLMENTACION.md
+changes-clientes.md
+notas.md
