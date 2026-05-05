@@ -7,6 +7,8 @@ import { uploadFileToR2 } from "@/lib/r2-upload";
 import { refreshPlanTrabajoEstado } from "@/components/planesTrabajo/components/actions";
 import { parseCalendarStringToDate, toDateOnlyString } from "@/lib/dates";
 import { dbLogger } from "@/lib/logger";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 type InformeWithRelations = Prisma.InformeGetPayload<{
   include: {
@@ -331,6 +333,7 @@ export async function getInformesByRange(params: {
 }
 
 export async function createInforme(data: any) {
+  await requirePermission(PERMISSIONS.INFORMES_CREATE);
   const informe = await prisma.informe.create({
     data,
   });
@@ -340,6 +343,7 @@ export async function createInforme(data: any) {
 }
 
 export async function completarInforme(formData: FormData) {
+  await requirePermission(PERMISSIONS.INFORMES_DELIVER);
   const file = formData.get("file") as File | null;
   const informeId = formData.get("informeId") as string | null;
   const responsable = formData.get("responsable") as string | null;
@@ -385,6 +389,7 @@ export async function completarInforme(formData: FormData) {
 }
 
 export async function updateInforme(id: string, data: any) {
+  await requirePermission(PERMISSIONS.INFORMES_UPDATE);
   const informe = await prisma.informe.update({
     where: { id },
     data,
@@ -405,6 +410,7 @@ export async function generateInformesFromPropuesta({
   fechaVencimiento,
   clientLocationId,
 }: GenerateInformesInput) {
+  await requirePermission(PERMISSIONS.INFORMES_CREATE);
   const propuesta = await prisma.propuestaTecnica.findUnique({
     where: { id: propuestaId },
     include: {

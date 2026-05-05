@@ -1,5 +1,5 @@
-import { createEnv } from "@t3-oss/env-nextjs"
-import { z } from "zod"
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   /**
@@ -8,6 +8,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     CLERK_SECRET_KEY: z.string().min(1),
+    CLERK_WEBHOOK_SECRET: z.string().min(1),
     CLOUDFLARE_S3_API: z.string().url(),
     CLOUDFLARE_ACCESS_KEY_ID: z.string().min(1),
     CLOUDFLARE_SECRET_ACCESS_KEY: z.string().min(1),
@@ -24,12 +25,8 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string().default("/sign-in"),
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().default("/sign-up"),
-    NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL: z
-      .string()
-      .default("/dashboard"),
-    NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: z
-      .string()
-      .default("/dashboard"),
+    NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL: z.string().default("/dashboard"),
+    NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: z.string().default("/dashboard"),
   },
 
   /**
@@ -40,6 +37,7 @@ export const env = createEnv({
     // Server
     DATABASE_URL: process.env.DATABASE_URL,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
     CLOUDFLARE_S3_API: process.env.CLOUDFLARE_S3_API,
     CLOUDFLARE_ACCESS_KEY_ID: process.env.CLOUDFLARE_ACCESS_KEY_ID,
     CLOUDFLARE_SECRET_ACCESS_KEY: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
@@ -47,8 +45,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
 
     // Client
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
@@ -63,4 +60,4 @@ export const env = createEnv({
    */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,
-})
+});

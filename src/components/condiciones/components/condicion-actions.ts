@@ -4,8 +4,11 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { Condicion } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export async function createCondicion(data: Partial<Condicion>) {
+  await requirePermission(PERMISSIONS.CONDICIONES_CREATE);
   try {
     const condicion = await prisma.condicion.create({
       data: {
@@ -35,6 +38,7 @@ export async function createCondicion(data: Partial<Condicion>) {
 }
 
 export async function updateCondicion(data: Partial<Condicion>) {
+  await requirePermission(PERMISSIONS.CONDICIONES_UPDATE);
   try {
     const condicion = await prisma.condicion.update({
       where: {
@@ -68,6 +72,7 @@ export async function updateCondicion(data: Partial<Condicion>) {
 }
 
 export async function deleteCondicion(id: string) {
+  await requirePermission(PERMISSIONS.CONDICIONES_DELETE);
   try {
     const condicion = await prisma.condicion.delete({
       where: {

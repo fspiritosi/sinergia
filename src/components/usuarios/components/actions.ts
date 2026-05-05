@@ -1,16 +1,21 @@
 "use server";
 
-import { auth, currentUser, clerkClient } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { clerkClient } from "@clerk/nextjs/server";
 import { env } from "@/lib/env";
 import { authLogger } from "@/lib/logger";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { roleRepository } from "@/repositories/role.repository";
+import { userRepository } from "@/repositories/user.repository";
+import { toRoleSummaryDto, type RoleSummaryDto } from "@/dtos/role.dto";
 
 export type AppUser = {
   id: string;
   email: string;
   firstName: string | null;
   lastName: string | null;
-  role: string | null;
+  roleName: string | null;
+  roleLabel: string | null;
   is_active: boolean;
   createdAt: string; // ISO
 };
@@ -19,29 +24,25 @@ type CreateUserPayload = {
   email: string;
   firstName: string;
   lastName: string;
-  role: string;
+  roleId: string;
 };
 
+export async function getRolesForSelect(): Promise<RoleSummaryDto[]> {
+  const roles = await roleRepository.findMany();
+  return roles.map(toRoleSummaryDto);
+}
+
 export async function createUserAction(data: CreateUserPayload): Promise<void> {
-  const { userId } = await auth();
-  if (!userId) {
-    redirect("/sign-in");
-  }
-
-  const user = await currentUser();
-  const role = user?.publicMetadata?.role;
-
-  if (role !== "admin") {
-    redirect("/dashboard");
-  }
+  await requirePermission(PERMISSIONS.USUARIOS_INVITE);
 
   const email = data.email?.trim() ?? "";
-  const firstName = data.firstName?.trim() ?? "";
-  const lastName = data.lastName?.trim() ?? "";
-  const newUserRole = data.role ?? "user";
-
   if (!email) {
     throw new Error("El email es obligatorio");
+  }
+
+  const role = await roleRepository.findById(data.roleId);
+  if (!role) {
+    throw new Error("El rol seleccionado no existe");
   }
 
   const client = await clerkClient();
@@ -51,7 +52,7 @@ export async function createUserAction(data: CreateUserPayload): Promise<void> {
       emailAddress: email,
       redirectUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard`,
       publicMetadata: {
-        role: newUserRole === "admin" ? "admin" : "user",
+        role: role.name,
       },
     });
   } catch (error: unknown) {
@@ -69,21 +70,39 @@ export async function createUserAction(data: CreateUserPayload): Promise<void> {
 }
 
 export const getUsers = async (): Promise<AppUser[]> => {
+  await requirePermission(PERMISSIONS.USUARIOS_VIEW);
+
   const client = await clerkClient();
   const users = await client.users.getUserList({ limit: 50 });
 
+  // Una sola query a la DB para resolver los roles legibles desde la tabla User
+  const dbUsers = await userRepository.findMany({
+    where: { clerkId: { in: users.data.map((u) => u.id) } },
+  });
+  const byClerkId = new Map(
+    (
+      dbUsers as unknown as Array<{
+        clerkId: string;
+        role: { name: string; label: string };
+      }>
+    ).map((u) => [u.clerkId, u.role])
+  );
+
   return users.data.map((user) => {
     const primaryEmail =
-      user.primaryEmailAddress?.emailAddress ??
-      user.emailAddresses[0]?.emailAddress ??
-      "";
+      user.primaryEmailAddress?.emailAddress ?? user.emailAddresses[0]?.emailAddress ?? "";
+
+    const dbRole = byClerkId.get(user.id);
+    const metadataRole =
+      typeof user.publicMetadata?.role === "string" ? (user.publicMetadata.role as string) : null;
 
     return {
       id: user.id,
       email: primaryEmail,
       firstName: user.firstName ?? null,
       lastName: user.lastName ?? null,
-      role: (user.publicMetadata as any)?.role ?? null,
+      roleName: dbRole?.name ?? metadataRole,
+      roleLabel: dbRole?.label ?? metadataRole,
       is_active: !user.banned && !user.locked,
       createdAt: new Date(user.createdAt).toISOString(),
     };

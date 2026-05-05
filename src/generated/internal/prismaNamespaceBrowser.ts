@@ -64,7 +64,11 @@ export const ModelName = {
   PlanTrabajo: 'PlanTrabajo',
   PlanTrabajoProgramacion: 'PlanTrabajoProgramacion',
   DetalleVariante: 'DetalleVariante',
-  Condicion: 'Condicion'
+  Condicion: 'Condicion',
+  User: 'User',
+  Role: 'Role',
+  Permission: 'Permission',
+  RolePermission: 'RolePermission'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -297,6 +301,52 @@ export const CondicionScalarFieldEnum = {
 } as const
 
 export type CondicionScalarFieldEnum = (typeof CondicionScalarFieldEnum)[keyof typeof CondicionScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  clerkId: 'clerkId',
+  email: 'email',
+  name: 'name',
+  roleId: 'roleId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  label: 'label',
+  description: 'description',
+  isSystem: 'isSystem',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+export const PermissionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  module: 'module',
+  action: 'action',
+  description: 'description'
+} as const
+
+export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+
+
+export const RolePermissionScalarFieldEnum = {
+  roleId: 'roleId',
+  permissionId: 'permissionId'
+} as const
+
+export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
 
 
 export const SortOrder = {

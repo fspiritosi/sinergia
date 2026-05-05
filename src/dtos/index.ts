@@ -72,3 +72,20 @@ export {
   toPlanTrabajoSummaryDtos,
   getEstadoDisplay,
 } from "./planTrabajo.dto";
+
+// Role / Permission DTOs
+export type { PermissionDto, RoleDto, RoleWithPermissionsDto, RoleSummaryDto } from "./role.dto";
+
+export {
+  toPermissionDto,
+  toRoleDto,
+  toRoleWithPermissionsDto,
+  toRoleSummaryDto,
+  toRoleDtos,
+  toRoleSummaryDtos,
+} from "./role.dto";
+
+// User DTOs
+export type { UserDto, UserWithRoleDto, UserSummaryDto } from "./user.dto";
+
+export { toUserDto, toUserWithRoleDto, toUserSummaryDto, toUserDtos } from "./user.dto";

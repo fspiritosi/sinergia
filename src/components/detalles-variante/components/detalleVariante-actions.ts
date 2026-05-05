@@ -4,10 +4,13 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import type { DetalleVariante } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 const REVALIDATE_PATH = "/dashboard/detalles-variante";
 
 export async function createDetalleVariante(data: DetalleVariante) {
+  await requirePermission(PERMISSIONS.DETALLES_VARIANTE_CREATE);
   try {
     const record = await prisma.detalleVariante.create({
       data: {
@@ -31,6 +34,7 @@ export async function createDetalleVariante(data: DetalleVariante) {
 }
 
 export async function updateDetalleVariante(data: Partial<DetalleVariante>) {
+  await requirePermission(PERMISSIONS.DETALLES_VARIANTE_UPDATE);
   try {
     if (!data.id) {
       throw new Error("El identificador es requerido");
@@ -54,12 +58,16 @@ export async function updateDetalleVariante(data: Partial<DetalleVariante>) {
     revalidatePath(REVALIDATE_PATH);
     return { success: true };
   } catch (error) {
-    dbLogger.error({ error, detalleVarianteId: data.id }, "Error al actualizar detalle de variante");
+    dbLogger.error(
+      { error, detalleVarianteId: data.id },
+      "Error al actualizar detalle de variante"
+    );
     throw error;
   }
 }
 
 export async function deleteDetalleVariante(id: string) {
+  await requirePermission(PERMISSIONS.DETALLES_VARIANTE_DELETE);
   try {
     if (!id) {
       throw new Error("El identificador es requerido");

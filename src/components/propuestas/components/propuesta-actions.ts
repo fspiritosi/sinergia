@@ -5,6 +5,8 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { parseDateOnlyToLocalNoon } from "@/lib/dates";
 import { dbLogger } from "@/lib/logger";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 interface CreatePropuestaInput {
   codigo: string;
@@ -21,6 +23,7 @@ interface CreatePropuestaInput {
 }
 
 export async function createPropuesta(data: CreatePropuestaInput) {
+  await requirePermission(PERMISSIONS.PROPUESTAS_CREATE);
   try {
     await prisma.propuestaTecnica.create({
       data: {
@@ -47,7 +50,7 @@ export async function createPropuesta(data: CreatePropuestaInput) {
 }
 
 export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
-
+  await requirePermission(PERMISSIONS.PROPUESTAS_UPDATE);
   try {
     const vigencia =
       data.vigencia instanceof Date
@@ -73,11 +76,14 @@ export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
         status: data.status,
         condicionesParticulares: data.condicionesParticulares,
         updatedAt: new Date().toISOString(),
-      }
+      },
     });
 
     if (!propuesta) {
-      dbLogger.error({ propuestaId: data.id }, "Error al actualizar propuesta: registro no actualizado");
+      dbLogger.error(
+        { propuestaId: data.id },
+        "Error al actualizar propuesta: registro no actualizado"
+      );
       throw new Error("Error al actualizar la propuesta");
     }
 
@@ -90,6 +96,7 @@ export async function updatePropuesta(data: Partial<PropuestaTecnica>) {
 }
 
 export async function deletePropuesta(id: string) {
+  await requirePermission(PERMISSIONS.PROPUESTAS_DELETE);
   try {
     const propuesta = await prisma.propuestaTecnica.delete({
       where: {

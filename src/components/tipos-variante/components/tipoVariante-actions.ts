@@ -4,8 +4,11 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import type { TipoDeVariante } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export async function createTipoDeVariante(data: TipoDeVariante) {
+  await requirePermission(PERMISSIONS.TIPOS_VARIANTE_CREATE);
   try {
     const record = await prisma.tipoDeVariante.create({
       data: {
@@ -28,6 +31,7 @@ export async function createTipoDeVariante(data: TipoDeVariante) {
 }
 
 export async function updateTipoDeVariante(data: Partial<TipoDeVariante>) {
+  await requirePermission(PERMISSIONS.TIPOS_VARIANTE_UPDATE);
   try {
     if (!data.id) {
       throw new Error("El identificador es requerido");
@@ -56,6 +60,7 @@ export async function updateTipoDeVariante(data: Partial<TipoDeVariante>) {
 }
 
 export async function deleteTipoDeVariante(id: string) {
+  await requirePermission(PERMISSIONS.TIPOS_VARIANTE_DELETE);
   try {
     if (!id) {
       throw new Error("El identificador es requerido");

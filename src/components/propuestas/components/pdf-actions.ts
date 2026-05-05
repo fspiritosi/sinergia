@@ -6,8 +6,11 @@ import { PropuestaPDF } from "../pdf/PropuestaPDF";
 import { toDateOnlyString } from "@/lib/dates";
 import { pdfLogger } from "@/lib/logger";
 import { getActiveCondicionesByTipo } from "@/components/condiciones/components/actions";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export async function generatePropuestaPDF(propuestaId: string) {
+  await requirePermission(PERMISSIONS.PROPUESTAS_DOWNLOAD_PDF);
   try {
     // Obtener la propuesta con sus relaciones
     const propuesta = await prisma.propuestaTecnica.findUnique({
