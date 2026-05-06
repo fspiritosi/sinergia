@@ -22,100 +22,120 @@ import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { usePermissions } from "@/components/rbac/use-permissions";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: "Gestión",
-      url: "/dashboard/clientes",
-      items: [
-        {
-          title: "Clientes",
-          url: "/dashboard/clientes",
-          isActive: true,
-        },
-        // {
-        //   title: "Locaciones Clientes",
-        //   url: "/dashboard/clientes/locaciones",
-        //   isActive: false,
-        // },
-        {
-          title: "Propuestas",
-          url: "/dashboard/clientes/propuestas",
-          isActive: false,
-        },
-      ],
-    },
-    {
-      title: "Planificación",
-      url: "/dashboard/planes",
-      items: [
-        {
-          title: "Calendario",
-          url: "/dashboard/planificacion",
-          isActive: false,
-        },
-        {
-          title: "Planes de Trabajo",
-          url: "/dashboard/planes",
-          isActive: false,
-        },
-        {
-          title: "Informes",
-          url: "/dashboard/informes",
-          isActive: false,
-        },
-      ],
-    },
-    {
-      title: "Configuración",
-      url: "/dashboard/configuracion",
-      items: [
-        {
-          title: "Servicios",
-          url: "/dashboard/servicios",
-          isActive: false,
-        },
-        {
-          title: "Items",
-          url: "/dashboard/items",
-          isActive: false,
-        },
-        {
-          title: "Tipos de Informe",
-          url: "/dashboard/tipos-informe",
-          isActive: false,
-        },
-        {
-          title: "Tipos de Variantes",
-          url: "/dashboard/tipos-variante",
-          isActive: false,
-        },
-        {
-          title: "Detalle de Variantes",
-          url: "/dashboard/detalles-variante",
-          isActive: false,
-        },
-        {
-          title: "Condiciones",
-          url: "/dashboard/condiciones",
-          isActive: false,
-        },
-        {
-          title: "Usuarios",
-          url: "/dashboard/usuarios",
-          isActive: false,
-        },
-      ],
-    },
-  ],
+type NavItem = {
+  title: string;
+  url: string;
+  requiredPermission?: string;
 };
+
+type NavSection = {
+  title: string;
+  url: string;
+  items: NavItem[];
+};
+
+const navMain: NavSection[] = [
+  {
+    title: "Gestión",
+    url: "/dashboard/clientes",
+    items: [
+      {
+        title: "Clientes",
+        url: "/dashboard/clientes",
+        requiredPermission: PERMISSIONS.CLIENTES_VIEW,
+      },
+      {
+        title: "Propuestas",
+        url: "/dashboard/clientes/propuestas",
+        requiredPermission: PERMISSIONS.PROPUESTAS_VIEW,
+      },
+    ],
+  },
+  {
+    title: "Planificación",
+    url: "/dashboard/planes",
+    items: [
+      {
+        title: "Calendario",
+        url: "/dashboard/planificacion",
+        requiredPermission: PERMISSIONS.PLANIFICACION_VIEW,
+      },
+      {
+        title: "Planes de Trabajo",
+        url: "/dashboard/planes",
+        requiredPermission: PERMISSIONS.PLANES_VIEW,
+      },
+      {
+        title: "Informes",
+        url: "/dashboard/informes",
+        requiredPermission: PERMISSIONS.INFORMES_VIEW,
+      },
+    ],
+  },
+  {
+    title: "Configuración",
+    url: "/dashboard/configuracion",
+    items: [
+      {
+        title: "Servicios",
+        url: "/dashboard/servicios",
+        requiredPermission: PERMISSIONS.SERVICIOS_VIEW,
+      },
+      {
+        title: "Items",
+        url: "/dashboard/items",
+        requiredPermission: PERMISSIONS.ITEMS_VIEW,
+      },
+      {
+        title: "Tipos de Informe",
+        url: "/dashboard/tipos-informe",
+        requiredPermission: PERMISSIONS.TIPOS_INFORME_VIEW,
+      },
+      {
+        title: "Tipos de Variantes",
+        url: "/dashboard/tipos-variante",
+        requiredPermission: PERMISSIONS.TIPOS_VARIANTE_VIEW,
+      },
+      {
+        title: "Detalle de Variantes",
+        url: "/dashboard/detalles-variante",
+        requiredPermission: PERMISSIONS.DETALLES_VARIANTE_VIEW,
+      },
+      {
+        title: "Condiciones",
+        url: "/dashboard/condiciones",
+        requiredPermission: PERMISSIONS.CONDICIONES_VIEW,
+      },
+      {
+        title: "Usuarios",
+        url: "/dashboard/usuarios",
+        requiredPermission: PERMISSIONS.USUARIOS_VIEW,
+      },
+      {
+        title: "Roles y permisos",
+        url: "/dashboard/roles",
+        requiredPermission: PERMISSIONS.USUARIOS_MANAGE_ROLES,
+      },
+    ],
+  },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { user } = useUser();
-  const isAdmin = user?.publicMetadata?.role === "admin";
+  const { can } = usePermissions();
+
+  const visibleSections = navMain
+    .map((section) => ({
+      ...section,
+      items: section.items.filter(
+        (item) => !item.requiredPermission || can(item.requiredPermission)
+      ),
+    }))
+    .filter((section) => section.items.length > 0);
 
   return (
     <Sidebar {...props}>
@@ -134,8 +154,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {data.navMain.map((item, index) => {
-              const isSectionActive = item.items?.some((child) => {
+            {visibleSections.map((item, index) => {
+              const isSectionActive = item.items.some((child) => {
                 if (!pathname) return false;
                 return pathname === child.url || pathname.startsWith(`${child.url}/`);
               });
@@ -154,26 +174,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
-                    {item.items?.length ? (
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {item.items.map((child) => {
-                            if (child.url === "/dashboard/usuarios" && !isAdmin) {
-                              return null;
-                            }
-                            const isActive = pathname === child.url;
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.items.map((child) => {
+                          const isActive = pathname === child.url;
 
-                            return (
-                              <SidebarMenuSubItem key={child.title}>
-                                <SidebarMenuSubButton asChild isActive={isActive}>
-                                  <Link href={child.url}>{child.title}</Link>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            );
-                          })}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    ) : null}
+                          return (
+                            <SidebarMenuSubItem key={child.title}>
+                              <SidebarMenuSubButton asChild isActive={isActive}>
+                                <Link href={child.url}>{child.title}</Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          );
+                        })}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
                   </SidebarMenuItem>
                 </Collapsible>
               );

@@ -4,11 +4,11 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { ClientLocations } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
-
-
-
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export async function createClientLocation(data: ClientLocations) {
+  await requirePermission(PERMISSIONS.CLIENTES_CREATE);
   try {
     const clientLocation: ClientLocations = await prisma.clientLocations.create({
       data: {
@@ -17,11 +17,14 @@ export async function createClientLocation(data: ClientLocations) {
         provinciaId: data.provinciaId,
         ciudadId: data.ciudadId,
         is_active: data.is_active,
-    }
-  });
+      },
+    });
 
     if (!clientLocation) {
-      dbLogger.error({ locationName: data.name }, "Error al crear locación de cliente: registro no creado");
+      dbLogger.error(
+        { locationName: data.name },
+        "Error al crear locación de cliente: registro no creado"
+      );
       throw new Error("Error al crear la locacion del cliente");
     }
 
@@ -34,24 +37,27 @@ export async function createClientLocation(data: ClientLocations) {
 }
 
 export async function updateClientLocation(data: Partial<ClientLocations>) {
-
+  await requirePermission(PERMISSIONS.CLIENTES_UPDATE);
   try {
     const clientLocation = await prisma.clientLocations.update({
       where: {
         id: data.id,
       },
       data: {
-        name: data.name,    
+        name: data.name,
         clienteId: data.clienteId,
         provinciaId: data.provinciaId,
         ciudadId: data.ciudadId,
         is_active: data.is_active,
         updatedAt: new Date().toISOString(),
-      }
+      },
     });
 
     if (!clientLocation) {
-      dbLogger.error({ locationId: data.id }, "Error al actualizar locación de cliente: registro no actualizado");
+      dbLogger.error(
+        { locationId: data.id },
+        "Error al actualizar locación de cliente: registro no actualizado"
+      );
       throw new Error("Error al actualizar la locacion del cliente");
     }
 
@@ -64,6 +70,7 @@ export async function updateClientLocation(data: Partial<ClientLocations>) {
 }
 
 export async function deleteClientLocation(id: string) {
+  await requirePermission(PERMISSIONS.CLIENTES_DELETE);
   try {
     const clientLocation = await prisma.clientLocations.delete({
       where: {
@@ -72,7 +79,10 @@ export async function deleteClientLocation(id: string) {
     });
 
     if (!clientLocation) {
-      dbLogger.error({ locationId: id }, "Error al eliminar locación de cliente: registro no eliminado");
+      dbLogger.error(
+        { locationId: id },
+        "Error al eliminar locación de cliente: registro no eliminado"
+      );
       throw new Error("Error al eliminar la locacion del cliente");
     }
 
@@ -85,29 +95,25 @@ export async function deleteClientLocation(id: string) {
 }
 
 interface ClientLocationDetail {
-    clientLocation: ClientLocations;
+  clientLocation: ClientLocations;
 }
 
 export async function getClientLocation(id: string): Promise<ClientLocationDetail> {
-    try {
-        const clientLocation = await prisma.clientLocations.findUnique({
-            where: {
-                id,
-            },
-        });
+  try {
+    const clientLocation = await prisma.clientLocations.findUnique({
+      where: {
+        id,
+      },
+    });
 
-        if (!clientLocation) {
-            dbLogger.error({ locationId: id }, "ClientLocation no encontrado");
-            throw new Error("ClientLocation no encontrado");
-        }
-
-
-        return { clientLocation };
-    } catch (error) {
-        dbLogger.error({ error, locationId: id }, "Error al obtener clientLocation");
-        throw error;
+    if (!clientLocation) {
+      dbLogger.error({ locationId: id }, "ClientLocation no encontrado");
+      throw new Error("ClientLocation no encontrado");
     }
+
+    return { clientLocation };
+  } catch (error) {
+    dbLogger.error({ error, locationId: id }, "Error al obtener clientLocation");
+    throw error;
+  }
 }
-
-
-

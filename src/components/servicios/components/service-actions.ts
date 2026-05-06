@@ -4,11 +4,11 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { Items, Servicio as ServicioType } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
-
-
-
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export async function createServicio(data: ServicioType) {
+  await requirePermission(PERMISSIONS.SERVICIOS_CREATE);
   try {
     const cliente: ServicioType = await prisma.servicio.create({
       data: {
@@ -16,8 +16,8 @@ export async function createServicio(data: ServicioType) {
         description: data.description,
         type: data.type,
         is_active: data.is_active,
-    }
-  });
+      },
+    });
 
     if (!cliente) {
       dbLogger.error({ serviceName: data.name }, "Error al crear servicio: registro no creado");
@@ -33,23 +33,26 @@ export async function createServicio(data: ServicioType) {
 }
 
 export async function updateServicio(data: Partial<ServicioType>) {
-
+  await requirePermission(PERMISSIONS.SERVICIOS_UPDATE);
   try {
     const cliente = await prisma.servicio.update({
       where: {
         id: data.id,
       },
       data: {
-        name: data.name,    
+        name: data.name,
         description: data.description,
         type: data.type,
         is_active: data.is_active,
         updatedAt: new Date().toISOString(),
-      }
+      },
     });
 
     if (!cliente) {
-      dbLogger.error({ servicioId: data.id }, "Error al actualizar servicio: registro no actualizado");
+      dbLogger.error(
+        { servicioId: data.id },
+        "Error al actualizar servicio: registro no actualizado"
+      );
       throw new Error("Error al actualizar el servicio");
     }
 
@@ -62,6 +65,7 @@ export async function updateServicio(data: Partial<ServicioType>) {
 }
 
 export async function deleteServicio(id: string) {
+  await requirePermission(PERMISSIONS.SERVICIOS_DELETE);
   try {
     const cliente = await prisma.servicio.delete({
       where: {
@@ -83,41 +87,41 @@ export async function deleteServicio(id: string) {
 }
 
 interface ServicioDetail {
-    servicio: ServicioType;
-    items: Items[];
+  servicio: ServicioType;
+  items: Items[];
 }
 
 export async function getItemsService(id: string): Promise<ServicioDetail> {
-    try {
-        const servicio = await prisma.servicio.findUnique({
-            where: {
-                id,
-            },
-        });
+  try {
+    const servicio = await prisma.servicio.findUnique({
+      where: {
+        id,
+      },
+    });
 
-        if (!servicio) {
-            dbLogger.error({ servicioId: id }, "Servicio no encontrado");
-            throw new Error("Servicio no encontrado");
-        }
-
-        const itemsOnServicio = await prisma.itemsOnServicios.findMany({
-            where: {
-                servicioId: id,
-            },
-            include: {
-                item: true,
-            },
-        });
-
-        const items = itemsOnServicio
-            .map(({ item }) => item)
-            .filter((item): item is Items => Boolean(item));
-
-        return { servicio, items };
-    } catch (error) {
-        dbLogger.error({ error, servicioId: id }, "Error al obtener items del servicio");
-        throw error;
+    if (!servicio) {
+      dbLogger.error({ servicioId: id }, "Servicio no encontrado");
+      throw new Error("Servicio no encontrado");
     }
+
+    const itemsOnServicio = await prisma.itemsOnServicios.findMany({
+      where: {
+        servicioId: id,
+      },
+      include: {
+        item: true,
+      },
+    });
+
+    const items = itemsOnServicio
+      .map(({ item }) => item)
+      .filter((item): item is Items => Boolean(item));
+
+    return { servicio, items };
+  } catch (error) {
+    dbLogger.error({ error, servicioId: id }, "Error al obtener items del servicio");
+    throw error;
+  }
 }
 
 interface UpdateServicioItemsInput {
@@ -126,6 +130,7 @@ interface UpdateServicioItemsInput {
 }
 
 export async function updateServicioItems({ servicioId, itemIds }: UpdateServicioItemsInput) {
+  await requirePermission(PERMISSIONS.SERVICIOS_UPDATE);
   try {
     await prisma.$transaction([
       prisma.itemsOnServicios.deleteMany({
@@ -135,14 +140,14 @@ export async function updateServicioItems({ servicioId, itemIds }: UpdateServici
       }),
       ...(itemIds.length
         ? [
-          prisma.itemsOnServicios.createMany({
-            data: itemIds.map((itemId) => ({
-              servicioId,
-              itemId,
-            })),
-            skipDuplicates: true,
-          }),
-        ]
+            prisma.itemsOnServicios.createMany({
+              data: itemIds.map((itemId) => ({
+                servicioId,
+                itemId,
+              })),
+              skipDuplicates: true,
+            }),
+          ]
         : []),
     ]);
 

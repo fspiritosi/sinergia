@@ -13,6 +13,8 @@ import {
 } from "@/lib/dates";
 import { uploadFileToR2 } from "@/lib/r2-upload";
 import { dbLogger } from "@/lib/logger";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export type PlanTrabajoWithProgramaciones = PlanTrabajo & {
   cliente: { id: string; name: string };
@@ -193,6 +195,7 @@ export async function createPlanTrabajoFromPropuesta(params: {
   fechaInicio: string;
   fechaFin: string;
 }) {
+  await requirePermission(PERMISSIONS.PLANES_CREATE);
   const fechaInicio = parseDateOnlyToLocalNoon(params.fechaInicio);
   const fechaFin = parseDateOnlyToLocalNoon(params.fechaFin);
 
@@ -588,6 +591,7 @@ export async function createPlanTrabajoProgramacion(params: {
   clientLocationId?: string;
   detalleVarianteId?: string;
 }) {
+  await requirePermission(PERMISSIONS.PLANES_SCHEDULE);
   const plan = await prisma.planTrabajo.findUnique({
     where: { id: params.planTrabajoId },
     include: {
@@ -673,6 +677,7 @@ export async function createPlanTrabajoProgramacionesMensuales(params: {
   mesInicio: string; // YYYY-MM
   detalleVarianteId?: string;
 }) {
+  await requirePermission(PERMISSIONS.PLANES_SCHEDULE);
   const plan = await prisma.planTrabajo.findUnique({
     where: { id: params.planTrabajoId },
     include: {
@@ -769,6 +774,7 @@ export async function marcarProgramacionEjecutada(params: {
   programacionId: string;
   ejecutada: boolean;
 }) {
+  await requirePermission(PERMISSIONS.PLANIFICACION_UPDATE);
   const programacion = await prisma.planTrabajoProgramacion.findUnique({
     where: { id: params.programacionId },
     include: { planTrabajo: true, item: { select: { tipoDeInformeId: true } } },
@@ -795,6 +801,7 @@ export async function marcarProgramacionEjecutada(params: {
 }
 
 export async function ejecutarProgramacionConAdjunto(formData: FormData) {
+  await requirePermission(PERMISSIONS.PLANIFICACION_UPDATE);
   const programacionId = formData.get("programacionId") as string | null;
   const file = formData.get("file") as File | null;
 
@@ -839,6 +846,7 @@ export async function reprogramarPlanTrabajoProgramacion(params: {
   rangoInicio: string;
   rangoFin: string;
 }) {
+  await requirePermission(PERMISSIONS.PLANES_SCHEDULE);
   const rangoInicio = parseDateOnlyToLocalNoon(params.rangoInicio);
   const rangoFin = parseDateOnlyToLocalNoon(params.rangoFin);
 
@@ -952,6 +960,7 @@ export async function updatePlanTrabajoFechas(params: {
   fechaInicio: string;
   fechaFin: string;
 }) {
+  await requirePermission(PERMISSIONS.PLANES_UPDATE);
   const preview = await previewUpdatePlanTrabajoFechas(params);
 
   if (preview.fueraDeRango.length > 0) {

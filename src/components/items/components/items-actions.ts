@@ -4,18 +4,17 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { Items, Servicio } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
-
-
-
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 export async function createItem(data: Items) {
+  await requirePermission(PERMISSIONS.ITEMS_CREATE);
   try {
     const tipoDeInformeId =
       (data as any).tipoDeInformeId && (data as any).tipoDeInformeId !== ""
         ? (data as any).tipoDeInformeId
         : null;
-    const esPlanificable =
-      tipoDeInformeId !== null ? true : (data as any).esPlanificable ?? true;
+    const esPlanificable = tipoDeInformeId !== null ? true : ((data as any).esPlanificable ?? true);
     const hasVariant = Boolean((data as any).hasVariant);
     const variantTypeId =
       hasVariant && (data as any).variantTypeId && (data as any).variantTypeId !== ""
@@ -78,10 +77,8 @@ export async function getServiciosByItem(itemId: string): Promise<ServicioAssign
   return servicios;
 }
 
-export async function assignItemsToServicio({
-  servicioId,
-  itemIds,
-}: AssignItemsToServicioInput) {
+export async function assignItemsToServicio({ servicioId, itemIds }: AssignItemsToServicioInput) {
+  await requirePermission(PERMISSIONS.SERVICIOS_UPDATE);
   if (!servicioId) {
     throw new Error("El servicio es obligatorio para asignar items");
   }
@@ -128,6 +125,7 @@ export async function assignItemsToServicio({
 }
 
 export async function updateItem(data: Partial<Items>) {
+  await requirePermission(PERMISSIONS.ITEMS_UPDATE);
   try {
     if (!data.id) {
       throw new Error("El identificador del item es requerido para actualizar");
@@ -180,7 +178,7 @@ export async function updateItem(data: Partial<Items>) {
         data: {
           ...(data.name !== undefined ? { name: data.name } : {}),
           ...(data.description !== undefined ? { description: data.description } : {}),
-           ...(data.detail !== undefined ? { detail: data.detail } : {}),
+          ...(data.detail !== undefined ? { detail: data.detail } : {}),
           ...(data.is_active !== undefined ? { is_active: data.is_active } : {}),
           ...(tipoDeInformeId !== undefined ? { tipoDeInformeId } : {}),
           ...(esPlanificable !== undefined ? { esPlanificable } : {}),
@@ -214,6 +212,7 @@ export async function updateItem(data: Partial<Items>) {
 }
 
 export async function deleteItem(id: string) {
+  await requirePermission(PERMISSIONS.ITEMS_DELETE);
   try {
     const cliente = await prisma.items.delete({
       where: {
@@ -233,5 +232,3 @@ export async function deleteItem(id: string) {
     throw error;
   }
 }
-
-

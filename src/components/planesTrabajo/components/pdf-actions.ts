@@ -6,6 +6,8 @@ import { PlanTrabajoPDF } from "../pdf/PlanTrabajoPDF";
 import type { MonthGroup, ProgramacionRow } from "../pdf/ProgramacionesPage";
 import { formatDateOnly } from "@/lib/dates";
 import { pdfLogger } from "@/lib/logger";
+import { requirePermission } from "@/lib/rbac/require";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 
 function formatEstado(estado: string): string {
   switch (estado) {
@@ -85,6 +87,7 @@ function groupProgramacionesByMonth(
 }
 
 export async function generatePlanTrabajoPDF(planTrabajoId: string) {
+  await requirePermission(PERMISSIONS.PLANES_GENERATE_PDF);
   try {
     const plan = await prisma.planTrabajo.findUnique({
       where: { id: planTrabajoId },
