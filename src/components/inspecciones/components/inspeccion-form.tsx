@@ -138,7 +138,7 @@ export function InspeccionForm({ inspeccionId }: Props) {
     if (!secciones) return;
 
     // Validate all visible questions have a response
-    const allPreguntas = collectAllPreguntas(secciones as SeccionData[]);
+    const allPreguntas = collectAllPreguntas(secciones as unknown as SeccionData[]);
     const visibleIds = collectVisiblePreguntaIds(allPreguntas, respuestas);
     const unanswered = visibleIds.filter((id) => !respuestas.get(id)?.valor);
 
@@ -240,7 +240,7 @@ export function InspeccionForm({ inspeccionId }: Props) {
 
       {/* Sections */}
       <div className="space-y-4">
-        {(secciones as SeccionData[] | undefined)?.map((seccion) => (
+        {(secciones as unknown as SeccionData[] | undefined)?.map((seccion) => (
           <InspeccionSeccion
             key={seccion.id}
             seccion={seccion}
