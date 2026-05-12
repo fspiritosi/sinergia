@@ -89,3 +89,10 @@ export {
 export type { UserDto, UserWithRoleDto, UserSummaryDto } from "./user.dto";
 
 export { toUserDto, toUserWithRoleDto, toUserSummaryDto, toUserDtos } from "./user.dto";
+
+// Inspeccion DTOs
+export type {
+  InspeccionSummaryDto,
+  InspeccionRespuestaDto,
+  InspeccionDetalleDto,
+} from "./inspeccion.dto";
