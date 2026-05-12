@@ -75,6 +75,12 @@ export const PERMISSIONS = {
   INFORMES_DELIVER: "informes:deliver",
   INFORMES_UPLOAD_FILE: "informes:upload-file",
   INFORMES_DOWNLOAD_FILE: "informes:download-file",
+
+  // Inspecciones
+  INSPECCIONES_VIEW: "inspecciones:view",
+  INSPECCIONES_CREATE: "inspecciones:create",
+  INSPECCIONES_UPDATE: "inspecciones:update",
+  INSPECCIONES_DELETE: "inspecciones:delete",
 } as const;
 
 export type PermissionCode = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

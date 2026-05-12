@@ -30,6 +30,7 @@ export const ROUTE_GUARDS: Record<string, RoleName[]> = {
   "/dashboard/planes": [ROLES.ADMIN, ROLES.GERENTE, ROLES.TECNICO, ROLES.LECTURA],
   "/dashboard/planificacion": [ROLES.ADMIN, ROLES.GERENTE, ROLES.TECNICO, ROLES.LECTURA],
   "/dashboard/informes": [ROLES.ADMIN, ROLES.GERENTE, ROLES.TECNICO, ROLES.LECTURA],
+  "/dashboard/inspecciones": [ROLES.ADMIN, ROLES.GERENTE, ROLES.TECNICO, ROLES.LECTURA],
 };
 
 /**
