@@ -14,7 +14,7 @@ export type PreguntaData = {
   codigo: string;
   texto: string;
   acciones: { id: string; texto: string; orden: number }[];
-  hijasCondicionales: PreguntaData[];
+  hijasCondicionales?: PreguntaData[];
   condicionRespuesta: string | null;
 };
 
@@ -171,9 +171,9 @@ export function InspeccionPregunta({ pregunta, respuestas, readOnly, onSave, sav
       )}
 
       {/* Conditional children (visible when SÍ and has children) */}
-      {valor === "si" && pregunta.hijasCondicionales.length > 0 && (
+      {valor === "si" && (pregunta.hijasCondicionales?.length ?? 0) > 0 && (
         <div className="border-primary/30 ml-4 space-y-4 border-l-2 pl-4">
-          {pregunta.hijasCondicionales.map((hija) => (
+          {pregunta.hijasCondicionales?.map((hija) => (
             <InspeccionPregunta
               key={hija.id}
               pregunta={hija}

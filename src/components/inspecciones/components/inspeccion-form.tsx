@@ -40,8 +40,8 @@ function collectVisiblePreguntaIds(
   for (const p of preguntas) {
     ids.push(p.id);
     const r = respuestas.get(p.id);
-    if (r?.valor === "si" && p.hijasCondicionales.length > 0) {
-      ids.push(...collectVisiblePreguntaIds(p.hijasCondicionales, respuestas));
+    if (r?.valor === "si" && (p.hijasCondicionales?.length ?? 0) > 0) {
+      ids.push(...collectVisiblePreguntaIds(p.hijasCondicionales!, respuestas));
     }
   }
   return ids;
