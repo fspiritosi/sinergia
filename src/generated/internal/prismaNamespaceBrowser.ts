@@ -74,6 +74,7 @@ export const ModelName = {
   AccionCorrectivaInspeccion: 'AccionCorrectivaInspeccion',
   InspeccionFormulario: 'InspeccionFormulario',
   InspeccionRespuesta: 'InspeccionRespuesta',
+  InspeccionRespuestaImagen: 'InspeccionRespuestaImagen',
   InspeccionAccionSeleccionada: 'InspeccionAccionSeleccionada'
 } as const
 
@@ -417,6 +418,17 @@ export const InspeccionRespuestaScalarFieldEnum = {
 } as const
 
 export type InspeccionRespuestaScalarFieldEnum = (typeof InspeccionRespuestaScalarFieldEnum)[keyof typeof InspeccionRespuestaScalarFieldEnum]
+
+
+export const InspeccionRespuestaImagenScalarFieldEnum = {
+  id: 'id',
+  respuestaId: 'respuestaId',
+  r2Key: 'r2Key',
+  orden: 'orden',
+  createdAt: 'createdAt'
+} as const
+
+export type InspeccionRespuestaImagenScalarFieldEnum = (typeof InspeccionRespuestaImagenScalarFieldEnum)[keyof typeof InspeccionRespuestaImagenScalarFieldEnum]
 
 
 export const InspeccionAccionSeleccionadaScalarFieldEnum = {

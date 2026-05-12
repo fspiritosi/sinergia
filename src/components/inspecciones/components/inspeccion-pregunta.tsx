@@ -1,13 +1,16 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef, type ChangeEvent } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Loader2, ChevronDown, ChevronRight } from "lucide-react";
+import { Loader2, ChevronDown, ChevronRight, Camera, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { uploadImagenRespuesta, deleteImagenRespuesta } from "./inspeccion-actions";
 
 export type PreguntaData = {
   id: string;
@@ -18,10 +21,16 @@ export type PreguntaData = {
   condicionRespuesta: string | null;
 };
 
+export type ImagenLocal = {
+  id: string;
+  r2Key: string;
+};
+
 export type RespuestaLocal = {
   valor: "si" | "no" | "na" | null;
   observaciones: string;
   accionIds: string[];
+  imagenes: ImagenLocal[];
 };
 
 type Props = {
@@ -35,9 +44,22 @@ type Props = {
     accionIds: string[]
   ) => void;
   savingIds: Set<string>;
+  formularioId: string;
+  r2PublicBase: string;
 };
 
-export function InspeccionPregunta({ pregunta, respuestas, readOnly, onSave, savingIds }: Props) {
+const MAX_IMAGENES = 3;
+const MAX_FILE_SIZE_MB = 5;
+
+export function InspeccionPregunta({
+  pregunta,
+  respuestas,
+  readOnly,
+  onSave,
+  savingIds,
+  formularioId,
+  r2PublicBase,
+}: Props) {
   // Derive values from the respuestas map (single source of truth from parent)
   const existing = useMemo(() => respuestas.get(pregunta.id), [respuestas, pregunta.id]);
   const valor = existing?.valor ?? null;
@@ -52,8 +74,53 @@ export function InspeccionPregunta({ pregunta, respuestas, readOnly, onSave, sav
   }
 
   const [obsOpen, setObsOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+
+  const imagenes = useMemo(() => existing?.imagenes ?? [], [existing?.imagenes]);
 
   const isSaving = savingIds.has(pregunta.id);
+
+  const uploadMutation = useMutation({
+    mutationFn: (formData: FormData) => uploadImagenRespuesta(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["inspeccion", formularioId] });
+    },
+    onError: () => {
+      toast.error("Error al subir la imagen");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (imagenId: string) => deleteImagenRespuesta(imagenId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["inspeccion", formularioId] });
+    },
+    onError: () => {
+      toast.error("Error al eliminar la imagen");
+    },
+  });
+
+  const handleFileChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        toast.error(`La imagen supera el tamaño máximo de ${MAX_FILE_SIZE_MB} MB`);
+        e.target.value = "";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.set("formularioId", formularioId);
+      formData.set("preguntaId", pregunta.id);
+      formData.set("file", file);
+      uploadMutation.mutate(formData);
+      e.target.value = "";
+    },
+    [formularioId, pregunta.id, uploadMutation]
+  );
 
   const handleValorChange = useCallback(
     (newValor: "si" | "no" | "na") => {
@@ -150,6 +217,61 @@ export function InspeccionPregunta({ pregunta, respuestas, readOnly, onSave, sav
         </div>
       )}
 
+      {/* Imágenes adjuntas */}
+      {valor && (
+        <div className="ml-4 space-y-2">
+          {imagenes.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {imagenes.map((img) => (
+                <div key={img.id} className="group relative">
+                  <img
+                    src={`${r2PublicBase}/${img.r2Key}`}
+                    alt="Adjunto"
+                    className="h-20 w-20 rounded-md border object-cover"
+                  />
+                  {!readOnly && (
+                    <button
+                      type="button"
+                      onClick={() => deleteMutation.mutate(img.id)}
+                      disabled={deleteMutation.isPending}
+                      className="absolute -right-1 -top-1 rounded-full bg-destructive p-0.5 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {!readOnly && imagenes.length < MAX_IMAGENES && (
+            <>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={uploadMutation.isPending}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                {uploadMutation.isPending ? (
+                  <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                ) : (
+                  <Camera className="mr-1 h-3 w-3" />
+                )}
+                {uploadMutation.isPending ? "Subiendo..." : "Adjuntar foto"}
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+
       {/* Observaciones (collapsible, always available) */}
       {valor && (
         <Collapsible open={obsOpen} onOpenChange={setObsOpen}>
@@ -181,6 +303,8 @@ export function InspeccionPregunta({ pregunta, respuestas, readOnly, onSave, sav
               readOnly={readOnly}
               onSave={onSave}
               savingIds={savingIds}
+              formularioId={formularioId}
+              r2PublicBase={r2PublicBase}
             />
           ))}
         </div>

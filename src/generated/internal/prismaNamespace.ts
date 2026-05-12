@@ -415,6 +415,7 @@ export const ModelName = {
   AccionCorrectivaInspeccion: 'AccionCorrectivaInspeccion',
   InspeccionFormulario: 'InspeccionFormulario',
   InspeccionRespuesta: 'InspeccionRespuesta',
+  InspeccionRespuestaImagen: 'InspeccionRespuestaImagen',
   InspeccionAccionSeleccionada: 'InspeccionAccionSeleccionada'
 } as const
 
@@ -431,7 +432,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante" | "condicion" | "user" | "role" | "permission" | "rolePermission" | "seccionInspeccion" | "preguntaInspeccion" | "accionCorrectivaInspeccion" | "inspeccionFormulario" | "inspeccionRespuesta" | "inspeccionAccionSeleccionada"
+    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante" | "condicion" | "user" | "role" | "permission" | "rolePermission" | "seccionInspeccion" | "preguntaInspeccion" | "accionCorrectivaInspeccion" | "inspeccionFormulario" | "inspeccionRespuesta" | "inspeccionRespuestaImagen" | "inspeccionAccionSeleccionada"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2285,6 +2286,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    InspeccionRespuestaImagen: {
+      payload: Prisma.$InspeccionRespuestaImagenPayload<ExtArgs>
+      fields: Prisma.InspeccionRespuestaImagenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InspeccionRespuestaImagenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InspeccionRespuestaImagenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>
+        }
+        findFirst: {
+          args: Prisma.InspeccionRespuestaImagenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InspeccionRespuestaImagenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>
+        }
+        findMany: {
+          args: Prisma.InspeccionRespuestaImagenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>[]
+        }
+        create: {
+          args: Prisma.InspeccionRespuestaImagenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>
+        }
+        createMany: {
+          args: Prisma.InspeccionRespuestaImagenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InspeccionRespuestaImagenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>[]
+        }
+        delete: {
+          args: Prisma.InspeccionRespuestaImagenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>
+        }
+        update: {
+          args: Prisma.InspeccionRespuestaImagenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>
+        }
+        deleteMany: {
+          args: Prisma.InspeccionRespuestaImagenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InspeccionRespuestaImagenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InspeccionRespuestaImagenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>[]
+        }
+        upsert: {
+          args: Prisma.InspeccionRespuestaImagenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaImagenPayload>
+        }
+        aggregate: {
+          args: Prisma.InspeccionRespuestaImagenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInspeccionRespuestaImagen>
+        }
+        groupBy: {
+          args: Prisma.InspeccionRespuestaImagenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspeccionRespuestaImagenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InspeccionRespuestaImagenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspeccionRespuestaImagenCountAggregateOutputType> | number
+        }
+      }
+    }
     InspeccionAccionSeleccionada: {
       payload: Prisma.$InspeccionAccionSeleccionadaPayload<ExtArgs>
       fields: Prisma.InspeccionAccionSeleccionadaFieldRefs
@@ -2724,6 +2799,17 @@ export const InspeccionRespuestaScalarFieldEnum = {
 export type InspeccionRespuestaScalarFieldEnum = (typeof InspeccionRespuestaScalarFieldEnum)[keyof typeof InspeccionRespuestaScalarFieldEnum]
 
 
+export const InspeccionRespuestaImagenScalarFieldEnum = {
+  id: 'id',
+  respuestaId: 'respuestaId',
+  r2Key: 'r2Key',
+  orden: 'orden',
+  createdAt: 'createdAt'
+} as const
+
+export type InspeccionRespuestaImagenScalarFieldEnum = (typeof InspeccionRespuestaImagenScalarFieldEnum)[keyof typeof InspeccionRespuestaImagenScalarFieldEnum]
+
+
 export const InspeccionAccionSeleccionadaScalarFieldEnum = {
   respuestaId: 'respuestaId',
   accionId: 'accionId'
@@ -3090,6 +3176,7 @@ export type GlobalOmitConfig = {
   accionCorrectivaInspeccion?: Prisma.AccionCorrectivaInspeccionOmit
   inspeccionFormulario?: Prisma.InspeccionFormularioOmit
   inspeccionRespuesta?: Prisma.InspeccionRespuestaOmit
+  inspeccionRespuestaImagen?: Prisma.InspeccionRespuestaImagenOmit
   inspeccionAccionSeleccionada?: Prisma.InspeccionAccionSeleccionadaOmit
 }
 

@@ -201,6 +201,7 @@ export type InspeccionRespuestaWhereInput = {
   formulario?: Prisma.XOR<Prisma.InspeccionFormularioScalarRelationFilter, Prisma.InspeccionFormularioWhereInput>
   pregunta?: Prisma.XOR<Prisma.PreguntaInspeccionScalarRelationFilter, Prisma.PreguntaInspeccionWhereInput>
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaListRelationFilter
+  imagenes?: Prisma.InspeccionRespuestaImagenListRelationFilter
 }
 
 export type InspeccionRespuestaOrderByWithRelationInput = {
@@ -214,6 +215,7 @@ export type InspeccionRespuestaOrderByWithRelationInput = {
   formulario?: Prisma.InspeccionFormularioOrderByWithRelationInput
   pregunta?: Prisma.PreguntaInspeccionOrderByWithRelationInput
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaOrderByRelationAggregateInput
+  imagenes?: Prisma.InspeccionRespuestaImagenOrderByRelationAggregateInput
 }
 
 export type InspeccionRespuestaWhereUniqueInput = Prisma.AtLeast<{
@@ -231,6 +233,7 @@ export type InspeccionRespuestaWhereUniqueInput = Prisma.AtLeast<{
   formulario?: Prisma.XOR<Prisma.InspeccionFormularioScalarRelationFilter, Prisma.InspeccionFormularioWhereInput>
   pregunta?: Prisma.XOR<Prisma.PreguntaInspeccionScalarRelationFilter, Prisma.PreguntaInspeccionWhereInput>
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaListRelationFilter
+  imagenes?: Prisma.InspeccionRespuestaImagenListRelationFilter
 }, "id" | "formularioId_preguntaId">
 
 export type InspeccionRespuestaOrderByWithAggregationInput = {
@@ -268,6 +271,7 @@ export type InspeccionRespuestaCreateInput = {
   formulario: Prisma.InspeccionFormularioCreateNestedOneWithoutRespuestasInput
   pregunta: Prisma.PreguntaInspeccionCreateNestedOneWithoutRespuestasInput
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaCreateNestedManyWithoutRespuestaInput
+  imagenes?: Prisma.InspeccionRespuestaImagenCreateNestedManyWithoutRespuestaInput
 }
 
 export type InspeccionRespuestaUncheckedCreateInput = {
@@ -279,6 +283,7 @@ export type InspeccionRespuestaUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUncheckedCreateNestedManyWithoutRespuestaInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUncheckedCreateNestedManyWithoutRespuestaInput
 }
 
 export type InspeccionRespuestaUpdateInput = {
@@ -290,6 +295,7 @@ export type InspeccionRespuestaUpdateInput = {
   formulario?: Prisma.InspeccionFormularioUpdateOneRequiredWithoutRespuestasNestedInput
   pregunta?: Prisma.PreguntaInspeccionUpdateOneRequiredWithoutRespuestasNestedInput
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUpdateManyWithoutRespuestaNestedInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUpdateManyWithoutRespuestaNestedInput
 }
 
 export type InspeccionRespuestaUncheckedUpdateInput = {
@@ -301,6 +307,7 @@ export type InspeccionRespuestaUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUncheckedUpdateManyWithoutRespuestaNestedInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUncheckedUpdateManyWithoutRespuestaNestedInput
 }
 
 export type InspeccionRespuestaCreateManyInput = {
@@ -469,6 +476,20 @@ export type EnumRespuestaValorFieldUpdateOperationsInput = {
   set?: $Enums.RespuestaValor
 }
 
+export type InspeccionRespuestaCreateNestedOneWithoutImagenesInput = {
+  create?: Prisma.XOR<Prisma.InspeccionRespuestaCreateWithoutImagenesInput, Prisma.InspeccionRespuestaUncheckedCreateWithoutImagenesInput>
+  connectOrCreate?: Prisma.InspeccionRespuestaCreateOrConnectWithoutImagenesInput
+  connect?: Prisma.InspeccionRespuestaWhereUniqueInput
+}
+
+export type InspeccionRespuestaUpdateOneRequiredWithoutImagenesNestedInput = {
+  create?: Prisma.XOR<Prisma.InspeccionRespuestaCreateWithoutImagenesInput, Prisma.InspeccionRespuestaUncheckedCreateWithoutImagenesInput>
+  connectOrCreate?: Prisma.InspeccionRespuestaCreateOrConnectWithoutImagenesInput
+  upsert?: Prisma.InspeccionRespuestaUpsertWithoutImagenesInput
+  connect?: Prisma.InspeccionRespuestaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InspeccionRespuestaUpdateToOneWithWhereWithoutImagenesInput, Prisma.InspeccionRespuestaUpdateWithoutImagenesInput>, Prisma.InspeccionRespuestaUncheckedUpdateWithoutImagenesInput>
+}
+
 export type InspeccionRespuestaCreateNestedOneWithoutAccionesSeleccionadasInput = {
   create?: Prisma.XOR<Prisma.InspeccionRespuestaCreateWithoutAccionesSeleccionadasInput, Prisma.InspeccionRespuestaUncheckedCreateWithoutAccionesSeleccionadasInput>
   connectOrCreate?: Prisma.InspeccionRespuestaCreateOrConnectWithoutAccionesSeleccionadasInput
@@ -491,6 +512,7 @@ export type InspeccionRespuestaCreateWithoutPreguntaInput = {
   updatedAt?: Date | string
   formulario: Prisma.InspeccionFormularioCreateNestedOneWithoutRespuestasInput
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaCreateNestedManyWithoutRespuestaInput
+  imagenes?: Prisma.InspeccionRespuestaImagenCreateNestedManyWithoutRespuestaInput
 }
 
 export type InspeccionRespuestaUncheckedCreateWithoutPreguntaInput = {
@@ -501,6 +523,7 @@ export type InspeccionRespuestaUncheckedCreateWithoutPreguntaInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUncheckedCreateNestedManyWithoutRespuestaInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUncheckedCreateNestedManyWithoutRespuestaInput
 }
 
 export type InspeccionRespuestaCreateOrConnectWithoutPreguntaInput = {
@@ -550,6 +573,7 @@ export type InspeccionRespuestaCreateWithoutFormularioInput = {
   updatedAt?: Date | string
   pregunta: Prisma.PreguntaInspeccionCreateNestedOneWithoutRespuestasInput
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaCreateNestedManyWithoutRespuestaInput
+  imagenes?: Prisma.InspeccionRespuestaImagenCreateNestedManyWithoutRespuestaInput
 }
 
 export type InspeccionRespuestaUncheckedCreateWithoutFormularioInput = {
@@ -560,6 +584,7 @@ export type InspeccionRespuestaUncheckedCreateWithoutFormularioInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUncheckedCreateNestedManyWithoutRespuestaInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUncheckedCreateNestedManyWithoutRespuestaInput
 }
 
 export type InspeccionRespuestaCreateOrConnectWithoutFormularioInput = {
@@ -588,6 +613,66 @@ export type InspeccionRespuestaUpdateManyWithWhereWithoutFormularioInput = {
   data: Prisma.XOR<Prisma.InspeccionRespuestaUpdateManyMutationInput, Prisma.InspeccionRespuestaUncheckedUpdateManyWithoutFormularioInput>
 }
 
+export type InspeccionRespuestaCreateWithoutImagenesInput = {
+  id?: string
+  valor: $Enums.RespuestaValor
+  observaciones?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  formulario: Prisma.InspeccionFormularioCreateNestedOneWithoutRespuestasInput
+  pregunta: Prisma.PreguntaInspeccionCreateNestedOneWithoutRespuestasInput
+  accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaCreateNestedManyWithoutRespuestaInput
+}
+
+export type InspeccionRespuestaUncheckedCreateWithoutImagenesInput = {
+  id?: string
+  formularioId: string
+  preguntaId: string
+  valor: $Enums.RespuestaValor
+  observaciones?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUncheckedCreateNestedManyWithoutRespuestaInput
+}
+
+export type InspeccionRespuestaCreateOrConnectWithoutImagenesInput = {
+  where: Prisma.InspeccionRespuestaWhereUniqueInput
+  create: Prisma.XOR<Prisma.InspeccionRespuestaCreateWithoutImagenesInput, Prisma.InspeccionRespuestaUncheckedCreateWithoutImagenesInput>
+}
+
+export type InspeccionRespuestaUpsertWithoutImagenesInput = {
+  update: Prisma.XOR<Prisma.InspeccionRespuestaUpdateWithoutImagenesInput, Prisma.InspeccionRespuestaUncheckedUpdateWithoutImagenesInput>
+  create: Prisma.XOR<Prisma.InspeccionRespuestaCreateWithoutImagenesInput, Prisma.InspeccionRespuestaUncheckedCreateWithoutImagenesInput>
+  where?: Prisma.InspeccionRespuestaWhereInput
+}
+
+export type InspeccionRespuestaUpdateToOneWithWhereWithoutImagenesInput = {
+  where?: Prisma.InspeccionRespuestaWhereInput
+  data: Prisma.XOR<Prisma.InspeccionRespuestaUpdateWithoutImagenesInput, Prisma.InspeccionRespuestaUncheckedUpdateWithoutImagenesInput>
+}
+
+export type InspeccionRespuestaUpdateWithoutImagenesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  valor?: Prisma.EnumRespuestaValorFieldUpdateOperationsInput | $Enums.RespuestaValor
+  observaciones?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  formulario?: Prisma.InspeccionFormularioUpdateOneRequiredWithoutRespuestasNestedInput
+  pregunta?: Prisma.PreguntaInspeccionUpdateOneRequiredWithoutRespuestasNestedInput
+  accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUpdateManyWithoutRespuestaNestedInput
+}
+
+export type InspeccionRespuestaUncheckedUpdateWithoutImagenesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  formularioId?: Prisma.StringFieldUpdateOperationsInput | string
+  preguntaId?: Prisma.StringFieldUpdateOperationsInput | string
+  valor?: Prisma.EnumRespuestaValorFieldUpdateOperationsInput | $Enums.RespuestaValor
+  observaciones?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUncheckedUpdateManyWithoutRespuestaNestedInput
+}
+
 export type InspeccionRespuestaCreateWithoutAccionesSeleccionadasInput = {
   id?: string
   valor: $Enums.RespuestaValor
@@ -596,6 +681,7 @@ export type InspeccionRespuestaCreateWithoutAccionesSeleccionadasInput = {
   updatedAt?: Date | string
   formulario: Prisma.InspeccionFormularioCreateNestedOneWithoutRespuestasInput
   pregunta: Prisma.PreguntaInspeccionCreateNestedOneWithoutRespuestasInput
+  imagenes?: Prisma.InspeccionRespuestaImagenCreateNestedManyWithoutRespuestaInput
 }
 
 export type InspeccionRespuestaUncheckedCreateWithoutAccionesSeleccionadasInput = {
@@ -606,6 +692,7 @@ export type InspeccionRespuestaUncheckedCreateWithoutAccionesSeleccionadasInput 
   observaciones?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  imagenes?: Prisma.InspeccionRespuestaImagenUncheckedCreateNestedManyWithoutRespuestaInput
 }
 
 export type InspeccionRespuestaCreateOrConnectWithoutAccionesSeleccionadasInput = {
@@ -632,6 +719,7 @@ export type InspeccionRespuestaUpdateWithoutAccionesSeleccionadasInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   formulario?: Prisma.InspeccionFormularioUpdateOneRequiredWithoutRespuestasNestedInput
   pregunta?: Prisma.PreguntaInspeccionUpdateOneRequiredWithoutRespuestasNestedInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUpdateManyWithoutRespuestaNestedInput
 }
 
 export type InspeccionRespuestaUncheckedUpdateWithoutAccionesSeleccionadasInput = {
@@ -642,6 +730,7 @@ export type InspeccionRespuestaUncheckedUpdateWithoutAccionesSeleccionadasInput 
   observaciones?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  imagenes?: Prisma.InspeccionRespuestaImagenUncheckedUpdateManyWithoutRespuestaNestedInput
 }
 
 export type InspeccionRespuestaCreateManyPreguntaInput = {
@@ -661,6 +750,7 @@ export type InspeccionRespuestaUpdateWithoutPreguntaInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   formulario?: Prisma.InspeccionFormularioUpdateOneRequiredWithoutRespuestasNestedInput
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUpdateManyWithoutRespuestaNestedInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUpdateManyWithoutRespuestaNestedInput
 }
 
 export type InspeccionRespuestaUncheckedUpdateWithoutPreguntaInput = {
@@ -671,6 +761,7 @@ export type InspeccionRespuestaUncheckedUpdateWithoutPreguntaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUncheckedUpdateManyWithoutRespuestaNestedInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUncheckedUpdateManyWithoutRespuestaNestedInput
 }
 
 export type InspeccionRespuestaUncheckedUpdateManyWithoutPreguntaInput = {
@@ -699,6 +790,7 @@ export type InspeccionRespuestaUpdateWithoutFormularioInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pregunta?: Prisma.PreguntaInspeccionUpdateOneRequiredWithoutRespuestasNestedInput
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUpdateManyWithoutRespuestaNestedInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUpdateManyWithoutRespuestaNestedInput
 }
 
 export type InspeccionRespuestaUncheckedUpdateWithoutFormularioInput = {
@@ -709,6 +801,7 @@ export type InspeccionRespuestaUncheckedUpdateWithoutFormularioInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accionesSeleccionadas?: Prisma.InspeccionAccionSeleccionadaUncheckedUpdateManyWithoutRespuestaNestedInput
+  imagenes?: Prisma.InspeccionRespuestaImagenUncheckedUpdateManyWithoutRespuestaNestedInput
 }
 
 export type InspeccionRespuestaUncheckedUpdateManyWithoutFormularioInput = {
@@ -727,10 +820,12 @@ export type InspeccionRespuestaUncheckedUpdateManyWithoutFormularioInput = {
 
 export type InspeccionRespuestaCountOutputType = {
   accionesSeleccionadas: number
+  imagenes: number
 }
 
 export type InspeccionRespuestaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accionesSeleccionadas?: boolean | InspeccionRespuestaCountOutputTypeCountAccionesSeleccionadasArgs
+  imagenes?: boolean | InspeccionRespuestaCountOutputTypeCountImagenesArgs
 }
 
 /**
@@ -750,6 +845,13 @@ export type InspeccionRespuestaCountOutputTypeCountAccionesSeleccionadasArgs<Ext
   where?: Prisma.InspeccionAccionSeleccionadaWhereInput
 }
 
+/**
+ * InspeccionRespuestaCountOutputType without action
+ */
+export type InspeccionRespuestaCountOutputTypeCountImagenesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InspeccionRespuestaImagenWhereInput
+}
+
 
 export type InspeccionRespuestaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -762,6 +864,7 @@ export type InspeccionRespuestaSelect<ExtArgs extends runtime.Types.Extensions.I
   formulario?: boolean | Prisma.InspeccionFormularioDefaultArgs<ExtArgs>
   pregunta?: boolean | Prisma.PreguntaInspeccionDefaultArgs<ExtArgs>
   accionesSeleccionadas?: boolean | Prisma.InspeccionRespuesta$accionesSeleccionadasArgs<ExtArgs>
+  imagenes?: boolean | Prisma.InspeccionRespuesta$imagenesArgs<ExtArgs>
   _count?: boolean | Prisma.InspeccionRespuestaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["inspeccionRespuesta"]>
 
@@ -804,6 +907,7 @@ export type InspeccionRespuestaInclude<ExtArgs extends runtime.Types.Extensions.
   formulario?: boolean | Prisma.InspeccionFormularioDefaultArgs<ExtArgs>
   pregunta?: boolean | Prisma.PreguntaInspeccionDefaultArgs<ExtArgs>
   accionesSeleccionadas?: boolean | Prisma.InspeccionRespuesta$accionesSeleccionadasArgs<ExtArgs>
+  imagenes?: boolean | Prisma.InspeccionRespuesta$imagenesArgs<ExtArgs>
   _count?: boolean | Prisma.InspeccionRespuestaCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InspeccionRespuestaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -821,6 +925,7 @@ export type $InspeccionRespuestaPayload<ExtArgs extends runtime.Types.Extensions
     formulario: Prisma.$InspeccionFormularioPayload<ExtArgs>
     pregunta: Prisma.$PreguntaInspeccionPayload<ExtArgs>
     accionesSeleccionadas: Prisma.$InspeccionAccionSeleccionadaPayload<ExtArgs>[]
+    imagenes: Prisma.$InspeccionRespuestaImagenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1227,6 +1332,7 @@ export interface Prisma__InspeccionRespuestaClient<T, Null = never, ExtArgs exte
   formulario<T extends Prisma.InspeccionFormularioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InspeccionFormularioDefaultArgs<ExtArgs>>): Prisma.Prisma__InspeccionFormularioClient<runtime.Types.Result.GetResult<Prisma.$InspeccionFormularioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   pregunta<T extends Prisma.PreguntaInspeccionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PreguntaInspeccionDefaultArgs<ExtArgs>>): Prisma.Prisma__PreguntaInspeccionClient<runtime.Types.Result.GetResult<Prisma.$PreguntaInspeccionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   accionesSeleccionadas<T extends Prisma.InspeccionRespuesta$accionesSeleccionadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InspeccionRespuesta$accionesSeleccionadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InspeccionAccionSeleccionadaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  imagenes<T extends Prisma.InspeccionRespuesta$imagenesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InspeccionRespuesta$imagenesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InspeccionRespuestaImagenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1680,6 +1786,30 @@ export type InspeccionRespuesta$accionesSeleccionadasArgs<ExtArgs extends runtim
   take?: number
   skip?: number
   distinct?: Prisma.InspeccionAccionSeleccionadaScalarFieldEnum | Prisma.InspeccionAccionSeleccionadaScalarFieldEnum[]
+}
+
+/**
+ * InspeccionRespuesta.imagenes
+ */
+export type InspeccionRespuesta$imagenesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InspeccionRespuestaImagen
+   */
+  select?: Prisma.InspeccionRespuestaImagenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InspeccionRespuestaImagen
+   */
+  omit?: Prisma.InspeccionRespuestaImagenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InspeccionRespuestaImagenInclude<ExtArgs> | null
+  where?: Prisma.InspeccionRespuestaImagenWhereInput
+  orderBy?: Prisma.InspeccionRespuestaImagenOrderByWithRelationInput | Prisma.InspeccionRespuestaImagenOrderByWithRelationInput[]
+  cursor?: Prisma.InspeccionRespuestaImagenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InspeccionRespuestaImagenScalarFieldEnum | Prisma.InspeccionRespuestaImagenScalarFieldEnum[]
 }
 
 /**

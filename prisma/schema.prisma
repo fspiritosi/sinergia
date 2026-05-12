@@ -465,12 +465,24 @@ model InspeccionRespuesta {
   valor          RespuestaValor
   observaciones  String?
   accionesSeleccionadas InspeccionAccionSeleccionada[]
+  imagenes              InspeccionRespuestaImagen[]
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
 
   @@unique([formularioId, preguntaId])
   @@index([formularioId])
   @@index([preguntaId])
+}
+
+model InspeccionRespuestaImagen {
+  id           String             @id @default(uuid())
+  respuestaId  String
+  respuesta    InspeccionRespuesta @relation(fields: [respuestaId], references: [id], onDelete: Cascade)
+  r2Key        String
+  orden        Int
+  createdAt    DateTime           @default(now())
+
+  @@index([respuestaId])
 }
 
 model InspeccionAccionSeleccionada {

@@ -24,6 +24,8 @@ type Props = {
     accionIds: string[]
   ) => void;
   savingIds: Set<string>;
+  formularioId: string;
+  r2PublicBase: string;
 };
 
 /**
@@ -52,7 +54,15 @@ function countRespondidas(seccion: SeccionData, respuestas: Map<string, Respuest
   return count;
 }
 
-export function InspeccionSeccion({ seccion, respuestas, readOnly, onSave, savingIds }: Props) {
+export function InspeccionSeccion({
+  seccion,
+  respuestas,
+  readOnly,
+  onSave,
+  savingIds,
+  formularioId,
+  r2PublicBase,
+}: Props) {
   const [open, setOpen] = useState(true);
 
   const total = countAllPreguntas(seccion);
@@ -86,6 +96,8 @@ export function InspeccionSeccion({ seccion, respuestas, readOnly, onSave, savin
             readOnly={readOnly}
             onSave={onSave}
             savingIds={savingIds}
+            formularioId={formularioId}
+            r2PublicBase={r2PublicBase}
           />
         ))}
 
@@ -98,6 +110,8 @@ export function InspeccionSeccion({ seccion, respuestas, readOnly, onSave, savin
             readOnly={readOnly}
             onSave={onSave}
             savingIds={savingIds}
+            formularioId={formularioId}
+            r2PublicBase={r2PublicBase}
           />
         ))}
       </CollapsibleContent>

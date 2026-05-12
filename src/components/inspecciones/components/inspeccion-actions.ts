@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
 import { dbLogger } from "@/lib/logger";
+import { uploadFileToR2, deleteFileFromR2 } from "@/lib/r2-upload";
 
 export async function crearInspeccion(data: {
   clienteId: string;
@@ -106,6 +107,82 @@ export async function finalizarInspeccion(formularioId: string) {
     return { success: true };
   } catch (error) {
     dbLogger.error({ error, formularioId }, "Error al finalizar inspección");
+    throw error;
+  }
+}
+
+const MAX_IMAGENES_POR_RESPUESTA = 3;
+
+export async function uploadImagenRespuesta(formData: FormData) {
+  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+
+  const formularioId = formData.get("formularioId") as string;
+  const preguntaId = formData.get("preguntaId") as string;
+  const file = formData.get("file") as File | null;
+
+  if (!formularioId || !preguntaId || !file) {
+    throw new Error("Faltan datos para subir la imagen");
+  }
+
+  try {
+    // Asegurar que existe la respuesta (upsert con valor actual o "na" por defecto)
+    const respuesta = await prisma.inspeccionRespuesta.upsert({
+      where: {
+        formularioId_preguntaId: { formularioId, preguntaId },
+      },
+      update: {},
+      create: {
+        formularioId,
+        preguntaId,
+        valor: "na",
+      },
+      include: { imagenes: true },
+    });
+
+    if (respuesta.imagenes.length >= MAX_IMAGENES_POR_RESPUESTA) {
+      throw new Error(`Máximo ${MAX_IMAGENES_POR_RESPUESTA} imágenes por respuesta`);
+    }
+
+    const orden = respuesta.imagenes.length + 1;
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const key = `inspecciones/${formularioId}/${preguntaId}/${orden}.${ext}`;
+
+    await uploadFileToR2(file, key);
+
+    const imagen = await prisma.inspeccionRespuestaImagen.create({
+      data: {
+        respuestaId: respuesta.id,
+        r2Key: key,
+        orden,
+      },
+    });
+
+    return { success: true, id: imagen.id, r2Key: key };
+  } catch (error) {
+    dbLogger.error({ error, formularioId, preguntaId }, "Error al subir imagen");
+    throw error;
+  }
+}
+
+export async function deleteImagenRespuesta(imagenId: string) {
+  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+
+  try {
+    const imagen = await prisma.inspeccionRespuestaImagen.findUnique({
+      where: { id: imagenId },
+    });
+
+    if (!imagen) throw new Error("Imagen no encontrada");
+
+    await deleteFileFromR2(imagen.r2Key);
+
+    await prisma.inspeccionRespuestaImagen.delete({
+      where: { id: imagenId },
+    });
+
+    return { success: true };
+  } catch (error) {
+    dbLogger.error({ error, imagenId }, "Error al eliminar imagen");
     throw error;
   }
 }

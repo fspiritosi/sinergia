@@ -63,6 +63,9 @@ export class InspeccionRepository extends BaseRepository<
               accionesSeleccionadas: {
                 include: { accion: true },
               },
+              imagenes: {
+                orderBy: { orden: "asc" as const },
+              },
             },
           },
         },

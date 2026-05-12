@@ -86,6 +86,8 @@ export function InspeccionForm({ inspeccionId }: Props) {
           valor: r.valor as "si" | "no" | "na" | null,
           observaciones: r.observaciones ?? "",
           accionIds: r.accionesSeleccionadas.map((a: { accionId: string }) => a.accionId),
+          imagenes:
+            (r as any).imagenes?.map((img: any) => ({ id: img.id, r2Key: img.r2Key })) ?? [],
         });
       }
       setRespuestas(map);
@@ -116,7 +118,13 @@ export function InspeccionForm({ inspeccionId }: Props) {
       // Update local state immediately
       setRespuestas((prev) => {
         const next = new Map(prev);
-        next.set(preguntaId, { valor, observaciones, accionIds });
+        const existing = prev.get(preguntaId);
+        next.set(preguntaId, {
+          valor,
+          observaciones,
+          accionIds,
+          imagenes: existing?.imagenes ?? [],
+        });
         return next;
       });
 
@@ -248,6 +256,8 @@ export function InspeccionForm({ inspeccionId }: Props) {
             readOnly={readOnly}
             onSave={handleSave}
             savingIds={savingIds}
+            formularioId={inspeccionId}
+            r2PublicBase="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev"
           />
         ))}
       </div>

@@ -143,6 +143,11 @@ export type InspeccionFormulario = Prisma.InspeccionFormularioModel
  */
 export type InspeccionRespuesta = Prisma.InspeccionRespuestaModel
 /**
+ * Model InspeccionRespuestaImagen
+ * 
+ */
+export type InspeccionRespuestaImagen = Prisma.InspeccionRespuestaImagenModel
+/**
  * Model InspeccionAccionSeleccionada
  * 
  */
