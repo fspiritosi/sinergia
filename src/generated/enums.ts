@@ -71,3 +71,28 @@ export const CondicionTipo = {
 } as const
 
 export type CondicionTipo = (typeof CondicionTipo)[keyof typeof CondicionTipo]
+
+
+export const InspeccionEstado = {
+  borrador: 'borrador',
+  completada: 'completada'
+} as const
+
+export type InspeccionEstado = (typeof InspeccionEstado)[keyof typeof InspeccionEstado]
+
+
+export const InspeccionTipo = {
+  inspeccion_base: 'inspeccion_base',
+  inspeccion_equipo: 'inspeccion_equipo'
+} as const
+
+export type InspeccionTipo = (typeof InspeccionTipo)[keyof typeof InspeccionTipo]
+
+
+export const RespuestaValor = {
+  si: 'si',
+  no: 'no',
+  na: 'na'
+} as const
+
+export type RespuestaValor = (typeof RespuestaValor)[keyof typeof RespuestaValor]

@@ -40,6 +40,7 @@ model Cliente {
   clientLocations ClientLocations[]
   informes Informe[]
   planesTrabajo PlanTrabajo[]
+  inspecciones InspeccionFormulario[]
 
   @@index([is_active])
   @@index([name])
@@ -188,8 +189,8 @@ model ClientLocations {
   updatedAt DateTime @default(now())
 
   informes Informe[]
-
   planesTrabajoProgramaciones PlanTrabajoProgramacion[]
+  inspecciones InspeccionFormulario[]
 
   @@index([clienteId])
   @@index([provinciaId])
@@ -222,6 +223,7 @@ model Informe {
 
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @default(now())
+  inspeccion InspeccionFormulario?
 
   @@index([clienteId])
   @@index([tipoDeInformeId])
@@ -337,6 +339,7 @@ model User {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  inspecciones InspeccionFormulario[]
 
   @@index([clerkId])
   @@index([roleId])
@@ -374,6 +377,110 @@ model RolePermission {
 
   @@id([roleId, permissionId])
   @@index([roleId])
+}
+
+// Inspecciones Ambientales — Catálogo
+
+model SeccionInspeccion {
+  id        String @id @default(uuid())
+  codigo    String @unique
+  titulo    String
+  parentId  String?
+  parent    SeccionInspeccion?  @relation("SeccionHija", fields: [parentId], references: [id])
+  hijas     SeccionInspeccion[] @relation("SeccionHija")
+  orden     Int
+  preguntas PreguntaInspeccion[]
+
+  @@index([parentId])
+  @@index([orden])
+}
+
+model PreguntaInspeccion {
+  id                  String @id @default(uuid())
+  codigo              String @unique
+  texto               String
+  seccionId           String
+  seccion             SeccionInspeccion @relation(fields: [seccionId], references: [id])
+  orden               Int
+  parentPreguntaId    String?
+  parentPregunta      PreguntaInspeccion?  @relation("PreguntaCondicional", fields: [parentPreguntaId], references: [id])
+  hijasCondicionales  PreguntaInspeccion[] @relation("PreguntaCondicional")
+  condicionRespuesta  String?
+
+  acciones   AccionCorrectivaInspeccion[]
+  respuestas InspeccionRespuesta[]
+
+  @@index([seccionId])
+  @@index([parentPreguntaId])
+  @@index([orden])
+}
+
+model AccionCorrectivaInspeccion {
+  id          String @id @default(uuid())
+  preguntaId  String
+  pregunta    PreguntaInspeccion @relation(fields: [preguntaId], references: [id])
+  texto       String
+  orden       Int
+
+  selecciones InspeccionAccionSeleccionada[]
+
+  @@index([preguntaId])
+  @@index([orden])
+}
+
+// Inspecciones Ambientales — Operativo
+
+model InspeccionFormulario {
+  id               String            @id @default(uuid())
+  clienteId        String
+  cliente          Cliente           @relation(fields: [clienteId], references: [id])
+  tipo             InspeccionTipo
+  fecha            DateTime          @default(now())
+  estado           InspeccionEstado   @default(borrador)
+  realizadoPorId   String
+  realizadoPor     User              @relation(fields: [realizadoPorId], references: [id])
+  clientLocationId String?
+  clientLocation   ClientLocations?  @relation(fields: [clientLocationId], references: [id])
+  lugarTexto       String?
+  informeId        String?           @unique
+  informe          Informe?          @relation(fields: [informeId], references: [id])
+  respuestas       InspeccionRespuesta[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([clienteId])
+  @@index([realizadoPorId])
+  @@index([estado])
+  @@index([tipo])
+  @@index([fecha])
+  @@index([clientLocationId])
+}
+
+model InspeccionRespuesta {
+  id             String              @id @default(uuid())
+  formularioId   String
+  formulario     InspeccionFormulario @relation(fields: [formularioId], references: [id], onDelete: Cascade)
+  preguntaId     String
+  pregunta       PreguntaInspeccion  @relation(fields: [preguntaId], references: [id])
+  valor          RespuestaValor
+  observaciones  String?
+  accionesSeleccionadas InspeccionAccionSeleccionada[]
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  @@unique([formularioId, preguntaId])
+  @@index([formularioId])
+  @@index([preguntaId])
+}
+
+model InspeccionAccionSeleccionada {
+  respuestaId String
+  respuesta   InspeccionRespuesta        @relation(fields: [respuestaId], references: [id], onDelete: Cascade)
+  accionId    String
+  accion      AccionCorrectivaInspeccion  @relation(fields: [accionId], references: [id])
+
+  @@id([respuestaId, accionId])
+  @@index([respuestaId])
 }
 
 
@@ -421,4 +528,20 @@ enum ServiceType {
 enum CondicionTipo {
   general
   particular
+}
+
+enum InspeccionEstado {
+  borrador
+  completada
+}
+
+enum InspeccionTipo {
+  inspeccion_base
+  inspeccion_equipo
+}
+
+enum RespuestaValor {
+  si
+  no
+  na
 }

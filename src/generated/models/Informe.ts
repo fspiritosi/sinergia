@@ -243,6 +243,7 @@ export type InformeWhereInput = {
   propuesta?: Prisma.XOR<Prisma.PropuestaTecnicaScalarRelationFilter, Prisma.PropuestaTecnicaWhereInput>
   clientLocation?: Prisma.XOR<Prisma.ClientLocationsScalarRelationFilter, Prisma.ClientLocationsWhereInput>
   planTrabajoProgramacion?: Prisma.XOR<Prisma.PlanTrabajoProgramacionNullableScalarRelationFilter, Prisma.PlanTrabajoProgramacionWhereInput> | null
+  inspeccion?: Prisma.XOR<Prisma.InspeccionFormularioNullableScalarRelationFilter, Prisma.InspeccionFormularioWhereInput> | null
 }
 
 export type InformeOrderByWithRelationInput = {
@@ -263,6 +264,7 @@ export type InformeOrderByWithRelationInput = {
   propuesta?: Prisma.PropuestaTecnicaOrderByWithRelationInput
   clientLocation?: Prisma.ClientLocationsOrderByWithRelationInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionOrderByWithRelationInput
+  inspeccion?: Prisma.InspeccionFormularioOrderByWithRelationInput
 }
 
 export type InformeWhereUniqueInput = Prisma.AtLeast<{
@@ -286,6 +288,7 @@ export type InformeWhereUniqueInput = Prisma.AtLeast<{
   propuesta?: Prisma.XOR<Prisma.PropuestaTecnicaScalarRelationFilter, Prisma.PropuestaTecnicaWhereInput>
   clientLocation?: Prisma.XOR<Prisma.ClientLocationsScalarRelationFilter, Prisma.ClientLocationsWhereInput>
   planTrabajoProgramacion?: Prisma.XOR<Prisma.PlanTrabajoProgramacionNullableScalarRelationFilter, Prisma.PlanTrabajoProgramacionWhereInput> | null
+  inspeccion?: Prisma.XOR<Prisma.InspeccionFormularioNullableScalarRelationFilter, Prisma.InspeccionFormularioWhereInput> | null
 }, "id" | "planTrabajoProgramacionId">
 
 export type InformeOrderByWithAggregationInput = {
@@ -337,6 +340,7 @@ export type InformeCreateInput = {
   propuesta: Prisma.PropuestaTecnicaCreateNestedOneWithoutInformesInput
   clientLocation: Prisma.ClientLocationsCreateNestedOneWithoutInformesInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionCreateNestedOneWithoutInformeInput
+  inspeccion?: Prisma.InspeccionFormularioCreateNestedOneWithoutInformeInput
 }
 
 export type InformeUncheckedCreateInput = {
@@ -352,6 +356,7 @@ export type InformeUncheckedCreateInput = {
   planTrabajoProgramacionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedCreateNestedOneWithoutInformeInput
 }
 
 export type InformeUpdateInput = {
@@ -367,6 +372,7 @@ export type InformeUpdateInput = {
   propuesta?: Prisma.PropuestaTecnicaUpdateOneRequiredWithoutInformesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneRequiredWithoutInformesNestedInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionUpdateOneWithoutInformeNestedInput
+  inspeccion?: Prisma.InspeccionFormularioUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateInput = {
@@ -382,6 +388,7 @@ export type InformeUncheckedUpdateInput = {
   planTrabajoProgramacionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeCreateManyInput = {
@@ -688,6 +695,22 @@ export type InformeUncheckedUpdateOneWithoutPlanTrabajoProgramacionNestedInput =
   update?: Prisma.XOR<Prisma.XOR<Prisma.InformeUpdateToOneWithWhereWithoutPlanTrabajoProgramacionInput, Prisma.InformeUpdateWithoutPlanTrabajoProgramacionInput>, Prisma.InformeUncheckedUpdateWithoutPlanTrabajoProgramacionInput>
 }
 
+export type InformeCreateNestedOneWithoutInspeccionInput = {
+  create?: Prisma.XOR<Prisma.InformeCreateWithoutInspeccionInput, Prisma.InformeUncheckedCreateWithoutInspeccionInput>
+  connectOrCreate?: Prisma.InformeCreateOrConnectWithoutInspeccionInput
+  connect?: Prisma.InformeWhereUniqueInput
+}
+
+export type InformeUpdateOneWithoutInspeccionNestedInput = {
+  create?: Prisma.XOR<Prisma.InformeCreateWithoutInspeccionInput, Prisma.InformeUncheckedCreateWithoutInspeccionInput>
+  connectOrCreate?: Prisma.InformeCreateOrConnectWithoutInspeccionInput
+  upsert?: Prisma.InformeUpsertWithoutInspeccionInput
+  disconnect?: Prisma.InformeWhereInput | boolean
+  delete?: Prisma.InformeWhereInput | boolean
+  connect?: Prisma.InformeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InformeUpdateToOneWithWhereWithoutInspeccionInput, Prisma.InformeUpdateWithoutInspeccionInput>, Prisma.InformeUncheckedUpdateWithoutInspeccionInput>
+}
+
 export type InformeCreateWithoutClienteInput = {
   id?: string
   fechaVencimiento: Date | string
@@ -700,6 +723,7 @@ export type InformeCreateWithoutClienteInput = {
   propuesta: Prisma.PropuestaTecnicaCreateNestedOneWithoutInformesInput
   clientLocation: Prisma.ClientLocationsCreateNestedOneWithoutInformesInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionCreateNestedOneWithoutInformeInput
+  inspeccion?: Prisma.InspeccionFormularioCreateNestedOneWithoutInformeInput
 }
 
 export type InformeUncheckedCreateWithoutClienteInput = {
@@ -714,6 +738,7 @@ export type InformeUncheckedCreateWithoutClienteInput = {
   planTrabajoProgramacionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedCreateNestedOneWithoutInformeInput
 }
 
 export type InformeCreateOrConnectWithoutClienteInput = {
@@ -772,6 +797,7 @@ export type InformeCreateWithoutPropuestaInput = {
   tipoDeInforme: Prisma.TipoDeInformeCreateNestedOneWithoutInformesInput
   clientLocation: Prisma.ClientLocationsCreateNestedOneWithoutInformesInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionCreateNestedOneWithoutInformeInput
+  inspeccion?: Prisma.InspeccionFormularioCreateNestedOneWithoutInformeInput
 }
 
 export type InformeUncheckedCreateWithoutPropuestaInput = {
@@ -786,6 +812,7 @@ export type InformeUncheckedCreateWithoutPropuestaInput = {
   planTrabajoProgramacionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedCreateNestedOneWithoutInformeInput
 }
 
 export type InformeCreateOrConnectWithoutPropuestaInput = {
@@ -826,6 +853,7 @@ export type InformeCreateWithoutTipoDeInformeInput = {
   propuesta: Prisma.PropuestaTecnicaCreateNestedOneWithoutInformesInput
   clientLocation: Prisma.ClientLocationsCreateNestedOneWithoutInformesInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionCreateNestedOneWithoutInformeInput
+  inspeccion?: Prisma.InspeccionFormularioCreateNestedOneWithoutInformeInput
 }
 
 export type InformeUncheckedCreateWithoutTipoDeInformeInput = {
@@ -840,6 +868,7 @@ export type InformeUncheckedCreateWithoutTipoDeInformeInput = {
   planTrabajoProgramacionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedCreateNestedOneWithoutInformeInput
 }
 
 export type InformeCreateOrConnectWithoutTipoDeInformeInput = {
@@ -880,6 +909,7 @@ export type InformeCreateWithoutClientLocationInput = {
   tipoDeInforme: Prisma.TipoDeInformeCreateNestedOneWithoutInformesInput
   propuesta: Prisma.PropuestaTecnicaCreateNestedOneWithoutInformesInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionCreateNestedOneWithoutInformeInput
+  inspeccion?: Prisma.InspeccionFormularioCreateNestedOneWithoutInformeInput
 }
 
 export type InformeUncheckedCreateWithoutClientLocationInput = {
@@ -894,6 +924,7 @@ export type InformeUncheckedCreateWithoutClientLocationInput = {
   planTrabajoProgramacionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedCreateNestedOneWithoutInformeInput
 }
 
 export type InformeCreateOrConnectWithoutClientLocationInput = {
@@ -934,6 +965,7 @@ export type InformeCreateWithoutPlanTrabajoProgramacionInput = {
   tipoDeInforme: Prisma.TipoDeInformeCreateNestedOneWithoutInformesInput
   propuesta: Prisma.PropuestaTecnicaCreateNestedOneWithoutInformesInput
   clientLocation: Prisma.ClientLocationsCreateNestedOneWithoutInformesInput
+  inspeccion?: Prisma.InspeccionFormularioCreateNestedOneWithoutInformeInput
 }
 
 export type InformeUncheckedCreateWithoutPlanTrabajoProgramacionInput = {
@@ -948,6 +980,7 @@ export type InformeUncheckedCreateWithoutPlanTrabajoProgramacionInput = {
   adjunto?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedCreateNestedOneWithoutInformeInput
 }
 
 export type InformeCreateOrConnectWithoutPlanTrabajoProgramacionInput = {
@@ -978,6 +1011,7 @@ export type InformeUpdateWithoutPlanTrabajoProgramacionInput = {
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneRequiredWithoutInformesNestedInput
   propuesta?: Prisma.PropuestaTecnicaUpdateOneRequiredWithoutInformesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneRequiredWithoutInformesNestedInput
+  inspeccion?: Prisma.InspeccionFormularioUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateWithoutPlanTrabajoProgramacionInput = {
@@ -990,6 +1024,83 @@ export type InformeUncheckedUpdateWithoutPlanTrabajoProgramacionInput = {
   responsableConfeccion?: Prisma.StringFieldUpdateOperationsInput | string
   estado?: Prisma.EnumInformeEstadoFieldUpdateOperationsInput | $Enums.InformeEstado
   adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedUpdateOneWithoutInformeNestedInput
+}
+
+export type InformeCreateWithoutInspeccionInput = {
+  id?: string
+  fechaVencimiento: Date | string
+  responsableConfeccion: string
+  estado?: $Enums.InformeEstado
+  adjunto?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cliente: Prisma.ClienteCreateNestedOneWithoutInformesInput
+  tipoDeInforme: Prisma.TipoDeInformeCreateNestedOneWithoutInformesInput
+  propuesta: Prisma.PropuestaTecnicaCreateNestedOneWithoutInformesInput
+  clientLocation: Prisma.ClientLocationsCreateNestedOneWithoutInformesInput
+  planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionCreateNestedOneWithoutInformeInput
+}
+
+export type InformeUncheckedCreateWithoutInspeccionInput = {
+  id?: string
+  clienteId: string
+  tipoDeInformeId: string
+  propuestaId: string
+  clientLocationId: string
+  fechaVencimiento: Date | string
+  responsableConfeccion: string
+  estado?: $Enums.InformeEstado
+  adjunto?: string | null
+  planTrabajoProgramacionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type InformeCreateOrConnectWithoutInspeccionInput = {
+  where: Prisma.InformeWhereUniqueInput
+  create: Prisma.XOR<Prisma.InformeCreateWithoutInspeccionInput, Prisma.InformeUncheckedCreateWithoutInspeccionInput>
+}
+
+export type InformeUpsertWithoutInspeccionInput = {
+  update: Prisma.XOR<Prisma.InformeUpdateWithoutInspeccionInput, Prisma.InformeUncheckedUpdateWithoutInspeccionInput>
+  create: Prisma.XOR<Prisma.InformeCreateWithoutInspeccionInput, Prisma.InformeUncheckedCreateWithoutInspeccionInput>
+  where?: Prisma.InformeWhereInput
+}
+
+export type InformeUpdateToOneWithWhereWithoutInspeccionInput = {
+  where?: Prisma.InformeWhereInput
+  data: Prisma.XOR<Prisma.InformeUpdateWithoutInspeccionInput, Prisma.InformeUncheckedUpdateWithoutInspeccionInput>
+}
+
+export type InformeUpdateWithoutInspeccionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fechaVencimiento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  responsableConfeccion?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumInformeEstadoFieldUpdateOperationsInput | $Enums.InformeEstado
+  adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutInformesNestedInput
+  tipoDeInforme?: Prisma.TipoDeInformeUpdateOneRequiredWithoutInformesNestedInput
+  propuesta?: Prisma.PropuestaTecnicaUpdateOneRequiredWithoutInformesNestedInput
+  clientLocation?: Prisma.ClientLocationsUpdateOneRequiredWithoutInformesNestedInput
+  planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionUpdateOneWithoutInformeNestedInput
+}
+
+export type InformeUncheckedUpdateWithoutInspeccionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  tipoDeInformeId?: Prisma.StringFieldUpdateOperationsInput | string
+  propuestaId?: Prisma.StringFieldUpdateOperationsInput | string
+  clientLocationId?: Prisma.StringFieldUpdateOperationsInput | string
+  fechaVencimiento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  responsableConfeccion?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumInformeEstadoFieldUpdateOperationsInput | $Enums.InformeEstado
+  adjunto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  planTrabajoProgramacionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1020,6 +1131,7 @@ export type InformeUpdateWithoutClienteInput = {
   propuesta?: Prisma.PropuestaTecnicaUpdateOneRequiredWithoutInformesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneRequiredWithoutInformesNestedInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionUpdateOneWithoutInformeNestedInput
+  inspeccion?: Prisma.InspeccionFormularioUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateWithoutClienteInput = {
@@ -1034,6 +1146,7 @@ export type InformeUncheckedUpdateWithoutClienteInput = {
   planTrabajoProgramacionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateManyWithoutClienteInput = {
@@ -1076,6 +1189,7 @@ export type InformeUpdateWithoutPropuestaInput = {
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneRequiredWithoutInformesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneRequiredWithoutInformesNestedInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionUpdateOneWithoutInformeNestedInput
+  inspeccion?: Prisma.InspeccionFormularioUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateWithoutPropuestaInput = {
@@ -1090,6 +1204,7 @@ export type InformeUncheckedUpdateWithoutPropuestaInput = {
   planTrabajoProgramacionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateManyWithoutPropuestaInput = {
@@ -1132,6 +1247,7 @@ export type InformeUpdateWithoutTipoDeInformeInput = {
   propuesta?: Prisma.PropuestaTecnicaUpdateOneRequiredWithoutInformesNestedInput
   clientLocation?: Prisma.ClientLocationsUpdateOneRequiredWithoutInformesNestedInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionUpdateOneWithoutInformeNestedInput
+  inspeccion?: Prisma.InspeccionFormularioUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateWithoutTipoDeInformeInput = {
@@ -1146,6 +1262,7 @@ export type InformeUncheckedUpdateWithoutTipoDeInformeInput = {
   planTrabajoProgramacionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateManyWithoutTipoDeInformeInput = {
@@ -1188,6 +1305,7 @@ export type InformeUpdateWithoutClientLocationInput = {
   tipoDeInforme?: Prisma.TipoDeInformeUpdateOneRequiredWithoutInformesNestedInput
   propuesta?: Prisma.PropuestaTecnicaUpdateOneRequiredWithoutInformesNestedInput
   planTrabajoProgramacion?: Prisma.PlanTrabajoProgramacionUpdateOneWithoutInformeNestedInput
+  inspeccion?: Prisma.InspeccionFormularioUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateWithoutClientLocationInput = {
@@ -1202,6 +1320,7 @@ export type InformeUncheckedUpdateWithoutClientLocationInput = {
   planTrabajoProgramacionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspeccion?: Prisma.InspeccionFormularioUncheckedUpdateOneWithoutInformeNestedInput
 }
 
 export type InformeUncheckedUpdateManyWithoutClientLocationInput = {
@@ -1238,6 +1357,7 @@ export type InformeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   propuesta?: boolean | Prisma.PropuestaTecnicaDefaultArgs<ExtArgs>
   clientLocation?: boolean | Prisma.ClientLocationsDefaultArgs<ExtArgs>
   planTrabajoProgramacion?: boolean | Prisma.Informe$planTrabajoProgramacionArgs<ExtArgs>
+  inspeccion?: boolean | Prisma.Informe$inspeccionArgs<ExtArgs>
 }, ExtArgs["result"]["informe"]>
 
 export type InformeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1302,6 +1422,7 @@ export type InformeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   propuesta?: boolean | Prisma.PropuestaTecnicaDefaultArgs<ExtArgs>
   clientLocation?: boolean | Prisma.ClientLocationsDefaultArgs<ExtArgs>
   planTrabajoProgramacion?: boolean | Prisma.Informe$planTrabajoProgramacionArgs<ExtArgs>
+  inspeccion?: boolean | Prisma.Informe$inspeccionArgs<ExtArgs>
 }
 export type InformeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
@@ -1326,6 +1447,7 @@ export type $InformePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     propuesta: Prisma.$PropuestaTecnicaPayload<ExtArgs>
     clientLocation: Prisma.$ClientLocationsPayload<ExtArgs>
     planTrabajoProgramacion: Prisma.$PlanTrabajoProgramacionPayload<ExtArgs> | null
+    inspeccion: Prisma.$InspeccionFormularioPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1739,6 +1861,7 @@ export interface Prisma__InformeClient<T, Null = never, ExtArgs extends runtime.
   propuesta<T extends Prisma.PropuestaTecnicaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropuestaTecnicaDefaultArgs<ExtArgs>>): Prisma.Prisma__PropuestaTecnicaClient<runtime.Types.Result.GetResult<Prisma.$PropuestaTecnicaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   clientLocation<T extends Prisma.ClientLocationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientLocationsDefaultArgs<ExtArgs>>): Prisma.Prisma__ClientLocationsClient<runtime.Types.Result.GetResult<Prisma.$ClientLocationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   planTrabajoProgramacion<T extends Prisma.Informe$planTrabajoProgramacionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Informe$planTrabajoProgramacionArgs<ExtArgs>>): Prisma.Prisma__PlanTrabajoProgramacionClient<runtime.Types.Result.GetResult<Prisma.$PlanTrabajoProgramacionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  inspeccion<T extends Prisma.Informe$inspeccionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Informe$inspeccionArgs<ExtArgs>>): Prisma.Prisma__InspeccionFormularioClient<runtime.Types.Result.GetResult<Prisma.$InspeccionFormularioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2192,6 +2315,25 @@ export type Informe$planTrabajoProgramacionArgs<ExtArgs extends runtime.Types.Ex
    */
   include?: Prisma.PlanTrabajoProgramacionInclude<ExtArgs> | null
   where?: Prisma.PlanTrabajoProgramacionWhereInput
+}
+
+/**
+ * Informe.inspeccion
+ */
+export type Informe$inspeccionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InspeccionFormulario
+   */
+  select?: Prisma.InspeccionFormularioSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InspeccionFormulario
+   */
+  omit?: Prisma.InspeccionFormularioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InspeccionFormularioInclude<ExtArgs> | null
+  where?: Prisma.InspeccionFormularioWhereInput
 }
 
 /**

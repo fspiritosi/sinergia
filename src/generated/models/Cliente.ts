@@ -236,6 +236,7 @@ export type ClienteWhereInput = {
   clientLocations?: Prisma.ClientLocationsListRelationFilter
   informes?: Prisma.InformeListRelationFilter
   planesTrabajo?: Prisma.PlanTrabajoListRelationFilter
+  inspecciones?: Prisma.InspeccionFormularioListRelationFilter
 }
 
 export type ClienteOrderByWithRelationInput = {
@@ -256,6 +257,7 @@ export type ClienteOrderByWithRelationInput = {
   clientLocations?: Prisma.ClientLocationsOrderByRelationAggregateInput
   informes?: Prisma.InformeOrderByRelationAggregateInput
   planesTrabajo?: Prisma.PlanTrabajoOrderByRelationAggregateInput
+  inspecciones?: Prisma.InspeccionFormularioOrderByRelationAggregateInput
 }
 
 export type ClienteWhereUniqueInput = Prisma.AtLeast<{
@@ -279,6 +281,7 @@ export type ClienteWhereUniqueInput = Prisma.AtLeast<{
   clientLocations?: Prisma.ClientLocationsListRelationFilter
   informes?: Prisma.InformeListRelationFilter
   planesTrabajo?: Prisma.PlanTrabajoListRelationFilter
+  inspecciones?: Prisma.InspeccionFormularioListRelationFilter
 }, "id" | "cuit">
 
 export type ClienteOrderByWithAggregationInput = {
@@ -331,6 +334,7 @@ export type ClienteCreateInput = {
   clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateInput = {
@@ -349,6 +353,7 @@ export type ClienteUncheckedCreateInput = {
   clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUpdateInput = {
@@ -367,6 +372,7 @@ export type ClienteUpdateInput = {
   clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateInput = {
@@ -385,6 +391,7 @@ export type ClienteUncheckedUpdateInput = {
   clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateManyInput = {
@@ -636,6 +643,20 @@ export type ClienteUpdateOneRequiredWithoutPlanesTrabajoNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClienteUpdateToOneWithWhereWithoutPlanesTrabajoInput, Prisma.ClienteUpdateWithoutPlanesTrabajoInput>, Prisma.ClienteUncheckedUpdateWithoutPlanesTrabajoInput>
 }
 
+export type ClienteCreateNestedOneWithoutInspeccionesInput = {
+  create?: Prisma.XOR<Prisma.ClienteCreateWithoutInspeccionesInput, Prisma.ClienteUncheckedCreateWithoutInspeccionesInput>
+  connectOrCreate?: Prisma.ClienteCreateOrConnectWithoutInspeccionesInput
+  connect?: Prisma.ClienteWhereUniqueInput
+}
+
+export type ClienteUpdateOneRequiredWithoutInspeccionesNestedInput = {
+  create?: Prisma.XOR<Prisma.ClienteCreateWithoutInspeccionesInput, Prisma.ClienteUncheckedCreateWithoutInspeccionesInput>
+  connectOrCreate?: Prisma.ClienteCreateOrConnectWithoutInspeccionesInput
+  upsert?: Prisma.ClienteUpsertWithoutInspeccionesInput
+  connect?: Prisma.ClienteWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClienteUpdateToOneWithWhereWithoutInspeccionesInput, Prisma.ClienteUpdateWithoutInspeccionesInput>, Prisma.ClienteUncheckedUpdateWithoutInspeccionesInput>
+}
+
 export type ClienteCreateWithoutProvinciaInput = {
   id?: string
   name: string
@@ -651,6 +672,7 @@ export type ClienteCreateWithoutProvinciaInput = {
   clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutProvinciaInput = {
@@ -668,6 +690,7 @@ export type ClienteUncheckedCreateWithoutProvinciaInput = {
   clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutProvinciaInput = {
@@ -728,6 +751,7 @@ export type ClienteCreateWithoutCiudadInput = {
   clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutCiudadInput = {
@@ -745,6 +769,7 @@ export type ClienteUncheckedCreateWithoutCiudadInput = {
   clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutCiudadInput = {
@@ -788,6 +813,7 @@ export type ClienteCreateWithoutPropuestasInput = {
   clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutPropuestasInput = {
@@ -805,6 +831,7 @@ export type ClienteUncheckedCreateWithoutPropuestasInput = {
   clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutPropuestasInput = {
@@ -838,6 +865,7 @@ export type ClienteUpdateWithoutPropuestasInput = {
   clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutPropuestasInput = {
@@ -855,6 +883,7 @@ export type ClienteUncheckedUpdateWithoutPropuestasInput = {
   clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateWithoutClientLocationsInput = {
@@ -872,6 +901,7 @@ export type ClienteCreateWithoutClientLocationsInput = {
   propuestas?: Prisma.PropuestaTecnicaCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutClientLocationsInput = {
@@ -889,6 +919,7 @@ export type ClienteUncheckedCreateWithoutClientLocationsInput = {
   propuestas?: Prisma.PropuestaTecnicaUncheckedCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutClientLocationsInput = {
@@ -922,6 +953,7 @@ export type ClienteUpdateWithoutClientLocationsInput = {
   propuestas?: Prisma.PropuestaTecnicaUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutClientLocationsInput = {
@@ -939,6 +971,7 @@ export type ClienteUncheckedUpdateWithoutClientLocationsInput = {
   propuestas?: Prisma.PropuestaTecnicaUncheckedUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateWithoutInformesInput = {
@@ -956,6 +989,7 @@ export type ClienteCreateWithoutInformesInput = {
   propuestas?: Prisma.PropuestaTecnicaCreateNestedManyWithoutClienteInput
   clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutInformesInput = {
@@ -973,6 +1007,7 @@ export type ClienteUncheckedCreateWithoutInformesInput = {
   propuestas?: Prisma.PropuestaTecnicaUncheckedCreateNestedManyWithoutClienteInput
   clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutInformesInput = {
@@ -1006,6 +1041,7 @@ export type ClienteUpdateWithoutInformesInput = {
   propuestas?: Prisma.PropuestaTecnicaUpdateManyWithoutClienteNestedInput
   clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutInformesInput = {
@@ -1023,6 +1059,7 @@ export type ClienteUncheckedUpdateWithoutInformesInput = {
   propuestas?: Prisma.PropuestaTecnicaUncheckedUpdateManyWithoutClienteNestedInput
   clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateWithoutPlanesTrabajoInput = {
@@ -1040,6 +1077,7 @@ export type ClienteCreateWithoutPlanesTrabajoInput = {
   propuestas?: Prisma.PropuestaTecnicaCreateNestedManyWithoutClienteInput
   clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutPlanesTrabajoInput = {
@@ -1057,6 +1095,7 @@ export type ClienteUncheckedCreateWithoutPlanesTrabajoInput = {
   propuestas?: Prisma.PropuestaTecnicaUncheckedCreateNestedManyWithoutClienteInput
   clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
   informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutPlanesTrabajoInput = {
@@ -1090,6 +1129,7 @@ export type ClienteUpdateWithoutPlanesTrabajoInput = {
   propuestas?: Prisma.PropuestaTecnicaUpdateManyWithoutClienteNestedInput
   clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutPlanesTrabajoInput = {
@@ -1107,6 +1147,95 @@ export type ClienteUncheckedUpdateWithoutPlanesTrabajoInput = {
   propuestas?: Prisma.PropuestaTecnicaUncheckedUpdateManyWithoutClienteNestedInput
   clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutClienteNestedInput
+}
+
+export type ClienteCreateWithoutInspeccionesInput = {
+  id?: string
+  name: string
+  cuit: string
+  domicilio: string
+  telefono: string
+  email: string
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  provincia?: Prisma.ProvinciaCreateNestedOneWithoutClientesInput
+  ciudad?: Prisma.CiudadCreateNestedOneWithoutClientesInput
+  propuestas?: Prisma.PropuestaTecnicaCreateNestedManyWithoutClienteInput
+  clientLocations?: Prisma.ClientLocationsCreateNestedManyWithoutClienteInput
+  informes?: Prisma.InformeCreateNestedManyWithoutClienteInput
+  planesTrabajo?: Prisma.PlanTrabajoCreateNestedManyWithoutClienteInput
+}
+
+export type ClienteUncheckedCreateWithoutInspeccionesInput = {
+  id?: string
+  name: string
+  cuit: string
+  domicilio: string
+  telefono: string
+  email: string
+  provinciaId?: string | null
+  ciudadId?: string | null
+  is_active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  propuestas?: Prisma.PropuestaTecnicaUncheckedCreateNestedManyWithoutClienteInput
+  clientLocations?: Prisma.ClientLocationsUncheckedCreateNestedManyWithoutClienteInput
+  informes?: Prisma.InformeUncheckedCreateNestedManyWithoutClienteInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedCreateNestedManyWithoutClienteInput
+}
+
+export type ClienteCreateOrConnectWithoutInspeccionesInput = {
+  where: Prisma.ClienteWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClienteCreateWithoutInspeccionesInput, Prisma.ClienteUncheckedCreateWithoutInspeccionesInput>
+}
+
+export type ClienteUpsertWithoutInspeccionesInput = {
+  update: Prisma.XOR<Prisma.ClienteUpdateWithoutInspeccionesInput, Prisma.ClienteUncheckedUpdateWithoutInspeccionesInput>
+  create: Prisma.XOR<Prisma.ClienteCreateWithoutInspeccionesInput, Prisma.ClienteUncheckedCreateWithoutInspeccionesInput>
+  where?: Prisma.ClienteWhereInput
+}
+
+export type ClienteUpdateToOneWithWhereWithoutInspeccionesInput = {
+  where?: Prisma.ClienteWhereInput
+  data: Prisma.XOR<Prisma.ClienteUpdateWithoutInspeccionesInput, Prisma.ClienteUncheckedUpdateWithoutInspeccionesInput>
+}
+
+export type ClienteUpdateWithoutInspeccionesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cuit?: Prisma.StringFieldUpdateOperationsInput | string
+  domicilio?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provincia?: Prisma.ProvinciaUpdateOneWithoutClientesNestedInput
+  ciudad?: Prisma.CiudadUpdateOneWithoutClientesNestedInput
+  propuestas?: Prisma.PropuestaTecnicaUpdateManyWithoutClienteNestedInput
+  clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
+  informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutClienteNestedInput
+}
+
+export type ClienteUncheckedUpdateWithoutInspeccionesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cuit?: Prisma.StringFieldUpdateOperationsInput | string
+  domicilio?: Prisma.StringFieldUpdateOperationsInput | string
+  telefono?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provinciaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ciudadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  propuestas?: Prisma.PropuestaTecnicaUncheckedUpdateManyWithoutClienteNestedInput
+  clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
+  informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
+  planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateManyProvinciaInput = {
@@ -1137,6 +1266,7 @@ export type ClienteUpdateWithoutProvinciaInput = {
   clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutProvinciaInput = {
@@ -1154,6 +1284,7 @@ export type ClienteUncheckedUpdateWithoutProvinciaInput = {
   clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateManyWithoutProvinciaInput = {
@@ -1197,6 +1328,7 @@ export type ClienteUpdateWithoutCiudadInput = {
   clientLocations?: Prisma.ClientLocationsUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutCiudadInput = {
@@ -1214,6 +1346,7 @@ export type ClienteUncheckedUpdateWithoutCiudadInput = {
   clientLocations?: Prisma.ClientLocationsUncheckedUpdateManyWithoutClienteNestedInput
   informes?: Prisma.InformeUncheckedUpdateManyWithoutClienteNestedInput
   planesTrabajo?: Prisma.PlanTrabajoUncheckedUpdateManyWithoutClienteNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateManyWithoutCiudadInput = {
@@ -1239,6 +1372,7 @@ export type ClienteCountOutputType = {
   clientLocations: number
   informes: number
   planesTrabajo: number
+  inspecciones: number
 }
 
 export type ClienteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1246,6 +1380,7 @@ export type ClienteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   clientLocations?: boolean | ClienteCountOutputTypeCountClientLocationsArgs
   informes?: boolean | ClienteCountOutputTypeCountInformesArgs
   planesTrabajo?: boolean | ClienteCountOutputTypeCountPlanesTrabajoArgs
+  inspecciones?: boolean | ClienteCountOutputTypeCountInspeccionesArgs
 }
 
 /**
@@ -1286,6 +1421,13 @@ export type ClienteCountOutputTypeCountPlanesTrabajoArgs<ExtArgs extends runtime
   where?: Prisma.PlanTrabajoWhereInput
 }
 
+/**
+ * ClienteCountOutputType without action
+ */
+export type ClienteCountOutputTypeCountInspeccionesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InspeccionFormularioWhereInput
+}
+
 
 export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1305,6 +1447,7 @@ export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   clientLocations?: boolean | Prisma.Cliente$clientLocationsArgs<ExtArgs>
   informes?: boolean | Prisma.Cliente$informesArgs<ExtArgs>
   planesTrabajo?: boolean | Prisma.Cliente$planesTrabajoArgs<ExtArgs>
+  inspecciones?: boolean | Prisma.Cliente$inspeccionesArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cliente"]>
 
@@ -1362,6 +1505,7 @@ export type ClienteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   clientLocations?: boolean | Prisma.Cliente$clientLocationsArgs<ExtArgs>
   informes?: boolean | Prisma.Cliente$informesArgs<ExtArgs>
   planesTrabajo?: boolean | Prisma.Cliente$planesTrabajoArgs<ExtArgs>
+  inspecciones?: boolean | Prisma.Cliente$inspeccionesArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClienteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1382,6 +1526,7 @@ export type $ClientePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     clientLocations: Prisma.$ClientLocationsPayload<ExtArgs>[]
     informes: Prisma.$InformePayload<ExtArgs>[]
     planesTrabajo: Prisma.$PlanTrabajoPayload<ExtArgs>[]
+    inspecciones: Prisma.$InspeccionFormularioPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1795,6 +1940,7 @@ export interface Prisma__ClienteClient<T, Null = never, ExtArgs extends runtime.
   clientLocations<T extends Prisma.Cliente$clientLocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$clientLocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientLocationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   informes<T extends Prisma.Cliente$informesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$informesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InformePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   planesTrabajo<T extends Prisma.Cliente$planesTrabajoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$planesTrabajoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanTrabajoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inspecciones<T extends Prisma.Cliente$inspeccionesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$inspeccionesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InspeccionFormularioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2362,6 +2508,30 @@ export type Cliente$planesTrabajoArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.PlanTrabajoScalarFieldEnum | Prisma.PlanTrabajoScalarFieldEnum[]
+}
+
+/**
+ * Cliente.inspecciones
+ */
+export type Cliente$inspeccionesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InspeccionFormulario
+   */
+  select?: Prisma.InspeccionFormularioSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InspeccionFormulario
+   */
+  omit?: Prisma.InspeccionFormularioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InspeccionFormularioInclude<ExtArgs> | null
+  where?: Prisma.InspeccionFormularioWhereInput
+  orderBy?: Prisma.InspeccionFormularioOrderByWithRelationInput | Prisma.InspeccionFormularioOrderByWithRelationInput[]
+  cursor?: Prisma.InspeccionFormularioWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InspeccionFormularioScalarFieldEnum | Prisma.InspeccionFormularioScalarFieldEnum[]
 }
 
 /**

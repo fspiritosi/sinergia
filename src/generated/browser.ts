@@ -117,3 +117,33 @@ export type Permission = Prisma.PermissionModel
  * 
  */
 export type RolePermission = Prisma.RolePermissionModel
+/**
+ * Model SeccionInspeccion
+ * 
+ */
+export type SeccionInspeccion = Prisma.SeccionInspeccionModel
+/**
+ * Model PreguntaInspeccion
+ * 
+ */
+export type PreguntaInspeccion = Prisma.PreguntaInspeccionModel
+/**
+ * Model AccionCorrectivaInspeccion
+ * 
+ */
+export type AccionCorrectivaInspeccion = Prisma.AccionCorrectivaInspeccionModel
+/**
+ * Model InspeccionFormulario
+ * 
+ */
+export type InspeccionFormulario = Prisma.InspeccionFormularioModel
+/**
+ * Model InspeccionRespuesta
+ * 
+ */
+export type InspeccionRespuesta = Prisma.InspeccionRespuestaModel
+/**
+ * Model InspeccionAccionSeleccionada
+ * 
+ */
+export type InspeccionAccionSeleccionada = Prisma.InspeccionAccionSeleccionadaModel

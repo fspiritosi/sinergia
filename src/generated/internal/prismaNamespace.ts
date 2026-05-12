@@ -409,7 +409,13 @@ export const ModelName = {
   User: 'User',
   Role: 'Role',
   Permission: 'Permission',
-  RolePermission: 'RolePermission'
+  RolePermission: 'RolePermission',
+  SeccionInspeccion: 'SeccionInspeccion',
+  PreguntaInspeccion: 'PreguntaInspeccion',
+  AccionCorrectivaInspeccion: 'AccionCorrectivaInspeccion',
+  InspeccionFormulario: 'InspeccionFormulario',
+  InspeccionRespuesta: 'InspeccionRespuesta',
+  InspeccionAccionSeleccionada: 'InspeccionAccionSeleccionada'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante" | "condicion" | "user" | "role" | "permission" | "rolePermission"
+    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante" | "condicion" | "user" | "role" | "permission" | "rolePermission" | "seccionInspeccion" | "preguntaInspeccion" | "accionCorrectivaInspeccion" | "inspeccionFormulario" | "inspeccionRespuesta" | "inspeccionAccionSeleccionada"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1909,6 +1915,450 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SeccionInspeccion: {
+      payload: Prisma.$SeccionInspeccionPayload<ExtArgs>
+      fields: Prisma.SeccionInspeccionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SeccionInspeccionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SeccionInspeccionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>
+        }
+        findFirst: {
+          args: Prisma.SeccionInspeccionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SeccionInspeccionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>
+        }
+        findMany: {
+          args: Prisma.SeccionInspeccionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>[]
+        }
+        create: {
+          args: Prisma.SeccionInspeccionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>
+        }
+        createMany: {
+          args: Prisma.SeccionInspeccionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SeccionInspeccionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>[]
+        }
+        delete: {
+          args: Prisma.SeccionInspeccionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>
+        }
+        update: {
+          args: Prisma.SeccionInspeccionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>
+        }
+        deleteMany: {
+          args: Prisma.SeccionInspeccionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SeccionInspeccionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SeccionInspeccionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>[]
+        }
+        upsert: {
+          args: Prisma.SeccionInspeccionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeccionInspeccionPayload>
+        }
+        aggregate: {
+          args: Prisma.SeccionInspeccionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSeccionInspeccion>
+        }
+        groupBy: {
+          args: Prisma.SeccionInspeccionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SeccionInspeccionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SeccionInspeccionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SeccionInspeccionCountAggregateOutputType> | number
+        }
+      }
+    }
+    PreguntaInspeccion: {
+      payload: Prisma.$PreguntaInspeccionPayload<ExtArgs>
+      fields: Prisma.PreguntaInspeccionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PreguntaInspeccionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PreguntaInspeccionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>
+        }
+        findFirst: {
+          args: Prisma.PreguntaInspeccionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PreguntaInspeccionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>
+        }
+        findMany: {
+          args: Prisma.PreguntaInspeccionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>[]
+        }
+        create: {
+          args: Prisma.PreguntaInspeccionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>
+        }
+        createMany: {
+          args: Prisma.PreguntaInspeccionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PreguntaInspeccionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>[]
+        }
+        delete: {
+          args: Prisma.PreguntaInspeccionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>
+        }
+        update: {
+          args: Prisma.PreguntaInspeccionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PreguntaInspeccionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PreguntaInspeccionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PreguntaInspeccionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PreguntaInspeccionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PreguntaInspeccionPayload>
+        }
+        aggregate: {
+          args: Prisma.PreguntaInspeccionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePreguntaInspeccion>
+        }
+        groupBy: {
+          args: Prisma.PreguntaInspeccionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PreguntaInspeccionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PreguntaInspeccionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PreguntaInspeccionCountAggregateOutputType> | number
+        }
+      }
+    }
+    AccionCorrectivaInspeccion: {
+      payload: Prisma.$AccionCorrectivaInspeccionPayload<ExtArgs>
+      fields: Prisma.AccionCorrectivaInspeccionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AccionCorrectivaInspeccionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AccionCorrectivaInspeccionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>
+        }
+        findFirst: {
+          args: Prisma.AccionCorrectivaInspeccionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AccionCorrectivaInspeccionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>
+        }
+        findMany: {
+          args: Prisma.AccionCorrectivaInspeccionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>[]
+        }
+        create: {
+          args: Prisma.AccionCorrectivaInspeccionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>
+        }
+        createMany: {
+          args: Prisma.AccionCorrectivaInspeccionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AccionCorrectivaInspeccionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>[]
+        }
+        delete: {
+          args: Prisma.AccionCorrectivaInspeccionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>
+        }
+        update: {
+          args: Prisma.AccionCorrectivaInspeccionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>
+        }
+        deleteMany: {
+          args: Prisma.AccionCorrectivaInspeccionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AccionCorrectivaInspeccionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AccionCorrectivaInspeccionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>[]
+        }
+        upsert: {
+          args: Prisma.AccionCorrectivaInspeccionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccionCorrectivaInspeccionPayload>
+        }
+        aggregate: {
+          args: Prisma.AccionCorrectivaInspeccionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAccionCorrectivaInspeccion>
+        }
+        groupBy: {
+          args: Prisma.AccionCorrectivaInspeccionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccionCorrectivaInspeccionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AccionCorrectivaInspeccionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccionCorrectivaInspeccionCountAggregateOutputType> | number
+        }
+      }
+    }
+    InspeccionFormulario: {
+      payload: Prisma.$InspeccionFormularioPayload<ExtArgs>
+      fields: Prisma.InspeccionFormularioFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InspeccionFormularioFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InspeccionFormularioFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>
+        }
+        findFirst: {
+          args: Prisma.InspeccionFormularioFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InspeccionFormularioFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>
+        }
+        findMany: {
+          args: Prisma.InspeccionFormularioFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>[]
+        }
+        create: {
+          args: Prisma.InspeccionFormularioCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>
+        }
+        createMany: {
+          args: Prisma.InspeccionFormularioCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InspeccionFormularioCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>[]
+        }
+        delete: {
+          args: Prisma.InspeccionFormularioDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>
+        }
+        update: {
+          args: Prisma.InspeccionFormularioUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>
+        }
+        deleteMany: {
+          args: Prisma.InspeccionFormularioDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InspeccionFormularioUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InspeccionFormularioUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>[]
+        }
+        upsert: {
+          args: Prisma.InspeccionFormularioUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionFormularioPayload>
+        }
+        aggregate: {
+          args: Prisma.InspeccionFormularioAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInspeccionFormulario>
+        }
+        groupBy: {
+          args: Prisma.InspeccionFormularioGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspeccionFormularioGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InspeccionFormularioCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspeccionFormularioCountAggregateOutputType> | number
+        }
+      }
+    }
+    InspeccionRespuesta: {
+      payload: Prisma.$InspeccionRespuestaPayload<ExtArgs>
+      fields: Prisma.InspeccionRespuestaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InspeccionRespuestaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InspeccionRespuestaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>
+        }
+        findFirst: {
+          args: Prisma.InspeccionRespuestaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InspeccionRespuestaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>
+        }
+        findMany: {
+          args: Prisma.InspeccionRespuestaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>[]
+        }
+        create: {
+          args: Prisma.InspeccionRespuestaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>
+        }
+        createMany: {
+          args: Prisma.InspeccionRespuestaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InspeccionRespuestaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>[]
+        }
+        delete: {
+          args: Prisma.InspeccionRespuestaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>
+        }
+        update: {
+          args: Prisma.InspeccionRespuestaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>
+        }
+        deleteMany: {
+          args: Prisma.InspeccionRespuestaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InspeccionRespuestaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InspeccionRespuestaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>[]
+        }
+        upsert: {
+          args: Prisma.InspeccionRespuestaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionRespuestaPayload>
+        }
+        aggregate: {
+          args: Prisma.InspeccionRespuestaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInspeccionRespuesta>
+        }
+        groupBy: {
+          args: Prisma.InspeccionRespuestaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspeccionRespuestaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InspeccionRespuestaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspeccionRespuestaCountAggregateOutputType> | number
+        }
+      }
+    }
+    InspeccionAccionSeleccionada: {
+      payload: Prisma.$InspeccionAccionSeleccionadaPayload<ExtArgs>
+      fields: Prisma.InspeccionAccionSeleccionadaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InspeccionAccionSeleccionadaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InspeccionAccionSeleccionadaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>
+        }
+        findFirst: {
+          args: Prisma.InspeccionAccionSeleccionadaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InspeccionAccionSeleccionadaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>
+        }
+        findMany: {
+          args: Prisma.InspeccionAccionSeleccionadaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>[]
+        }
+        create: {
+          args: Prisma.InspeccionAccionSeleccionadaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>
+        }
+        createMany: {
+          args: Prisma.InspeccionAccionSeleccionadaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InspeccionAccionSeleccionadaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>[]
+        }
+        delete: {
+          args: Prisma.InspeccionAccionSeleccionadaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>
+        }
+        update: {
+          args: Prisma.InspeccionAccionSeleccionadaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>
+        }
+        deleteMany: {
+          args: Prisma.InspeccionAccionSeleccionadaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InspeccionAccionSeleccionadaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InspeccionAccionSeleccionadaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>[]
+        }
+        upsert: {
+          args: Prisma.InspeccionAccionSeleccionadaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspeccionAccionSeleccionadaPayload>
+        }
+        aggregate: {
+          args: Prisma.InspeccionAccionSeleccionadaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInspeccionAccionSeleccionada>
+        }
+        groupBy: {
+          args: Prisma.InspeccionAccionSeleccionadaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspeccionAccionSeleccionadaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InspeccionAccionSeleccionadaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspeccionAccionSeleccionadaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2210,6 +2660,78 @@ export const RolePermissionScalarFieldEnum = {
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
 
 
+export const SeccionInspeccionScalarFieldEnum = {
+  id: 'id',
+  codigo: 'codigo',
+  titulo: 'titulo',
+  parentId: 'parentId',
+  orden: 'orden'
+} as const
+
+export type SeccionInspeccionScalarFieldEnum = (typeof SeccionInspeccionScalarFieldEnum)[keyof typeof SeccionInspeccionScalarFieldEnum]
+
+
+export const PreguntaInspeccionScalarFieldEnum = {
+  id: 'id',
+  codigo: 'codigo',
+  texto: 'texto',
+  seccionId: 'seccionId',
+  orden: 'orden',
+  parentPreguntaId: 'parentPreguntaId',
+  condicionRespuesta: 'condicionRespuesta'
+} as const
+
+export type PreguntaInspeccionScalarFieldEnum = (typeof PreguntaInspeccionScalarFieldEnum)[keyof typeof PreguntaInspeccionScalarFieldEnum]
+
+
+export const AccionCorrectivaInspeccionScalarFieldEnum = {
+  id: 'id',
+  preguntaId: 'preguntaId',
+  texto: 'texto',
+  orden: 'orden'
+} as const
+
+export type AccionCorrectivaInspeccionScalarFieldEnum = (typeof AccionCorrectivaInspeccionScalarFieldEnum)[keyof typeof AccionCorrectivaInspeccionScalarFieldEnum]
+
+
+export const InspeccionFormularioScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  tipo: 'tipo',
+  fecha: 'fecha',
+  estado: 'estado',
+  realizadoPorId: 'realizadoPorId',
+  clientLocationId: 'clientLocationId',
+  lugarTexto: 'lugarTexto',
+  informeId: 'informeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspeccionFormularioScalarFieldEnum = (typeof InspeccionFormularioScalarFieldEnum)[keyof typeof InspeccionFormularioScalarFieldEnum]
+
+
+export const InspeccionRespuestaScalarFieldEnum = {
+  id: 'id',
+  formularioId: 'formularioId',
+  preguntaId: 'preguntaId',
+  valor: 'valor',
+  observaciones: 'observaciones',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspeccionRespuestaScalarFieldEnum = (typeof InspeccionRespuestaScalarFieldEnum)[keyof typeof InspeccionRespuestaScalarFieldEnum]
+
+
+export const InspeccionAccionSeleccionadaScalarFieldEnum = {
+  respuestaId: 'respuestaId',
+  accionId: 'accionId'
+} as const
+
+export type InspeccionAccionSeleccionadaScalarFieldEnum = (typeof InspeccionAccionSeleccionadaScalarFieldEnum)[keyof typeof InspeccionAccionSeleccionadaScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2402,6 +2924,48 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'InspeccionTipo'
+ */
+export type EnumInspeccionTipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InspeccionTipo'>
+    
+
+
+/**
+ * Reference to a field of type 'InspeccionTipo[]'
+ */
+export type ListEnumInspeccionTipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InspeccionTipo[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InspeccionEstado'
+ */
+export type EnumInspeccionEstadoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InspeccionEstado'>
+    
+
+
+/**
+ * Reference to a field of type 'InspeccionEstado[]'
+ */
+export type ListEnumInspeccionEstadoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InspeccionEstado[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RespuestaValor'
+ */
+export type EnumRespuestaValorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RespuestaValor'>
+    
+
+
+/**
+ * Reference to a field of type 'RespuestaValor[]'
+ */
+export type ListEnumRespuestaValorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RespuestaValor[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -2521,6 +3085,12 @@ export type GlobalOmitConfig = {
   role?: Prisma.RoleOmit
   permission?: Prisma.PermissionOmit
   rolePermission?: Prisma.RolePermissionOmit
+  seccionInspeccion?: Prisma.SeccionInspeccionOmit
+  preguntaInspeccion?: Prisma.PreguntaInspeccionOmit
+  accionCorrectivaInspeccion?: Prisma.AccionCorrectivaInspeccionOmit
+  inspeccionFormulario?: Prisma.InspeccionFormularioOmit
+  inspeccionRespuesta?: Prisma.InspeccionRespuestaOmit
+  inspeccionAccionSeleccionada?: Prisma.InspeccionAccionSeleccionadaOmit
 }
 
 /* Types for Logging */
