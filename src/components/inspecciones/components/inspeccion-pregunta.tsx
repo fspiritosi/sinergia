@@ -8,7 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Loader2, ChevronDown, ChevronRight, Camera, X } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Loader2, ChevronDown, ChevronRight, ChevronLeft, Camera, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { uploadImagenRespuesta, deleteImagenRespuesta } from "./inspeccion-actions";
 
@@ -74,6 +75,12 @@ export function InspeccionPregunta({
   }
 
   const [obsOpen, setObsOpen] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
@@ -222,13 +229,22 @@ export function InspeccionPregunta({
         <div className="ml-4 space-y-2">
           {imagenes.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {imagenes.map((img) => (
+              {imagenes.map((img, idx) => (
                 <div key={img.id} className="group relative">
-                  <img
-                    src={`${r2PublicBase}/${img.r2Key}`}
-                    alt="Adjunto"
-                    className="h-20 w-20 rounded-md border object-cover"
-                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLightboxIndex(idx);
+                      setLightboxOpen(true);
+                    }}
+                    className="block overflow-hidden rounded-md border focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    <img
+                      src={`${r2PublicBase}/${img.r2Key}`}
+                      alt={`Adjunto ${idx + 1}`}
+                      className="h-20 w-20 object-cover transition-transform hover:scale-105"
+                    />
+                  </button>
                   {!readOnly && (
                     <button
                       type="button"
@@ -269,6 +285,119 @@ export function InspeccionPregunta({
               </Button>
             </>
           )}
+
+          {/* Lightbox / galería */}
+          <Dialog
+            open={lightboxOpen}
+            onOpenChange={(open) => {
+              setLightboxOpen(open);
+              if (!open) {
+                setZoom(1);
+                setPan({ x: 0, y: 0 });
+              }
+            }}
+          >
+            <DialogContent
+              className="sm:max-w-[90vw] max-h-[95vh] w-fit p-4"
+              showCloseButton={true}
+            >
+              {imagenes.length > 0 && (
+                <div className="flex flex-col items-center gap-3">
+                  <div
+                    className="relative overflow-hidden rounded-md"
+                    style={{ cursor: zoom > 1 ? (dragging ? "grabbing" : "grab") : "zoom-in" }}
+                    onWheel={(e) => {
+                      e.preventDefault();
+                      setZoom((z) => {
+                        const next = z + (e.deltaY < 0 ? 0.25 : -0.25);
+                        const clamped = Math.min(Math.max(next, 1), 5);
+                        if (clamped === 1) setPan({ x: 0, y: 0 });
+                        return clamped;
+                      });
+                    }}
+                    onClick={() => {
+                      if (zoom === 1) {
+                        setZoom(2);
+                      } else {
+                        setZoom(1);
+                        setPan({ x: 0, y: 0 });
+                      }
+                    }}
+                    onMouseDown={(e) => {
+                      if (zoom <= 1) return;
+                      e.preventDefault();
+                      setDragging(true);
+                      setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+                    }}
+                    onMouseMove={(e) => {
+                      if (!dragging) return;
+                      setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+                    }}
+                    onMouseUp={() => setDragging(false)}
+                    onMouseLeave={() => setDragging(false)}
+                    onTouchStart={(e) => {
+                      if (zoom <= 1 || e.touches.length !== 1) return;
+                      const t = e.touches[0];
+                      setDragging(true);
+                      setDragStart({ x: t.clientX - pan.x, y: t.clientY - pan.y });
+                    }}
+                    onTouchMove={(e) => {
+                      if (!dragging || e.touches.length !== 1) return;
+                      const t = e.touches[0];
+                      setPan({ x: t.clientX - dragStart.x, y: t.clientY - dragStart.y });
+                    }}
+                    onTouchEnd={() => setDragging(false)}
+                  >
+                    <img
+                      src={`${r2PublicBase}/${imagenes[lightboxIndex]?.r2Key}`}
+                      alt={`Imagen ${lightboxIndex + 1} de ${imagenes.length}`}
+                      className="max-h-[75vh] max-w-[85vw] select-none object-contain transition-transform duration-150"
+                      style={{
+                        transform: `scale(${zoom}) translate(${pan.x / zoom}px, ${pan.y / zoom}px)`,
+                      }}
+                      draggable={false}
+                    />
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      disabled={lightboxIndex === 0}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLightboxIndex((i) => i - 1);
+                        setZoom(1);
+                        setPan({ x: 0, y: 0 });
+                      }}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <span className="text-sm text-muted-foreground">
+                      {lightboxIndex + 1} / {imagenes.length}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      disabled={lightboxIndex === imagenes.length - 1}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLightboxIndex((i) => i + 1);
+                        setZoom(1);
+                        setPan({ x: 0, y: 0 });
+                      }}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  {zoom > 1 && (
+                    <p className="text-xs text-muted-foreground">
+                      Zoom: {Math.round(zoom * 100)}% — click para resetear, scroll para ajustar
+                    </p>
+                  )}
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       )}
 
