@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, FileDown } from "lucide-react";
 import { formatDateOnly } from "@/lib/dates";
 import { getSeccionesConPreguntas, getInspeccionById } from "./actions";
 import { guardarRespuesta, finalizarInspeccion } from "./inspeccion-actions";
+import { generateInspeccionPDF } from "./pdf-actions";
 import { InspeccionSeccion, type SeccionData } from "./inspeccion-seccion";
 import type { RespuestaLocal, PreguntaData } from "./inspeccion-pregunta";
 
@@ -61,7 +62,37 @@ export function InspeccionForm({ inspeccionId }: Props) {
   const [respuestas, setRespuestas] = useState<Map<string, RespuestaLocal>>(new Map());
   const [savingIds, setSavingIds] = useState<Set<string>>(new Set());
   const [hasSaved, setHasSaved] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
   const initializedRef = useRef(false);
+
+  const handleDownloadPDF = useCallback(async () => {
+    setDownloadingPdf(true);
+    try {
+      const result = await generateInspeccionPDF(inspeccionId);
+      if (!result.success || !result.data) {
+        toast.error(result.success ? "Error al generar PDF" : result.error);
+        return;
+      }
+
+      const byteCharacters = atob(result.data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const blob = new Blob([new Uint8Array(byteNumbers)], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = result.filename;
+      link.click();
+      window.URL.revokeObjectURL(url);
+      toast.success("PDF descargado");
+    } catch {
+      toast.error("Error al generar PDF");
+    } finally {
+      setDownloadingPdf(false);
+    }
+  }, [inspeccionId]);
 
   const { data: secciones, isLoading: loadingSecciones } = useQuery({
     queryKey: ["secciones-inspeccion"],
@@ -217,21 +248,40 @@ export function InspeccionForm({ inspeccionId }: Props) {
               </div>
             </div>
 
-            {/* Save status indicator */}
-            <div className="text-muted-foreground flex items-center gap-1 text-sm">
-              {savingIds.size > 0 ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Guardando...</span>
-                </>
-              ) : (
-                hasSaved && (
-                  <>
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
-                    <span className="text-green-600">Guardado</span>
-                  </>
-                )
+            <div className="flex items-center gap-3">
+              {/* Botón descargar PDF (solo inspecciones completadas) */}
+              {inspeccion.estado === "completada" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadPDF}
+                  disabled={downloadingPdf}
+                >
+                  {downloadingPdf ? (
+                    <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                  ) : (
+                    <FileDown className="mr-1 h-4 w-4" />
+                  )}
+                  {downloadingPdf ? "Generando..." : "Descargar PDF"}
+                </Button>
               )}
+
+              {/* Save status indicator */}
+              <div className="text-muted-foreground flex items-center gap-1 text-sm">
+                {savingIds.size > 0 ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Guardando...</span>
+                  </>
+                ) : (
+                  hasSaved && (
+                    <>
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <span className="text-green-600">Guardado</span>
+                    </>
+                  )
+                )}
+              </div>
             </div>
           </div>
         </CardHeader>
