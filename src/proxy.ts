@@ -3,7 +3,12 @@ import { NextResponse } from "next/server";
 import { getAllowedRoles } from "@/lib/rbac/route-guards";
 import type { RoleName } from "@/lib/rbac/permissions";
 
-const isPublicRoute = createRouteMatcher(["/sing-in", "/sing-up", "/", "/api/webhooks/(.*)"]);
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/",
+  "/api/webhooks/(.*)",
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isPublicRoute(req)) return;
