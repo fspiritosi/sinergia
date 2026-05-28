@@ -169,6 +169,8 @@ const PERMISSIONS: PermissionSeed[] = [
     action: "manage-roles",
     description: "Gestionar roles y permisos",
   },
+
+  ...crudPermissions("inspecciones"),
 ];
 
 const ROLE_PERMISSIONS: Record<string, string[] | "all"> = {
@@ -189,6 +191,9 @@ const ROLE_PERMISSIONS: Record<string, string[] | "all"> = {
     "informes:upload-file",
     "informes:download-file",
     "informes:deliver",
+    "inspecciones:view",
+    "inspecciones:create",
+    "inspecciones:update",
   ],
 
   tecnico: [
@@ -199,6 +204,9 @@ const ROLE_PERMISSIONS: Record<string, string[] | "all"> = {
     "informes:update",
     "informes:upload-file",
     "informes:download-file",
+    "inspecciones:view",
+    "inspecciones:create",
+    "inspecciones:update",
   ],
 
   lectura: [
@@ -208,6 +216,7 @@ const ROLE_PERMISSIONS: Record<string, string[] | "all"> = {
     "planes:view",
     "planificacion:view",
     "informes:view",
+    "inspecciones:view",
   ],
 };
 

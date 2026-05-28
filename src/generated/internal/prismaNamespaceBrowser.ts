@@ -68,7 +68,14 @@ export const ModelName = {
   User: 'User',
   Role: 'Role',
   Permission: 'Permission',
-  RolePermission: 'RolePermission'
+  RolePermission: 'RolePermission',
+  SeccionInspeccion: 'SeccionInspeccion',
+  PreguntaInspeccion: 'PreguntaInspeccion',
+  AccionCorrectivaInspeccion: 'AccionCorrectivaInspeccion',
+  InspeccionFormulario: 'InspeccionFormulario',
+  InspeccionRespuesta: 'InspeccionRespuesta',
+  InspeccionRespuestaImagen: 'InspeccionRespuestaImagen',
+  InspeccionAccionSeleccionada: 'InspeccionAccionSeleccionada'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -347,6 +354,89 @@ export const RolePermissionScalarFieldEnum = {
 } as const
 
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
+
+
+export const SeccionInspeccionScalarFieldEnum = {
+  id: 'id',
+  codigo: 'codigo',
+  titulo: 'titulo',
+  parentId: 'parentId',
+  orden: 'orden'
+} as const
+
+export type SeccionInspeccionScalarFieldEnum = (typeof SeccionInspeccionScalarFieldEnum)[keyof typeof SeccionInspeccionScalarFieldEnum]
+
+
+export const PreguntaInspeccionScalarFieldEnum = {
+  id: 'id',
+  codigo: 'codigo',
+  texto: 'texto',
+  seccionId: 'seccionId',
+  orden: 'orden',
+  parentPreguntaId: 'parentPreguntaId',
+  condicionRespuesta: 'condicionRespuesta'
+} as const
+
+export type PreguntaInspeccionScalarFieldEnum = (typeof PreguntaInspeccionScalarFieldEnum)[keyof typeof PreguntaInspeccionScalarFieldEnum]
+
+
+export const AccionCorrectivaInspeccionScalarFieldEnum = {
+  id: 'id',
+  preguntaId: 'preguntaId',
+  texto: 'texto',
+  orden: 'orden'
+} as const
+
+export type AccionCorrectivaInspeccionScalarFieldEnum = (typeof AccionCorrectivaInspeccionScalarFieldEnum)[keyof typeof AccionCorrectivaInspeccionScalarFieldEnum]
+
+
+export const InspeccionFormularioScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  tipo: 'tipo',
+  fecha: 'fecha',
+  estado: 'estado',
+  realizadoPorId: 'realizadoPorId',
+  clientLocationId: 'clientLocationId',
+  lugarTexto: 'lugarTexto',
+  informeId: 'informeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspeccionFormularioScalarFieldEnum = (typeof InspeccionFormularioScalarFieldEnum)[keyof typeof InspeccionFormularioScalarFieldEnum]
+
+
+export const InspeccionRespuestaScalarFieldEnum = {
+  id: 'id',
+  formularioId: 'formularioId',
+  preguntaId: 'preguntaId',
+  valor: 'valor',
+  observaciones: 'observaciones',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspeccionRespuestaScalarFieldEnum = (typeof InspeccionRespuestaScalarFieldEnum)[keyof typeof InspeccionRespuestaScalarFieldEnum]
+
+
+export const InspeccionRespuestaImagenScalarFieldEnum = {
+  id: 'id',
+  respuestaId: 'respuestaId',
+  r2Key: 'r2Key',
+  orden: 'orden',
+  createdAt: 'createdAt'
+} as const
+
+export type InspeccionRespuestaImagenScalarFieldEnum = (typeof InspeccionRespuestaImagenScalarFieldEnum)[keyof typeof InspeccionRespuestaImagenScalarFieldEnum]
+
+
+export const InspeccionAccionSeleccionadaScalarFieldEnum = {
+  respuestaId: 'respuestaId',
+  accionId: 'accionId'
+} as const
+
+export type InspeccionAccionSeleccionadaScalarFieldEnum = (typeof InspeccionAccionSeleccionadaScalarFieldEnum)[keyof typeof InspeccionAccionSeleccionadaScalarFieldEnum]
 
 
 export const SortOrder = {

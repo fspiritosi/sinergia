@@ -73,6 +73,11 @@ const navMain: NavSection[] = [
         url: "/dashboard/informes",
         requiredPermission: PERMISSIONS.INFORMES_VIEW,
       },
+      {
+        title: "Inspecciones",
+        url: "/dashboard/inspecciones",
+        requiredPermission: PERMISSIONS.INSPECCIONES_VIEW,
+      },
     ],
   },
   {

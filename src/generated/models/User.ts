@@ -207,6 +207,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
+  inspecciones?: Prisma.InspeccionFormularioListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -219,6 +220,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
+  inspecciones?: Prisma.InspeccionFormularioOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -234,6 +236,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
+  inspecciones?: Prisma.InspeccionFormularioListRelationFilter
 }, "id" | "clerkId" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -273,6 +276,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   role: Prisma.RoleCreateNestedOneWithoutUsersInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutRealizadoPorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -284,6 +288,7 @@ export type UserUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutRealizadoPorInput
 }
 
 export type UserUpdateInput = {
@@ -295,6 +300,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutRealizadoPorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -306,6 +312,7 @@ export type UserUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutRealizadoPorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -383,6 +390,11 @@ export type UserOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
+}
+
 export type UserCreateNestedManyWithoutRoleInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutRoleInput, Prisma.UserUncheckedCreateWithoutRoleInput> | Prisma.UserCreateWithoutRoleInput[] | Prisma.UserUncheckedCreateWithoutRoleInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoleInput | Prisma.UserCreateOrConnectWithoutRoleInput[]
@@ -425,6 +437,20 @@ export type UserUncheckedUpdateManyWithoutRoleNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
+export type UserCreateNestedOneWithoutInspeccionesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesInput, Prisma.UserUncheckedCreateWithoutInspeccionesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInspeccionesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInspeccionesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesInput, Prisma.UserUncheckedCreateWithoutInspeccionesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInspeccionesInput
+  upsert?: Prisma.UserUpsertWithoutInspeccionesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInspeccionesInput, Prisma.UserUpdateWithoutInspeccionesInput>, Prisma.UserUncheckedUpdateWithoutInspeccionesInput>
+}
+
 export type UserCreateWithoutRoleInput = {
   id?: string
   clerkId: string
@@ -433,6 +459,7 @@ export type UserCreateWithoutRoleInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutRealizadoPorInput
 }
 
 export type UserUncheckedCreateWithoutRoleInput = {
@@ -443,6 +470,7 @@ export type UserUncheckedCreateWithoutRoleInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutRealizadoPorInput
 }
 
 export type UserCreateOrConnectWithoutRoleInput = {
@@ -485,6 +513,66 @@ export type UserScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
+export type UserCreateWithoutInspeccionesInput = {
+  id?: string
+  clerkId: string
+  email: string
+  name?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role: Prisma.RoleCreateNestedOneWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutInspeccionesInput = {
+  id?: string
+  clerkId: string
+  email: string
+  name?: string | null
+  roleId: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserCreateOrConnectWithoutInspeccionesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesInput, Prisma.UserUncheckedCreateWithoutInspeccionesInput>
+}
+
+export type UserUpsertWithoutInspeccionesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInspeccionesInput, Prisma.UserUncheckedUpdateWithoutInspeccionesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesInput, Prisma.UserUncheckedCreateWithoutInspeccionesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInspeccionesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInspeccionesInput, Prisma.UserUncheckedUpdateWithoutInspeccionesInput>
+}
+
+export type UserUpdateWithoutInspeccionesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInspeccionesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type UserCreateManyRoleInput = {
   id?: string
   clerkId: string
@@ -503,6 +591,7 @@ export type UserUpdateWithoutRoleInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutRealizadoPorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRoleInput = {
@@ -513,6 +602,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutRealizadoPorNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -526,6 +616,35 @@ export type UserUncheckedUpdateManyWithoutRoleInput = {
 }
 
 
+/**
+ * Count Type UserCountOutputType
+ */
+
+export type UserCountOutputType = {
+  inspecciones: number
+}
+
+export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  inspecciones?: boolean | UserCountOutputTypeCountInspeccionesArgs
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserCountOutputType
+   */
+  select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInspeccionesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InspeccionFormularioWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -537,6 +656,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  inspecciones?: boolean | Prisma.User$inspeccionesArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -577,6 +698,8 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clerkId" | "email" | "name" | "roleId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  inspecciones?: boolean | Prisma.User$inspeccionesArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
@@ -589,6 +712,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     role: Prisma.$RolePayload<ExtArgs>
+    inspecciones: Prisma.$InspeccionFormularioPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -994,6 +1118,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   role<T extends Prisma.RoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoleDefaultArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  inspecciones<T extends Prisma.User$inspeccionesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inspeccionesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InspeccionFormularioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1424,6 +1549,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.inspecciones
+ */
+export type User$inspeccionesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InspeccionFormulario
+   */
+  select?: Prisma.InspeccionFormularioSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InspeccionFormulario
+   */
+  omit?: Prisma.InspeccionFormularioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InspeccionFormularioInclude<ExtArgs> | null
+  where?: Prisma.InspeccionFormularioWhereInput
+  orderBy?: Prisma.InspeccionFormularioOrderByWithRelationInput | Prisma.InspeccionFormularioOrderByWithRelationInput[]
+  cursor?: Prisma.InspeccionFormularioWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InspeccionFormularioScalarFieldEnum | Prisma.InspeccionFormularioScalarFieldEnum[]
 }
 
 /**
