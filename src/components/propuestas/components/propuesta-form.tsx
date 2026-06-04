@@ -52,7 +52,8 @@ const statusEnum = z.enum(STATUS_OPTIONS);
 type StatusValue = z.infer<typeof statusEnum>;
 
 const propuestaSchema = z.object({
-  codigo: z.string().min(1, "El código es requerido"),
+  // El código se autogenera al crear (AÑO-NNN) y es inmutable al editar.
+  codigo: z.string().optional(),
   clienteId: z.string().min(1, "Seleccioná un cliente"),
   servicioId: z.string().min(1, "Seleccioná un servicio"),
   vigencia: z
@@ -509,19 +510,27 @@ export function PropuestaForm({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="codigo"
-                render={({ field }) => (
-                  <FormItem className="col-span-2">
-                    <FormLabel>Codigo *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Codigo de la propuesta" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {isEditing ? (
+                <FormField
+                  control={form.control}
+                  name="codigo"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2">
+                      <FormLabel>Código</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value ?? ""} readOnly disabled />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              ) : (
+                <FormItem className="col-span-2">
+                  <FormLabel>Código</FormLabel>
+                  <FormControl>
+                    <Input value="Se generará automáticamente (AÑO-NNN)" readOnly disabled />
+                  </FormControl>
+                </FormItem>
+              )}
 
               <FormField
                 control={form.control}
