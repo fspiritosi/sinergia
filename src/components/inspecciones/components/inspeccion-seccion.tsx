@@ -3,7 +3,12 @@
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Minus, Plus } from "lucide-react";
-import { InspeccionPregunta, type PreguntaData, type RespuestaLocal } from "./inspeccion-pregunta";
+import {
+  InspeccionPregunta,
+  type PreguntaData,
+  type RespuestaLocal,
+  type ImagenLocal,
+} from "./inspeccion-pregunta";
 
 export type SeccionData = {
   id: string;
@@ -26,6 +31,8 @@ type Props = {
   savingIds: Set<string>;
   formularioId: string;
   r2PublicBase: string;
+  onImageUploaded: (preguntaId: string, imagen: ImagenLocal) => void;
+  onImageDeleted: (preguntaId: string, imagenId: string) => void;
 };
 
 /**
@@ -62,6 +69,8 @@ export function InspeccionSeccion({
   savingIds,
   formularioId,
   r2PublicBase,
+  onImageUploaded,
+  onImageDeleted,
 }: Props) {
   const [open, setOpen] = useState(true);
 
@@ -98,6 +107,8 @@ export function InspeccionSeccion({
             savingIds={savingIds}
             formularioId={formularioId}
             r2PublicBase={r2PublicBase}
+            onImageUploaded={onImageUploaded}
+            onImageDeleted={onImageDeleted}
           />
         ))}
 
@@ -112,6 +123,8 @@ export function InspeccionSeccion({
             savingIds={savingIds}
             formularioId={formularioId}
             r2PublicBase={r2PublicBase}
+            onImageUploaded={onImageUploaded}
+            onImageDeleted={onImageDeleted}
           />
         ))}
       </CollapsibleContent>

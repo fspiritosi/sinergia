@@ -2,11 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
-import { Eye } from "lucide-react";
-import Link from "next/link";
 import { formatDateOnly } from "@/lib/dates";
+import { InspeccionRowActions } from "./inspeccion-row-actions";
 import type { InspeccionSummaryDto } from "@/dtos";
 
 export const columns: ColumnDef<InspeccionSummaryDto>[] = [
@@ -79,13 +77,6 @@ export const columns: ColumnDef<InspeccionSummaryDto>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => (
-      <Button variant="ghost" size="icon" asChild>
-        <Link href={`/dashboard/inspecciones/${row.original.id}`}>
-          <Eye className="h-4 w-4" />
-          <span className="sr-only">Ver inspección</span>
-        </Link>
-      </Button>
-    ),
+    cell: ({ row }) => <InspeccionRowActions inspeccion={row.original} />,
   },
 ];

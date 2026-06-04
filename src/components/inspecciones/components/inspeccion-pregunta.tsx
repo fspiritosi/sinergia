@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useRef, type ChangeEvent } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -9,7 +9,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Loader2, ChevronDown, ChevronRight, ChevronLeft, Camera, X } from "lucide-react";
+import {
+  Loader2,
+  ChevronDown,
+  ChevronRight,
+  ChevronLeft,
+  Camera,
+  Paperclip,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { uploadImagenRespuesta, deleteImagenRespuesta } from "./inspeccion-actions";
 
@@ -47,10 +55,12 @@ type Props = {
   savingIds: Set<string>;
   formularioId: string;
   r2PublicBase: string;
+  onImageUploaded: (preguntaId: string, imagen: ImagenLocal) => void;
+  onImageDeleted: (preguntaId: string, imagenId: string) => void;
 };
 
 const MAX_IMAGENES = 3;
-const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_MB = 15;
 
 export function InspeccionPregunta({
   pregunta,
@@ -60,6 +70,8 @@ export function InspeccionPregunta({
   savingIds,
   formularioId,
   r2PublicBase,
+  onImageUploaded,
+  onImageDeleted,
 }: Props) {
   // Derive values from the respuestas map (single source of truth from parent)
   const existing = useMemo(() => respuestas.get(pregunta.id), [respuestas, pregunta.id]);
@@ -81,8 +93,8 @@ export function InspeccionPregunta({
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const queryClient = useQueryClient();
 
   const imagenes = useMemo(() => existing?.imagenes ?? [], [existing?.imagenes]);
 
@@ -90,8 +102,10 @@ export function InspeccionPregunta({
 
   const uploadMutation = useMutation({
     mutationFn: (formData: FormData) => uploadImagenRespuesta(formData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["inspeccion", formularioId] });
+    onSuccess: (data) => {
+      if (data?.id && data?.r2Key) {
+        onImageUploaded(pregunta.id, { id: data.id, r2Key: data.r2Key });
+      }
     },
     onError: () => {
       toast.error("Error al subir la imagen");
@@ -100,8 +114,8 @@ export function InspeccionPregunta({
 
   const deleteMutation = useMutation({
     mutationFn: (imagenId: string) => deleteImagenRespuesta(imagenId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["inspeccion", formularioId] });
+    onSuccess: (_data, imagenId) => {
+      onImageDeleted(pregunta.id, imagenId);
     },
     onError: () => {
       toast.error("Error al eliminar la imagen");
@@ -261,28 +275,49 @@ export function InspeccionPregunta({
           )}
           {!readOnly && imagenes.length < MAX_IMAGENES && (
             <>
+              {/* Input de cámara (mobile abre la cámara) */}
               <input
-                ref={fileInputRef}
+                ref={cameraInputRef}
                 type="file"
                 accept="image/*"
                 capture="environment"
                 onChange={handleFileChange}
                 className="hidden"
               />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={uploadMutation.isPending}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                {uploadMutation.isPending ? (
-                  <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                ) : (
-                  <Camera className="mr-1 h-3 w-3" />
-                )}
-                {uploadMutation.isPending ? "Subiendo..." : "Adjuntar foto"}
-              </Button>
+              {/* Input de archivo (galería / explorador de archivos) */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={uploadMutation.isPending}
+                  onClick={() => cameraInputRef.current?.click()}
+                >
+                  {uploadMutation.isPending ? (
+                    <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                  ) : (
+                    <Camera className="mr-1 h-3 w-3" />
+                  )}
+                  {uploadMutation.isPending ? "Subiendo..." : "Tomar foto"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={uploadMutation.isPending}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Paperclip className="mr-1 h-3 w-3" />
+                  Adjuntar archivo
+                </Button>
+              </div>
             </>
           )}
 
@@ -434,6 +469,8 @@ export function InspeccionPregunta({
               savingIds={savingIds}
               formularioId={formularioId}
               r2PublicBase={r2PublicBase}
+              onImageUploaded={onImageUploaded}
+              onImageDeleted={onImageDeleted}
             />
           ))}
         </div>
