@@ -15,6 +15,7 @@ import { uploadFileToR2 } from "@/lib/r2-upload";
 import { dbLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { assertProgramacionEditable } from "./programacion-guards";
 
 export type PlanTrabajoWithProgramaciones = PlanTrabajo & {
   cliente: { id: string; name: string };
@@ -891,6 +892,113 @@ export async function reprogramarPlanTrabajoProgramacion(params: {
       where: { id: programacion.informe.id },
       data: { fechaVencimiento: fecha },
     });
+  }
+
+  await refreshPlanTrabajoEstado(programacion.planTrabajoId);
+  revalidatePath("/dashboard");
+
+  return { success: true };
+}
+
+export async function updatePlanTrabajoProgramacion(params: {
+  programacionId: string;
+  fechaProgramada: string;
+  precision: ProgramacionPrecision;
+  clientLocationId?: string;
+  detalleVarianteId?: string;
+}) {
+  await requirePermission(PERMISSIONS.PLANIFICACION_UPDATE);
+
+  const programacion = await prisma.planTrabajoProgramacion.findUnique({
+    where: { id: params.programacionId },
+    include: {
+      planTrabajo: { select: { id: true, fechaInicio: true, fechaFin: true } },
+      item: {
+        select: { id: true, tipoDeInformeId: true, hasVariant: true, variantTypeId: true },
+      },
+      informe: { select: { id: true, estado: true, adjunto: true } },
+    },
+  });
+
+  if (!programacion) throw new Error("Programación no encontrada");
+
+  assertProgramacionEditable(programacion);
+
+  const requiereInforme = Boolean(programacion.item.tipoDeInformeId);
+
+  if (requiereInforme) {
+    if (!params.clientLocationId) {
+      throw new Error("La locación del cliente es obligatoria para este item");
+    }
+    if (params.precision !== "dia") {
+      throw new Error("Este item requiere una fecha completa (día)");
+    }
+  }
+
+  const fecha = normalizeProgramacionDate(params.fechaProgramada, params.precision);
+  assertDateInRange(fecha, programacion.planTrabajo.fechaInicio, programacion.planTrabajo.fechaFin);
+
+  const detalleVarianteId = await resolveDetalleVarianteId({
+    item: {
+      hasVariant: programacion.item.hasVariant,
+      variantTypeId: programacion.item.variantTypeId,
+    },
+    detalleVarianteId: params.detalleVarianteId,
+  });
+
+  await prisma.planTrabajoProgramacion.update({
+    where: { id: programacion.id },
+    data: {
+      fechaProgramada: fecha,
+      precision: params.precision,
+      clientLocationId: params.clientLocationId ?? null,
+      detalleVarianteId,
+    },
+  });
+
+  if (programacion.informe) {
+    await prisma.informe.update({
+      where: { id: programacion.informe.id },
+      data: {
+        fechaVencimiento: fecha,
+        ...(params.clientLocationId ? { clientLocationId: params.clientLocationId } : {}),
+      },
+    });
+  }
+
+  await refreshPlanTrabajoEstado(programacion.planTrabajo.id);
+  revalidatePath("/dashboard");
+
+  return { success: true };
+}
+
+export async function deletePlanTrabajoProgramacion(programacionId: string) {
+  await requirePermission(PERMISSIONS.PLANIFICACION_DELETE);
+
+  const programacion = await prisma.planTrabajoProgramacion.findUnique({
+    where: { id: programacionId },
+    select: {
+      id: true,
+      planTrabajoId: true,
+      ejecutadoAt: true,
+      informe: { select: { id: true, estado: true, adjunto: true } },
+    },
+  });
+
+  if (!programacion) throw new Error("Programación no encontrada");
+
+  assertProgramacionEditable(programacion);
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      if (programacion.informe) {
+        await tx.informe.delete({ where: { id: programacion.informe.id } });
+      }
+      await tx.planTrabajoProgramacion.delete({ where: { id: programacion.id } });
+    });
+  } catch (error) {
+    dbLogger.error({ error, programacionId }, "Error al eliminar programación");
+    throw error;
   }
 
   await refreshPlanTrabajoEstado(programacion.planTrabajoId);

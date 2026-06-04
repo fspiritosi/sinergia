@@ -117,3 +117,15 @@ export async function getClientLocation(id: string): Promise<ClientLocationDetai
     throw error;
   }
 }
+
+export async function getClientLocationsByCliente(
+  clienteId: string
+): Promise<Array<{ id: string; name: string }>> {
+  const locations = await prisma.clientLocations.findMany({
+    where: { clienteId, is_active: true },
+    select: { id: true, name: true },
+    orderBy: { name: "asc" },
+  });
+
+  return locations;
+}
