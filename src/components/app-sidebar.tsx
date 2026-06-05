@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Minus, Plus } from "lucide-react";
+import { HelpCircle, Minus, Plus } from "lucide-react";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
@@ -11,6 +11,7 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -24,6 +25,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { usePermissions } from "@/components/rbac/use-permissions";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { useUnreadSupportTicketsCount } from "@/features/Ayuda/hooks/useUnreadSupportTicketsCount";
 
 type NavItem = {
   title: string;
@@ -128,6 +130,23 @@ const navMain: NavSection[] = [
   },
 ];
 
+function AyudaNavItem({ pathname }: { pathname: string | null }) {
+  const unreadCount = useUnreadSupportTicketsCount();
+  const isActive = pathname === "/dashboard/help" || pathname?.startsWith("/dashboard/help/");
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild isActive={isActive}>
+        <Link href="/dashboard/help">
+          <HelpCircle />
+          <span>Ayuda</span>
+        </Link>
+      </SidebarMenuButton>
+      {unreadCount > 0 && <SidebarMenuBadge>{unreadCount}</SidebarMenuBadge>}
+    </SidebarMenuItem>
+  );
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { user } = useUser();
@@ -198,6 +217,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </Collapsible>
               );
             })}
+            <AyudaNavItem pathname={pathname} />
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
