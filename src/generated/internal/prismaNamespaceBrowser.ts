@@ -75,7 +75,8 @@ export const ModelName = {
   InspeccionFormulario: 'InspeccionFormulario',
   InspeccionRespuesta: 'InspeccionRespuesta',
   InspeccionRespuestaImagen: 'InspeccionRespuestaImagen',
-  InspeccionAccionSeleccionada: 'InspeccionAccionSeleccionada'
+  InspeccionAccionSeleccionada: 'InspeccionAccionSeleccionada',
+  support_ticket_views: 'support_ticket_views'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -437,6 +438,17 @@ export const InspeccionAccionSeleccionadaScalarFieldEnum = {
 } as const
 
 export type InspeccionAccionSeleccionadaScalarFieldEnum = (typeof InspeccionAccionSeleccionadaScalarFieldEnum)[keyof typeof InspeccionAccionSeleccionadaScalarFieldEnum]
+
+
+export const Support_ticket_viewsScalarFieldEnum = {
+  user_id: 'user_id',
+  taskapp_ticket_id: 'taskapp_ticket_id',
+  last_seen_at: 'last_seen_at',
+  last_seen_status_id: 'last_seen_status_id',
+  created_at: 'created_at'
+} as const
+
+export type Support_ticket_viewsScalarFieldEnum = (typeof Support_ticket_viewsScalarFieldEnum)[keyof typeof Support_ticket_viewsScalarFieldEnum]
 
 
 export const SortOrder = {

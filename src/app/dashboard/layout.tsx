@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getCurrentUserPermissions } from "@/lib/auth";
+import { SupportTicketsRealtimeProvider } from "@/features/Ayuda/components/SupportTicketsRealtimeProvider";
 
 export default async function Page({ children }: { children: React.ReactNode }) {
   const { userId } = await auth();
@@ -18,15 +19,17 @@ export default async function Page({ children }: { children: React.ReactNode }) 
 
   return (
     <PermissionsProvider role={role} codes={codes}>
-      <SidebarProvider>
-        <DashboardTitleProvider>
-          <AppSidebar />
-          <SidebarInset className="overflow-x-hidden">
-            <PageHeader />
-            <div className="flex-1 overflow-x-auto p-8">{children}</div>
-          </SidebarInset>
-        </DashboardTitleProvider>
-      </SidebarProvider>
+      <SupportTicketsRealtimeProvider>
+        <SidebarProvider>
+          <DashboardTitleProvider>
+            <AppSidebar />
+            <SidebarInset className="overflow-x-hidden">
+              <PageHeader />
+              <div className="flex-1 overflow-x-auto p-8">{children}</div>
+            </SidebarInset>
+          </DashboardTitleProvider>
+        </SidebarProvider>
+      </SupportTicketsRealtimeProvider>
     </PermissionsProvider>
   );
 }
