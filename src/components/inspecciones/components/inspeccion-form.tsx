@@ -171,6 +171,36 @@ export function InspeccionForm({ inspeccionId }: Props) {
     [inspeccionId, saveMutation]
   );
 
+  const handleImageUploaded = useCallback(
+    (preguntaId: string, imagen: { id: string; r2Key: string }) => {
+      setRespuestas((prev) => {
+        const next = new Map(prev);
+        const existing = prev.get(preguntaId);
+        next.set(preguntaId, {
+          valor: existing?.valor ?? "na",
+          observaciones: existing?.observaciones ?? "",
+          accionIds: existing?.accionIds ?? [],
+          imagenes: [...(existing?.imagenes ?? []), imagen],
+        });
+        return next;
+      });
+    },
+    []
+  );
+
+  const handleImageDeleted = useCallback((preguntaId: string, imagenId: string) => {
+    setRespuestas((prev) => {
+      const existing = prev.get(preguntaId);
+      if (!existing) return prev;
+      const next = new Map(prev);
+      next.set(preguntaId, {
+        ...existing,
+        imagenes: existing.imagenes.filter((img) => img.id !== imagenId),
+      });
+      return next;
+    });
+  }, []);
+
   const [finalizing, setFinalizing] = useState(false);
 
   const handleFinalize = useCallback(async () => {
@@ -308,6 +338,8 @@ export function InspeccionForm({ inspeccionId }: Props) {
             savingIds={savingIds}
             formularioId={inspeccionId}
             r2PublicBase="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev"
+            onImageUploaded={handleImageUploaded}
+            onImageDeleted={handleImageDeleted}
           />
         ))}
       </div>

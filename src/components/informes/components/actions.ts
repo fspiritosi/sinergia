@@ -9,6 +9,8 @@ import { parseCalendarStringToDate, toDateOnlyString } from "@/lib/dates";
 import { dbLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { assertInformeEditable } from "./informe-guards";
+import { validateInformeUpdate, type InformeUpdateInput } from "@/lib/validations/informe.schema";
 
 type InformeWithRelations = Prisma.InformeGetPayload<{
   include: {
@@ -388,15 +390,59 @@ export async function completarInforme(formData: FormData) {
   revalidatePath("/dashboard/informes");
 }
 
-export async function updateInforme(id: string, data: any) {
+export async function updateInforme(id: string, data: InformeUpdateInput) {
   await requirePermission(PERMISSIONS.INFORMES_UPDATE);
+
+  const validated = validateInformeUpdate(data);
+
+  const existing = await prisma.informe.findUnique({
+    where: { id },
+    select: { estado: true },
+  });
+
+  if (!existing) {
+    throw new Error("Informe no encontrado");
+  }
+
+  assertInformeEditable(existing);
+
   const informe = await prisma.informe.update({
     where: { id },
-    data,
+    data: {
+      tipoDeInformeId: validated.tipoDeInformeId,
+      clientLocationId: validated.clientLocationId,
+      responsableConfeccion: validated.responsableConfeccion ?? "",
+      fechaVencimiento: parseCalendarStringToDate(validated.fechaVencimiento),
+    },
   });
 
   revalidatePath("/dashboard/informes");
   return informe;
+}
+
+export async function deleteInforme(id: string) {
+  await requirePermission(PERMISSIONS.INFORMES_DELETE);
+
+  const existing = await prisma.informe.findUnique({
+    where: { id },
+    select: { estado: true },
+  });
+
+  if (!existing) {
+    throw new Error("Informe no encontrado");
+  }
+
+  assertInformeEditable(existing);
+
+  try {
+    await prisma.informe.delete({ where: { id } });
+  } catch (error) {
+    dbLogger.error({ error, informeId: id }, "Error al eliminar informe");
+    throw error;
+  }
+
+  revalidatePath("/dashboard/informes");
+  return { success: true };
 }
 
 interface GenerateInformesInput {

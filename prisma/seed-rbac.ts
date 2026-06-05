@@ -28,7 +28,7 @@ const ROLES: RoleSeed[] = [
   },
   {
     name: "gerente",
-    label: "Gerente",
+    label: "Asistente",
     description: "Gestiona operativamente planes, planificación e informes. Ve propuestas.",
     isSystem: false,
   },

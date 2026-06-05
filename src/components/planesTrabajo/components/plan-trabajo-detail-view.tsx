@@ -26,8 +26,18 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { FileText } from "lucide-react";
+import { FileText, Trash2 } from "lucide-react";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import type { PlanTrabajoWithProgramaciones } from "./actions";
 import {
   createPlanTrabajoProgramacion,
@@ -37,6 +47,7 @@ import {
   previewUpdatePlanTrabajoFechas,
   reprogramarPlanTrabajoProgramacion,
   updatePlanTrabajoFechas,
+  deletePlanTrabajoProgramacion,
 } from "./actions";
 import { PlanTrabajoPDFViewerDialog } from "./pdf-viewer-dialog";
 import {
@@ -95,6 +106,8 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
   const [ejecutarProgramacionId, setEjecutarProgramacionId] = useState<string | null>(null);
   const [ejecutarFile, setEjecutarFile] = useState<File | null>(null);
   const [ejecutarLoading, setEjecutarLoading] = useState(false);
+  const [eliminarProgramacionId, setEliminarProgramacionId] = useState<string | null>(null);
+  const [eliminarProgramacionSaving, setEliminarProgramacionSaving] = useState(false);
   const [verAdjuntoProgramacionId, setVerAdjuntoProgramacionId] = useState<string | null>(null);
   const [pdfOpen, setPdfOpen] = useState(false);
   const [textoFiltro, setTextoFiltro] = useState("");
@@ -559,6 +572,19 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
                           {ejecutado ? "Ver evidencia" : "Ejecutar"}
                         </Button>
                       ) : null}
+
+                      {!ejecutado ? (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          className="text-destructive hover:text-destructive"
+                          aria-label="Eliminar programación"
+                          onClick={() => setEliminarProgramacionId(p.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      ) : null}
                     </div>
                   </div>
                 );
@@ -573,6 +599,49 @@ export function PlanTrabajoDetailView({ plan }: PlanTrabajoDetailViewProps) {
           )}
         </CardContent>
       </Card>
+
+      <AlertDialog
+        open={Boolean(eliminarProgramacionId)}
+        onOpenChange={(open) => {
+          if (!open) setEliminarProgramacionId(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar esta programación?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer.
+              {plan.programaciones.find((p) => p.id === eliminarProgramacionId)?.informe
+                ? " También se eliminará el informe pendiente asociado a esta programación."
+                : ""}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={eliminarProgramacionSaving}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={eliminarProgramacionSaving}
+              className="bg-destructive text-white hover:bg-destructive/90"
+              onClick={async (e) => {
+                e.preventDefault();
+                if (!eliminarProgramacionId) return;
+                setEliminarProgramacionSaving(true);
+                try {
+                  await deletePlanTrabajoProgramacion(eliminarProgramacionId);
+                  toast.success("Programación eliminada");
+                  setEliminarProgramacionId(null);
+                  router.refresh();
+                } catch (error: any) {
+                  toast.error(error?.message ?? "No se pudo eliminar la programación");
+                } finally {
+                  setEliminarProgramacionSaving(false);
+                }
+              }}
+            >
+              {eliminarProgramacionSaving ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Dialog
         open={Boolean(verAdjuntoProgramacionId)}

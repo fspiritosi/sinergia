@@ -6,6 +6,7 @@ import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
 import { dbLogger } from "@/lib/logger";
 import { uploadFileToR2, deleteFileFromR2 } from "@/lib/r2-upload";
+import { assertInspeccionEliminable } from "./inspeccion-guards";
 
 export async function crearInspeccion(data: {
   clienteId: string;
@@ -112,6 +113,7 @@ export async function finalizarInspeccion(formularioId: string) {
 }
 
 const MAX_IMAGENES_POR_RESPUESTA = 3;
+const MAX_FILE_SIZE_MB = 15;
 
 export async function uploadImagenRespuesta(formData: FormData) {
   await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
@@ -122,6 +124,10 @@ export async function uploadImagenRespuesta(formData: FormData) {
 
   if (!formularioId || !preguntaId || !file) {
     throw new Error("Faltan datos para subir la imagen");
+  }
+
+  if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+    throw new Error(`La imagen supera el tamaño máximo de ${MAX_FILE_SIZE_MB} MB`);
   }
 
   try {
@@ -189,6 +195,17 @@ export async function deleteImagenRespuesta(imagenId: string) {
 
 export async function eliminarInspeccion(id: string) {
   await requirePermission(PERMISSIONS.INSPECCIONES_DELETE);
+
+  const existing = await prisma.inspeccionFormulario.findUnique({
+    where: { id },
+    select: { estado: true },
+  });
+
+  if (!existing) {
+    throw new Error("Inspección no encontrada");
+  }
+
+  assertInspeccionEliminable(existing);
 
   try {
     await prisma.inspeccionFormulario.delete({ where: { id } });

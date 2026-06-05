@@ -107,11 +107,9 @@ export const propuestaUpdateSchema = propuestaBaseSchema.partial().extend({
  * Keeps vigencia as string for easier form handling
  */
 export const propuestaFormSchema = z.object({
-  codigo: z
-    .string()
-    .min(1, "El código es requerido")
-    .max(50, "El código no puede exceder 50 caracteres")
-    .trim(),
+  // El código se autogenera al crear (formato AÑO-NNN) y es inmutable al editar,
+  // por eso es opcional en el formulario.
+  codigo: z.string().max(50, "El código no puede exceder 50 caracteres").trim().optional(),
 
   clienteId: z.string().min(1, "Seleccioná un cliente"),
 

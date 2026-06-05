@@ -1,13 +1,14 @@
-"use client"
+"use client";
 
-import { MoreHorizontal, CheckCircle2, Eye, FileText } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { MoreHorizontal, CheckCircle2, Eye, FileText, Pencil, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -15,47 +16,88 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import type { Informe } from "./actions"
-import { completarInforme } from "./actions"
-import { InformeViewerDialog } from "./informe-viewer-dialog"
-import { toast } from "sonner"
-import { useState, type ChangeEvent } from "react"
-import { useFormStatus } from "react-dom"
-import { formatDateOnly, formatDateTime, parseCalendarStringToDate } from "@/lib/dates"
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { Informe } from "./actions";
+import { completarInforme, deleteInforme } from "./actions";
+import { InformeViewerDialog } from "./informe-viewer-dialog";
+import { InformeEditDialog } from "./informe-edit-dialog";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState, type ChangeEvent } from "react";
+import { useFormStatus } from "react-dom";
+import { formatDateOnly, formatDateTime, parseCalendarStringToDate } from "@/lib/dates";
 
 interface InformeRowActionsProps {
-  informe: Informe
+  informe: Informe;
 }
 
-const MAX_FILE_SIZE_MB = 1
+const MAX_FILE_SIZE_MB = 1;
 
 export function InformeRowActions({ informe }: InformeRowActionsProps) {
-  const [realizadoOpen, setRealizadoOpen] = useState(false)
-  const [verOpen, setVerOpen] = useState(false)
-  const [viewerOpen, setViewerOpen] = useState(false)
-  const isPendiente = informe.estado === "pendiente"
+  const [realizadoOpen, setRealizadoOpen] = useState(false);
+  const [verOpen, setVerOpen] = useState(false);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const isPendiente = informe.estado === "pendiente";
+  const queryClient = useQueryClient();
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await deleteInforme(informe.id);
+      toast.success("Informe eliminado correctamente");
+      queryClient.invalidateQueries({ queryKey: ["informes"] });
+      setDeleteOpen(false);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al eliminar el informe");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-          >
+          <Button variant="ghost" className="flex h-8 w-8 p-0 data-[state=open]:bg-muted">
             <MoreHorizontal className="h-4 w-4" />
             <span className="sr-only">Abrir menú</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[220px]">
           {isPendiente ? (
-            <DropdownMenuItem onClick={() => setRealizadoOpen(true)}>
-              <CheckCircle2 className="mr-2 h-4 w-4 hover:text-white" />
-              Marcar como realizado
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem onClick={() => setRealizadoOpen(true)}>
+                <CheckCircle2 className="mr-2 h-4 w-4 hover:text-white" />
+                Marcar como realizado
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setEditOpen(true)}>
+                <Pencil className="mr-2 h-4 w-4 hover:text-white" />
+                Editar
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => setDeleteOpen(true)}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Eliminar
+              </DropdownMenuItem>
+            </>
           ) : (
             <>
               <DropdownMenuItem onClick={() => setViewerOpen(true)}>
@@ -70,6 +112,32 @@ export function InformeRowActions({ informe }: InformeRowActionsProps) {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <InformeEditDialog open={editOpen} onOpenChange={setEditOpen} informe={informe} />
+
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar este informe?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. El informe pendiente será eliminado permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              disabled={isDeleting}
+              className="bg-destructive text-white hover:bg-destructive/90"
+            >
+              {isDeleting ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Dialog open={realizadoOpen} onOpenChange={setRealizadoOpen}>
         <DialogContent className="sm:max-w-[480px]">
@@ -105,13 +173,13 @@ export function InformeRowActions({ informe }: InformeRowActionsProps) {
                 name="file"
                 required
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const file = e.target.files?.[0]
-                  if (!file) return
+                  const file = e.target.files?.[0];
+                  if (!file) return;
 
-                  const maxBytes = MAX_FILE_SIZE_MB * 1024 * 1024
+                  const maxBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
                   if (file.size > maxBytes) {
-                    toast.error(`El archivo supera el tamaño máximo de ${MAX_FILE_SIZE_MB} MB`)
-                    e.target.value = ""
+                    toast.error(`El archivo supera el tamaño máximo de ${MAX_FILE_SIZE_MB} MB`);
+                    e.target.value = "";
                   }
                 }}
               />
@@ -121,11 +189,7 @@ export function InformeRowActions({ informe }: InformeRowActionsProps) {
             </div>
 
             <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setRealizadoOpen(false)}
-              >
+              <Button type="button" variant="outline" onClick={() => setRealizadoOpen(false)}>
                 Cancelar
               </Button>
               <SubmitButton />
@@ -154,37 +218,49 @@ export function InformeRowActions({ informe }: InformeRowActionsProps) {
             </div>
             <div>
               <span className="font-medium">Tipo de informe: </span>
-              <span>{informe.tipoDeInforme?.name || 'Sin tipo'}</span>
+              <span>{informe.tipoDeInforme?.name || "Sin tipo"}</span>
             </div>
             <div>
               <span className="font-medium">Locación: </span>
-              <span>{informe.clientLocation?.name || 'Sin locación'}</span>
+              <span>{informe.clientLocation?.name || "Sin locación"}</span>
             </div>
             <div>
               <span className="font-medium">Fecha de compromiso: </span>
-              <span>{informe.fechaVencimiento ? formatDateOnly(informe.fechaVencimiento, "es-AR") : 'Sin fecha'}</span>
+              <span>
+                {informe.fechaVencimiento
+                  ? formatDateOnly(informe.fechaVencimiento, "es-AR")
+                  : "Sin fecha"}
+              </span>
             </div>
             <div>
               <span className="font-medium">Fecha de realización: </span>
-              <span>{informe.updatedAt ? formatDateTime(informe.updatedAt, "es-AR") : 'Sin fecha'}</span>
+              <span>
+                {informe.updatedAt ? formatDateTime(informe.updatedAt, "es-AR") : "Sin fecha"}
+              </span>
             </div>
             <div>
               <span className="font-medium">Calidad: </span>
               {(() => {
-                  const fechaVencimiento =
-  informe.fechaVencimiento && typeof informe.fechaVencimiento === 'string'
-    ? parseCalendarStringToDate(informe.fechaVencimiento)
-    : new Date(informe.fechaVencimiento)
-  const fechaRealizacion = new Date(informe.updatedAt)
-  const diffTime = fechaRealizacion.getTime() - fechaVencimiento.getTime()
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  
-  if (diffDays <= 0) {
-    return <span className="text-green-600">A tiempo ({Math.abs(diffDays)} días antes)</span>
-  } else {
-    return <span className="text-red-600">Fuera de plazo ({diffDays} días después)</span>
-  }
-})()}
+                const fechaVencimiento =
+                  informe.fechaVencimiento && typeof informe.fechaVencimiento === "string"
+                    ? parseCalendarStringToDate(informe.fechaVencimiento)
+                    : new Date(informe.fechaVencimiento);
+                const fechaRealizacion = new Date(informe.updatedAt);
+                const diffTime = fechaRealizacion.getTime() - fechaVencimiento.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays <= 0) {
+                  return (
+                    <span className="text-green-600">
+                      A tiempo ({Math.abs(diffDays)} días antes)
+                    </span>
+                  );
+                } else {
+                  return (
+                    <span className="text-red-600">Fuera de plazo ({diffDays} días después)</span>
+                  );
+                }
+              })()}
             </div>
             <div>
               <span className="font-medium">Estado: </span>
@@ -199,27 +275,19 @@ export function InformeRowActions({ informe }: InformeRowActionsProps) {
           </div>
 
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setVerOpen(false)}
-            >
+            <Button type="button" variant="outline" onClick={() => setVerOpen(false)}>
               Cerrar
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <InformeViewerDialog
-        open={viewerOpen}
-        onOpenChange={setViewerOpen}
-        informe={informe}
-      />
+      <InformeViewerDialog open={viewerOpen} onOpenChange={setViewerOpen} informe={informe} />
     </>
-  )
+  );
 }
 
 function SubmitButton() {
-  const { pending } = useFormStatus()
+  const { pending } = useFormStatus();
 
   return (
     <Button
@@ -229,5 +297,5 @@ function SubmitButton() {
     >
       {pending ? "Guardando..." : "Marcar como realizado"}
     </Button>
-  )
+  );
 }
