@@ -1,6 +1,6 @@
 "use client";
 
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import type { Ticket } from "@/shared/lib/taskapp/types";
 import { Inbox } from "lucide-react";
 import { useEffect } from "react";
@@ -42,7 +42,13 @@ export default function TicketDetailSheet({
 
   return (
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent side="right" className="sm:max-w-2xl flex flex-col p-0 gap-0">
+      <SheetContent
+        side="right"
+        className="sm:max-w-2xl flex flex-col p-0 gap-0"
+        aria-describedby={undefined}
+      >
+        {/* Titulo accesible para lectores de pantalla (Radix exige un DialogTitle) */}
+        <SheetTitle className="sr-only">{ticket ? ticket.title : "Detalle del ticket"}</SheetTitle>
         {isLoading && !ticket ? (
           <TicketDetailSheetSkeleton />
         ) : ticket ? (
