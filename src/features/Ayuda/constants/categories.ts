@@ -1,27 +1,27 @@
 import {
   Building2,
   Calendar,
+  ClipboardCheck,
   ClipboardList,
+  FileSignature,
   FileText,
-  HandHelping,
   LayoutDashboard,
   MoreHorizontal,
-  Truck,
+  Settings,
   Users,
-  Wrench,
   type LucideIcon,
 } from "lucide-react";
 
 export type CategorySlug =
   | "dashboard"
-  | "empresa"
-  | "empleados"
-  | "equipos"
-  | "comercial"
-  | "documentacion"
-  | "operaciones"
-  | "mantenimiento"
-  | "formularios"
+  | "clientes"
+  | "propuestas"
+  | "planificacion"
+  | "planes"
+  | "informes"
+  | "inspecciones"
+  | "configuracion"
+  | "usuarios"
   | "otro";
 
 export interface CategoryDef {
@@ -30,16 +30,20 @@ export interface CategoryDef {
   icon: LucideIcon;
 }
 
+// Categorías mapeadas a los módulos reales de sinergia (ver app-sidebar):
+// Gestión (Clientes, Propuestas), Planificación (Calendario, Planes de
+// Trabajo, Informes, Inspecciones) y Configuración (Servicios, Items, Tipos,
+// Condiciones, Usuarios y Roles).
 export const CATEGORIES: CategoryDef[] = [
   { slug: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { slug: "empresa", label: "Empresa", icon: Building2 },
-  { slug: "empleados", label: "Empleados", icon: Users },
-  { slug: "equipos", label: "Equipos", icon: Truck },
-  { slug: "comercial", label: "Comercial", icon: HandHelping },
-  { slug: "documentacion", label: "Documentación", icon: FileText },
-  { slug: "operaciones", label: "Operaciones", icon: Calendar },
-  { slug: "mantenimiento", label: "Mantenimiento", icon: Wrench },
-  { slug: "formularios", label: "Formularios", icon: ClipboardList },
+  { slug: "clientes", label: "Clientes", icon: Building2 },
+  { slug: "propuestas", label: "Propuestas", icon: FileSignature },
+  { slug: "planificacion", label: "Planificación", icon: Calendar },
+  { slug: "planes", label: "Planes de Trabajo", icon: ClipboardList },
+  { slug: "informes", label: "Informes", icon: FileText },
+  { slug: "inspecciones", label: "Inspecciones", icon: ClipboardCheck },
+  { slug: "configuracion", label: "Configuración", icon: Settings },
+  { slug: "usuarios", label: "Usuarios y permisos", icon: Users },
   { slug: "otro", label: "Otro", icon: MoreHorizontal },
 ];
 
