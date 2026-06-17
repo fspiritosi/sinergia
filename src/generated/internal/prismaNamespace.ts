@@ -416,7 +416,8 @@ export const ModelName = {
   InspeccionFormulario: 'InspeccionFormulario',
   InspeccionRespuesta: 'InspeccionRespuesta',
   InspeccionRespuestaImagen: 'InspeccionRespuestaImagen',
-  InspeccionAccionSeleccionada: 'InspeccionAccionSeleccionada'
+  InspeccionAccionSeleccionada: 'InspeccionAccionSeleccionada',
+  support_ticket_views: 'support_ticket_views'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -432,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante" | "condicion" | "user" | "role" | "permission" | "rolePermission" | "seccionInspeccion" | "preguntaInspeccion" | "accionCorrectivaInspeccion" | "inspeccionFormulario" | "inspeccionRespuesta" | "inspeccionRespuestaImagen" | "inspeccionAccionSeleccionada"
+    modelProps: "test" | "cliente" | "provincia" | "ciudad" | "servicio" | "items" | "itemsOnServicios" | "propuestaTecnica" | "tipoDeInforme" | "tipoDeVariante" | "clientLocations" | "informe" | "planTrabajo" | "planTrabajoProgramacion" | "detalleVariante" | "condicion" | "user" | "role" | "permission" | "rolePermission" | "seccionInspeccion" | "preguntaInspeccion" | "accionCorrectivaInspeccion" | "inspeccionFormulario" | "inspeccionRespuesta" | "inspeccionRespuestaImagen" | "inspeccionAccionSeleccionada" | "support_ticket_views"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2434,6 +2435,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    support_ticket_views: {
+      payload: Prisma.$support_ticket_viewsPayload<ExtArgs>
+      fields: Prisma.support_ticket_viewsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.support_ticket_viewsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.support_ticket_viewsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>
+        }
+        findFirst: {
+          args: Prisma.support_ticket_viewsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.support_ticket_viewsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>
+        }
+        findMany: {
+          args: Prisma.support_ticket_viewsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>[]
+        }
+        create: {
+          args: Prisma.support_ticket_viewsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>
+        }
+        createMany: {
+          args: Prisma.support_ticket_viewsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.support_ticket_viewsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>[]
+        }
+        delete: {
+          args: Prisma.support_ticket_viewsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>
+        }
+        update: {
+          args: Prisma.support_ticket_viewsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>
+        }
+        deleteMany: {
+          args: Prisma.support_ticket_viewsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.support_ticket_viewsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.support_ticket_viewsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>[]
+        }
+        upsert: {
+          args: Prisma.support_ticket_viewsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$support_ticket_viewsPayload>
+        }
+        aggregate: {
+          args: Prisma.Support_ticket_viewsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSupport_ticket_views>
+        }
+        groupBy: {
+          args: Prisma.support_ticket_viewsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Support_ticket_viewsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.support_ticket_viewsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Support_ticket_viewsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2818,6 +2893,17 @@ export const InspeccionAccionSeleccionadaScalarFieldEnum = {
 export type InspeccionAccionSeleccionadaScalarFieldEnum = (typeof InspeccionAccionSeleccionadaScalarFieldEnum)[keyof typeof InspeccionAccionSeleccionadaScalarFieldEnum]
 
 
+export const Support_ticket_viewsScalarFieldEnum = {
+  user_id: 'user_id',
+  taskapp_ticket_id: 'taskapp_ticket_id',
+  last_seen_at: 'last_seen_at',
+  last_seen_status_id: 'last_seen_status_id',
+  created_at: 'created_at'
+} as const
+
+export type Support_ticket_viewsScalarFieldEnum = (typeof Support_ticket_viewsScalarFieldEnum)[keyof typeof Support_ticket_viewsScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3052,6 +3138,20 @@ export type ListEnumRespuestaValorFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt[]'
+ */
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3178,6 +3278,7 @@ export type GlobalOmitConfig = {
   inspeccionRespuesta?: Prisma.InspeccionRespuestaOmit
   inspeccionRespuestaImagen?: Prisma.InspeccionRespuestaImagenOmit
   inspeccionAccionSeleccionada?: Prisma.InspeccionAccionSeleccionadaOmit
+  support_ticket_views?: Prisma.support_ticket_viewsOmit
 }
 
 /* Types for Logging */
