@@ -4,6 +4,14 @@ import { PageFooter } from "./PageFooter";
 import { PageHeader } from "./PageHeader";
 import type { Items, Moneda, PropuestaTecnica } from "@/generated/client";
 
+/**
+ * Filtra condiciones basura: vacías, solo espacios o solo guiones
+ * (evita que un dato mal cargado se muestre como un bullet vacío en el PDF).
+ */
+function isCondicionValida(item: string): boolean {
+  return Boolean(item) && item.trim().replace(/^-+$/, "") !== "";
+}
+
 interface CondicionesPageProps {
   servicioDescripcion: string;
   servicioNombre: string;
@@ -33,7 +41,7 @@ export function CondicionesPage({
         <View style={pdfStyles.conditionsMainContent}>
           {/* Consideraciones Generales */}
           <Text style={pdfStyles.consideracionesTitle}>Consideraciones Generales</Text>
-          {condicionesGenerales.map((item, index) => (
+          {condicionesGenerales.filter(isCondicionValida).map((item, index) => (
             <View key={index} style={{ flexDirection: "row", marginBottom: 3 }}>
               <View style={pdfStyles.bulletPoint} />
               <Text style={[pdfStyles.consideracion, { flex: 1, paddingLeft: 0 }]}>{item}</Text>
@@ -44,7 +52,7 @@ export function CondicionesPage({
           <Text style={[pdfStyles.consideracionesTitle, { marginTop: 15 }]}>
             Consideraciones Particulares
           </Text>
-          {condicionesParticulares.map((item, index) => (
+          {condicionesParticulares.filter(isCondicionValida).map((item, index) => (
             <View key={index} style={{ flexDirection: "row", marginBottom: 3 }}>
               <View style={pdfStyles.bulletPoint} />
               <Text style={[pdfStyles.consideracion, { flex: 1, paddingLeft: 0 }]}>{item}</Text>
