@@ -152,3 +152,8 @@ export type InspeccionRespuestaImagen = Prisma.InspeccionRespuestaImagenModel
  * 
  */
 export type InspeccionAccionSeleccionada = Prisma.InspeccionAccionSeleccionadaModel
+/**
+ * Model support_ticket_views
+ * 
+ */
+export type support_ticket_views = Prisma.support_ticket_viewsModel
