@@ -54,7 +54,6 @@ type Props = {
   ) => void;
   savingIds: Set<string>;
   formularioId: string;
-  r2PublicBase: string;
   onImageUploaded: (preguntaId: string, imagen: ImagenLocal) => void;
   onImageDeleted: (preguntaId: string, imagenId: string) => void;
 };
@@ -69,7 +68,6 @@ export function InspeccionPregunta({
   onSave,
   savingIds,
   formularioId,
-  r2PublicBase,
   onImageUploaded,
   onImageDeleted,
 }: Props) {
@@ -254,7 +252,7 @@ export function InspeccionPregunta({
                     className="block overflow-hidden rounded-md border focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <img
-                      src={`${r2PublicBase}/${img.r2Key}`}
+                      src={`/api/inspecciones/file/${img.id}`}
                       alt={`Adjunto ${idx + 1}`}
                       className="h-20 w-20 object-cover transition-transform hover:scale-105"
                     />
@@ -384,7 +382,7 @@ export function InspeccionPregunta({
                     onTouchEnd={() => setDragging(false)}
                   >
                     <img
-                      src={`${r2PublicBase}/${imagenes[lightboxIndex]?.r2Key}`}
+                      src={`/api/inspecciones/file/${imagenes[lightboxIndex]?.id}`}
                       alt={`Imagen ${lightboxIndex + 1} de ${imagenes.length}`}
                       className="max-h-[75vh] max-w-[85vw] select-none object-contain transition-transform duration-150"
                       style={{
@@ -468,7 +466,6 @@ export function InspeccionPregunta({
               onSave={onSave}
               savingIds={savingIds}
               formularioId={formularioId}
-              r2PublicBase={r2PublicBase}
               onImageUploaded={onImageUploaded}
               onImageDeleted={onImageDeleted}
             />

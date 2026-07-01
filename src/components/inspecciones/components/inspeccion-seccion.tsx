@@ -30,7 +30,6 @@ type Props = {
   ) => void;
   savingIds: Set<string>;
   formularioId: string;
-  r2PublicBase: string;
   onImageUploaded: (preguntaId: string, imagen: ImagenLocal) => void;
   onImageDeleted: (preguntaId: string, imagenId: string) => void;
 };
@@ -68,7 +67,6 @@ export function InspeccionSeccion({
   onSave,
   savingIds,
   formularioId,
-  r2PublicBase,
   onImageUploaded,
   onImageDeleted,
 }: Props) {
@@ -106,7 +104,6 @@ export function InspeccionSeccion({
             onSave={onSave}
             savingIds={savingIds}
             formularioId={formularioId}
-            r2PublicBase={r2PublicBase}
             onImageUploaded={onImageUploaded}
             onImageDeleted={onImageDeleted}
           />
@@ -122,7 +119,6 @@ export function InspeccionSeccion({
             onSave={onSave}
             savingIds={savingIds}
             formularioId={formularioId}
-            r2PublicBase={r2PublicBase}
             onImageUploaded={onImageUploaded}
             onImageDeleted={onImageDeleted}
           />

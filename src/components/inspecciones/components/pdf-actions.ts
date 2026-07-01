@@ -6,10 +6,10 @@ import { PERMISSIONS } from "@/lib/rbac/permissions";
 import { pdfLogger } from "@/lib/logger";
 import { formatDateOnly } from "@/lib/dates";
 import { inspeccionRepository } from "@/repositories/inspeccion.repository";
+import { getBytesFromR2 } from "@/lib/r2-upload";
+import { contentTypeFromKey } from "@/lib/mime";
 import { getSeccionesConPreguntas } from "./actions";
 import { InspeccionPDF, type SeccionPDF, type PreguntaPDF } from "../pdf/InspeccionPDF";
-
-const R2_PUBLIC_BASE = "https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev";
 
 const TIPO_LABEL: Record<string, string> = {
   inspeccion_base: "Inspección de Base",
@@ -87,17 +87,43 @@ export async function generateInspeccionPDF(inspeccionId: string) {
       }
     }
 
-    // Detalle de hallazgos (respuestas NO)
-    const detallesNo = inspeccion.respuestas
+    // Detalle de hallazgos (respuestas NO). Las imágenes se descargan de R2
+    // (bucket correcto por entorno) y se embeben como data URI base64, para no
+    // depender de una URL pública (que en producción apunta a otro bucket).
+    const detallesNoOrdenadas = inspeccion.respuestas
       .filter((r) => r.valor === "no")
-      .map((r) => ({
+      .sort((a, b) =>
+        a.pregunta.codigo.localeCompare(b.pregunta.codigo, undefined, { numeric: true })
+      );
+
+    const detallesNo = await Promise.all(
+      detallesNoOrdenadas.map(async (r) => ({
         codigo: r.pregunta.codigo,
         texto: r.pregunta.texto,
         acciones: r.accionesSeleccionadas.map((a) => a.accion.texto),
         observaciones: r.observaciones,
-        imagenesUrls: r.imagenes.map((img) => `${R2_PUBLIC_BASE}/${img.r2Key}`),
+        imagenesUrls: (
+          await Promise.all(
+            r.imagenes.map(async (img) => {
+              const file = await getBytesFromR2(img.r2Key);
+              if (!file) {
+                pdfLogger.warn(
+                  { r2Key: img.r2Key, inspeccionId },
+                  "Imagen de inspección no encontrada en R2; se omite en el PDF"
+                );
+                return null;
+              }
+              const contentType =
+                file.contentType && file.contentType !== "application/octet-stream"
+                  ? file.contentType
+                  : contentTypeFromKey(img.r2Key);
+              const base64 = Buffer.from(file.bytes).toString("base64");
+              return `data:${contentType};base64,${base64}`;
+            })
+          )
+        ).filter((url): url is string => url !== null),
       }))
-      .sort((a, b) => a.codigo.localeCompare(b.codigo, undefined, { numeric: true }));
+    );
 
     const lugar = inspeccion.clientLocation?.name ?? inspeccion.lugarTexto ?? "—";
 
