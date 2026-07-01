@@ -1,6 +1,11 @@
 "use server";
 
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
 import { env } from "./env";
 
 const r2Client = new S3Client({
@@ -37,6 +42,31 @@ export async function deleteFileFromR2(key: string): Promise<void> {
       Key: key,
     })
   );
+}
+
+/**
+ * Descarga los bytes de un objeto de R2 (bucket configurado por entorno).
+ * Devuelve null si el objeto no existe o hubo error, para que el llamador
+ * decida cómo manejarlo (ej: omitir la imagen en el PDF).
+ */
+export async function getBytesFromR2(
+  key: string
+): Promise<{ bytes: Uint8Array; contentType: string } | null> {
+  try {
+    const result = await r2Client.send(
+      new GetObjectCommand({
+        Bucket: env.CLOUDFLARE_R2_BUCKET,
+        Key: key,
+      })
+    );
+
+    if (!result.Body) return null;
+
+    const bytes = await result.Body.transformToByteArray();
+    return { bytes, contentType: result.ContentType ?? "application/octet-stream" };
+  } catch {
+    return null;
+  }
 }
 
 export async function uploadBytesToR2(

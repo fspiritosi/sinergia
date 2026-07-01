@@ -337,7 +337,6 @@ export function InspeccionForm({ inspeccionId }: Props) {
             onSave={handleSave}
             savingIds={savingIds}
             formularioId={inspeccionId}
-            r2PublicBase="https://pub-f585ac1b3c1f462c8439adaf03fa21cd.r2.dev"
             onImageUploaded={handleImageUploaded}
             onImageDeleted={handleImageDeleted}
           />
