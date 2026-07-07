@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
 import { AppUser } from "./actions";
+import { UserRowActions } from "./user-row-actions";
 
 export const columns: ColumnDef<AppUser>[] = [
   {
@@ -73,10 +74,8 @@ export const columns: ColumnDef<AppUser>[] = [
     },
   },
 
-  // {
-  //     id: "actions",
-  //     cell: ({ row }) => {
-  //         return <ServiceRowActions servicio={row.original} />
-  //     },
-  // },
+  {
+    id: "actions",
+    cell: ({ row }) => <UserRowActions user={row.original} />,
+  },
 ];

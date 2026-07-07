@@ -1,6 +1,7 @@
 "use server";
 
 import { clerkClient } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { env } from "@/lib/env";
 import { authLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
@@ -14,6 +15,7 @@ export type AppUser = {
   email: string;
   firstName: string | null;
   lastName: string | null;
+  roleId: string | null;
   roleName: string | null;
   roleLabel: string | null;
   is_active: boolean;
@@ -83,7 +85,7 @@ export const getUsers = async (): Promise<AppUser[]> => {
     (
       dbUsers as unknown as Array<{
         clerkId: string;
-        role: { name: string; label: string };
+        role: { id: string; name: string; label: string };
       }>
     ).map((u) => [u.clerkId, u.role])
   );
@@ -101,6 +103,7 @@ export const getUsers = async (): Promise<AppUser[]> => {
       email: primaryEmail,
       firstName: user.firstName ?? null,
       lastName: user.lastName ?? null,
+      roleId: dbRole?.id ?? null,
       roleName: dbRole?.name ?? metadataRole,
       roleLabel: dbRole?.label ?? metadataRole,
       is_active: !user.banned && !user.locked,
@@ -108,3 +111,36 @@ export const getUsers = async (): Promise<AppUser[]> => {
     };
   });
 };
+
+/**
+ * Actualiza el rol de un usuario (solo admins con USUARIOS_MANAGE_ROLES).
+ * Actualiza la metadata de Clerk (para el token/middleware) y la tabla User
+ * de la DB (efecto inmediato, sin esperar el webhook).
+ *
+ * `userId` es el id de Clerk (AppUser.id).
+ */
+export async function updateUserRole(data: { userId: string; roleId: string }): Promise<void> {
+  await requirePermission(PERMISSIONS.USUARIOS_MANAGE_ROLES);
+
+  const role = await roleRepository.findById(data.roleId);
+  if (!role) {
+    throw new Error("El rol seleccionado no existe");
+  }
+
+  try {
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(data.userId, {
+      publicMetadata: { role: role.name },
+    });
+
+    const dbUser = await userRepository.findByClerkId(data.userId);
+    if (dbUser) {
+      await userRepository.setRole(dbUser.id, data.roleId);
+    }
+
+    revalidatePath("/dashboard/usuarios");
+  } catch (error: unknown) {
+    authLogger.error({ error, userId: data.userId, roleId: data.roleId }, "Error al cambiar rol");
+    throw error instanceof Error ? error : new Error("Error al cambiar el rol del usuario");
+  }
+}
