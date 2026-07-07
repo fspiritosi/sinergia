@@ -1,12 +1,6 @@
- "use client";
+"use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { SerializedCliente } from "@/components/clientes/ClienteDetalle";
 import { PropuestasTableWrapper } from "@/components/propuestas/components/propuestas-table-wrapper";
@@ -14,12 +8,7 @@ import type { PropuestaTecnica } from "@/components/propuestas/components/action
 import { ClientLocationTableWrapper } from "@/components/clientLocations/components/clientLocations-table-wrapper";
 import type { clientLocations as ClientLocation } from "@/components/clientLocations/components/actions";
 import { Separator } from "@/components/ui/separator";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect } from "react";
 import { useDashboardTitle } from "@/components/dashboard/DashboardTitleContext";
 
@@ -37,14 +26,12 @@ export function ClienteIdWrapper({ data }: ClienteIdWrapperProps) {
 
   const propuestas: PropuestaTecnica[] = data.propuestas ?? [];
 
-  const clientLocations: ClientLocation[] = (data.clientLocations ?? []).map(
-    (loc) => ({
-      ...loc,
-      createdAt: new Date(loc.createdAt),
-      updatedAt: new Date(loc.updatedAt),
-      cliente: loc.cliente ?? { id: loc.clienteId, name: "Sin cliente" },
-    })
-  );
+  const clientLocations: ClientLocation[] = (data.clientLocations ?? []).map((loc) => ({
+    ...loc,
+    createdAt: new Date(loc.createdAt),
+    updatedAt: new Date(loc.updatedAt),
+    cliente: loc.cliente ?? { id: loc.clienteId, name: "Sin cliente" },
+  }));
 
   return (
     <Card>
@@ -72,14 +59,8 @@ export function ClienteIdWrapper({ data }: ClienteIdWrapperProps) {
               <DetailRow label="Domicilio" value={data.domicilio} />
               <DetailRow label="Teléfono" value={data.telefono ?? "—"} />
               <DetailRow label="Email" value={data.email ?? "—"} />
-              <DetailRow
-                label="Provincia"
-                value={data.provincia?.nombre ?? "Sin provincia"}
-              />
-              <DetailRow
-                label="Ciudad"
-                value={data.ciudad?.nombre ?? "Sin ciudad"}
-              />
+              <DetailRow label="Provincia" value={data.provincia?.nombre ?? "Sin provincia"} />
+              <DetailRow label="Ciudad" value={data.ciudad?.nombre ?? "Sin ciudad"} />
               <DetailRow
                 label="Estado"
                 value={
@@ -92,11 +73,10 @@ export function ClienteIdWrapper({ data }: ClienteIdWrapperProps) {
           </TabsContent>
 
           <TabsContent value="locaciones">
-            {clientLocations.length === 0 ? (
-              <div>No hay ubicaciones</div>
-            ) : (
-              <ClientLocationTableWrapper data={clientLocations} />
-            )}
+            {/* Renderizamos siempre el wrapper: incluye el botón para agregar
+                locación y su propio estado vacío, así se puede cargar la
+                primera locación de un cliente que no tiene ninguna. */}
+            <ClientLocationTableWrapper data={clientLocations} />
           </TabsContent>
 
           <TabsContent value="propuestas">
@@ -112,18 +92,10 @@ export function ClienteIdWrapper({ data }: ClienteIdWrapperProps) {
   );
 }
 
-function DetailRow({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) {
+function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1 rounded-lg border p-3">
-      <span className="text-xs uppercase tracking-wide text-muted-foreground">
-        {label}
-      </span>
+      <span className="text-xs uppercase tracking-wide text-muted-foreground">{label}</span>
       <span className="text-sm font-medium">{value}</span>
     </div>
   );
