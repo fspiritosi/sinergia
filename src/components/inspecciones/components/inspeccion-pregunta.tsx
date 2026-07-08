@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { uploadImagenRespuesta, deleteImagenRespuesta } from "./inspeccion-actions";
+import { compressImage } from "@/lib/compress-image";
 
 export type PreguntaData = {
   id: string;
@@ -59,7 +60,9 @@ type Props = {
 };
 
 const MAX_IMAGENES = 3;
-const MAX_FILE_SIZE_MB = 15;
+// Tamaño máximo del ORIGINAL aceptado. Se comprime en el cliente antes de subir,
+// así que lo que finalmente se guarda pesa ~1.5 MB independientemente de esto.
+const MAX_FILE_SIZE_MB = 50;
 
 export function InspeccionPregunta({
   pregunta,
@@ -98,6 +101,8 @@ export function InspeccionPregunta({
 
   const isSaving = savingIds.has(pregunta.id);
 
+  const [preparing, setPreparing] = useState(false);
+
   const uploadMutation = useMutation({
     mutationFn: (formData: FormData) => uploadImagenRespuesta(formData),
     onSuccess: (data) => {
@@ -121,22 +126,29 @@ export function InspeccionPregunta({
   });
 
   const handleFileChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
+    async (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
+      e.target.value = "";
       if (!file) return;
 
       if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
         toast.error(`La imagen supera el tamaño máximo de ${MAX_FILE_SIZE_MB} MB`);
-        e.target.value = "";
         return;
+      }
+
+      setPreparing(true);
+      let toUpload = file;
+      try {
+        toUpload = await compressImage(file);
+      } finally {
+        setPreparing(false);
       }
 
       const formData = new FormData();
       formData.set("formularioId", formularioId);
       formData.set("preguntaId", pregunta.id);
-      formData.set("file", file);
+      formData.set("file", toUpload);
       uploadMutation.mutate(formData);
-      e.target.value = "";
     },
     [formularioId, pregunta.id, uploadMutation]
   );
@@ -295,21 +307,25 @@ export function InspeccionPregunta({
                   type="button"
                   variant="outline"
                   size="sm"
-                  disabled={uploadMutation.isPending}
+                  disabled={uploadMutation.isPending || preparing}
                   onClick={() => cameraInputRef.current?.click()}
                 >
-                  {uploadMutation.isPending ? (
+                  {uploadMutation.isPending || preparing ? (
                     <Loader2 className="mr-1 h-3 w-3 animate-spin" />
                   ) : (
                     <Camera className="mr-1 h-3 w-3" />
                   )}
-                  {uploadMutation.isPending ? "Subiendo..." : "Tomar foto"}
+                  {preparing
+                    ? "Procesando..."
+                    : uploadMutation.isPending
+                      ? "Subiendo..."
+                      : "Tomar foto"}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  disabled={uploadMutation.isPending}
+                  disabled={uploadMutation.isPending || preparing}
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <Paperclip className="mr-1 h-3 w-3" />
