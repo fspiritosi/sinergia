@@ -25,11 +25,13 @@ export type DetalleNoPDF = {
 export type InspeccionPDFProps = {
   clienteNombre: string;
   fecha: string;
+  fechaConfeccion: string;
   lugar: string;
   realizadoPor: string;
   tipo: string;
   secciones: SeccionPDF[];
   detallesNo: DetalleNoPDF[];
+  firmaUrl?: string | null;
 };
 
 const ESTADO_LABEL: Record<string, string> = {
@@ -61,11 +63,13 @@ function Header() {
 export function InspeccionPDF({
   clienteNombre,
   fecha,
+  fechaConfeccion,
   lugar,
   realizadoPor,
   tipo,
   secciones,
   detallesNo,
+  firmaUrl,
 }: InspeccionPDFProps) {
   return (
     <Document
@@ -82,6 +86,10 @@ export function InspeccionPDF({
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>FECHA DE INSPECCIÓN</Text>
             <Text style={styles.infoValue}>{fecha}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>FECHA DE CONFECCIÓN</Text>
+            <Text style={styles.infoValue}>{fechaConfeccion}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>EMPRESA</Text>
@@ -174,6 +182,15 @@ export function InspeccionPDF({
               )}
             </View>
           ))
+        )}
+
+        {firmaUrl && (
+          <View style={styles.firmaContainer} wrap={false}>
+            <Image src={firmaUrl} style={styles.firmaImagen} />
+            <View style={styles.firmaLinea} />
+            <Text style={styles.firmaLabel}>Firma del responsable</Text>
+            <Text style={styles.firmaNombre}>{realizadoPor}</Text>
+          </View>
         )}
 
         <Text

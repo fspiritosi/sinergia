@@ -29,10 +29,12 @@ export type InspeccionFormularioMinAggregateOutputType = {
   clienteId: string | null
   tipo: $Enums.InspeccionTipo | null
   fecha: Date | null
+  fechaInspeccion: Date | null
   estado: $Enums.InspeccionEstado | null
   realizadoPorId: string | null
   clientLocationId: string | null
   lugarTexto: string | null
+  firmaR2Key: string | null
   informeId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -43,10 +45,12 @@ export type InspeccionFormularioMaxAggregateOutputType = {
   clienteId: string | null
   tipo: $Enums.InspeccionTipo | null
   fecha: Date | null
+  fechaInspeccion: Date | null
   estado: $Enums.InspeccionEstado | null
   realizadoPorId: string | null
   clientLocationId: string | null
   lugarTexto: string | null
+  firmaR2Key: string | null
   informeId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,10 +61,12 @@ export type InspeccionFormularioCountAggregateOutputType = {
   clienteId: number
   tipo: number
   fecha: number
+  fechaInspeccion: number
   estado: number
   realizadoPorId: number
   clientLocationId: number
   lugarTexto: number
+  firmaR2Key: number
   informeId: number
   createdAt: number
   updatedAt: number
@@ -73,10 +79,12 @@ export type InspeccionFormularioMinAggregateInputType = {
   clienteId?: true
   tipo?: true
   fecha?: true
+  fechaInspeccion?: true
   estado?: true
   realizadoPorId?: true
   clientLocationId?: true
   lugarTexto?: true
+  firmaR2Key?: true
   informeId?: true
   createdAt?: true
   updatedAt?: true
@@ -87,10 +95,12 @@ export type InspeccionFormularioMaxAggregateInputType = {
   clienteId?: true
   tipo?: true
   fecha?: true
+  fechaInspeccion?: true
   estado?: true
   realizadoPorId?: true
   clientLocationId?: true
   lugarTexto?: true
+  firmaR2Key?: true
   informeId?: true
   createdAt?: true
   updatedAt?: true
@@ -101,10 +111,12 @@ export type InspeccionFormularioCountAggregateInputType = {
   clienteId?: true
   tipo?: true
   fecha?: true
+  fechaInspeccion?: true
   estado?: true
   realizadoPorId?: true
   clientLocationId?: true
   lugarTexto?: true
+  firmaR2Key?: true
   informeId?: true
   createdAt?: true
   updatedAt?: true
@@ -188,10 +200,12 @@ export type InspeccionFormularioGroupByOutputType = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha: Date
+  fechaInspeccion: Date | null
   estado: $Enums.InspeccionEstado
   realizadoPorId: string
   clientLocationId: string | null
   lugarTexto: string | null
+  firmaR2Key: string | null
   informeId: string | null
   createdAt: Date
   updatedAt: Date
@@ -223,10 +237,12 @@ export type InspeccionFormularioWhereInput = {
   clienteId?: Prisma.StringFilter<"InspeccionFormulario"> | string
   tipo?: Prisma.EnumInspeccionTipoFilter<"InspeccionFormulario"> | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
+  fechaInspeccion?: Prisma.DateTimeNullableFilter<"InspeccionFormulario"> | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFilter<"InspeccionFormulario"> | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFilter<"InspeccionFormulario"> | string
   clientLocationId?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
   lugarTexto?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
+  firmaR2Key?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
   informeId?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
   createdAt?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
@@ -242,10 +258,12 @@ export type InspeccionFormularioOrderByWithRelationInput = {
   clienteId?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
+  fechaInspeccion?: Prisma.SortOrderInput | Prisma.SortOrder
   estado?: Prisma.SortOrder
   realizadoPorId?: Prisma.SortOrder
   clientLocationId?: Prisma.SortOrderInput | Prisma.SortOrder
   lugarTexto?: Prisma.SortOrderInput | Prisma.SortOrder
+  firmaR2Key?: Prisma.SortOrderInput | Prisma.SortOrder
   informeId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -265,10 +283,12 @@ export type InspeccionFormularioWhereUniqueInput = Prisma.AtLeast<{
   clienteId?: Prisma.StringFilter<"InspeccionFormulario"> | string
   tipo?: Prisma.EnumInspeccionTipoFilter<"InspeccionFormulario"> | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
+  fechaInspeccion?: Prisma.DateTimeNullableFilter<"InspeccionFormulario"> | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFilter<"InspeccionFormulario"> | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFilter<"InspeccionFormulario"> | string
   clientLocationId?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
   lugarTexto?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
+  firmaR2Key?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
   createdAt?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
@@ -283,10 +303,12 @@ export type InspeccionFormularioOrderByWithAggregationInput = {
   clienteId?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
+  fechaInspeccion?: Prisma.SortOrderInput | Prisma.SortOrder
   estado?: Prisma.SortOrder
   realizadoPorId?: Prisma.SortOrder
   clientLocationId?: Prisma.SortOrderInput | Prisma.SortOrder
   lugarTexto?: Prisma.SortOrderInput | Prisma.SortOrder
+  firmaR2Key?: Prisma.SortOrderInput | Prisma.SortOrder
   informeId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -303,10 +325,12 @@ export type InspeccionFormularioScalarWhereWithAggregatesInput = {
   clienteId?: Prisma.StringWithAggregatesFilter<"InspeccionFormulario"> | string
   tipo?: Prisma.EnumInspeccionTipoWithAggregatesFilter<"InspeccionFormulario"> | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeWithAggregatesFilter<"InspeccionFormulario"> | Date | string
+  fechaInspeccion?: Prisma.DateTimeNullableWithAggregatesFilter<"InspeccionFormulario"> | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoWithAggregatesFilter<"InspeccionFormulario"> | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringWithAggregatesFilter<"InspeccionFormulario"> | string
   clientLocationId?: Prisma.StringNullableWithAggregatesFilter<"InspeccionFormulario"> | string | null
   lugarTexto?: Prisma.StringNullableWithAggregatesFilter<"InspeccionFormulario"> | string | null
+  firmaR2Key?: Prisma.StringNullableWithAggregatesFilter<"InspeccionFormulario"> | string | null
   informeId?: Prisma.StringNullableWithAggregatesFilter<"InspeccionFormulario"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InspeccionFormulario"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"InspeccionFormulario"> | Date | string
@@ -316,8 +340,10 @@ export type InspeccionFormularioCreateInput = {
   id?: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutInspeccionesInput
@@ -332,10 +358,12 @@ export type InspeccionFormularioUncheckedCreateInput = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   realizadoPorId: string
   clientLocationId?: string | null
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -346,8 +374,10 @@ export type InspeccionFormularioUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutInspeccionesNestedInput
@@ -362,10 +392,12 @@ export type InspeccionFormularioUncheckedUpdateInput = {
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFieldUpdateOperationsInput | string
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,10 +409,12 @@ export type InspeccionFormularioCreateManyInput = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   realizadoPorId: string
   clientLocationId?: string | null
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -390,8 +424,10 @@ export type InspeccionFormularioUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -401,10 +437,12 @@ export type InspeccionFormularioUncheckedUpdateManyInput = {
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFieldUpdateOperationsInput | string
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,10 +468,12 @@ export type InspeccionFormularioCountOrderByAggregateInput = {
   clienteId?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
+  fechaInspeccion?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   realizadoPorId?: Prisma.SortOrder
   clientLocationId?: Prisma.SortOrder
   lugarTexto?: Prisma.SortOrder
+  firmaR2Key?: Prisma.SortOrder
   informeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -444,10 +484,12 @@ export type InspeccionFormularioMaxOrderByAggregateInput = {
   clienteId?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
+  fechaInspeccion?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   realizadoPorId?: Prisma.SortOrder
   clientLocationId?: Prisma.SortOrder
   lugarTexto?: Prisma.SortOrder
+  firmaR2Key?: Prisma.SortOrder
   informeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -458,10 +500,12 @@ export type InspeccionFormularioMinOrderByAggregateInput = {
   clienteId?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
   fecha?: Prisma.SortOrder
+  fechaInspeccion?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   realizadoPorId?: Prisma.SortOrder
   clientLocationId?: Prisma.SortOrder
   lugarTexto?: Prisma.SortOrder
+  firmaR2Key?: Prisma.SortOrder
   informeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -656,8 +700,10 @@ export type InspeccionFormularioCreateWithoutClienteInput = {
   id?: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   realizadoPor: Prisma.UserCreateNestedOneWithoutInspeccionesInput
@@ -670,10 +716,12 @@ export type InspeccionFormularioUncheckedCreateWithoutClienteInput = {
   id?: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   realizadoPorId: string
   clientLocationId?: string | null
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -714,10 +762,12 @@ export type InspeccionFormularioScalarWhereInput = {
   clienteId?: Prisma.StringFilter<"InspeccionFormulario"> | string
   tipo?: Prisma.EnumInspeccionTipoFilter<"InspeccionFormulario"> | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
+  fechaInspeccion?: Prisma.DateTimeNullableFilter<"InspeccionFormulario"> | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFilter<"InspeccionFormulario"> | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFilter<"InspeccionFormulario"> | string
   clientLocationId?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
   lugarTexto?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
+  firmaR2Key?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
   informeId?: Prisma.StringNullableFilter<"InspeccionFormulario"> | string | null
   createdAt?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InspeccionFormulario"> | Date | string
@@ -727,8 +777,10 @@ export type InspeccionFormularioCreateWithoutClientLocationInput = {
   id?: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutInspeccionesInput
@@ -742,9 +794,11 @@ export type InspeccionFormularioUncheckedCreateWithoutClientLocationInput = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   realizadoPorId: string
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -781,8 +835,10 @@ export type InspeccionFormularioCreateWithoutInformeInput = {
   id?: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutInspeccionesInput
@@ -796,10 +852,12 @@ export type InspeccionFormularioUncheckedCreateWithoutInformeInput = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   realizadoPorId: string
   clientLocationId?: string | null
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   respuestas?: Prisma.InspeccionRespuestaUncheckedCreateNestedManyWithoutFormularioInput
@@ -825,8 +883,10 @@ export type InspeccionFormularioUpdateWithoutInformeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutInspeccionesNestedInput
@@ -840,10 +900,12 @@ export type InspeccionFormularioUncheckedUpdateWithoutInformeInput = {
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFieldUpdateOperationsInput | string
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   respuestas?: Prisma.InspeccionRespuestaUncheckedUpdateManyWithoutFormularioNestedInput
@@ -853,8 +915,10 @@ export type InspeccionFormularioCreateWithoutRealizadoPorInput = {
   id?: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutInspeccionesInput
@@ -868,9 +932,11 @@ export type InspeccionFormularioUncheckedCreateWithoutRealizadoPorInput = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   clientLocationId?: string | null
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -907,8 +973,10 @@ export type InspeccionFormularioCreateWithoutRespuestasInput = {
   id?: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   cliente: Prisma.ClienteCreateNestedOneWithoutInspeccionesInput
@@ -922,10 +990,12 @@ export type InspeccionFormularioUncheckedCreateWithoutRespuestasInput = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   realizadoPorId: string
   clientLocationId?: string | null
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -951,8 +1021,10 @@ export type InspeccionFormularioUpdateWithoutRespuestasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutInspeccionesNestedInput
@@ -966,10 +1038,12 @@ export type InspeccionFormularioUncheckedUpdateWithoutRespuestasInput = {
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFieldUpdateOperationsInput | string
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -979,10 +1053,12 @@ export type InspeccionFormularioCreateManyClienteInput = {
   id?: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   realizadoPorId: string
   clientLocationId?: string | null
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -992,8 +1068,10 @@ export type InspeccionFormularioUpdateWithoutClienteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   realizadoPor?: Prisma.UserUpdateOneRequiredWithoutInspeccionesNestedInput
@@ -1006,10 +1084,12 @@ export type InspeccionFormularioUncheckedUpdateWithoutClienteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFieldUpdateOperationsInput | string
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1020,10 +1100,12 @@ export type InspeccionFormularioUncheckedUpdateManyWithoutClienteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFieldUpdateOperationsInput | string
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1034,9 +1116,11 @@ export type InspeccionFormularioCreateManyClientLocationInput = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   realizadoPorId: string
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1046,8 +1130,10 @@ export type InspeccionFormularioUpdateWithoutClientLocationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutInspeccionesNestedInput
@@ -1061,9 +1147,11 @@ export type InspeccionFormularioUncheckedUpdateWithoutClientLocationInput = {
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFieldUpdateOperationsInput | string
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1075,9 +1163,11 @@ export type InspeccionFormularioUncheckedUpdateManyWithoutClientLocationInput = 
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   realizadoPorId?: Prisma.StringFieldUpdateOperationsInput | string
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1088,9 +1178,11 @@ export type InspeccionFormularioCreateManyRealizadoPorInput = {
   clienteId: string
   tipo: $Enums.InspeccionTipo
   fecha?: Date | string
+  fechaInspeccion?: Date | string | null
   estado?: $Enums.InspeccionEstado
   clientLocationId?: string | null
   lugarTexto?: string | null
+  firmaR2Key?: string | null
   informeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1100,8 +1192,10 @@ export type InspeccionFormularioUpdateWithoutRealizadoPorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutInspeccionesNestedInput
@@ -1115,9 +1209,11 @@ export type InspeccionFormularioUncheckedUpdateWithoutRealizadoPorInput = {
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1129,9 +1225,11 @@ export type InspeccionFormularioUncheckedUpdateManyWithoutRealizadoPorInput = {
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   tipo?: Prisma.EnumInspeccionTipoFieldUpdateOperationsInput | $Enums.InspeccionTipo
   fecha?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fechaInspeccion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   estado?: Prisma.EnumInspeccionEstadoFieldUpdateOperationsInput | $Enums.InspeccionEstado
   clientLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lugarTexto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firmaR2Key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   informeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1173,10 +1271,12 @@ export type InspeccionFormularioSelect<ExtArgs extends runtime.Types.Extensions.
   clienteId?: boolean
   tipo?: boolean
   fecha?: boolean
+  fechaInspeccion?: boolean
   estado?: boolean
   realizadoPorId?: boolean
   clientLocationId?: boolean
   lugarTexto?: boolean
+  firmaR2Key?: boolean
   informeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1193,10 +1293,12 @@ export type InspeccionFormularioSelectCreateManyAndReturn<ExtArgs extends runtim
   clienteId?: boolean
   tipo?: boolean
   fecha?: boolean
+  fechaInspeccion?: boolean
   estado?: boolean
   realizadoPorId?: boolean
   clientLocationId?: boolean
   lugarTexto?: boolean
+  firmaR2Key?: boolean
   informeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1211,10 +1313,12 @@ export type InspeccionFormularioSelectUpdateManyAndReturn<ExtArgs extends runtim
   clienteId?: boolean
   tipo?: boolean
   fecha?: boolean
+  fechaInspeccion?: boolean
   estado?: boolean
   realizadoPorId?: boolean
   clientLocationId?: boolean
   lugarTexto?: boolean
+  firmaR2Key?: boolean
   informeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1229,16 +1333,18 @@ export type InspeccionFormularioSelectScalar = {
   clienteId?: boolean
   tipo?: boolean
   fecha?: boolean
+  fechaInspeccion?: boolean
   estado?: boolean
   realizadoPorId?: boolean
   clientLocationId?: boolean
   lugarTexto?: boolean
+  firmaR2Key?: boolean
   informeId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type InspeccionFormularioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clienteId" | "tipo" | "fecha" | "estado" | "realizadoPorId" | "clientLocationId" | "lugarTexto" | "informeId" | "createdAt" | "updatedAt", ExtArgs["result"]["inspeccionFormulario"]>
+export type InspeccionFormularioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clienteId" | "tipo" | "fecha" | "fechaInspeccion" | "estado" | "realizadoPorId" | "clientLocationId" | "lugarTexto" | "firmaR2Key" | "informeId" | "createdAt" | "updatedAt", ExtArgs["result"]["inspeccionFormulario"]>
 export type InspeccionFormularioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
   realizadoPor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1274,10 +1380,12 @@ export type $InspeccionFormularioPayload<ExtArgs extends runtime.Types.Extension
     clienteId: string
     tipo: $Enums.InspeccionTipo
     fecha: Date
+    fechaInspeccion: Date | null
     estado: $Enums.InspeccionEstado
     realizadoPorId: string
     clientLocationId: string | null
     lugarTexto: string | null
+    firmaR2Key: string | null
     informeId: string | null
     createdAt: Date
     updatedAt: Date
@@ -1713,10 +1821,12 @@ export interface InspeccionFormularioFieldRefs {
   readonly clienteId: Prisma.FieldRef<"InspeccionFormulario", 'String'>
   readonly tipo: Prisma.FieldRef<"InspeccionFormulario", 'InspeccionTipo'>
   readonly fecha: Prisma.FieldRef<"InspeccionFormulario", 'DateTime'>
+  readonly fechaInspeccion: Prisma.FieldRef<"InspeccionFormulario", 'DateTime'>
   readonly estado: Prisma.FieldRef<"InspeccionFormulario", 'InspeccionEstado'>
   readonly realizadoPorId: Prisma.FieldRef<"InspeccionFormulario", 'String'>
   readonly clientLocationId: Prisma.FieldRef<"InspeccionFormulario", 'String'>
   readonly lugarTexto: Prisma.FieldRef<"InspeccionFormulario", 'String'>
+  readonly firmaR2Key: Prisma.FieldRef<"InspeccionFormulario", 'String'>
   readonly informeId: Prisma.FieldRef<"InspeccionFormulario", 'String'>
   readonly createdAt: Prisma.FieldRef<"InspeccionFormulario", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"InspeccionFormulario", 'DateTime'>

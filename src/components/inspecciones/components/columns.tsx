@@ -10,9 +10,12 @@ import type { InspeccionSummaryDto } from "@/dtos";
 export const columns: ColumnDef<InspeccionSummaryDto>[] = [
   {
     accessorKey: "fecha",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Fecha inspección" />,
     cell: ({ row }) => {
-      const fecha = row.getValue("fecha") as string;
+      // Preferimos la fecha real de la inspección; si es un registro antiguo sin
+      // ese dato, mostramos la fecha de creación como respaldo.
+      const fechaInspeccion = row.original.fechaInspeccion;
+      const fecha = fechaInspeccion ?? (row.getValue("fecha") as string);
       return <div className="text-sm">{formatDateOnly(fecha)}</div>;
     },
   },

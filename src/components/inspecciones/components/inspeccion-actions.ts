@@ -3,9 +3,10 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { requirePermission } from "@/lib/rbac/require";
-import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { PERMISSIONS, ROLES } from "@/lib/rbac/permissions";
 import { dbLogger } from "@/lib/logger";
 import { uploadFileToR2, deleteFileFromR2 } from "@/lib/r2-upload";
+import { parseDateOnlyToLocalNoon } from "@/lib/dates";
 import { assertInspeccionEliminable } from "./inspeccion-guards";
 
 export async function crearInspeccion(data: {
@@ -14,6 +15,7 @@ export async function crearInspeccion(data: {
   clientLocationId?: string | null;
   lugarTexto?: string | null;
   informeId?: string | null;
+  fechaInspeccion?: string | null;
 }) {
   const user = await requirePermission(PERMISSIONS.INSPECCIONES_CREATE);
 
@@ -26,6 +28,9 @@ export async function crearInspeccion(data: {
         clientLocationId: data.tipo === "inspeccion_base" ? (data.clientLocationId ?? null) : null,
         lugarTexto: data.tipo === "inspeccion_equipo" ? (data.lugarTexto ?? null) : null,
         informeId: data.informeId ?? null,
+        fechaInspeccion: data.fechaInspeccion
+          ? parseDateOnlyToLocalNoon(data.fechaInspeccion)
+          : null,
       },
     });
 
@@ -33,6 +38,26 @@ export async function crearInspeccion(data: {
     return { success: true, id: inspeccion.id };
   } catch (error) {
     dbLogger.error({ error }, "Error al crear inspección");
+    throw error;
+  }
+}
+
+export async function actualizarFechaInspeccion(formularioId: string, fecha: string | null) {
+  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+
+  try {
+    await prisma.inspeccionFormulario.update({
+      where: { id: formularioId },
+      data: {
+        fechaInspeccion: fecha ? parseDateOnlyToLocalNoon(fecha) : null,
+      },
+    });
+
+    revalidatePath("/dashboard/inspecciones");
+    revalidatePath(`/dashboard/inspecciones/${formularioId}`);
+    return { success: true };
+  } catch (error) {
+    dbLogger.error({ error, formularioId }, "Error al actualizar la fecha de inspección");
     throw error;
   }
 }
@@ -193,8 +218,71 @@ export async function deleteImagenRespuesta(imagenId: string) {
   }
 }
 
+const MAX_FIRMA_SIZE_MB = 5;
+
+export async function uploadFirmaInspeccion(formData: FormData) {
+  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+
+  const formularioId = formData.get("formularioId") as string;
+  const file = formData.get("file") as File | null;
+
+  if (!formularioId || !file) {
+    throw new Error("Faltan datos para subir la firma");
+  }
+
+  if (file.size > MAX_FIRMA_SIZE_MB * 1024 * 1024) {
+    throw new Error(`La firma supera el tamaño máximo de ${MAX_FIRMA_SIZE_MB} MB`);
+  }
+
+  try {
+    // Key estable por inspección: re-subir una firma sobrescribe la anterior.
+    const key = `inspecciones/${formularioId}/firma`;
+
+    await uploadFileToR2(file, key);
+
+    await prisma.inspeccionFormulario.update({
+      where: { id: formularioId },
+      data: { firmaR2Key: key },
+    });
+
+    revalidatePath(`/dashboard/inspecciones/${formularioId}`);
+    return { success: true, r2Key: key };
+  } catch (error) {
+    dbLogger.error({ error, formularioId }, "Error al subir la firma");
+    throw error;
+  }
+}
+
+export async function deleteFirmaInspeccion(formularioId: string) {
+  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+
+  try {
+    const inspeccion = await prisma.inspeccionFormulario.findUnique({
+      where: { id: formularioId },
+      select: { firmaR2Key: true },
+    });
+
+    if (!inspeccion) throw new Error("Inspección no encontrada");
+
+    if (inspeccion.firmaR2Key) {
+      await deleteFileFromR2(inspeccion.firmaR2Key);
+    }
+
+    await prisma.inspeccionFormulario.update({
+      where: { id: formularioId },
+      data: { firmaR2Key: null },
+    });
+
+    revalidatePath(`/dashboard/inspecciones/${formularioId}`);
+    return { success: true };
+  } catch (error) {
+    dbLogger.error({ error, formularioId }, "Error al eliminar la firma");
+    throw error;
+  }
+}
+
 export async function eliminarInspeccion(id: string) {
-  await requirePermission(PERMISSIONS.INSPECCIONES_DELETE);
+  const user = await requirePermission(PERMISSIONS.INSPECCIONES_DELETE);
 
   const existing = await prisma.inspeccionFormulario.findUnique({
     where: { id },
@@ -205,7 +293,8 @@ export async function eliminarInspeccion(id: string) {
     throw new Error("Inspección no encontrada");
   }
 
-  assertInspeccionEliminable(existing);
+  // Los informes finalizados solo puede eliminarlos un administrador.
+  assertInspeccionEliminable(existing, { isAdmin: user.role.name === ROLES.ADMIN });
 
   try {
     await prisma.inspeccionFormulario.delete({ where: { id } });

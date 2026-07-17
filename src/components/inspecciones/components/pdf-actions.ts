@@ -127,20 +127,42 @@ export async function generateInspeccionPDF(inspeccionId: string) {
 
     const lugar = inspeccion.clientLocation?.name ?? inspeccion.lugarTexto ?? "—";
 
+    const fechaInspeccion = inspeccion.fechaInspeccion ?? inspeccion.fecha;
+
+    // Firma del responsable: se descarga de R2 y se embebe como data URI base64.
+    let firmaUrl: string | null = null;
+    if (inspeccion.firmaR2Key) {
+      const firmaFile = await getBytesFromR2(inspeccion.firmaR2Key);
+      if (firmaFile) {
+        const contentType =
+          firmaFile.contentType && firmaFile.contentType !== "application/octet-stream"
+            ? firmaFile.contentType
+            : "image/png";
+        firmaUrl = `data:${contentType};base64,${Buffer.from(firmaFile.bytes).toString("base64")}`;
+      } else {
+        pdfLogger.warn(
+          { r2Key: inspeccion.firmaR2Key, inspeccionId },
+          "Firma de inspección no encontrada en R2; se omite en el PDF"
+        );
+      }
+    }
+
     const pdfBuffer = await renderToBuffer(
       InspeccionPDF({
         clienteNombre: inspeccion.cliente.name,
-        fecha: formatDateOnly(inspeccion.fecha, "es-AR"),
+        fecha: formatDateOnly(fechaInspeccion, "es-AR"),
+        fechaConfeccion: formatDateOnly(inspeccion.createdAt, "es-AR"),
         lugar,
         realizadoPor: inspeccion.realizadoPor.name ?? inspeccion.realizadoPor.email,
         tipo: TIPO_LABEL[inspeccion.tipo] ?? inspeccion.tipo,
         secciones,
         detallesNo,
+        firmaUrl,
       })
     );
 
     const base64 = pdfBuffer.toString("base64");
-    const fechaArchivo = formatDateOnly(inspeccion.fecha, "es-AR").replace(/\//g, "-");
+    const fechaArchivo = formatDateOnly(fechaInspeccion, "es-AR").replace(/\//g, "-");
 
     return {
       success: true as const,

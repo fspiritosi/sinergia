@@ -436,12 +436,14 @@ model InspeccionFormulario {
   cliente          Cliente           @relation(fields: [clienteId], references: [id])
   tipo             InspeccionTipo
   fecha            DateTime          @default(now())
+  fechaInspeccion  DateTime?
   estado           InspeccionEstado   @default(borrador)
   realizadoPorId   String
   realizadoPor     User              @relation(fields: [realizadoPorId], references: [id])
   clientLocationId String?
   clientLocation   ClientLocations?  @relation(fields: [clientLocationId], references: [id])
   lugarTexto       String?
+  firmaR2Key       String?
   informeId        String?           @unique
   informe          Informe?          @relation(fields: [informeId], references: [id])
   respuestas       InspeccionRespuesta[]
@@ -453,6 +455,7 @@ model InspeccionFormulario {
   @@index([estado])
   @@index([tipo])
   @@index([fecha])
+  @@index([fechaInspeccion])
   @@index([clientLocationId])
 }
 

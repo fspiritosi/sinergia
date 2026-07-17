@@ -24,7 +24,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Can } from "@/components/rbac/Can";
-import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { usePermissions } from "@/components/rbac/use-permissions";
+import { PERMISSIONS, ROLES } from "@/lib/rbac/permissions";
 import { eliminarInspeccion } from "./inspeccion-actions";
 import type { InspeccionSummaryDto } from "@/dtos";
 
@@ -36,8 +37,12 @@ export function InspeccionRowActions({ inspeccion }: InspeccionRowActionsProps) 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
+  const { isRole } = usePermissions();
 
   const isFinalizada = inspeccion.estado === "completada";
+  const isAdmin = isRole(ROLES.ADMIN);
+  // Los borradores los borra cualquiera con permiso; los finalizados, solo admin.
+  const canDelete = !isFinalizada || isAdmin;
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -70,7 +75,7 @@ export function InspeccionRowActions({ inspeccion }: InspeccionRowActionsProps) 
             </Link>
           </DropdownMenuItem>
 
-          {!isFinalizada && (
+          {canDelete && (
             <Can permission={PERMISSIONS.INSPECCIONES_DELETE}>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -90,8 +95,9 @@ export function InspeccionRowActions({ inspeccion }: InspeccionRowActionsProps) 
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar esta inspección?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. Se eliminará permanentemente la inspección y sus
-              respuestas e imágenes asociadas.
+              {isFinalizada
+                ? "Este informe está finalizado. Esta acción no se puede deshacer y eliminará permanentemente la inspección con sus respuestas, imágenes y firma asociadas."
+                : "Esta acción no se puede deshacer. Se eliminará permanentemente la inspección y sus respuestas e imágenes asociadas."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
