@@ -20,8 +20,20 @@ describe("assertInspeccionEliminable", () => {
     expect(() => assertInspeccionEliminable({ estado: "borrador" })).not.toThrow();
   });
 
-  it("throws with the finalizada message for a completed inspeccion", () => {
+  it("throws with the finalizada message for a completed inspeccion when not admin", () => {
     expect(() => assertInspeccionEliminable({ estado: "completada" })).toThrow(
+      INSPECCION_FINALIZADA_ERROR
+    );
+  });
+
+  it("does not throw for a completed inspeccion when the user is admin", () => {
+    expect(() =>
+      assertInspeccionEliminable({ estado: "completada" }, { isAdmin: true })
+    ).not.toThrow();
+  });
+
+  it("throws for a completed inspeccion when the user is not admin (explicit)", () => {
+    expect(() => assertInspeccionEliminable({ estado: "completada" }, { isAdmin: false })).toThrow(
       INSPECCION_FINALIZADA_ERROR
     );
   });

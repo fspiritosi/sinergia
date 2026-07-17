@@ -169,6 +169,35 @@ export const inspeccionStyles = StyleSheet.create({
     marginTop: 6,
   },
 
+  // Firma del responsable
+  firmaContainer: {
+    marginTop: 40,
+    alignItems: "center",
+    alignSelf: "flex-end",
+    width: 220,
+  },
+  firmaImagen: {
+    width: 160,
+    height: 70,
+    objectFit: "contain",
+  },
+  firmaLinea: {
+    width: 200,
+    borderTopWidth: 0.5,
+    borderTopColor: PDF_COLORS.textDark,
+    marginTop: 2,
+    marginBottom: 4,
+  },
+  firmaLabel: {
+    fontSize: 9,
+    fontWeight: "bold",
+    color: PDF_COLORS.textDark,
+  },
+  firmaNombre: {
+    fontSize: 8,
+    color: PDF_COLORS.textDark,
+  },
+
   pageNumber: {
     position: "absolute",
     bottom: 20,

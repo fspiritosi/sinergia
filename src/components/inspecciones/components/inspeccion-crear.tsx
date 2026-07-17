@@ -32,10 +32,20 @@ import { getClientes } from "@/components/clientes/components/actions";
 import { getActiveClientLocations } from "@/components/clientLocations/components/actions";
 import { crearInspeccion } from "./inspeccion-actions";
 
+/** Fecha de hoy en formato YYYY-MM-DD respetando la zona horaria local. */
+function todayDateInputValue(): string {
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 const crearInspeccionSchema = z
   .object({
     clienteId: z.string().min(1, "El cliente es requerido"),
     tipo: z.enum(["inspeccion_base", "inspeccion_equipo"]),
+    fechaInspeccion: z.string().min(1, "La fecha de inspección es requerida"),
     clientLocationId: z.string().optional(),
     lugarTexto: z.string().optional(),
     informeId: z.string().optional(),
@@ -63,6 +73,7 @@ export function InspeccionCrear({ redirectBase }: InspeccionCrearProps) {
     defaultValues: {
       clienteId: "",
       tipo: "inspeccion_base",
+      fechaInspeccion: todayDateInputValue(),
       clientLocationId: undefined,
       lugarTexto: "",
       informeId: undefined,
@@ -88,6 +99,7 @@ export function InspeccionCrear({ redirectBase }: InspeccionCrearProps) {
       crearInspeccion({
         clienteId: data.clienteId,
         tipo: data.tipo,
+        fechaInspeccion: data.fechaInspeccion,
         clientLocationId: data.clientLocationId ?? null,
         lugarTexto: data.lugarTexto ?? null,
         informeId: data.informeId ?? null,
@@ -174,6 +186,21 @@ export function InspeccionCrear({ redirectBase }: InspeccionCrearProps) {
                         <Label htmlFor="tipo-equipo">Inspección de Equipo</Label>
                       </div>
                     </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Fecha de la inspección (día en que se realizó) */}
+            <FormField
+              control={form.control}
+              name="fechaInspeccion"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Fecha de la inspección *</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} disabled={mutation.isPending} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

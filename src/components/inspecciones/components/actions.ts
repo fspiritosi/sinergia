@@ -63,6 +63,7 @@ export async function getInspeccionesPaginated(params: {
         clienteNombre: i.cliente.name,
         tipo: i.tipo,
         fecha: i.fecha.toISOString(),
+        fechaInspeccion: i.fechaInspeccion?.toISOString() ?? null,
         estado: i.estado,
         realizadoPorNombre: i.realizadoPor.name ?? i.realizadoPor.email,
         lugarNombre: i.clientLocation?.name ?? i.lugarTexto ?? null,

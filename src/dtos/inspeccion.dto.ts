@@ -3,6 +3,7 @@ export interface InspeccionSummaryDto {
   clienteNombre: string;
   tipo: string;
   fecha: string;
+  fechaInspeccion: string | null;
   estado: string;
   realizadoPorNombre: string | null;
   lugarNombre: string | null;
@@ -24,6 +25,7 @@ export interface InspeccionDetalleDto {
   clienteNombre: string;
   tipo: string;
   fecha: string;
+  fechaInspeccion: string | null;
   estado: string;
   realizadoPorId: string;
   realizadoPorNombre: string | null;

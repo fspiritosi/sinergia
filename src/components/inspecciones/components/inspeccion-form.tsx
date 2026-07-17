@@ -9,11 +9,29 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2, CheckCircle2, AlertCircle, FileDown } from "lucide-react";
 import { formatDateOnly } from "@/lib/dates";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { getSeccionesConPreguntas, getInspeccionById } from "./actions";
-import { guardarRespuesta, finalizarInspeccion } from "./inspeccion-actions";
+import {
+  guardarRespuesta,
+  finalizarInspeccion,
+  actualizarFechaInspeccion,
+} from "./inspeccion-actions";
 import { generateInspeccionPDF } from "./pdf-actions";
+import { FirmaCapture } from "./firma-capture";
 import { InspeccionSeccion, type SeccionData } from "./inspeccion-seccion";
 import type { RespuestaLocal, PreguntaData } from "./inspeccion-pregunta";
+
+/** Convierte una fecha (Date o string ISO) al formato YYYY-MM-DD en hora local. */
+function dateToInputValue(value: Date | string | null | undefined): string {
+  if (!value) return "";
+  const d = typeof value === "string" ? new Date(value) : value;
+  if (Number.isNaN(d.getTime())) return "";
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
 
 type Props = {
   inspeccionId: string;
@@ -63,7 +81,10 @@ export function InspeccionForm({ inspeccionId }: Props) {
   const [savingIds, setSavingIds] = useState<Set<string>>(new Set());
   const [hasSaved, setHasSaved] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
+  const [fechaInspeccionValue, setFechaInspeccionValue] = useState("");
+  const [hasFirma, setHasFirma] = useState(false);
   const initializedRef = useRef(false);
+  const datosInitRef = useRef(false);
 
   const handleDownloadPDF = useCallback(async () => {
     setDownloadingPdf(true);
@@ -106,6 +127,23 @@ export function InspeccionForm({ inspeccionId }: Props) {
   } = useQuery({
     queryKey: ["inspeccion", inspeccionId],
     queryFn: () => getInspeccionById(inspeccionId),
+  });
+
+  // Initialize fecha de inspección y estado de firma desde el servidor (una vez)
+  useEffect(() => {
+    if (inspeccion && !datosInitRef.current) {
+      setFechaInspeccionValue(dateToInputValue(inspeccion.fechaInspeccion ?? inspeccion.fecha));
+      setHasFirma(!!inspeccion.firmaR2Key);
+      datosInitRef.current = true;
+    }
+  }, [inspeccion]);
+
+  const fechaMutation = useMutation({
+    mutationFn: (fecha: string | null) => actualizarFechaInspeccion(inspeccionId, fecha),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["inspecciones"] });
+    },
+    onError: () => toast.error("Error al actualizar la fecha de inspección"),
   });
 
   // Initialize respuestas map from server data
@@ -268,7 +306,10 @@ export function InspeccionForm({ inspeccionId }: Props) {
                 <Badge variant={inspeccion.estado === "completada" ? "default" : "outline"}>
                   {ESTADO_LABELS[inspeccion.estado] ?? inspeccion.estado}
                 </Badge>
-                <span>Fecha: {formatDateOnly(inspeccion.fecha)}</span>
+                <span>
+                  Fecha inspección: {formatDateOnly(inspeccion.fechaInspeccion ?? inspeccion.fecha)}
+                </span>
+                <span>Confección: {formatDateOnly(inspeccion.createdAt)}</span>
                 {(inspeccion.clientLocation?.name || inspeccion.lugarTexto) && (
                   <span>Lugar: {inspeccion.clientLocation?.name ?? inspeccion.lugarTexto}</span>
                 )}
@@ -324,6 +365,41 @@ export function InspeccionForm({ inspeccionId }: Props) {
             </div>
           </CardContent>
         )}
+      </Card>
+
+      {/* Datos del informe: fecha de inspección editable + firma del responsable */}
+      <Card>
+        <CardContent className="space-y-6 pt-6">
+          {!readOnly && (
+            <div className="max-w-xs space-y-1.5">
+              <Label htmlFor="fecha-inspeccion">Fecha de la inspección</Label>
+              <Input
+                id="fecha-inspeccion"
+                type="date"
+                value={fechaInspeccionValue}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFechaInspeccionValue(value);
+                  fechaMutation.mutate(value || null);
+                }}
+              />
+              <p className="text-muted-foreground text-xs">
+                Día en que se realizó la inspección (distinto de la fecha de confección del
+                informe).
+              </p>
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Label>Firma del responsable</Label>
+            <FirmaCapture
+              formularioId={inspeccionId}
+              hasFirma={hasFirma}
+              readOnly={readOnly}
+              onFirmaChange={setHasFirma}
+            />
+          </div>
+        </CardContent>
       </Card>
 
       {/* Sections */}
