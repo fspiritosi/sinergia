@@ -52,7 +52,12 @@ export async function createUserAction(data: CreateUserPayload): Promise<void> {
   try {
     await client.invitations.createInvitation({
       emailAddress: email,
-      redirectUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard`,
+      // Debe apuntar a una página que renderice <SignUp />: ahí se consume el
+      // __clerk_ticket de la invitación. Apuntar a /dashboard no funciona
+      // porque está protegido y el middleware rebota al invitado a /sign-in,
+      // perdiendo el ticket. El redirect post-alta lo maneja
+      // NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL (/dashboard).
+      redirectUrl: `${env.NEXT_PUBLIC_APP_URL}/sign-up`,
       publicMetadata: {
         role: role.name,
       },
