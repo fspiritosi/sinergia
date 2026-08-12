@@ -1,6 +1,6 @@
 "use server";
 
-import { currentUser } from "@clerk/nextjs/server";
+import { getCurrentDbUser } from "@/lib/auth";
 
 export interface ReporterSession {
   email: string;
@@ -11,18 +11,16 @@ export interface ReporterSession {
 
 /**
  * Devuelve la identidad del usuario actual (email, nombre y userId) o null si
- * no hay sesión. Implementado contra Clerk (auth provider de sinergia).
+ * no hay sesión.
+ *
+ * `userId` pasó a ser `User.id` (uuid de nuestra base). Antes era el id crudo
+ * de Clerk (`user_xxx`), que es lo que quedó guardado en
+ * `support_ticket_views.user_id` para las filas anteriores a la migración: ese
+ * histórico se reasigna en el script scripts/migrate-support-ticket-views.ts.
  */
 export async function getReporterEmail(): Promise<ReporterSession | null> {
-  const user = await currentUser();
+  const user = await getCurrentDbUser();
   if (!user) return null;
 
-  const email =
-    user.primaryEmailAddress?.emailAddress ?? user.emailAddresses[0]?.emailAddress ?? null;
-  if (!email) return null;
-
-  const name =
-    [user.firstName, user.lastName].filter(Boolean).join(" ").trim() || user.username || null;
-
-  return { email, name, userId: user.id };
+  return { email: user.email, name: user.name, userId: user.id };
 }

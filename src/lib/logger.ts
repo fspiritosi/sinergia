@@ -21,6 +21,7 @@ export const authLogger = logger.child({ module: "auth" });
 export const pdfLogger = logger.child({ module: "pdf" });
 export const apiLogger = logger.child({ module: "api" });
 export const uploadLogger = logger.child({ module: "upload" });
+export const mailLogger = logger.child({ module: "mail" });
 
 type LogMeta = { data?: unknown };
 

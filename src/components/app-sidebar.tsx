@@ -19,7 +19,7 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
+import { UserMenu } from "@/components/auth/user-menu";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -149,7 +149,6 @@ function AyudaNavItem({ pathname }: { pathname: string | null }) {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const { user } = useUser();
   const { can } = usePermissions();
 
   const visibleSections = navMain
@@ -222,17 +221,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SignedIn>
-          <div className="w-full px-4 py-2 ring-1 ring-sidebar-primary-foreground flex items-center justify-around gap-2">
-            <UserButton />
-            <div>
-              <p className="text-xs font-semibold">{user?.fullName}</p>
-              <span className="text-xs text-gray-400">
-                {user?.primaryEmailAddress?.emailAddress ?? user?.emailAddresses?.[0]?.emailAddress}
-              </span>
-            </div>
-          </div>
-        </SignedIn>
+        <div className="w-full ring-1 ring-sidebar-primary-foreground">
+          <UserMenu />
+        </div>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

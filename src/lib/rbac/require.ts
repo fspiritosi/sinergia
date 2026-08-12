@@ -24,8 +24,12 @@ export async function requirePermission(permission: PermissionCode) {
   const user = await getCurrentDbUser();
   if (!user) throw new UnauthenticatedError();
 
+  // Se loguea userId (el uuid de User) y no clerkId: desde la migración a
+  // better-auth, clerkId sólo lo conservan los usuarios previos, así que en
+  // todo usuario nuevo vendría null y estos avisos de seguridad quedarían sin
+  // identificar a quién se le negó el acceso.
   if (!user.isActive) {
-    authLogger.warn({ clerkId: user.clerkId, permission }, "Acceso denegado: usuario inactivo");
+    authLogger.warn({ userId: user.id, permission }, "Acceso denegado: usuario inactivo");
     throw new ForbiddenError(permission);
   }
 
@@ -33,7 +37,7 @@ export async function requirePermission(permission: PermissionCode) {
 
   if (!has) {
     authLogger.warn(
-      { clerkId: user.clerkId, role: user.role.name, permission },
+      { userId: user.id, role: user.role.name, permission },
       "Acceso denegado: permiso faltante"
     );
     throw new ForbiddenError(permission);
@@ -48,7 +52,7 @@ export async function requireRole(...roles: RoleName[]) {
 
   if (!user.isActive || !roles.includes(user.role.name as RoleName)) {
     authLogger.warn(
-      { clerkId: user.clerkId, role: user.role.name, roles },
+      { userId: user.id, role: user.role.name, roles },
       "Acceso denegado: rol no permitido"
     );
     throw new ForbiddenError(roles.join(","));
