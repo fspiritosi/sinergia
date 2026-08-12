@@ -330,20 +330,92 @@ model Condicion {
 // RBAC
 
 model User {
-  id        String   @id @default(uuid())
-  clerkId   String   @unique
-  email     String   @unique
-  name      String?
-  roleId    String
-  role      Role     @relation(fields: [roleId], references: [id])
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id String @id @default(uuid())
+
+  // Nullable durante la migración a better-auth: los usuarios creados por el
+  // nuevo proveedor no tienen clerkId. La columna se elimina en una migración
+  // posterior, recién cuando el cutover está confirmado — mientras exista, un
+  // rollback a la imagen con Clerk sigue arrancando sin tocar la base.
+  clerkId String? @unique
+
+  email String  @unique
+  name  String?
+
+  // Requeridos por better-auth. Los usuarios importados de Clerk se marcan
+  // emailVerified=true: ya estaban verificados allá, y con
+  // requireEmailVerification activo quedarían sin poder entrar.
+  emailVerified Boolean @default(false)
+  image         String?
+
+  roleId   String
+  role     Role    @relation(fields: [roleId], references: [id])
+  isActive Boolean @default(true)
+
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
   inspecciones InspeccionFormulario[]
+  sessions     Session[]
+  accounts     Account[]
 
   @@index([clerkId])
   @@index([roleId])
   @@index([isActive])
+}
+
+// ---------------------------------------------------------------------------
+// Modelos de better-auth. Generados con `npx @better-auth/cli generate` y
+// adaptados a las convenciones del schema: sin @@map (las tablas son
+// PascalCase como el resto) y con @default(uuid()) por robustez.
+// ---------------------------------------------------------------------------
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Account {
+  id         String @id @default(uuid())
+  accountId  String
+  providerId String
+  userId     String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+
+  // Hash de la contraseña para providerId="credential". Acá se escriben los
+  // password_digest bcrypt importados desde Clerk, sin re-hashear.
+  password String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([providerId, accountId])
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
 }
 
 model Role {

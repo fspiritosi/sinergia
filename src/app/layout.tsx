@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Roboto } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider, SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import { esES } from "@clerk/localizations";
 import { Providers } from "./providers";
-
-
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +18,6 @@ const roboto = Roboto({
   subsets: ["latin"],
 });
 
-
 export const metadata: Metadata = {
   title: "Sinergia Ambiental",
   description: "Sinergia Ambiental",
@@ -37,20 +31,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // better-auth no necesita un provider en el árbol: el estado de sesión lo
+  // resuelve `useSession()` del auth-client donde haga falta.
   return (
-    <ClerkProvider localization={esES} >
-      <html lang="es" suppressHydrationWarning>
-        <body
-          suppressHydrationWarning
-          className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable}  font-sans`}
-        >
-          <Providers>
-            {children}
-          </Providers>
-        </body>
-      </html>
-    </ClerkProvider>
-
-
+    <html lang="es" suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable}  font-sans`}
+      >
+        <Providers>{children}</Providers>
+      </body>
+    </html>
   );
 }

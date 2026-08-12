@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { getCurrentUserPermissions } from "@/lib/auth";
 import { PermissionsProvider } from "@/components/rbac/PermissionsProvider";
@@ -6,10 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function InspeccionLayout({ children }: { children: React.ReactNode }) {
-  const { userId } = await auth();
-  if (!userId) redirect("/sign-in");
-
+  // /inspeccion/* no está en ROUTE_GUARDS: como antes, alcanza con estar
+  // autenticado. El permiso fino lo valida cada server action.
   const { role, codes } = await getCurrentUserPermissions();
+  if (!role) redirect("/sign-in");
 
   return (
     <PermissionsProvider role={role} codes={codes}>

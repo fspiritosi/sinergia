@@ -10,7 +10,8 @@ This is a business management application built with Next.js 16 (App Router) for
 
 - **Framework**: Next.js 16 with App Router, React 19, TypeScript
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Clerk
+- **Authentication**: better-auth (email + password, Prisma adapter) with bcrypt hashing
+- **Email**: Nodemailer over SMTP (invitations, verification, password reset)
 - **Styling**: Tailwind CSS 4 with shadcn/ui components
 - **Forms**: React Hook Form + Zod validation
 - **Environment Variables**: @t3-oss/env-nextjs (type-safe env vars with Zod validation)
@@ -85,11 +86,44 @@ npx prisma generate           # Regenerate Prisma Client
 
 ### Authentication & Authorization
 
-- Uses Clerk for authentication
-- Protected routes are wrapped in dashboard layout at [/src/app/dashboard/layout.tsx](src/app/dashboard/layout.tsx)
-- Middleware in [/src/proxy.ts](src/proxy.ts) handles route protection
-- Public routes: `/`, `/sign-in`, `/sign-up`
+Authentication runs on **better-auth** (migrated from Clerk), with the Prisma
+adapter over the same Postgres database. Identity and sessions live in our own
+tables — there is no external identity provider anymore.
+
+- **Instance**: [/src/lib/auth-server.ts](src/lib/auth-server.ts) — email+password,
+  bcrypt hashing, email verification required, and a `databaseHooks` that assigns
+  the default role on sign-up (the `User.roleId` FK is mandatory).
+- **Client**: [/src/lib/auth-client.ts](src/lib/auth-client.ts) — `useSession`,
+  `signIn`, `signOut`.
+- **Route handler**: `/src/app/api/auth/[...all]/route.ts`
+- **Session helpers**: [/src/lib/auth.ts](src/lib/auth.ts) exposes
+  `getCurrentDbUser()` and `getCurrentUserPermissions()`. Everything else in the
+  app (RBAC, providers, sidebar) goes through these two.
+- **Emails** (invitation, verification, password reset) are sent over SMTP via
+  [/src/lib/mailer.ts](src/lib/mailer.ts) (Nodemailer).
+
+**Two layers of authorization:**
+
+1. **Route-level, by role** — `ROUTE_GUARDS` in
+   [/src/lib/rbac/route-guards.ts](src/lib/rbac/route-guards.ts). The middleware
+   ([/src/proxy.ts](src/proxy.ts)) only checks that a session cookie exists and
+   re-injects the pathname into the **request** headers; the role check itself
+   runs in [/src/app/dashboard/layout.tsx](src/app/dashboard/layout.tsx) via
+   `isRoleAllowedForRoute`, where the user's role is already loaded from the DB.
+
+   > The pathname MUST be passed with `NextResponse.next({ request: { headers } })`.
+   > Using `res.headers.set(...)` writes the _response_ headers, which never reach
+   > `headers()` in a Server Component — the guard would silently stop applying.
+   > Covered by `src/__tests__/proxy.test.ts`.
+
+2. **Action-level, by permission** — `requirePermission()` from
+   [/src/lib/rbac/require.ts](src/lib/rbac/require.ts), called in every server
+   action. This is the real enforcement.
+
+- Public routes: `/`, `/sign-in`, `/sign-up`, `/set-password`, `/api/auth/*`
 - All `/dashboard/*` routes require authentication
+- Public self-registration at `/sign-up` is **open** (new users get the `lectura`
+  role), matching the previous behaviour
 
 ### Database Schema Overview
 
@@ -1235,23 +1269,29 @@ const apiKey = env.CLOUDFLARE_ACCESS_KEY_ID;
 
 **Required environment variables** (see .env.example):
 
-**Server-only:**
+**Server-only** (in Dokploy these go in **Environment**, never Build Args):
 
 - `DATABASE_URL` - PostgreSQL connection string (must be valid URL)
-- `CLERK_SECRET_KEY` - Clerk secret key
+- `BETTER_AUTH_SECRET` - 32-byte hex secret for signing sessions
+- `BETTER_AUTH_URL` - Base URL of the app; must match the domain Traefik serves
+- `SMTP_HOST` / `SMTP_PORT` / `SMTP_SECURE` / `SMTP_USER` / `SMTP_PASS` / `SMTP_FROM` - Outgoing mail
 - `CLOUDFLARE_S3_API` - Cloudflare R2 endpoint URL
 - `CLOUDFLARE_ACCESS_KEY_ID` - R2 access key
 - `CLOUDFLARE_SECRET_ACCESS_KEY` - R2 secret key
 - `CLOUDFLARE_R2_BUCKET` - R2 bucket name
 
+The `CLERK_*` variables are still declared during the migration window so a
+rollback to the previous image keeps working. They are removed in the final
+phase — see [docs/cutover-clerk-a-better-auth.md](docs/cutover-clerk-a-better-auth.md).
+
 **Client-exposed (NEXT*PUBLIC*\*):**
 
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk publishable key
-- `NEXT_PUBLIC_APP_URL` - Application base URL
-- `NEXT_PUBLIC_CLERK_SIGN_IN_URL` - Sign in route (default: "/sign-in")
-- `NEXT_PUBLIC_CLERK_SIGN_UP_URL` - Sign up route (default: "/sign-up")
-- `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL` - Post-login redirect (default: "/dashboard")
-- `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` - Post-signup redirect (default: "/dashboard")
+- `NEXT_PUBLIC_APP_URL` - Application base URL. Used as the `baseURL` of the
+  better-auth client, so it must match the real domain. **It is inlined at build
+  time**: in Dokploy it goes in **Build Args** and requires a rebuild to change.
+
+The remaining `NEXT_PUBLIC_CLERK_*` variables are kept during the migration
+window only.
 
 **Adding new environment variables:**
 
