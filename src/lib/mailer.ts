@@ -50,6 +50,64 @@ function htmlToText(html: string): string {
     .trim();
 }
 
+/**
+ * Traduce el error de nodemailer a algo que le sirva a quien lo lee en un toast
+ * o en el log, sin tener que ir a buscar qué significa el código.
+ */
+function describirFallo(error: unknown): string {
+  const code = (error as { code?: string })?.code;
+  const mensaje = error instanceof Error ? error.message : String(error);
+
+  switch (code) {
+    case "EAUTH":
+      return `el servidor de correo rechazó las credenciales — revisar SMTP_USER y SMTP_PASS (${mensaje})`;
+    case "ETIMEDOUT":
+    case "ECONNECTION":
+    case "ESOCKET":
+    case "ECONNREFUSED":
+      return `no se pudo conectar con el servidor de correo — revisar SMTP_HOST, SMTP_PORT y SMTP_SECURE (${mensaje})`;
+    case "EENVELOPE":
+      return `el servidor rechazó la dirección de destino (${mensaje})`;
+    default:
+      return mensaje;
+  }
+}
+
+/**
+ * Último fallo de envío por destinatario.
+ *
+ * Existe por un motivo concreto: better-auth atrapa las excepciones de sus
+ * callbacks de correo (`sendResetPassword`, `sendVerificationEmail`) y responde
+ * `status: true` igual. Sin este registro, una invitación disparada con el SMTP
+ * caído le devuelve "usuario creado" al admin y el problema pasa inadvertido
+ * —que es exactamente lo que ocurrió con las invitaciones de agosto de 2026—.
+ *
+ * Quien dispara el envío lo consume con `tomarFalloDeEnvio()` inmediatamente
+ * después, en el mismo request, y así puede informarlo.
+ */
+const fallosDeEnvio = new Map<string, string>();
+
+/** Tope defensivo: si nadie consume los fallos, el Map no puede crecer sin fin. */
+const MAX_FALLOS_RETENIDOS = 100;
+
+/**
+ * Lee y descarta el fallo anotado para ese destinatario. Devuelve `undefined`
+ * si el último envío salió bien (o si ya se consumió).
+ */
+export function tomarFalloDeEnvio(to: string): string | undefined {
+  const clave = to.trim().toLowerCase();
+  const detalle = fallosDeEnvio.get(clave);
+  fallosDeEnvio.delete(clave);
+  return detalle;
+}
+
+function registrarFallo(to: string, detalle: string) {
+  if (fallosDeEnvio.size >= MAX_FALLOS_RETENIDOS) {
+    fallosDeEnvio.delete(fallosDeEnvio.keys().next().value!);
+  }
+  fallosDeEnvio.set(to.trim().toLowerCase(), detalle);
+}
+
 export async function sendMail({ to, subject, html, text }: SendMailOptions) {
   try {
     const info = await getTransport().sendMail({
@@ -60,11 +118,25 @@ export async function sendMail({ to, subject, html, text }: SendMailOptions) {
       text: text ?? htmlToText(html),
     });
 
-    mailLogger.info({ to, subject }, "Email enviado");
+    // Un envío puede resolver con el destinatario rechazado (el servidor acepta
+    // la conexión y descarta la casilla). Sin este chequeo se registraría como
+    // "Email enviado" un correo que nunca va a llegar.
+    if (info.rejected?.length) {
+      throw new Error(`el servidor rechazó al destinatario: ${info.response ?? "sin respuesta"}`);
+    }
+
+    // accepted/messageId/response son lo que hace falta para rastrear un envío
+    // en los logs del proveedor. Nunca loguear el cuerpo: lleva tokens.
+    mailLogger.info(
+      { to, subject, messageId: info.messageId, accepted: info.accepted, response: info.response },
+      "Email enviado"
+    );
+    fallosDeEnvio.delete(to.trim().toLowerCase());
     return info;
   } catch (error) {
-    // Nunca loguear el cuerpo: puede contener tokens de invitación o reseteo.
-    mailLogger.error({ error, to, subject }, "Error al enviar email");
+    const detalle = describirFallo(error);
+    registrarFallo(to, detalle);
+    mailLogger.error({ error, to, subject, detalle }, "Error al enviar email");
     throw error;
   }
 }

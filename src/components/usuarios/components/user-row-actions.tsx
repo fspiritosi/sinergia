@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontal, Shield } from "lucide-react";
+import { MoreHorizontal, Shield, Send } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Can } from "@/components/rbac/Can";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
-import { getRolesForSelect, updateUserRole, type AppUser } from "./actions";
+import { getRolesForSelect, resendInvitationAction, updateUserRole, type AppUser } from "./actions";
 
 interface UserRowActionsProps {
   user: AppUser;
@@ -41,6 +41,7 @@ export function UserRowActions({ user }: UserRowActionsProps) {
   const [open, setOpen] = useState(false);
   const [roleId, setRoleId] = useState<string>(user.roleId ?? "");
   const [saving, setSaving] = useState(false);
+  const [reenviando, setReenviando] = useState(false);
 
   const { data: roles, isLoading: rolesLoading } = useQuery({
     queryKey: ["roles", "select"],
@@ -66,8 +67,24 @@ export function UserRowActions({ user }: UserRowActionsProps) {
     }
   };
 
+  const handleResend = async () => {
+    setReenviando(true);
+    try {
+      await resendInvitationAction(user.id);
+      toast.success(`Invitación reenviada a ${user.email}`);
+    } catch (error) {
+      // El detalle importa: distingue "el SMTP rechazó las credenciales" de
+      // "no existe la casilla", que se resuelven de formas muy distintas.
+      toast.error(error instanceof Error ? error.message : "Error al reenviar la invitación", {
+        duration: 10000,
+      });
+    } finally {
+      setReenviando(false);
+    }
+  };
+
   return (
-    <Can permission={PERMISSIONS.USUARIOS_MANAGE_ROLES}>
+    <Can anyOf={[PERMISSIONS.USUARIOS_MANAGE_ROLES, PERMISSIONS.USUARIOS_INVITE]}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="flex h-8 w-8 p-0 data-[state=open]:bg-muted">
@@ -75,16 +92,32 @@ export function UserRowActions({ user }: UserRowActionsProps) {
             <span className="sr-only">Abrir menú</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[180px]">
-          <DropdownMenuItem
-            onClick={() => {
-              setRoleId(user.roleId ?? "");
-              setOpen(true);
-            }}
-          >
-            <Shield className="mr-2 h-4 w-4" />
-            Cambiar rol
-          </DropdownMenuItem>
+        <DropdownMenuContent align="end" className="w-[210px]">
+          <Can permission={PERMISSIONS.USUARIOS_MANAGE_ROLES}>
+            <DropdownMenuItem
+              onClick={() => {
+                setRoleId(user.roleId ?? "");
+                setOpen(true);
+              }}
+            >
+              <Shield className="mr-2 h-4 w-4" />
+              Cambiar rol
+            </DropdownMenuItem>
+          </Can>
+          <Can permission={PERMISSIONS.USUARIOS_INVITE}>
+            <DropdownMenuItem
+              disabled={reenviando}
+              onSelect={(e) => {
+                // Sin esto el menú se cierra y desmonta el item antes de que la
+                // acción termine, y el estado de "Reenviando…" no se ve nunca.
+                e.preventDefault();
+                void handleResend();
+              }}
+            >
+              <Send className="mr-2 h-4 w-4" />
+              {reenviando ? "Reenviando…" : "Reenviar invitación"}
+            </DropdownMenuItem>
+          </Can>
         </DropdownMenuContent>
       </DropdownMenu>
 

@@ -214,6 +214,7 @@ Las tablas nuevas quedan ahí sin molestar a nadie.
 | Login responde OK pero vuelve al login          | `BETTER_AUTH_URL` no coincide con el dominio real | Corregir en Dokploy y redesplegar                                              |
 | 500 al entrar, `table "Session" does not exist` | La migración no se aplicó                         | Verificar que `prisma/migrations/` esté en la imagen                           |
 | No llega ningún correo                          | SMTP mal configurado                              | Revisar los logs: el mailer registra `Email enviado` o `Error al enviar email` |
+| `EAUTH` / `535 authentication failed` en el log | `SMTP_PASS` llegó truncada a Dokploy              | `docker exec <cont> sh -c 'echo ${#SMTP_PASS}'` y comparar con el largo real   |
 | Un rol ve rutas que no debería                  | El guard no está corriendo                        | `npx vitest run src/__tests__/proxy.test.ts`                                   |
 
 ---

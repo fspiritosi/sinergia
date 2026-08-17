@@ -64,6 +64,13 @@ export const auth = betterAuth({
       verify: async ({ hash, password }) => bcrypt.compare(password, hash),
     },
 
+    // El default de better-auth es 1 hora. Alcanza para un "olvidé mi
+    // contraseña", pero este mismo endpoint es el que manda las invitaciones
+    // desde el panel de usuarios, y ahí una hora no sirve: al invitado le llega
+    // un correo que caduca antes de que lo lea. Con una semana, el enlace sigue
+    // siendo de un solo uso y queda anotado en la tabla Verification.
+    resetPasswordTokenExpiresIn: 60 * 60 * 24 * 7,
+
     sendResetPassword: async ({ user, url }) => {
       await sendMail({
         to: user.email,
