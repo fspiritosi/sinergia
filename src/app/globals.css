@@ -45,59 +45,59 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --sinergia: #2db5bc;
-    /* Lighter version of #2398A1 for dark mode */
-  }
-}
+/*
+ * El color de marca oscuro se define abajo, dentro de `.dark`, junto al resto
+ * del tema. Acá había un `@media (prefers-color-scheme: dark)` que lo pisaba
+ * según el sistema operativo: con el SO en oscuro y el usuario eligiendo el
+ * tema claro, quedaba el celeste claro sobre fondo blanco.
+ */
 
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   /* Brand Colors - Sinergia Ambiental (Logo Colors) */
-  --sinergia: #2398A1;
+  --sinergia: #2398a1;
   /* Teal - Primary */
   --sinergia-hover: #1a7680;
-  --sinergia-secondary: #84B631;
+  --sinergia-secondary: #84b631;
   /* Lime Green */
-  --sinergia-accent: #6A7475;
+  --sinergia-accent: #6a7475;
   /* Gray */
-  --sinergia-dark: #5B5B5E;
+  --sinergia-dark: #5b5b5e;
   /* Dark Gray */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   /* Primary: Teal */
-  --primary: #2398A1;
+  --primary: #2398a1;
   --primary-foreground: oklch(0.985 0 0);
   /* Secondary: Lime Green */
-  --secondary: #84B631;
+  --secondary: #84b631;
   --secondary-foreground: oklch(0.145 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   /* Accent: Gray */
-  --accent: #6A7475;
+  --accent: #6a7475;
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: #2398A1;
-  --chart-1: #2398A1;
-  --chart-2: #84B631;
-  --chart-3: #6A7475;
-  --chart-4: #5B5B5E;
+  --ring: #2398a1;
+  --chart-1: #2398a1;
+  --chart-2: #84b631;
+  --chart-3: #6a7475;
+  --chart-4: #5b5b5e;
   --chart-5: #69a328;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #2398A1;
+  --sidebar-primary: #2398a1;
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: #2398A1;
+  --sidebar-accent: #2398a1;
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: #2398A1;
+  --sidebar-ring: #2398a1;
 }
 
 .dark {
@@ -106,7 +106,7 @@
   /* Brand Colors - Dark Mode (Lighter versions) */
   --sinergia: #2db5bc;
   /* Lighter version of #2398A1 */
-  --sinergia-hover: #2398A1;
+  --sinergia-hover: #2398a1;
   --sinergia-secondary: #9dd356;
   /* Lighter version of #84B631 */
   --sinergia-accent: #8a9b9c;
@@ -136,7 +136,7 @@
   --chart-2: #9dd356;
   --chart-3: #8a9b9c;
   --chart-4: #7a7a7d;
-  --chart-5: #2398A1;
+  --chart-5: #2398a1;
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: #2db5bc;
