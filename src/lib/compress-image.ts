@@ -18,11 +18,14 @@ const DEFAULT_OPTIONS = {
   initialQuality: 0.8,
 };
 
-export async function compressImage(file: File): Promise<File> {
+/** Sobreescrituras puntuales de los valores por defecto (p. ej. un avatar). */
+export type CompressImageOptions = Partial<typeof DEFAULT_OPTIONS>;
+
+export async function compressImage(file: File, options: CompressImageOptions = {}): Promise<File> {
   if (!file.type.startsWith("image/")) return file;
 
   try {
-    const compressed = await imageCompression(file, DEFAULT_OPTIONS);
+    const compressed = await imageCompression(file, { ...DEFAULT_OPTIONS, ...options });
     // Garantizamos un File con nombre y tipo consistentes.
     return new File([compressed], file.name, {
       type: compressed.type || file.type,
