@@ -4,6 +4,7 @@ import { randomBytes } from "node:crypto";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth-server";
+import { tomarFalloDeEnvio } from "@/lib/mailer";
 import { authLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
@@ -40,6 +41,25 @@ export async function getRolesForSelect(): Promise<RoleSummaryDto[]> {
   return roles.map(toRoleSummaryDto);
 }
 
+/**
+ * Dispara el correo con el enlace a /set-password (ver `sendResetPassword` en
+ * auth-server.ts) y se asegura de que haya salido de verdad.
+ *
+ * El chequeo no es paranoia: better-auth atrapa la excepción de su callback de
+ * envío y devuelve `status: true` igual, así que sin `tomarFalloDeEnvio()` un
+ * SMTP caído se ve exactamente igual que un envío exitoso.
+ */
+async function enviarInvitacion(email: string): Promise<void> {
+  await auth.api.requestPasswordReset({
+    body: { email, redirectTo: "/set-password" },
+  });
+
+  const fallo = tomarFalloDeEnvio(email);
+  if (fallo) {
+    throw new Error(`No se pudo enviar el correo: ${fallo}`);
+  }
+}
+
 export async function createUserAction(data: CreateUserPayload): Promise<void> {
   await requirePermission(PERMISSIONS.USUARIOS_INVITE);
 
@@ -71,17 +91,50 @@ export async function createUserAction(data: CreateUserPayload): Promise<void> {
       passwordHash,
     });
 
-    // Dispara el correo con el enlace a /set-password (ver sendResetPassword
-    // en auth-server.ts).
-    await auth.api.requestPasswordReset({
-      body: { email, redirectTo: "/set-password" },
-    });
+    try {
+      await enviarInvitacion(email);
+    } catch (error: unknown) {
+      // El usuario ya quedó creado y eso no se deshace: borrarlo acá dejaría al
+      // admin sin nada, y el alta en sí salió bien. Lo que corresponde es
+      // decirle qué pasó y que reintente el envío con "Reenviar invitación".
+      authLogger.error({ error, email }, "Usuario creado pero falló el envío de la invitación");
+      revalidatePath("/dashboard/usuarios");
+      throw new Error(
+        `El usuario se creó, pero no se pudo enviar la invitación. ` +
+          `${error instanceof Error ? error.message : String(error)}. ` +
+          `Una vez resuelto, usá "Reenviar invitación" desde la fila del usuario.`
+      );
+    }
 
     authLogger.info({ userId: user.id, email, role: role.name }, "Usuario invitado");
     revalidatePath("/dashboard/usuarios");
   } catch (error: unknown) {
     authLogger.error({ error, email }, "Error al crear usuario");
     throw error instanceof Error ? error : new Error("Error desconocido al crear usuario");
+  }
+}
+
+/**
+ * Reenvía la invitación a un usuario que ya existe.
+ *
+ * Sin esto, un alta cuyo correo no llegó quedaba en un callejón sin salida:
+ * volver a invitarlo choca contra "Ya existe un usuario con ese email" y ese
+ * camino ni siquiera intenta el envío.
+ */
+export async function resendInvitationAction(userId: string): Promise<void> {
+  await requirePermission(PERMISSIONS.USUARIOS_INVITE);
+
+  const user = await userRepository.findById(userId);
+  if (!user) {
+    throw new Error("El usuario no existe");
+  }
+
+  try {
+    await enviarInvitacion(user.email);
+    authLogger.info({ userId, email: user.email }, "Invitación reenviada");
+  } catch (error: unknown) {
+    authLogger.error({ error, userId, email: user.email }, "Error al reenviar la invitación");
+    throw error instanceof Error ? error : new Error("Error al reenviar la invitación");
   }
 }
 

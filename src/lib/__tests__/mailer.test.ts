@@ -82,4 +82,96 @@ describe("sendMail", () => {
       })
     );
   });
+
+  it("falla si el servidor aceptó la conexión pero rechazó al destinatario", async () => {
+    sendMailMock.mockResolvedValueOnce({
+      messageId: "msg-2",
+      accepted: [],
+      rejected: ["destino@test.local"],
+      response: "550 mailbox unavailable",
+    });
+    const { sendMail } = await import("../mailer");
+
+    await expect(
+      sendMail({ to: "destino@test.local", subject: "X", html: "<p>X</p>" })
+    ).rejects.toThrow(/rechaz/i);
+  });
+});
+
+/**
+ * Este registro existe porque better-auth atrapa las excepciones de sus
+ * callbacks de correo y responde igual con status:true. Sin él, una invitación
+ * con el SMTP caído se ve como un alta exitosa.
+ */
+describe("registro de fallos de envío", () => {
+  it("anota el fallo del destinatario cuando el envío falla", async () => {
+    sendMailMock.mockRejectedValueOnce(new Error("SMTP caído"));
+    const { sendMail, tomarFalloDeEnvio } = await import("../mailer");
+
+    await expect(
+      sendMail({ to: "destino@test.local", subject: "X", html: "<p>X</p>" })
+    ).rejects.toThrow();
+
+    expect(tomarFalloDeEnvio("destino@test.local")).toContain("SMTP caído");
+  });
+
+  it("no deja nada anotado cuando el envío sale bien", async () => {
+    const { sendMail, tomarFalloDeEnvio } = await import("../mailer");
+
+    await sendMail({ to: "destino@test.local", subject: "X", html: "<p>X</p>" });
+
+    expect(tomarFalloDeEnvio("destino@test.local")).toBeUndefined();
+  });
+
+  it("se consume una sola vez, para que no contamine un envío posterior", async () => {
+    sendMailMock.mockRejectedValueOnce(new Error("SMTP caído"));
+    const { sendMail, tomarFalloDeEnvio } = await import("../mailer");
+
+    await expect(
+      sendMail({ to: "a@test.local", subject: "X", html: "<p>X</p>" })
+    ).rejects.toThrow();
+
+    expect(tomarFalloDeEnvio("a@test.local")).toBeDefined();
+    expect(tomarFalloDeEnvio("a@test.local")).toBeUndefined();
+  });
+
+  it("no confunde destinatarios distintos ni se pierde por mayúsculas", async () => {
+    sendMailMock.mockRejectedValueOnce(new Error("SMTP caído"));
+    const { sendMail, tomarFalloDeEnvio } = await import("../mailer");
+
+    await expect(
+      sendMail({ to: "Ana@Test.local", subject: "X", html: "<p>X</p>" })
+    ).rejects.toThrow();
+
+    expect(tomarFalloDeEnvio("otro@test.local")).toBeUndefined();
+    expect(tomarFalloDeEnvio("ana@test.local")).toBeDefined();
+  });
+
+  it("traduce el error de autenticación a algo accionable", async () => {
+    // Es el fallo real que dejó sin invitaciones al sistema: la contraseña SMTP
+    // llegó truncada a Dokploy y Hostinger devolvió 535.
+    const eauth = Object.assign(new Error("Invalid login"), { code: "EAUTH" });
+    sendMailMock.mockRejectedValueOnce(eauth);
+    const { sendMail, tomarFalloDeEnvio } = await import("../mailer");
+
+    await expect(
+      sendMail({ to: "a@test.local", subject: "X", html: "<p>X</p>" })
+    ).rejects.toThrow();
+
+    const detalle = tomarFalloDeEnvio("a@test.local");
+    expect(detalle).toMatch(/credenciales/i);
+    expect(detalle).toMatch(/SMTP_PASS/);
+  });
+
+  it("traduce los errores de conexión", async () => {
+    const timeout = Object.assign(new Error("timeout"), { code: "ETIMEDOUT" });
+    sendMailMock.mockRejectedValueOnce(timeout);
+    const { sendMail, tomarFalloDeEnvio } = await import("../mailer");
+
+    await expect(
+      sendMail({ to: "a@test.local", subject: "X", html: "<p>X</p>" })
+    ).rejects.toThrow();
+
+    expect(tomarFalloDeEnvio("a@test.local")).toMatch(/conectar/i);
+  });
 });

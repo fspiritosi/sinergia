@@ -89,6 +89,21 @@ describe("alta por invitación", () => {
     expect(url).toContain("callbackURL=%2Fset-password");
   });
 
+  it("el enlace dura una semana, no la hora que trae better-auth por defecto", async () => {
+    if (!hayBase) return;
+
+    // Con el default de 1 h, al invitado le caduca el correo antes de leerlo.
+    const token = await prisma.verification.findFirst({
+      where: { identifier: { startsWith: "reset-password:" } },
+      orderBy: { createdAt: "desc" },
+    });
+
+    expect(token).not.toBeNull();
+    const dias = (token!.expiresAt.getTime() - token!.createdAt.getTime()) / 86_400_000;
+    expect(dias).toBeGreaterThan(6.9);
+    expect(dias).toBeLessThan(7.1);
+  });
+
   it("no crea el usuario si falla la creación de credenciales (transacción)", async () => {
     if (!hayBase) return;
 
