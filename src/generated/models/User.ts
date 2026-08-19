@@ -224,6 +224,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   inspecciones?: Prisma.InspeccionFormularioListRelationFilter
+  inspeccionesEditadas?: Prisma.InspeccionFormularioListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
 }
@@ -241,6 +242,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
   inspecciones?: Prisma.InspeccionFormularioOrderByRelationAggregateInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
 }
@@ -261,6 +263,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   inspecciones?: Prisma.InspeccionFormularioListRelationFilter
+  inspeccionesEditadas?: Prisma.InspeccionFormularioListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
 }, "id" | "clerkId" | "email">
@@ -309,6 +312,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   role: Prisma.RoleCreateNestedOneWithoutUsersInput
   inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutRealizadoPorInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioCreateNestedManyWithoutEditadoPorInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -325,6 +329,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutRealizadoPorInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutEditadoPorInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -341,6 +346,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
   inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutRealizadoPorNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUpdateManyWithoutEditadoPorNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -357,6 +363,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutRealizadoPorNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutEditadoPorNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -453,6 +460,11 @@ export type UserOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type UserCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsInput
@@ -529,12 +541,28 @@ export type UserCreateNestedOneWithoutInspeccionesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutInspeccionesEditadasInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesEditadasInput, Prisma.UserUncheckedCreateWithoutInspeccionesEditadasInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInspeccionesEditadasInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutInspeccionesNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesInput, Prisma.UserUncheckedCreateWithoutInspeccionesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutInspeccionesInput
   upsert?: Prisma.UserUpsertWithoutInspeccionesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInspeccionesInput, Prisma.UserUpdateWithoutInspeccionesInput>, Prisma.UserUncheckedUpdateWithoutInspeccionesInput>
+}
+
+export type UserUpdateOneWithoutInspeccionesEditadasNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesEditadasInput, Prisma.UserUncheckedCreateWithoutInspeccionesEditadasInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInspeccionesEditadasInput
+  upsert?: Prisma.UserUpsertWithoutInspeccionesEditadasInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInspeccionesEditadasInput, Prisma.UserUpdateWithoutInspeccionesEditadasInput>, Prisma.UserUncheckedUpdateWithoutInspeccionesEditadasInput>
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -549,6 +577,7 @@ export type UserCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   role: Prisma.RoleCreateNestedOneWithoutUsersInput
   inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutRealizadoPorInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioCreateNestedManyWithoutEditadoPorInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
 
@@ -564,6 +593,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutRealizadoPorInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutEditadoPorInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -595,6 +625,7 @@ export type UserUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
   inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutRealizadoPorNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUpdateManyWithoutEditadoPorNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
 
@@ -610,6 +641,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutRealizadoPorNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutEditadoPorNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -625,6 +657,7 @@ export type UserCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   role: Prisma.RoleCreateNestedOneWithoutUsersInput
   inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutRealizadoPorInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioCreateNestedManyWithoutEditadoPorInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
@@ -640,6 +673,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutRealizadoPorInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutEditadoPorInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -671,6 +705,7 @@ export type UserUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
   inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutRealizadoPorNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUpdateManyWithoutEditadoPorNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
@@ -686,6 +721,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutRealizadoPorNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutEditadoPorNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -700,6 +736,7 @@ export type UserCreateWithoutRoleInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutRealizadoPorInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioCreateNestedManyWithoutEditadoPorInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -715,6 +752,7 @@ export type UserUncheckedCreateWithoutRoleInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutRealizadoPorInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutEditadoPorInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -772,6 +810,7 @@ export type UserCreateWithoutInspeccionesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   role: Prisma.RoleCreateNestedOneWithoutUsersInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioCreateNestedManyWithoutEditadoPorInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -787,6 +826,7 @@ export type UserUncheckedCreateWithoutInspeccionesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutEditadoPorInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -794,6 +834,43 @@ export type UserUncheckedCreateWithoutInspeccionesInput = {
 export type UserCreateOrConnectWithoutInspeccionesInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesInput, Prisma.UserUncheckedCreateWithoutInspeccionesInput>
+}
+
+export type UserCreateWithoutInspeccionesEditadasInput = {
+  id?: string
+  clerkId?: string | null
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role: Prisma.RoleCreateNestedOneWithoutUsersInput
+  inspecciones?: Prisma.InspeccionFormularioCreateNestedManyWithoutRealizadoPorInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInspeccionesEditadasInput = {
+  id?: string
+  clerkId?: string | null
+  email: string
+  name?: string | null
+  emailVerified?: boolean
+  image?: string | null
+  roleId: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  inspecciones?: Prisma.InspeccionFormularioUncheckedCreateNestedManyWithoutRealizadoPorInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInspeccionesEditadasInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesEditadasInput, Prisma.UserUncheckedCreateWithoutInspeccionesEditadasInput>
 }
 
 export type UserUpsertWithoutInspeccionesInput = {
@@ -818,6 +895,7 @@ export type UserUpdateWithoutInspeccionesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUpdateManyWithoutEditadoPorNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -833,6 +911,50 @@ export type UserUncheckedUpdateWithoutInspeccionesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutEditadoPorNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutInspeccionesEditadasInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInspeccionesEditadasInput, Prisma.UserUncheckedUpdateWithoutInspeccionesEditadasInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInspeccionesEditadasInput, Prisma.UserUncheckedCreateWithoutInspeccionesEditadasInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInspeccionesEditadasInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInspeccionesEditadasInput, Prisma.UserUncheckedUpdateWithoutInspeccionesEditadasInput>
+}
+
+export type UserUpdateWithoutInspeccionesEditadasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
+  inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutRealizadoPorNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInspeccionesEditadasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutRealizadoPorNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -860,6 +982,7 @@ export type UserUpdateWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   inspecciones?: Prisma.InspeccionFormularioUpdateManyWithoutRealizadoPorNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUpdateManyWithoutEditadoPorNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -875,6 +998,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   inspecciones?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutRealizadoPorNestedInput
+  inspeccionesEditadas?: Prisma.InspeccionFormularioUncheckedUpdateManyWithoutEditadoPorNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -898,12 +1022,14 @@ export type UserUncheckedUpdateManyWithoutRoleInput = {
 
 export type UserCountOutputType = {
   inspecciones: number
+  inspeccionesEditadas: number
   sessions: number
   accounts: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   inspecciones?: boolean | UserCountOutputTypeCountInspeccionesArgs
+  inspeccionesEditadas?: boolean | UserCountOutputTypeCountInspeccionesEditadasArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
 }
@@ -922,6 +1048,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  * UserCountOutputType without action
  */
 export type UserCountOutputTypeCountInspeccionesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InspeccionFormularioWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInspeccionesEditadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InspeccionFormularioWhereInput
 }
 
@@ -953,6 +1086,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   inspecciones?: boolean | Prisma.User$inspeccionesArgs<ExtArgs>
+  inspeccionesEditadas?: boolean | Prisma.User$inspeccionesEditadasArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1003,6 +1137,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   inspecciones?: boolean | Prisma.User$inspeccionesArgs<ExtArgs>
+  inspeccionesEditadas?: boolean | Prisma.User$inspeccionesEditadasArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1019,6 +1154,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     role: Prisma.$RolePayload<ExtArgs>
     inspecciones: Prisma.$InspeccionFormularioPayload<ExtArgs>[]
+    inspeccionesEditadas: Prisma.$InspeccionFormularioPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
   }
@@ -1429,6 +1565,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   role<T extends Prisma.RoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoleDefaultArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   inspecciones<T extends Prisma.User$inspeccionesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inspeccionesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InspeccionFormularioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inspeccionesEditadas<T extends Prisma.User$inspeccionesEditadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inspeccionesEditadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InspeccionFormularioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1869,6 +2006,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
  * User.inspecciones
  */
 export type User$inspeccionesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InspeccionFormulario
+   */
+  select?: Prisma.InspeccionFormularioSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InspeccionFormulario
+   */
+  omit?: Prisma.InspeccionFormularioOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InspeccionFormularioInclude<ExtArgs> | null
+  where?: Prisma.InspeccionFormularioWhereInput
+  orderBy?: Prisma.InspeccionFormularioOrderByWithRelationInput | Prisma.InspeccionFormularioOrderByWithRelationInput[]
+  cursor?: Prisma.InspeccionFormularioWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InspeccionFormularioScalarFieldEnum | Prisma.InspeccionFormularioScalarFieldEnum[]
+}
+
+/**
+ * User.inspeccionesEditadas
+ */
+export type User$inspeccionesEditadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the InspeccionFormulario
    */

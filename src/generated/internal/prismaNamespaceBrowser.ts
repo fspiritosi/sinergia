@@ -449,6 +449,8 @@ export const InspeccionFormularioScalarFieldEnum = {
   fechaInspeccion: 'fechaInspeccion',
   estado: 'estado',
   realizadoPorId: 'realizadoPorId',
+  editadoPorId: 'editadoPorId',
+  ultimaEdicionAt: 'ultimaEdicionAt',
   clientLocationId: 'clientLocationId',
   lugarTexto: 'lugarTexto',
   firmaR2Key: 'firmaR2Key',

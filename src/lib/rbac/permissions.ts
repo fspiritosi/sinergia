@@ -81,6 +81,7 @@ export const PERMISSIONS = {
   INSPECCIONES_CREATE: "inspecciones:create",
   INSPECCIONES_UPDATE: "inspecciones:update",
   INSPECCIONES_DELETE: "inspecciones:delete",
+  INSPECCIONES_EDIT_FINALIZADA: "inspecciones:edit-finalizada",
 } as const;
 
 export type PermissionCode = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

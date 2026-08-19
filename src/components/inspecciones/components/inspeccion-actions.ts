@@ -7,7 +7,52 @@ import { PERMISSIONS, ROLES } from "@/lib/rbac/permissions";
 import { dbLogger } from "@/lib/logger";
 import { uploadFileToR2, deleteFileFromR2 } from "@/lib/r2-upload";
 import { parseDateOnlyToLocalNoon } from "@/lib/dates";
-import { assertInspeccionEliminable } from "./inspeccion-guards";
+import {
+  assertInspeccionEliminable,
+  assertInspeccionEditable,
+  isInspeccionFinalizada,
+} from "./inspeccion-guards";
+
+type EdicionContext = {
+  userId: string;
+  eraFinalizada: boolean;
+};
+
+/**
+ * Valida que el usuario pueda modificar la inspección: siempre necesita
+ * `inspecciones:update`, y si la inspección ya está finalizada necesita además
+ * `inspecciones:edit-finalizada`.
+ */
+async function assertPuedeEditarInspeccion(formularioId: string): Promise<EdicionContext> {
+  const user = await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+
+  const inspeccion = await prisma.inspeccionFormulario.findUnique({
+    where: { id: formularioId },
+    select: { estado: true },
+  });
+
+  if (!inspeccion) throw new Error("Inspección no encontrada");
+
+  const canEditFinalizada = user.role.permissions.some(
+    (rp) => rp.permission.code === PERMISSIONS.INSPECCIONES_EDIT_FINALIZADA
+  );
+
+  assertInspeccionEditable(inspeccion, { canEditFinalizada });
+
+  return { userId: user.id, eraFinalizada: isInspeccionFinalizada(inspeccion) };
+}
+
+/** Deja registro de quién y cuándo modificó una inspección ya finalizada. */
+async function registrarEdicionFinalizada(formularioId: string, ctx: EdicionContext) {
+  if (!ctx.eraFinalizada) return;
+
+  await prisma.inspeccionFormulario.update({
+    where: { id: formularioId },
+    data: { editadoPorId: ctx.userId, ultimaEdicionAt: new Date() },
+  });
+
+  dbLogger.info({ formularioId, userId: ctx.userId }, "Inspección finalizada editada");
+}
 
 export async function crearInspeccion(data: {
   clienteId: string;
@@ -43,7 +88,7 @@ export async function crearInspeccion(data: {
 }
 
 export async function actualizarFechaInspeccion(formularioId: string, fecha: string | null) {
-  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+  const ctx = await assertPuedeEditarInspeccion(formularioId);
 
   try {
     await prisma.inspeccionFormulario.update({
@@ -52,6 +97,8 @@ export async function actualizarFechaInspeccion(formularioId: string, fecha: str
         fechaInspeccion: fecha ? parseDateOnlyToLocalNoon(fecha) : null,
       },
     });
+
+    await registrarEdicionFinalizada(formularioId, ctx);
 
     revalidatePath("/dashboard/inspecciones");
     revalidatePath(`/dashboard/inspecciones/${formularioId}`);
@@ -69,7 +116,7 @@ export async function guardarRespuesta(data: {
   observaciones?: string | null;
   accionIds?: string[];
 }) {
-  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+  const ctx = await assertPuedeEditarInspeccion(data.formularioId);
 
   try {
     const respuesta = await prisma.inspeccionRespuesta.upsert({
@@ -112,6 +159,8 @@ export async function guardarRespuesta(data: {
       data: { updatedAt: new Date() },
     });
 
+    await registrarEdicionFinalizada(data.formularioId, ctx);
+
     return { success: true };
   } catch (error) {
     dbLogger.error({ error, data }, "Error al guardar respuesta");
@@ -141,8 +190,6 @@ const MAX_IMAGENES_POR_RESPUESTA = 3;
 const MAX_FILE_SIZE_MB = 15;
 
 export async function uploadImagenRespuesta(formData: FormData) {
-  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
-
   const formularioId = formData.get("formularioId") as string;
   const preguntaId = formData.get("preguntaId") as string;
   const file = formData.get("file") as File | null;
@@ -150,6 +197,8 @@ export async function uploadImagenRespuesta(formData: FormData) {
   if (!formularioId || !preguntaId || !file) {
     throw new Error("Faltan datos para subir la imagen");
   }
+
+  const ctx = await assertPuedeEditarInspeccion(formularioId);
 
   if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
     throw new Error(`La imagen supera el tamaño máximo de ${MAX_FILE_SIZE_MB} MB`);
@@ -188,6 +237,8 @@ export async function uploadImagenRespuesta(formData: FormData) {
       },
     });
 
+    await registrarEdicionFinalizada(formularioId, ctx);
+
     return { success: true, id: imagen.id, r2Key: key };
   } catch (error) {
     dbLogger.error({ error, formularioId, preguntaId }, "Error al subir imagen");
@@ -196,20 +247,24 @@ export async function uploadImagenRespuesta(formData: FormData) {
 }
 
 export async function deleteImagenRespuesta(imagenId: string) {
-  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+  const imagen = await prisma.inspeccionRespuestaImagen.findUnique({
+    where: { id: imagenId },
+    include: { respuesta: { select: { formularioId: true } } },
+  });
+
+  if (!imagen) throw new Error("Imagen no encontrada");
+
+  const formularioId = imagen.respuesta.formularioId;
+  const ctx = await assertPuedeEditarInspeccion(formularioId);
 
   try {
-    const imagen = await prisma.inspeccionRespuestaImagen.findUnique({
-      where: { id: imagenId },
-    });
-
-    if (!imagen) throw new Error("Imagen no encontrada");
-
     await deleteFileFromR2(imagen.r2Key);
 
     await prisma.inspeccionRespuestaImagen.delete({
       where: { id: imagenId },
     });
+
+    await registrarEdicionFinalizada(formularioId, ctx);
 
     return { success: true };
   } catch (error) {
@@ -221,14 +276,14 @@ export async function deleteImagenRespuesta(imagenId: string) {
 const MAX_FIRMA_SIZE_MB = 5;
 
 export async function uploadFirmaInspeccion(formData: FormData) {
-  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
-
   const formularioId = formData.get("formularioId") as string;
   const file = formData.get("file") as File | null;
 
   if (!formularioId || !file) {
     throw new Error("Faltan datos para subir la firma");
   }
+
+  const ctx = await assertPuedeEditarInspeccion(formularioId);
 
   if (file.size > MAX_FIRMA_SIZE_MB * 1024 * 1024) {
     throw new Error(`La firma supera el tamaño máximo de ${MAX_FIRMA_SIZE_MB} MB`);
@@ -245,6 +300,8 @@ export async function uploadFirmaInspeccion(formData: FormData) {
       data: { firmaR2Key: key },
     });
 
+    await registrarEdicionFinalizada(formularioId, ctx);
+
     revalidatePath(`/dashboard/inspecciones/${formularioId}`);
     return { success: true, r2Key: key };
   } catch (error) {
@@ -254,7 +311,7 @@ export async function uploadFirmaInspeccion(formData: FormData) {
 }
 
 export async function deleteFirmaInspeccion(formularioId: string) {
-  await requirePermission(PERMISSIONS.INSPECCIONES_UPDATE);
+  const ctx = await assertPuedeEditarInspeccion(formularioId);
 
   try {
     const inspeccion = await prisma.inspeccionFormulario.findUnique({
@@ -272,6 +329,8 @@ export async function deleteFirmaInspeccion(formularioId: string) {
       where: { id: formularioId },
       data: { firmaR2Key: null },
     });
+
+    await registrarEdicionFinalizada(formularioId, ctx);
 
     revalidatePath(`/dashboard/inspecciones/${formularioId}`);
     return { success: true };

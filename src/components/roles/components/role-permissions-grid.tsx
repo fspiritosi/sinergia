@@ -24,6 +24,7 @@ const MODULE_LABELS: Record<string, string> = {
   planes: "Planes de Trabajo",
   planificacion: "Planificación",
   informes: "Informes",
+  inspecciones: "Inspecciones",
 };
 
 const ACTION_LABELS: Record<string, string> = {
@@ -43,6 +44,7 @@ const ACTION_LABELS: Record<string, string> = {
   invite: "Invitar",
   deactivate: "Desactivar",
   "manage-roles": "Gestionar roles",
+  "edit-finalizada": "Editar finalizadas",
 };
 
 type Props = {
