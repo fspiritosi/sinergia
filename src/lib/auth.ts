@@ -1,75 +1,34 @@
 import "server-only";
 import { cache } from "react";
-import { auth, clerkClient } from "@clerk/nextjs/server";
-import { authLogger } from "@/lib/logger";
+import { headers } from "next/headers";
+import { auth as betterAuth } from "@/lib/auth-server";
 import { userRepository } from "@/repositories/user.repository";
-import { roleRepository } from "@/repositories/role.repository";
+import { ROLES } from "@/lib/rbac/permissions";
 
-export const DEFAULT_ROLE_NAME = "lectura";
-export const ADMIN_ROLE_NAME = "admin";
+export const DEFAULT_ROLE_NAME = ROLES.LECTURA;
+export const ADMIN_ROLE_NAME = ROLES.ADMIN;
 
-async function resolveRoleIdForBootstrap(metadataRole: string | null): Promise<string> {
-  // Respeta cualquier rol válido del publicMetadata. Si no hay metadata o el
-  // rol pedido no existe en la DB, cae al rol por defecto (lectura).
-  if (metadataRole) {
-    const role = await roleRepository.findByName(metadataRole);
-    if (role) return role.id;
-    authLogger.warn(
-      { metadataRole },
-      "Bootstrap: rol del metadata no existe en DB, usando default"
-    );
-  }
-
-  const fallback = await roleRepository.findByName(DEFAULT_ROLE_NAME);
-  if (!fallback) {
-    throw new Error(`Rol "${DEFAULT_ROLE_NAME}" no encontrado. Asegurate de correr seed-rbac.`);
-  }
-  return fallback.id;
-}
-
+/**
+ * Usuario de la sesión actual, con su rol y permisos resueltos desde la DB.
+ *
+ * Contrato idéntico al de la versión con Clerk a propósito: `requirePermission`,
+ * `requireRole`, `hasPermission` y los layouts que arman el PermissionsProvider
+ * dependen de esta función, así que mantener nombre y forma de retorno deja sin
+ * tocar las ~62 llamadas repartidas por los archivos de actions.
+ *
+ * A diferencia de la versión con Clerk, ya no hace falta el bootstrap
+ * on-demand: better-auth escribe el usuario en nuestra propia tabla `User` al
+ * momento del alta, así que cuando hay sesión la fila siempre existe. Eso
+ * elimina de paso la condición de carrera que había entre ese bootstrap y el
+ * webhook `user.created`.
+ *
+ * Cacheado por request con `React.cache`.
+ */
 export const getCurrentDbUser = cache(async () => {
-  const { userId } = await auth();
-  if (!userId) return null;
+  const session = await betterAuth.api.getSession({ headers: await headers() });
+  if (!session?.user?.id) return null;
 
-  const existing = await userRepository.findByClerkId(userId);
-  if (existing) return existing;
-
-  try {
-    const clerk = await clerkClient();
-    const clerkUser = await clerk.users.getUser(userId);
-
-    const primaryEmail =
-      clerkUser.primaryEmailAddress?.emailAddress ??
-      clerkUser.emailAddresses[0]?.emailAddress ??
-      null;
-
-    if (!primaryEmail) {
-      authLogger.warn({ userId }, "Bootstrap user: sin email en Clerk, abortando");
-      return null;
-    }
-
-    const metadataRole =
-      typeof clerkUser.publicMetadata?.role === "string"
-        ? (clerkUser.publicMetadata.role as string)
-        : null;
-
-    const roleId = await resolveRoleIdForBootstrap(metadataRole);
-
-    const name = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") || null;
-
-    const created = await userRepository.upsertFromClerk({
-      clerkId: userId,
-      email: primaryEmail,
-      name,
-      roleId,
-    });
-
-    authLogger.info({ clerkId: userId, metadataRole }, "Bootstrap user: creado en DB");
-    return created;
-  } catch (error) {
-    authLogger.error({ error, userId }, "Bootstrap user: error al sincronizar con Clerk");
-    throw error;
-  }
+  return userRepository.findByIdWithPermissions(session.user.id);
 });
 
 export const getCurrentUserPermissions = cache(async () => {

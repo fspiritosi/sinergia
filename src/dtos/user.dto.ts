@@ -3,7 +3,8 @@ import { toRoleWithPermissionsDto, type RoleWithPermissionsDto } from "./role.dt
 
 export interface UserDto {
   id: string;
-  clerkId: string;
+  /** Sólo lo tienen los usuarios previos a la migración a better-auth. */
+  clerkId: string | null;
   email: string;
   name: string | null;
   roleId: string;
@@ -18,7 +19,8 @@ export interface UserWithRoleDto extends UserDto {
 
 export interface UserSummaryDto {
   id: string;
-  clerkId: string;
+  /** Sólo lo tienen los usuarios previos a la migración a better-auth. */
+  clerkId: string | null;
   email: string;
   name: string | null;
   roleName: string;

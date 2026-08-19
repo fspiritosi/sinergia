@@ -17,30 +17,30 @@ datasource db {
 // Modelos
 
 model Test {
-  id String @id @default(uuid())
+  id   String @id @default(uuid())
   name String @default("Test")
 }
 
 model Cliente {
-  id String @id @default(uuid())
-  name String
-  cuit String @unique
-  domicilio String
-  telefono String
-  email String
+  id          String     @id @default(uuid())
+  name        String
+  cuit        String     @unique
+  domicilio   String
+  telefono    String
+  email       String
   provincia   Provincia? @relation(fields: [provinciaId], references: [id])
   provinciaId String?
-  ciudad     Ciudad? @relation(fields: [ciudadId], references: [id])
-  ciudadId   String?
-  is_active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  ciudad      Ciudad?    @relation(fields: [ciudadId], references: [id])
+  ciudadId    String?
+  is_active   Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
 
-  propuestas PropuestaTecnica[]
+  propuestas      PropuestaTecnica[]
   clientLocations ClientLocations[]
-  informes Informe[]
-  planesTrabajo PlanTrabajo[]
-  inspecciones InspeccionFormulario[]
+  informes        Informe[]
+  planesTrabajo   PlanTrabajo[]
+  inspecciones    InspeccionFormulario[]
 
   @@index([is_active])
   @@index([name])
@@ -50,55 +50,55 @@ model Cliente {
 }
 
 model Provincia {
-  id String @id @default(uuid())
-  nombre String
-  ciudades Ciudad[]
-  clientes Cliente[]
+  id              String            @id @default(uuid())
+  nombre          String
+  ciudades        Ciudad[]
+  clientes        Cliente[]
   clientLocations ClientLocations[]
 }
 
 model Ciudad {
-  id String @id @default(uuid())
-  nombre String
-  provincia Provincia @relation(fields: [provinciaId], references: [id])
-  provinciaId String
-  clientes Cliente[]
+  id              String            @id @default(uuid())
+  nombre          String
+  provincia       Provincia         @relation(fields: [provinciaId], references: [id])
+  provinciaId     String
+  clientes        Cliente[]
   clientLocations ClientLocations[]
 
   @@index([provinciaId])
 }
 
 model Servicio {
-  id String @id @default(uuid())
-  name String
+  id          String      @id @default(uuid())
+  name        String
   description String
-  type ServiceType @default(mensual)
-  is_active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  type        ServiceType @default(mensual)
+  is_active   Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
 
   itemsOnServicios ItemsOnServicios[]
-  propuestas PropuestaTecnica[]
+  propuestas       PropuestaTecnica[]
 
   @@index([is_active])
   @@index([type])
 }
 
 model Items {
-  id String @id @default(uuid())
-  name String
-  description String
-  detail String @default("")
-  is_active Boolean @default(true)
-  esPlanificable Boolean @default(true)
-  hasVariant Boolean @default(false)
-  variantType       TipoDeVariante? @relation(fields: [variantTypeId], references: [id])
-  variantTypeId     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id             String          @id @default(uuid())
+  name           String
+  description    String
+  detail         String          @default("")
+  is_active      Boolean         @default(true)
+  esPlanificable Boolean         @default(true)
+  hasVariant     Boolean         @default(false)
+  variantType    TipoDeVariante? @relation(fields: [variantTypeId], references: [id])
+  variantTypeId  String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now())
 
-  servicios ItemsOnServicios[]
-  tipoDeInforme   TipoDeInforme? @relation(fields: [tipoDeInformeId], references: [id])
+  servicios       ItemsOnServicios[]
+  tipoDeInforme   TipoDeInforme?     @relation(fields: [tipoDeInformeId], references: [id])
   tipoDeInformeId String?
 
   planesTrabajoProgramaciones PlanTrabajoProgramacion[]
@@ -111,37 +111,35 @@ model Items {
 }
 
 model ItemsOnServicios {
-
-  servicio Servicio @relation(fields: [servicioId], references: [id])
+  servicio   Servicio @relation(fields: [servicioId], references: [id])
   servicioId String
 
-  item Items @relation(fields: [itemId], references: [id])
-  itemId String
+  item       Items    @relation(fields: [itemId], references: [id])
+  itemId     String
   assignedAt DateTime @default(now())
 
   @@id([servicioId, itemId])
 }
 
 model PropuestaTecnica {
-  id String @id @default(uuid())
-  codigo String @unique
-  cliente Cliente @relation(fields: [clienteId], references: [id])
-  clienteId String
-  servicios Servicio @relation(fields: [servicioId], references: [id])
-  servicioId String
-  vigencia DateTime?
-  status PropuestaStatus @default(pendiente)
-  items String[]
-  valor Decimal @default(0)
-  moneda Moneda @default(ARS)
-  contacto   String?
-  is_active Boolean @default(true)
+  id                      String          @id @default(uuid())
+  codigo                  String          @unique
+  cliente                 Cliente         @relation(fields: [clienteId], references: [id])
+  clienteId               String
+  servicios               Servicio        @relation(fields: [servicioId], references: [id])
+  servicioId              String
+  vigencia                DateTime?
+  status                  PropuestaStatus @default(pendiente)
+  items                   String[]
+  valor                   Decimal         @default(0)
+  moneda                  Moneda          @default(ARS)
+  contacto                String?
+  is_active               Boolean         @default(true)
   condicionesParticulares String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @default(now())
 
-
-  informes Informe[]
+  informes      Informe[]
   planesTrabajo PlanTrabajo[]
 
   @@index([clienteId])
@@ -153,44 +151,45 @@ model PropuestaTecnica {
 }
 
 model TipoDeInforme {
-  id String @id @default(uuid())
-  name String
+  id          String   @id @default(uuid())
+  name        String
   description String?
-  is_active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  is_active   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 
-  items Items[]
+  items    Items[]
   informes Informe[]
 }
-model TipoDeVariante {
-  id String @id @default(uuid())
-  name String
-  description String?
-  is_active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
 
-  items Items[]
+model TipoDeVariante {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  is_active   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  items    Items[]
   detalles DetalleVariante[]
 }
 
 model ClientLocations {
-  id String @id @default(uuid())
-  name String
-  clienteId String
-  cliente Cliente @relation(fields: [clienteId], references: [id])
+  id          String     @id @default(uuid())
+  name        String
+  clienteId   String
+  cliente     Cliente    @relation(fields: [clienteId], references: [id])
   provincia   Provincia? @relation(fields: [provinciaId], references: [id])
   provinciaId String?
-  ciudad     Ciudad? @relation(fields: [ciudadId], references: [id])
-  ciudadId   String?
-  is_active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  ciudad      Ciudad?    @relation(fields: [ciudadId], references: [id])
+  ciudadId    String?
+  is_active   Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
 
-  informes Informe[]
+  informes                    Informe[]
   planesTrabajoProgramaciones PlanTrabajoProgramacion[]
-  inspecciones InspeccionFormulario[]
+  inspecciones                InspeccionFormulario[]
 
   @@index([clienteId])
   @@index([provinciaId])
@@ -199,30 +198,30 @@ model ClientLocations {
 }
 
 model Informe {
-  id                   String         @id @default(uuid())
+  id String @id @default(uuid())
 
-  clienteId            String
-  cliente              Cliente        @relation(fields: [clienteId], references: [id])
+  clienteId String
+  cliente   Cliente @relation(fields: [clienteId], references: [id])
 
-  tipoDeInformeId      String
-  tipoDeInforme        TipoDeInforme  @relation(fields: [tipoDeInformeId], references: [id])
+  tipoDeInformeId String
+  tipoDeInforme   TipoDeInforme @relation(fields: [tipoDeInformeId], references: [id])
 
-  propuestaId          String
-  propuesta            PropuestaTecnica @relation(fields: [propuestaId], references: [id])
+  propuestaId String
+  propuesta   PropuestaTecnica @relation(fields: [propuestaId], references: [id])
 
-  clientLocationId     String
-  clientLocation       ClientLocations @relation(fields: [clientLocationId], references: [id])
+  clientLocationId String
+  clientLocation   ClientLocations @relation(fields: [clientLocationId], references: [id])
 
-  fechaVencimiento     DateTime
+  fechaVencimiento      DateTime
   responsableConfeccion String
-  estado               InformeEstado   @default(pendiente)
-  adjunto              String?
+  estado                InformeEstado @default(pendiente)
+  adjunto               String?
 
-  planTrabajoProgramacionId String? @unique
+  planTrabajoProgramacionId String?                  @unique
   planTrabajoProgramacion   PlanTrabajoProgramacion? @relation(fields: [planTrabajoProgramacionId], references: [id])
 
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @default(now())
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @default(now())
   inspeccion InspeccionFormulario?
 
   @@index([clienteId])
@@ -238,14 +237,14 @@ model PlanTrabajo {
   id String @id @default(uuid())
 
   clienteId String
-  cliente Cliente @relation(fields: [clienteId], references: [id])
+  cliente   Cliente @relation(fields: [clienteId], references: [id])
 
   propuestaId String
-  propuesta PropuestaTecnica @relation(fields: [propuestaId], references: [id])
+  propuesta   PropuestaTecnica @relation(fields: [propuestaId], references: [id])
 
   fechaInicio DateTime
-  fechaFin DateTime
-  estado PlanTrabajoEstado @default(pendiente_programacion)
+  fechaFin    DateTime
+  estado      PlanTrabajoEstado @default(pendiente_programacion)
 
   programaciones PlanTrabajoProgramacion[]
 
@@ -264,23 +263,23 @@ model PlanTrabajoProgramacion {
   id String @id @default(uuid())
 
   planTrabajoId String
-  planTrabajo PlanTrabajo @relation(fields: [planTrabajoId], references: [id])
+  planTrabajo   PlanTrabajo @relation(fields: [planTrabajoId], references: [id])
 
   itemId String
-  item Items @relation(fields: [itemId], references: [id])
+  item   Items  @relation(fields: [itemId], references: [id])
 
   fechaProgramada DateTime
-  precision ProgramacionPrecision @default(dia)
+  precision       ProgramacionPrecision @default(dia)
 
   clientLocationId String?
-  clientLocation ClientLocations? @relation(fields: [clientLocationId], references: [id])
+  clientLocation   ClientLocations? @relation(fields: [clientLocationId], references: [id])
 
   ejecutadoAt DateTime?
   adjunto     String?
 
-  informe Informe?
+  informe           Informe?
   detalleVarianteId String?
-  detalleVariante DetalleVariante? @relation(fields: [detalleVarianteId], references: [id])
+  detalleVariante   DetalleVariante? @relation(fields: [detalleVarianteId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -294,12 +293,12 @@ model PlanTrabajoProgramacion {
 }
 
 model DetalleVariante {
-  id String @id @default(uuid())
-  name String
+  id          String   @id @default(uuid())
+  name        String
   description String?
-  is_active Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  is_active   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 
   variantType   TipoDeVariante @relation(fields: [variantTypeId], references: [id])
   variantTypeId String
@@ -311,15 +310,15 @@ model DetalleVariante {
 }
 
 model Condicion {
-  id          String         @id @default(uuid())
+  id          String        @id @default(uuid())
   tipo        CondicionTipo
   title       String
-  description String         @db.Text
+  description String        @db.Text
   category    String?
-  is_active   Boolean        @default(true)
-  order       Int            @default(0)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  is_active   Boolean       @default(true)
+  order       Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   @@index([tipo])
   @@index([is_active])
@@ -330,21 +329,93 @@ model Condicion {
 // RBAC
 
 model User {
-  id        String   @id @default(uuid())
-  clerkId   String   @unique
-  email     String   @unique
-  name      String?
-  roleId    String
-  role      Role     @relation(fields: [roleId], references: [id])
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  inspecciones InspeccionFormulario[] @relation("InspeccionRealizadaPor")
+  id String @id @default(uuid())
+
+  // Nullable durante la migración a better-auth: los usuarios creados por el
+  // nuevo proveedor no tienen clerkId. La columna se elimina en una migración
+  // posterior, recién cuando el cutover está confirmado — mientras exista, un
+  // rollback a la imagen con Clerk sigue arrancando sin tocar la base.
+  clerkId String? @unique
+
+  email String  @unique
+  name  String?
+
+  // Requeridos por better-auth. Los usuarios importados de Clerk se marcan
+  // emailVerified=true: ya estaban verificados allá, y con
+  // requireEmailVerification activo quedarían sin poder entrar.
+  emailVerified Boolean @default(false)
+  image         String?
+
+  roleId   String
+  role     Role    @relation(fields: [roleId], references: [id])
+  isActive Boolean @default(true)
+
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  inspecciones         InspeccionFormulario[] @relation("InspeccionRealizadaPor")
   inspeccionesEditadas InspeccionFormulario[] @relation("InspeccionEditadaPor")
+  sessions             Session[]
+  accounts             Account[]
 
   @@index([clerkId])
   @@index([roleId])
   @@index([isActive])
+}
+
+// ---------------------------------------------------------------------------
+// Modelos de better-auth. Generados con `npx @better-auth/cli generate` y
+// adaptados a las convenciones del schema: sin @@map (las tablas son
+// PascalCase como el resto) y con @default(uuid()) por robustez.
+// ---------------------------------------------------------------------------
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Account {
+  id         String @id @default(uuid())
+  accountId  String
+  providerId String
+  userId     String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+
+  // Hash de la contraseña para providerId="credential". Acá se escriben los
+  // password_digest bcrypt importados desde Clerk, sin re-hashear.
+  password String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([providerId, accountId])
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
 }
 
 model Role {
@@ -383,12 +454,12 @@ model RolePermission {
 // Inspecciones Ambientales — Catálogo
 
 model SeccionInspeccion {
-  id        String @id @default(uuid())
-  codigo    String @unique
+  id        String               @id @default(uuid())
+  codigo    String               @unique
   titulo    String
   parentId  String?
-  parent    SeccionInspeccion?  @relation("SeccionHija", fields: [parentId], references: [id])
-  hijas     SeccionInspeccion[] @relation("SeccionHija")
+  parent    SeccionInspeccion?   @relation("SeccionHija", fields: [parentId], references: [id])
+  hijas     SeccionInspeccion[]  @relation("SeccionHija")
   orden     Int
   preguntas PreguntaInspeccion[]
 
@@ -397,16 +468,16 @@ model SeccionInspeccion {
 }
 
 model PreguntaInspeccion {
-  id                  String @id @default(uuid())
-  codigo              String @unique
-  texto               String
-  seccionId           String
-  seccion             SeccionInspeccion @relation(fields: [seccionId], references: [id])
-  orden               Int
-  parentPreguntaId    String?
-  parentPregunta      PreguntaInspeccion?  @relation("PreguntaCondicional", fields: [parentPreguntaId], references: [id])
-  hijasCondicionales  PreguntaInspeccion[] @relation("PreguntaCondicional")
-  condicionRespuesta  String?
+  id                 String               @id @default(uuid())
+  codigo             String               @unique
+  texto              String
+  seccionId          String
+  seccion            SeccionInspeccion    @relation(fields: [seccionId], references: [id])
+  orden              Int
+  parentPreguntaId   String?
+  parentPregunta     PreguntaInspeccion?  @relation("PreguntaCondicional", fields: [parentPreguntaId], references: [id])
+  hijasCondicionales PreguntaInspeccion[] @relation("PreguntaCondicional")
+  condicionRespuesta String?
 
   acciones   AccionCorrectivaInspeccion[]
   respuestas InspeccionRespuesta[]
@@ -417,11 +488,11 @@ model PreguntaInspeccion {
 }
 
 model AccionCorrectivaInspeccion {
-  id          String @id @default(uuid())
-  preguntaId  String
-  pregunta    PreguntaInspeccion @relation(fields: [preguntaId], references: [id])
-  texto       String
-  orden       Int
+  id         String             @id @default(uuid())
+  preguntaId String
+  pregunta   PreguntaInspeccion @relation(fields: [preguntaId], references: [id])
+  texto      String
+  orden      Int
 
   selecciones InspeccionAccionSeleccionada[]
 
@@ -432,27 +503,27 @@ model AccionCorrectivaInspeccion {
 // Inspecciones Ambientales — Operativo
 
 model InspeccionFormulario {
-  id               String            @id @default(uuid())
+  id               String                @id @default(uuid())
   clienteId        String
-  cliente          Cliente           @relation(fields: [clienteId], references: [id])
+  cliente          Cliente               @relation(fields: [clienteId], references: [id])
   tipo             InspeccionTipo
-  fecha            DateTime          @default(now())
+  fecha            DateTime              @default(now())
   fechaInspeccion  DateTime?
-  estado           InspeccionEstado   @default(borrador)
+  estado           InspeccionEstado      @default(borrador)
   realizadoPorId   String
-  realizadoPor     User              @relation("InspeccionRealizadaPor", fields: [realizadoPorId], references: [id])
+  realizadoPor     User                  @relation("InspeccionRealizadaPor", fields: [realizadoPorId], references: [id])
   editadoPorId     String?
-  editadoPor       User?             @relation("InspeccionEditadaPor", fields: [editadoPorId], references: [id])
+  editadoPor       User?                 @relation("InspeccionEditadaPor", fields: [editadoPorId], references: [id])
   ultimaEdicionAt  DateTime?
   clientLocationId String?
-  clientLocation   ClientLocations?  @relation(fields: [clientLocationId], references: [id])
+  clientLocation   ClientLocations?      @relation(fields: [clientLocationId], references: [id])
   lugarTexto       String?
   firmaR2Key       String?
-  informeId        String?           @unique
-  informe          Informe?          @relation(fields: [informeId], references: [id])
+  informeId        String?               @unique
+  informe          Informe?              @relation(fields: [informeId], references: [id])
   respuestas       InspeccionRespuesta[]
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
 
   @@index([clienteId])
   @@index([realizadoPorId])
@@ -465,17 +536,17 @@ model InspeccionFormulario {
 }
 
 model InspeccionRespuesta {
-  id             String              @id @default(uuid())
-  formularioId   String
-  formulario     InspeccionFormulario @relation(fields: [formularioId], references: [id], onDelete: Cascade)
-  preguntaId     String
-  pregunta       PreguntaInspeccion  @relation(fields: [preguntaId], references: [id])
-  valor          RespuestaValor
-  observaciones  String?
+  id                    String                         @id @default(uuid())
+  formularioId          String
+  formulario            InspeccionFormulario           @relation(fields: [formularioId], references: [id], onDelete: Cascade)
+  preguntaId            String
+  pregunta              PreguntaInspeccion             @relation(fields: [preguntaId], references: [id])
+  valor                 RespuestaValor
+  observaciones         String?
   accionesSeleccionadas InspeccionAccionSeleccionada[]
   imagenes              InspeccionRespuestaImagen[]
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
+  createdAt             DateTime                       @default(now())
+  updatedAt             DateTime                       @updatedAt
 
   @@unique([formularioId, preguntaId])
   @@index([formularioId])
@@ -483,12 +554,12 @@ model InspeccionRespuesta {
 }
 
 model InspeccionRespuestaImagen {
-  id           String             @id @default(uuid())
-  respuestaId  String
-  respuesta    InspeccionRespuesta @relation(fields: [respuestaId], references: [id], onDelete: Cascade)
-  r2Key        String
-  orden        Int
-  createdAt    DateTime           @default(now())
+  id          String              @id @default(uuid())
+  respuestaId String
+  respuesta   InspeccionRespuesta @relation(fields: [respuestaId], references: [id], onDelete: Cascade)
+  r2Key       String
+  orden       Int
+  createdAt   DateTime            @default(now())
 
   @@index([respuestaId])
 }
@@ -497,13 +568,11 @@ model InspeccionAccionSeleccionada {
   respuestaId String
   respuesta   InspeccionRespuesta        @relation(fields: [respuestaId], references: [id], onDelete: Cascade)
   accionId    String
-  accion      AccionCorrectivaInspeccion  @relation(fields: [accionId], references: [id])
+  accion      AccionCorrectivaInspeccion @relation(fields: [accionId], references: [id])
 
   @@id([respuestaId, accionId])
   @@index([respuestaId])
 }
-
-
 
 // ENUM
 
@@ -533,7 +602,7 @@ enum PropuestaStatus {
   en_progreso
   finalizada
 }
-  
+
 enum Moneda {
   ARS
   USD

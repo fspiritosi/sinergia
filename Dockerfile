@@ -23,6 +23,21 @@ RUN apk add --no-cache libc6-compat openssl
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# ---------------------------------------------------------------------------
+# Variables de entorno: dónde va cada una en Dokploy
+#
+#   BUILD ARGS (acá abajo, se hornean en el bundle durante el build):
+#     todas las NEXT_PUBLIC_*
+#
+#   ENVIRONMENT (se leen en runtime, NO hace falta declararlas acá):
+#     DATABASE_URL, CLOUDFLARE_*,
+#     BETTER_AUTH_SECRET, BETTER_AUTH_URL,
+#     SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS, SMTP_FROM
+#
+# BETTER_AUTH_URL y NEXT_PUBLIC_APP_URL deben apuntar ambas al dominio real que
+# sirve Traefik, o el login falla por origen no confiable.
+# ---------------------------------------------------------------------------
+
 # NEXT_PUBLIC_* vars get inlined into the client bundle at build time.
 # Dokploy must pass these as Build Args (dummy defaults let image build
 # even if a value is absent, but the real value must be provided).
