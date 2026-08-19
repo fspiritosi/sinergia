@@ -339,7 +339,8 @@ model User {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  inspecciones InspeccionFormulario[]
+  inspecciones InspeccionFormulario[] @relation("InspeccionRealizadaPor")
+  inspeccionesEditadas InspeccionFormulario[] @relation("InspeccionEditadaPor")
 
   @@index([clerkId])
   @@index([roleId])
@@ -439,7 +440,10 @@ model InspeccionFormulario {
   fechaInspeccion  DateTime?
   estado           InspeccionEstado   @default(borrador)
   realizadoPorId   String
-  realizadoPor     User              @relation(fields: [realizadoPorId], references: [id])
+  realizadoPor     User              @relation("InspeccionRealizadaPor", fields: [realizadoPorId], references: [id])
+  editadoPorId     String?
+  editadoPor       User?             @relation("InspeccionEditadaPor", fields: [editadoPorId], references: [id])
+  ultimaEdicionAt  DateTime?
   clientLocationId String?
   clientLocation   ClientLocations?  @relation(fields: [clientLocationId], references: [id])
   lugarTexto       String?
@@ -452,6 +456,7 @@ model InspeccionFormulario {
 
   @@index([clienteId])
   @@index([realizadoPorId])
+  @@index([editadoPorId])
   @@index([estado])
   @@index([tipo])
   @@index([fecha])

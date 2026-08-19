@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Loader2, CheckCircle2, AlertCircle, FileDown } from "lucide-react";
-import { formatDateOnly } from "@/lib/dates";
+import { Loader2, CheckCircle2, AlertCircle, FileDown, Lock, PencilLine } from "lucide-react";
+import { formatDateOnly, formatDateTime } from "@/lib/dates";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { getSeccionesConPreguntas, getInspeccionById } from "./actions";
@@ -21,6 +21,18 @@ import { generateInspeccionPDF } from "./pdf-actions";
 import { FirmaCapture } from "./firma-capture";
 import { InspeccionSeccion, type SeccionData } from "./inspeccion-seccion";
 import type { RespuestaLocal, PreguntaData } from "./inspeccion-pregunta";
+import { usePermissions } from "@/components/rbac/use-permissions";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 /** Convierte una fecha (Date o string ISO) al formato YYYY-MM-DD en hora local. */
 function dateToInputValue(value: Date | string | null | undefined): string {
@@ -83,6 +95,10 @@ export function InspeccionForm({ inspeccionId }: Props) {
   const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [fechaInspeccionValue, setFechaInspeccionValue] = useState("");
   const [hasFirma, setHasFirma] = useState(false);
+  const [edicionHabilitada, setEdicionHabilitada] = useState(false);
+  const [confirmandoEdicion, setConfirmandoEdicion] = useState(false);
+  const { can } = usePermissions();
+  const puedeEditarFinalizada = can(PERMISSIONS.INSPECCIONES_EDIT_FINALIZADA);
   const initializedRef = useRef(false);
   const datosInitRef = useRef(false);
 
@@ -272,7 +288,11 @@ export function InspeccionForm({ inspeccionId }: Props) {
   }, [secciones, respuestas, inspeccionId, queryClient]);
 
   const isLoading = loadingSecciones || loadingInspeccion;
-  const readOnly = inspeccion?.estado === "completada";
+
+  const finalizada = inspeccion?.estado === "completada";
+  // Editar una inspección finalizada requiere permiso y una habilitación
+  // explícita, para que nadie modifique un informe cerrado sin querer.
+  const readOnly = Boolean(finalizada) && !edicionHabilitada;
 
   if (isLoading) {
     return (
@@ -357,12 +377,50 @@ export function InspeccionForm({ inspeccionId }: Props) {
           </div>
         </CardHeader>
 
-        {readOnly && (
-          <CardContent className="pt-0">
-            <div className="bg-muted flex items-center gap-2 rounded-md px-3 py-2 text-sm">
-              <AlertCircle className="h-4 w-4" />
-              Esta inspeccion fue completada y es de solo lectura
-            </div>
+        {finalizada && (
+          <CardContent className="space-y-2 pt-0">
+            {readOnly ? (
+              <div className="bg-muted flex flex-wrap items-center gap-2 rounded-md px-3 py-2 text-sm">
+                <Lock className="h-4 w-4 shrink-0" />
+                <span>Esta inspección fue completada y es de solo lectura.</span>
+                {puedeEditarFinalizada && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="ml-auto"
+                    onClick={() => setConfirmandoEdicion(true)}
+                  >
+                    <PencilLine className="mr-1 h-4 w-4" />
+                    Habilitar edición
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-wrap items-center gap-2 rounded-md border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-sm text-amber-900 dark:text-amber-200">
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                <span>
+                  Estás corrigiendo una inspección finalizada. Los cambios se guardan al instante y
+                  quedan registrados.
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="ml-auto"
+                  onClick={() => setEdicionHabilitada(false)}
+                >
+                  <Lock className="mr-1 h-4 w-4" />
+                  Terminar edición
+                </Button>
+              </div>
+            )}
+
+            {inspeccion.ultimaEdicionAt && (
+              <p className="text-muted-foreground text-xs">
+                Última corrección:{" "}
+                {inspeccion.editadoPor?.name ?? inspeccion.editadoPor?.email ?? "usuario eliminado"}{" "}
+                el {formatDateTime(inspeccion.ultimaEdicionAt)}
+              </p>
+            )}
           </CardContent>
         )}
       </Card>
@@ -428,6 +486,26 @@ export function InspeccionForm({ inspeccionId }: Props) {
           </Button>
         </div>
       )}
+
+      <AlertDialog open={confirmandoEdicion} onOpenChange={setConfirmandoEdicion}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Habilitar la edición de una inspección finalizada?</AlertDialogTitle>
+            <AlertDialogDescription>
+              La inspección seguirá figurando como completada, pero vas a poder corregir respuestas,
+              observaciones, imágenes, fecha y firma. Quedará registrado quién hizo la corrección y
+              cuándo. Si el informe ya fue enviado al cliente, el PDF que tiene en su poder dejará
+              de coincidir con el del sistema.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={() => setEdicionHabilitada(true)}>
+              Habilitar edición
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

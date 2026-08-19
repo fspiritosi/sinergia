@@ -171,6 +171,12 @@ const PERMISSIONS: PermissionSeed[] = [
   },
 
   ...crudPermissions("inspecciones"),
+  {
+    code: "inspecciones:edit-finalizada",
+    module: "inspecciones",
+    action: "edit-finalizada",
+    description: "Editar inspecciones finalizadas",
+  },
 ];
 
 const ROLE_PERMISSIONS: Record<string, string[] | "all"> = {

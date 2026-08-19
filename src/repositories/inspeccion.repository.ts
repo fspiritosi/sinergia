@@ -33,6 +33,7 @@ export class InspeccionRepository extends BaseRepository<
     return {
       cliente: { select: { id: true, name: true } },
       realizadoPor: { select: { id: true, name: true, email: true } },
+      editadoPor: { select: { id: true, name: true, email: true } },
       clientLocation: { select: { id: true, name: true } },
       informe: { select: { id: true, estado: true } },
     };
