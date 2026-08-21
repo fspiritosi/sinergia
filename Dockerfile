@@ -96,4 +96,16 @@ USER nextjs
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node node_modules/next/dist/bin/next start"]
+# El stage `deps` corre `npm ci --ignore-scripts`, así que `postinstall` NUNCA se
+# ejecuta en la imagen: el esquema y los datos de RBAC se ponen al día acá, al
+# arrancar el contenedor.
+#
+# `migrate deploy` trae el esquema; `sync-permissions` trae las filas de permisos,
+# que son datos y por lo tanto ninguna migración las incluye. Sin ese segundo paso
+# un permiso nuevo queda desplegado pero inexistente en la base, y la feature que
+# lo usa es invisible incluso para un administrador.
+#
+# Ambos comandos usan devDependencies (`prisma`, `tsx`) presentes en la imagen
+# porque `npm ci` no poda las de desarrollo. No agregar `--omit=dev` sin mover
+# esos dos paquetes a `dependencies`.
+CMD ["sh", "-c", "npx prisma migrate deploy && npx tsx prisma/sync-permissions.ts && node node_modules/next/dist/bin/next start"]
