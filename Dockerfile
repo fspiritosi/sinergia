@@ -84,6 +84,12 @@ ENV HOSTNAME=0.0.0.0
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
 
+# `next start` lee next.config.ts del disco en runtime (el modo standalone es el
+# único que usa .next/required-server-files.json). Sin este archivo en la imagen,
+# Next arranca con TODOS los defaults en silencio: bodySizeLimit vuelve a 1 MB
+# —lo que rompía la subida de fotos en inspecciones— y images.remotePatterns
+# queda vacío, así que el optimizador rechaza las imágenes de R2 con un 400.
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./next.config.ts
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
