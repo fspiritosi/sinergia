@@ -79,15 +79,18 @@ export function InspeccionPregunta({
   const valor = existing?.valor ?? null;
   const accionIds = useMemo(() => existing?.accionIds ?? [], [existing?.accionIds]);
 
-  // Observaciones uses local state for typing, synced from parent on key change
-  const [localObservaciones, setLocalObservaciones] = useState(existing?.observaciones ?? "");
-  const [obsKey, setObsKey] = useState(pregunta.id);
-  if (obsKey !== pregunta.id) {
-    setObsKey(pregunta.id);
-    setLocalObservaciones(existing?.observaciones ?? "");
+  // Observaciones uses local state for typing, synced whenever the parent's value
+  // changes. The form mounts the questions with an empty map and fills it from the
+  // server afterwards, so syncing only on mount would show (and re-save) "".
+  const parentObservaciones = existing?.observaciones ?? "";
+  const [localObservaciones, setLocalObservaciones] = useState(parentObservaciones);
+  const [syncedObservaciones, setSyncedObservaciones] = useState(parentObservaciones);
+  const [obsOpen, setObsOpen] = useState(parentObservaciones !== "");
+  if (syncedObservaciones !== parentObservaciones) {
+    setSyncedObservaciones(parentObservaciones);
+    setLocalObservaciones(parentObservaciones);
+    if (parentObservaciones !== "") setObsOpen(true);
   }
-
-  const [obsOpen, setObsOpen] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [zoom, setZoom] = useState(1);
