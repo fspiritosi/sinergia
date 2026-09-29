@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { Can } from "@/components/rbac/Can";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +12,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -24,21 +28,17 @@ import {
 
 import type { DetalleVariante } from "./actions";
 import { DetalleVarianteForm } from "./detalleVariante-form";
-import {
-  updateDetalleVariante,
-  deleteDetalleVariante,
-} from "./detalleVariante-actions";
+import { updateDetalleVariante, deleteDetalleVariante } from "./detalleVariante-actions";
 
 interface DetalleVarianteRowActionsProps {
   detalleVariante: DetalleVariante;
 }
 
-export function DetalleVarianteRowActions({
-  detalleVariante,
-}: DetalleVarianteRowActionsProps) {
+export function DetalleVarianteRowActions({ detalleVariante }: DetalleVarianteRowActionsProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleEdit = async (data: any) => {
     setIsLoading(true);
@@ -57,13 +57,18 @@ export function DetalleVarianteRowActions({
   const handleDelete = async () => {
     setIsLoading(true);
     try {
-      await deleteDetalleVariante(detalleVariante.id);
+      const result = await deleteDetalleVariante(detalleVariante.id);
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
       toast.success("Detalle eliminado");
-      setDeleteOpen(false);
-    } catch (error) {
+      await queryClient.invalidateQueries({ queryKey: ["detalles-variante"] });
+    } catch {
       toast.error("No se pudo eliminar");
     } finally {
       setIsLoading(false);
+      setDeleteOpen(false);
     }
   };
 
@@ -71,10 +76,7 @@ export function DetalleVarianteRowActions({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-          >
+          <Button variant="ghost" className="flex h-8 w-8 p-0 data-[state=open]:bg-muted">
             <MoreHorizontal className="h-4 w-4" />
             <span className="sr-only">Abrir menú</span>
           </Button>
@@ -84,13 +86,16 @@ export function DetalleVarianteRowActions({
             <Edit className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="text-destructive focus:text-destructive"
-            onClick={() => setDeleteOpen(true)}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Eliminar
-          </DropdownMenuItem>
+          <Can permission={PERMISSIONS.DETALLES_VARIANTE_DELETE}>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Eliminar
+            </DropdownMenuItem>
+          </Can>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -107,14 +112,17 @@ export function DetalleVarianteRowActions({
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar detalle?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. Se eliminará{" "}
-              <strong>{detalleVariante.name}</strong> y dejará de estar disponible.
+              Esta acción no se puede deshacer. Se eliminará <strong>{detalleVariante.name}</strong>{" "}
+              y dejará de estar disponible.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isLoading}>Cancelar</AlertDialogCancel>
             <AlertDialogAction
-              onClick={handleDelete}
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
               disabled={isLoading}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >

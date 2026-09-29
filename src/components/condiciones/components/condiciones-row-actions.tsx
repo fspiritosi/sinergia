@@ -1,11 +1,12 @@
 "use client";
 
-import { MoreHorizontal, Edit } from "lucide-react";
+import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -22,6 +23,9 @@ import { CondicionForm } from "./condiciones-form";
 import { updateCondicion, deleteCondicion } from "./condicion-actions";
 import type { Condicion } from "@/generated/client";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { Can } from "@/components/rbac/Can";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 import { useState } from "react";
 
 interface CondicionRowActionsProps {
@@ -32,6 +36,7 @@ export function CondicionRowActions({ condicion }: CondicionRowActionsProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleEdit = async (data: any) => {
     setIsLoading(true);
@@ -49,13 +54,18 @@ export function CondicionRowActions({ condicion }: CondicionRowActionsProps) {
   const handleDelete = async () => {
     setIsLoading(true);
     try {
-      await deleteCondicion(condicion.id);
+      const result = await deleteCondicion(condicion.id);
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
       toast.success("Condición eliminada exitosamente");
-      setDeleteOpen(false);
-    } catch (error) {
+      await queryClient.invalidateQueries({ queryKey: ["condiciones"] });
+    } catch {
       toast.error("Error al eliminar la condición");
     } finally {
       setIsLoading(false);
+      setDeleteOpen(false);
     }
   };
 
@@ -73,6 +83,16 @@ export function CondicionRowActions({ condicion }: CondicionRowActionsProps) {
             <Edit className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
+          <Can permission={PERMISSIONS.CONDICIONES_DELETE}>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Eliminar
+            </DropdownMenuItem>
+          </Can>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -96,7 +116,10 @@ export function CondicionRowActions({ condicion }: CondicionRowActionsProps) {
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isLoading}>Cancelar</AlertDialogCancel>
             <AlertDialogAction
-              onClick={handleDelete}
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
               disabled={isLoading}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >

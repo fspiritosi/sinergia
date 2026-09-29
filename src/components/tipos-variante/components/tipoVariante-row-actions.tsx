@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { Can } from "@/components/rbac/Can";
+import { PERMISSIONS } from "@/lib/rbac/permissions";
 import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +12,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -22,22 +26,18 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { TipoVarianteForm } from "./tipoVariante-form";
-import {
-  updateTipoDeVariante,
-  deleteTipoDeVariante,
-} from "./tipoVariante-actions";
+import { updateTipoDeVariante, deleteTipoDeVariante } from "./tipoVariante-actions";
 import type { TipoDeVariante } from "./actions";
 
 interface TipoVarianteRowActionsProps {
   tipoVariante: TipoDeVariante;
 }
 
-export function TipoVarianteRowActions({
-  tipoVariante,
-}: TipoVarianteRowActionsProps) {
+export function TipoVarianteRowActions({ tipoVariante }: TipoVarianteRowActionsProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleEdit = async (data: any) => {
     setIsLoading(true);
@@ -56,13 +56,18 @@ export function TipoVarianteRowActions({
   const handleDelete = async () => {
     setIsLoading(true);
     try {
-      await deleteTipoDeVariante(tipoVariante.id);
+      const result = await deleteTipoDeVariante(tipoVariante.id);
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
       toast.success("Tipo de variante eliminado");
-      setDeleteOpen(false);
-    } catch (error) {
+      await queryClient.invalidateQueries({ queryKey: ["tipos-variante"] });
+    } catch {
       toast.error("No se pudo eliminar");
     } finally {
       setIsLoading(false);
+      setDeleteOpen(false);
     }
   };
 
@@ -70,10 +75,7 @@ export function TipoVarianteRowActions({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-          >
+          <Button variant="ghost" className="flex h-8 w-8 p-0 data-[state=open]:bg-muted">
             <MoreHorizontal className="h-4 w-4" />
             <span className="sr-only">Abrir menú</span>
           </Button>
@@ -83,13 +85,16 @@ export function TipoVarianteRowActions({
             <Edit className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="text-destructive focus:text-destructive"
-            onClick={() => setDeleteOpen(true)}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Eliminar
-          </DropdownMenuItem>
+          <Can permission={PERMISSIONS.TIPOS_VARIANTE_DELETE}>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Eliminar
+            </DropdownMenuItem>
+          </Can>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -106,14 +111,17 @@ export function TipoVarianteRowActions({
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar tipo de variante?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. Se eliminará{" "}
-              <strong>{tipoVariante.name}</strong> permanentemente.
+              Esta acción no se puede deshacer. Se eliminará <strong>{tipoVariante.name}</strong>{" "}
+              permanentemente.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isLoading}>Cancelar</AlertDialogCancel>
             <AlertDialogAction
-              onClick={handleDelete}
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
               disabled={isLoading}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >

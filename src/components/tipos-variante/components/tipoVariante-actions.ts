@@ -6,6 +6,7 @@ import type { TipoDeVariante } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { mensajeEnUso, esErrorDeReferencia, type DeleteResult } from "@/lib/delete-guard";
 
 export async function createTipoDeVariante(data: TipoDeVariante) {
   await requirePermission(PERMISSIONS.TIPOS_VARIANTE_CREATE);
@@ -59,26 +60,36 @@ export async function updateTipoDeVariante(data: Partial<TipoDeVariante>) {
   }
 }
 
-export async function deleteTipoDeVariante(id: string) {
+export async function deleteTipoDeVariante(id: string): Promise<DeleteResult> {
   await requirePermission(PERMISSIONS.TIPOS_VARIANTE_DELETE);
   try {
     if (!id) {
-      throw new Error("El identificador es requerido");
+      return { success: false, error: "El identificador es requerido" };
     }
 
-    const deleted = await prisma.tipoDeVariante.delete({
-      where: { id },
-    });
+    const [detalles, items] = await Promise.all([
+      prisma.detalleVariante.count({ where: { variantTypeId: id } }),
+      // Items.variantTypeId es opcional (SET NULL): sin este chequeo el item
+      // quedaría con hasVariant=true y sin tipo de variante.
+      prisma.items.count({ where: { variantTypeId: id } }),
+    ]);
+    const enUso = mensajeEnUso("el tipo de variante", [
+      { cantidad: detalles, singular: "detalle de variante", plural: "detalles de variante" },
+      { cantidad: items, singular: "item", plural: "items" },
+    ]);
+    if (enUso) return { success: false, error: enUso };
 
-    if (!deleted) {
-      throw new Error("Error al eliminar el tipo de variante");
-    }
+    await prisma.tipoDeVariante.delete({ where: { id } });
 
+    dbLogger.info({ tipoVarianteId: id }, "Tipo de variante eliminado");
     revalidatePath("/dashboard/tipos-variante");
     return { success: true };
   } catch (error) {
     dbLogger.error({ error, tipoVarianteId: id }, "Error al eliminar tipo de variante");
-    throw error;
+    if (esErrorDeReferencia(error)) {
+      return { success: false, error: "No se puede eliminar el tipo de variante: está en uso." };
+    }
+    return { success: false, error: "Error al eliminar el tipo de variante" };
   }
 }
 
