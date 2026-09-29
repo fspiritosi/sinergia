@@ -6,6 +6,7 @@ import { Items, Servicio } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { mensajeEnUso, esErrorDeReferencia, type DeleteResult } from "@/lib/delete-guard";
 
 export async function createItem(data: Items) {
   await requirePermission(PERMISSIONS.ITEMS_CREATE);
@@ -211,24 +212,35 @@ export async function updateItem(data: Partial<Items>) {
   }
 }
 
-export async function deleteItem(id: string) {
+export async function deleteItem(id: string): Promise<DeleteResult> {
   await requirePermission(PERMISSIONS.ITEMS_DELETE);
   try {
-    const cliente = await prisma.items.delete({
-      where: {
-        id: id,
-      },
-    });
+    const [propuestas, programaciones] = await Promise.all([
+      // PropuestaTecnica.items guarda los ids sin FK: sin este chequeo el item
+      // desaparecería en silencio de las propuestas y sus PDFs.
+      prisma.propuestaTecnica.count({ where: { items: { has: id } } }),
+      prisma.planTrabajoProgramacion.count({ where: { itemId: id } }),
+    ]);
+    const enUso = mensajeEnUso("el item", [
+      { cantidad: propuestas, singular: "propuesta", plural: "propuestas" },
+      { cantidad: programaciones, singular: "tarea programada", plural: "tareas programadas" },
+    ]);
+    if (enUso) return { success: false, error: enUso };
 
-    if (!cliente) {
-      dbLogger.error({ itemId: id }, "Error al eliminar item: registro no eliminado");
-      throw new Error("Error al eliminar el item");
-    }
+    // Se quita de los servicios a los que estaba asignado.
+    await prisma.$transaction([
+      prisma.itemsOnServicios.deleteMany({ where: { itemId: id } }),
+      prisma.items.delete({ where: { id } }),
+    ]);
 
+    dbLogger.info({ itemId: id }, "Item eliminado");
     revalidatePath("/dashboard/items");
     return { success: true };
   } catch (error) {
     dbLogger.error({ error, itemId: id }, "Error al eliminar item");
-    throw error;
+    if (esErrorDeReferencia(error)) {
+      return { success: false, error: "No se puede eliminar el item: está en uso." };
+    }
+    return { success: false, error: "Error al eliminar el item" };
   }
 }

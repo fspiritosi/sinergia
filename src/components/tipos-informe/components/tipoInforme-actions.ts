@@ -6,6 +6,7 @@ import { TipoDeInforme } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { mensajeEnUso, esErrorDeReferencia, type DeleteResult } from "@/lib/delete-guard";
 
 export async function createTipoDeInforme(data: TipoDeInforme) {
   await requirePermission(PERMISSIONS.TIPOS_INFORME_CREATE);
@@ -65,28 +66,32 @@ export async function updateTipoDeInforme(data: Partial<TipoDeInforme>) {
   }
 }
 
-export async function deleteTipoDeInforme(id: string) {
+export async function deleteTipoDeInforme(id: string): Promise<DeleteResult> {
   await requirePermission(PERMISSIONS.TIPOS_INFORME_DELETE);
   try {
-    const tipoDeInforme = await prisma.tipoDeInforme.delete({
-      where: {
-        id: id,
-      },
-    });
+    const [informes, items] = await Promise.all([
+      prisma.informe.count({ where: { tipoDeInformeId: id } }),
+      // Items.tipoDeInformeId es opcional (SET NULL): sin este chequeo los items
+      // quedarían sin tipo de informe en silencio.
+      prisma.items.count({ where: { tipoDeInformeId: id } }),
+    ]);
+    const enUso = mensajeEnUso("el tipo de informe", [
+      { cantidad: informes, singular: "informe", plural: "informes" },
+      { cantidad: items, singular: "item", plural: "items" },
+    ]);
+    if (enUso) return { success: false, error: enUso };
 
-    if (!tipoDeInforme) {
-      dbLogger.error(
-        { tipoInformeId: id },
-        "Error al eliminar tipo de informe: registro no eliminado"
-      );
-      throw new Error("Error al eliminar el tipo de informe");
-    }
+    await prisma.tipoDeInforme.delete({ where: { id } });
 
+    dbLogger.info({ tipoInformeId: id }, "Tipo de informe eliminado");
     revalidatePath("/dashboard/tipos-informe");
     return { success: true };
   } catch (error) {
     dbLogger.error({ error, tipoInformeId: id }, "Error al eliminar tipo de informe");
-    throw error;
+    if (esErrorDeReferencia(error)) {
+      return { success: false, error: "No se puede eliminar el tipo de informe: está en uso." };
+    }
+    return { success: false, error: "Error al eliminar el tipo de informe" };
   }
 }
 

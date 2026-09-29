@@ -6,6 +6,7 @@ import { Items, Servicio as ServicioType } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { mensajeEnUso, esErrorDeReferencia, type DeleteResult } from "@/lib/delete-guard";
 
 export async function createServicio(data: ServicioType) {
   await requirePermission(PERMISSIONS.SERVICIOS_CREATE);
@@ -64,25 +65,30 @@ export async function updateServicio(data: Partial<ServicioType>) {
   }
 }
 
-export async function deleteServicio(id: string) {
+export async function deleteServicio(id: string): Promise<DeleteResult> {
   await requirePermission(PERMISSIONS.SERVICIOS_DELETE);
   try {
-    const cliente = await prisma.servicio.delete({
-      where: {
-        id: id,
-      },
-    });
+    const propuestas = await prisma.propuestaTecnica.count({ where: { servicioId: id } });
+    const enUso = mensajeEnUso("el servicio", [
+      { cantidad: propuestas, singular: "propuesta", plural: "propuestas" },
+    ]);
+    if (enUso) return { success: false, error: enUso };
 
-    if (!cliente) {
-      dbLogger.error({ servicioId: id }, "Error al eliminar servicio: registro no eliminado");
-      throw new Error("Error al eliminar el servicio");
-    }
+    // La asignación de items es parte del servicio: se borra con él.
+    await prisma.$transaction([
+      prisma.itemsOnServicios.deleteMany({ where: { servicioId: id } }),
+      prisma.servicio.delete({ where: { id } }),
+    ]);
 
+    dbLogger.info({ servicioId: id }, "Servicio eliminado");
     revalidatePath("/dashboard/servicios");
     return { success: true };
   } catch (error) {
     dbLogger.error({ error, servicioId: id }, "Error al eliminar servicio");
-    throw error;
+    if (esErrorDeReferencia(error)) {
+      return { success: false, error: "No se puede eliminar el servicio: está en uso." };
+    }
+    return { success: false, error: "Error al eliminar el servicio" };
   }
 }
 

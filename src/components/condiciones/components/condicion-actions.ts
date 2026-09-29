@@ -6,6 +6,7 @@ import { Condicion } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import type { DeleteResult } from "@/lib/delete-guard";
 
 export async function createCondicion(data: Partial<Condicion>) {
   await requirePermission(PERMISSIONS.CONDICIONES_CREATE);
@@ -71,25 +72,18 @@ export async function updateCondicion(data: Partial<Condicion>) {
   }
 }
 
-export async function deleteCondicion(id: string) {
+export async function deleteCondicion(id: string): Promise<DeleteResult> {
   await requirePermission(PERMISSIONS.CONDICIONES_DELETE);
   try {
-    const condicion = await prisma.condicion.delete({
-      where: {
-        id: id,
-      },
-    });
+    // Sin FK: las propuestas guardan una copia del texto de la condición.
+    await prisma.condicion.delete({ where: { id } });
 
-    if (!condicion) {
-      dbLogger.error({ condicionId: id }, "Error al eliminar condición: registro no eliminado");
-      throw new Error("Error al eliminar la condición");
-    }
-
+    dbLogger.info({ condicionId: id }, "Condición eliminada");
     revalidatePath("/dashboard/condiciones");
     return { success: true };
   } catch (error) {
     dbLogger.error({ error, condicionId: id }, "Error al eliminar condición");
-    throw error;
+    return { success: false, error: "Error al eliminar la condición" };
   }
 }
 

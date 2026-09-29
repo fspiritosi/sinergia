@@ -6,6 +6,7 @@ import type { DetalleVariante } from "@/generated/client";
 import { dbLogger } from "@/lib/logger";
 import { requirePermission } from "@/lib/rbac/require";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { mensajeEnUso, esErrorDeReferencia, type DeleteResult } from "@/lib/delete-guard";
 
 const REVALIDATE_PATH = "/dashboard/detalles-variante";
 
@@ -66,26 +67,34 @@ export async function updateDetalleVariante(data: Partial<DetalleVariante>) {
   }
 }
 
-export async function deleteDetalleVariante(id: string) {
+export async function deleteDetalleVariante(id: string): Promise<DeleteResult> {
   await requirePermission(PERMISSIONS.DETALLES_VARIANTE_DELETE);
   try {
     if (!id) {
-      throw new Error("El identificador es requerido");
+      return { success: false, error: "El identificador es requerido" };
     }
 
-    const deleted = await prisma.detalleVariante.delete({
-      where: { id },
+    // PlanTrabajoProgramacion.detalleVarianteId es opcional (SET NULL): sin este
+    // chequeo las tareas programadas perderían la variante en silencio.
+    const programaciones = await prisma.planTrabajoProgramacion.count({
+      where: { detalleVarianteId: id },
     });
+    const enUso = mensajeEnUso("el detalle de variante", [
+      { cantidad: programaciones, singular: "tarea programada", plural: "tareas programadas" },
+    ]);
+    if (enUso) return { success: false, error: enUso };
 
-    if (!deleted) {
-      throw new Error("Error al eliminar el detalle de variante");
-    }
+    await prisma.detalleVariante.delete({ where: { id } });
 
+    dbLogger.info({ detalleVarianteId: id }, "Detalle de variante eliminado");
     revalidatePath(REVALIDATE_PATH);
     return { success: true };
   } catch (error) {
     dbLogger.error({ error, detalleVarianteId: id }, "Error al eliminar detalle de variante");
-    throw error;
+    if (esErrorDeReferencia(error)) {
+      return { success: false, error: "No se puede eliminar el detalle de variante: está en uso." };
+    }
+    return { success: false, error: "Error al eliminar el detalle de variante" };
   }
 }
 
